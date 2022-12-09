@@ -16,7 +16,9 @@ Safer version of C89 language - transpiles to C89.
 4. NULL - optional automatic checks before dereference whenever possible
 ...TBC
 
-### build
+### Build
+Requires: conan, cmake, ninja, clang++.
+
 ```
 SafeC $ mkdir build
 SafeC $ cd build
