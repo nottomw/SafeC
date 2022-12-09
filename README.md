@@ -10,7 +10,16 @@ Safer version of C89 language - transpiles to C89.
 3. Transpiled output code should be super readable, so it doesn't get in the way when debugging.
 
 ### Main features
-#### defer
+1. `defer`
+2. References
+3. Pointer ownership indication (and enforcement)
+4. NULL - optional automatic checks before dereference whenever possible
+...TBC
 
-...
-
+### build
+```
+SafeC $ mkdir build
+SafeC $ cd build
+SafeC/build $ cmake -G Ninja -S ../src
+SafeC/build $ ninja
+```
