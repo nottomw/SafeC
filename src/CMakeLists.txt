@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(SafeC CXX)
 
-# TODO: move project up
-include(${CMAKE_SOURCE_DIR}/../cmake/CompilerOptions.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/CompilerOptions.cmake)
 
 set(CMAKE_VERBOSE_MAKEFILE 1)
 
