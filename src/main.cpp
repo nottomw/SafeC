@@ -6,7 +6,7 @@
 
 namespace po = boost::program_options;
 
-// TODO : logger...
+// TODO: add logger...
 
 int main(int argc, char **argv)
 {
