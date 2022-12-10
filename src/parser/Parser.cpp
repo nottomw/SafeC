@@ -44,22 +44,22 @@ struct TokenHandler
         switch (token.id())
         {
         case Tokens::ID_BRACKET_OPEN:
-            parser.handleBraceOpen({}, stringIndex);
+            parser.handleBraceOpen(stringIndex);
             // std::cout << "(((bracket open at #" << stringIndex << ")))";
             stringIndex += 1U;
             break;
         case Tokens::ID_BRACKET_CLOSE:
-            parser.handleBraceClose({}, stringIndex);
+            parser.handleBraceClose(stringIndex);
             // std::cout << "(((bracket close at #" << stringIndex << ")))";
             stringIndex += 1U;
             break;
         case Tokens::ID_RETURN:
-            parser.handleReturn({}, stringIndex);
+            parser.handleReturn(stringIndex);
             // std::cout << "(((return at #" << stringIndex << ")))";
             stringIndex += token.value().size();
             break;
         case Tokens::ID_DEFER_CALL:
-            parser.handleDeferCall({}, token, stringIndex);
+            parser.handleDeferCall(token, stringIndex);
             // std::cout << "(((defer at #" << stringIndex << ")))";
             stringIndex += token.value().size();
             break;
@@ -103,25 +103,26 @@ void Parser::parse(const std::string &path)
     }
 }
 
-void Parser::addModPoint(Badge<TokenHandler>, ModPoint &&modPoint)
+void Parser::addModPoint(ModPoint &&modPoint)
 {
     std::cout << "Adding mod point:\n";
-    if (modPoint.mMod == ModPoint::ModType::CALL_DEFERRED)
+    if (modPoint.getModType() == ModPoint::ModType::CALL_DEFERRED)
     {
-        const auto functionName = std::any_cast<ModPoint::DataCallDeferred>(modPoint.mData).functionName;
+        const auto functionName = std::any_cast<ModPoint::DataCallDeferred>(modPoint.getData()).functionName;
         std::cout << "\tCALL_DEFERRED\n";
-        std::cout << "\t ~ function name: " << functionName;
-        std::cout << std::endl;
+        std::cout << "\t ~ file index: " << modPoint.getIndex() << "\n";
+        std::cout << "\t ~ mod type: " << static_cast<uint32_t>(modPoint.getModType()) << "\n";
+        std::cout << "\t ~ function name: " << functionName << "\n";
     }
 
     mModPoints.emplace_back(modPoint);
 }
-void Parser::handleBraceOpen(Badge<TokenHandler>, const uint32_t)
+void Parser::handleBraceOpen(const uint32_t)
 {
     mState.mCurrentBraceLevel += 1U;
 }
 
-void Parser::handleBraceClose(Badge<TokenHandler>, const uint32_t stringIndex)
+void Parser::handleBraceClose(const uint32_t stringIndex)
 {
     for (auto it = mState.mDeferAtBraceLevel.begin(); //
          it != mState.mDeferAtBraceLevel.end();
@@ -134,7 +135,7 @@ void Parser::handleBraceClose(Badge<TokenHandler>, const uint32_t stringIndex)
             std::cout << " <-- firing defer at end of brace level " << mState.mCurrentBraceLevel
                       << ", call: " << functionName << std::endl;
             addModPoint(
-                {}, ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
+                ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
             mState.mDeferAtBraceLevel.erase(it);
             break;
         }
@@ -143,7 +144,7 @@ void Parser::handleBraceClose(Badge<TokenHandler>, const uint32_t stringIndex)
     mState.mCurrentBraceLevel -= 1U;
 }
 
-void Parser::handleReturn(Badge<TokenHandler>, const uint32_t stringIndex)
+void Parser::handleReturn(const uint32_t stringIndex)
 {
     for (auto it = mState.mDeferAtBraceLevel.begin(); //
          it != mState.mDeferAtBraceLevel.end();
@@ -156,7 +157,7 @@ void Parser::handleReturn(Badge<TokenHandler>, const uint32_t stringIndex)
             std::cout << " <-- firing defer at return, brace level " << mState.mCurrentBraceLevel
                       << ", call: " << functionName << std::endl;
             addModPoint(
-                {}, ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
+                ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
 
             // TODO: detect if this is last return in function - if yes, erase
             // mState.mDeferAtBraceLevel.erase(it);
@@ -165,7 +166,7 @@ void Parser::handleReturn(Badge<TokenHandler>, const uint32_t stringIndex)
     }
 }
 
-void Parser::handleDeferCall(Badge<TokenHandler>, const LexerToken &token, const uint32_t)
+void Parser::handleDeferCall(const LexerToken &token, const uint32_t)
 {
     constexpr size_t deferSize = sizeof("defer ") - 1;
     const size_t tokenSize = token.value().size();

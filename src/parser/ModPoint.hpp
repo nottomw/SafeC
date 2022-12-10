@@ -37,12 +37,20 @@ public:
         return mIndex;
     }
 
+    ModType getModType() const
+    {
+        return mMod;
+    }
+
+    std::any getData() const
+    {
+        return mData;
+    }
+
 private:
     const uint32_t mIndex;
     const ModType mMod;
     const std::any mData;
-
-    friend class Parser;
 };
 
 } // namespace safec

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Badge.hpp"
 #include "ModPoint.hpp"
 #include <any>
 #include <boost/spirit/include/lex_lexertl.hpp>
@@ -29,16 +28,15 @@ public:
 
     void parse(const std::string &path);
 
-    // TODO: hide into ParserHelper, remove Badge
-    void addModPoint(Badge<TokenHandler>, ModPoint &&modPoint);
-
-    void handleBraceOpen(Badge<TokenHandler>, const uint32_t stringIndex);
-    void handleBraceClose(Badge<TokenHandler>, const uint32_t stringIndex);
-    void handleReturn(Badge<TokenHandler>, const uint32_t stringIndex);
-    void handleDeferCall(Badge<TokenHandler>, const LexerToken &token, const uint32_t stringIndex);
-
 private:
     void parseString(const std::string_view &source);
+
+    void addModPoint(ModPoint &&modPoint);
+
+    void handleBraceOpen(const uint32_t stringIndex);
+    void handleBraceClose(const uint32_t stringIndex);
+    void handleReturn(const uint32_t stringIndex);
+    void handleDeferCall(const LexerToken &token, const uint32_t stringIndex);
 
     std::vector<ModPoint> mModPoints;
 
@@ -56,6 +54,8 @@ private:
     };
 
     ParserState mState;
+
+    friend TokenHandler;
 };
 
 } // namespace safec
