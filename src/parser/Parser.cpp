@@ -27,6 +27,7 @@ struct TokenDefinitions : lex::lexer<TLexer>
 {
     TokenDefinitions()
     {
+        // TODO: defer call token regex
         this->self.add                                                         //
             ("\\{", Tokens::ID_BRACKET_OPEN)                                   //
             ("\\}", Tokens::ID_BRACKET_CLOSE)                                  //
