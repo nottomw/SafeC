@@ -51,7 +51,5 @@ int main(int argc, char **argv)
 		}
 	}
 
-	std::cout << "not functional yet...\n";
-
 	return 0;
 }
