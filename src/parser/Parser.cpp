@@ -3,7 +3,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
-#include <boost/spirit/include/lex_lexertl.hpp>
 #include <cassert>
 #include <iostream>
 
@@ -28,37 +27,40 @@ struct TokenDefinitions : lex::lexer<TLexer>
 {
     TokenDefinitions()
     {
-        this->self.add                                        //
-            ("\\{", Tokens::ID_BRACKET_OPEN)                  //
-            ("\\}", Tokens::ID_BRACKET_CLOSE)                 //
-            ("return", Tokens::ID_RETURN)                     //
-            ("defer [a-zA-Z0-9_]+\\(", Tokens::ID_DEFER_CALL) //
-            (".", Tokens::ID_CHAR)                            //
+        this->self.add                                                         //
+            ("\\{", Tokens::ID_BRACKET_OPEN)                                   //
+            ("\\}", Tokens::ID_BRACKET_CLOSE)                                  //
+            ("return", Tokens::ID_RETURN)                                      //
+            ("defer [a-zA-Z0-9_]+\\([a-zA-Z0-9_,]*\\)", Tokens::ID_DEFER_CALL) //
+            (".", Tokens::ID_CHAR)                                             //
             ;
     }
 };
 
 struct TokenHandler
 {
-    template <typename TToken>
-    bool operator()(const TToken &token, uint32_t &stringIndex)
+    bool operator()(const LexerToken &token, uint32_t &stringIndex, Parser &parser)
     {
         switch (token.id())
         {
         case Tokens::ID_BRACKET_OPEN:
-            std::cout << " ~ bracket open at #" << stringIndex << std::endl;
+            parser.handleBraceOpen({}, stringIndex);
+            // std::cout << "(((bracket open at #" << stringIndex << ")))";
             stringIndex += 1U;
             break;
         case Tokens::ID_BRACKET_CLOSE:
-            std::cout << " ~ bracket close at #" << stringIndex << std::endl;
+            parser.handleBraceClose({}, stringIndex);
+            // std::cout << "(((bracket close at #" << stringIndex << ")))";
             stringIndex += 1U;
             break;
         case Tokens::ID_RETURN:
-            std::cout << " ~ return at #" << stringIndex << std::endl;
+            parser.handleReturn({}, stringIndex);
+            // std::cout << "(((return at #" << stringIndex << ")))";
             stringIndex += token.value().size();
             break;
         case Tokens::ID_DEFER_CALL:
-            std::cout << " ~ defer call at #" << stringIndex << std::endl;
+            parser.handleDeferCall({}, token, stringIndex);
+            // std::cout << "(((defer at #" << stringIndex << ")))";
             stringIndex += token.value().size();
             break;
         case Tokens::ID_CHAR:
@@ -72,6 +74,11 @@ struct TokenHandler
         return true;
     }
 };
+
+Parser::Parser() //
+    : mState{}
+{
+}
 
 void Parser::parse(const std::string &path)
 {
@@ -96,19 +103,111 @@ void Parser::parse(const std::string &path)
     }
 }
 
+void Parser::addModPoint(Badge<TokenHandler>, ModPoint &&modPoint)
+{
+    std::cout << "Adding mod point:\n";
+    if (modPoint.mMod == ModPoint::ModType::CALL_DEFERRED)
+    {
+        const auto functionName = std::any_cast<ModPoint::DataCallDeferred>(modPoint.mData).functionName;
+        std::cout << "\tCALL_DEFERRED\n";
+        std::cout << "\t ~ function name: " << functionName;
+        std::cout << std::endl;
+    }
+
+    mModPoints.emplace_back(modPoint);
+}
+void Parser::handleBraceOpen(Badge<TokenHandler>, const uint32_t)
+{
+    mState.mCurrentBraceLevel += 1U;
+}
+
+void Parser::handleBraceClose(Badge<TokenHandler>, const uint32_t stringIndex)
+{
+    for (auto it = mState.mDeferAtBraceLevel.begin(); //
+         it != mState.mDeferAtBraceLevel.end();
+         ++it)
+    {
+        auto &deferAtBrace = it->first;
+        if (deferAtBrace == mState.mCurrentBraceLevel)
+        {
+            auto &functionName = it->second;
+            std::cout << " <-- firing defer at end of brace level " << mState.mCurrentBraceLevel
+                      << ", call: " << functionName << std::endl;
+            addModPoint(
+                {}, ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
+            mState.mDeferAtBraceLevel.erase(it);
+            break;
+        }
+    }
+
+    mState.mCurrentBraceLevel -= 1U;
+}
+
+void Parser::handleReturn(Badge<TokenHandler>, const uint32_t stringIndex)
+{
+    for (auto it = mState.mDeferAtBraceLevel.begin(); //
+         it != mState.mDeferAtBraceLevel.end();
+         ++it)
+    {
+        auto &deferAtBrace = it->first;
+        if (deferAtBrace <= mState.mCurrentBraceLevel)
+        {
+            auto &functionName = it->second;
+            std::cout << " <-- firing defer at return, brace level " << mState.mCurrentBraceLevel
+                      << ", call: " << functionName << std::endl;
+            addModPoint(
+                {}, ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
+
+            // TODO: detect if this is last return in function - if yes, erase
+            // mState.mDeferAtBraceLevel.erase(it);
+            break;
+        }
+    }
+}
+
+void Parser::handleDeferCall(Badge<TokenHandler>, const LexerToken &token, const uint32_t)
+{
+    constexpr size_t deferSize = sizeof("defer ") - 1;
+    const size_t tokenSize = token.value().size();
+
+    // TODO: fix this...
+    std::stringstream ss;
+    ss << token.value();
+    const std::string tokenValueStr = ss.str();
+    const char *const tokenValue = tokenValueStr.data();
+    const std::string deferredFunctionName( //
+        (tokenValue + deferSize),
+        (tokenSize - deferSize));
+
+    std::cout << " --> defer detected, brace level: " //
+              << mState.mCurrentBraceLevel            //
+              << ", token: "                          //
+              << deferredFunctionName                 //
+              << std::endl;
+
+    mState.mDeferAtBraceLevel.emplace_back(std::make_pair(mState.mCurrentBraceLevel, deferredFunctionName));
+}
+
 void Parser::parseString(const std::string_view &source)
 {
     TokenDefinitions<lex::lexertl::lexer<>> findTokens;
 
     uint32_t stringIndex = 0U;
-
-    auto tokenHandler = std::bind(TokenHandler(), std::placeholders::_1, std::ref(stringIndex));
+    auto tokenHandler = std::bind( //
+        TokenHandler(),
+        std::placeholders::_1,
+        std::ref(stringIndex),
+        std::ref(*this));
 
     auto first = source.begin();
     auto last = source.end();
 
     const bool lexSuccess = lex::tokenize( //
-        first, last, findTokens, tokenHandler);
+        first,
+        last,
+        findTokens,
+        tokenHandler);
+
     assert(lexSuccess == true);
 }
 
