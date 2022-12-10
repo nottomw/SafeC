@@ -5,10 +5,14 @@ project(SafeC CXX)
 include(${CMAKE_SOURCE_DIR}/cmake/CompilerOptions.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Deps.cmake)
 
+add_subdirectory(parser)
+
 add_executable(SafeCTranspiler
-	main.cpp
+    main.cpp
 )
 
 target_link_libraries(SafeCTranspiler
-	CONAN_PKG::boost
+    PUBLIC
+        CONAN_PKG::boost
+        safec::parser
 )

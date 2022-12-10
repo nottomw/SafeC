@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "parser/Parser.hpp"
 
 #include <boost/program_options.hpp>
 
@@ -29,11 +30,24 @@ int main(int argc, char **argv)
 
 	if (vm.count("disable") > 0)
 	{
-		std::cout << "disabled features: \n";
+		std::cout << "Disabled features: \n";
 		auto &disabledFeatures = vm["disable"].as<std::vector<std::string>>();
 		for (const auto &it : disabledFeatures)
 		{
 			std::cout << " - " << it << std::endl;
+		}
+	}
+
+	if (vm.count("file") > 0)
+	{
+		safec::Parser p;
+
+		std::cout << "Parsing files:\n";
+		auto &filesToParse = vm["file"].as<std::vector<std::string>>();
+		for (const auto &it : filesToParse)
+		{
+			std::cout << " - " << it << std::endl;
+			p.parse(it);
 		}
 	}
 
