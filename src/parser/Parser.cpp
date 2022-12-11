@@ -112,6 +112,7 @@ void Parser::addModPoint(ModPoint &&modPoint)
 
     mModPoints.emplace_back(modPoint);
 }
+
 void Parser::handleBraceOpen(const uint32_t)
 {
     mState.mCurrentBraceLevel += 1U;
@@ -186,6 +187,7 @@ void Parser::handleDeferCall(const LexerToken &token, const uint32_t)
 
 void Parser::parseString(const std::string_view &source)
 {
+    // TODO: for more advanced stuff probably need to use lex&yacc...
     TokenDefinitions<lex::lexertl::lexer<>> findTokens;
 
     uint32_t stringIndex = 0U;
