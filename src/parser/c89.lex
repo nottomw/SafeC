@@ -1,3 +1,5 @@
+/* https://www.quut.com/c/ANSI-C-grammar-l-1995.html */
+
 D			[0-9]
 L			[a-zA-Z_]
 H			[a-fA-F0-9]
