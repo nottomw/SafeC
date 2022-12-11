@@ -40,6 +40,7 @@ struct TokenDefinitions : lex::lexer<TLexer>
 
 struct TokenHandler
 {
+    // TODO: rework into modern version of lexer
     bool operator()(const LexerToken &token, uint32_t &stringIndex, Parser &parser)
     {
         switch (token.id())
