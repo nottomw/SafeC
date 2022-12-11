@@ -40,38 +40,31 @@ struct TokenDefinitions : lex::lexer<TLexer>
 
 struct TokenHandler
 {
-    // TODO: rework into modern version of lexer
     bool operator()(const LexerToken &token, uint32_t &stringIndex, Parser &parser)
     {
         switch (token.id())
         {
         case Tokens::ID_BRACKET_OPEN:
             parser.handleBraceOpen(stringIndex);
-            // std::cout << "(((bracket open at #" << stringIndex << ")))";
-            stringIndex += 1U;
             break;
         case Tokens::ID_BRACKET_CLOSE:
             parser.handleBraceClose(stringIndex);
-            // std::cout << "(((bracket close at #" << stringIndex << ")))";
-            stringIndex += 1U;
             break;
         case Tokens::ID_RETURN:
             parser.handleReturn(stringIndex);
-            // std::cout << "(((return at #" << stringIndex << ")))";
-            stringIndex += token.value().size();
             break;
         case Tokens::ID_DEFER_CALL:
             parser.handleDeferCall(token, stringIndex);
-            // std::cout << "(((defer at #" << stringIndex << ")))";
-            stringIndex += token.value().size();
             break;
         case Tokens::ID_CHAR:
-            stringIndex += 1U;
+            // nothing
             break;
         default:
             throw std::runtime_error{"unknown token id - lexer error"};
             break;
         }
+
+        stringIndex += token.value().size();
 
         return true;
     }
