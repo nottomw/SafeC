@@ -180,7 +180,7 @@ void count(void)
 	ECHO;
 }
 
-int check_type()
+int check_type(void)
 {
 /*
 * pseudo code --- this is what it should check

@@ -23,15 +23,6 @@ namespace safec
 namespace bfs = ::boost::filesystem;
 namespace bio = ::boost::iostreams;
 
-enum Tokens : uint32_t
-{
-    ID_BRACKET_OPEN = 1, // has to start at one
-    ID_BRACKET_CLOSE,
-    ID_RETURN,
-    ID_DEFER_CALL,
-    ID_CHAR
-};
-
 Parser::Parser() //
     : mState{}
 {

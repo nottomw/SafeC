@@ -34,7 +34,10 @@ void test_function(int arg)
 void test_function_file(int arg)
 {
     int fp = file_open();
-    file_close(fp);
+
+    {
+        file_close(fp);
+    }
 
     if (arg == false)
     {

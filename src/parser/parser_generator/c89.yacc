@@ -5,9 +5,7 @@
 #include <stdio.h>
 
 extern char yytext[];
-extern int column;
 
-extern int yylineno;
 extern int yylex( void );
 extern int yyparse( void );
 
