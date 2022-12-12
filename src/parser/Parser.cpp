@@ -76,11 +76,12 @@ void Parser::parseFile(const bfs::path &path)
     assert(yyin != nullptr);
 
     const int32_t parseRes = yyparse();
-
-    std::cout << "yyparse() result: " << parseRes << std::endl;
     assert(parseRes == 0);
 
-    std::cout << "Characters in file " << path << ": " << characters << std::endl;
+    std::cout << "Parsing done, characters in file " << path << ": " << characters << std::endl;
+
+    // After the parsing is done we should know the exact layout of intersting code blocks
+    // in the provided source file.
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)

@@ -36,7 +36,7 @@ void test_function_file(int arg)
     printf("end of function...\n");
 }
 
-void test_function_break_continue(void)
+void test_function_break_continue(int a, int b)
 {
     int i = 0;
     for(i = 0; i < 10; ++i)
