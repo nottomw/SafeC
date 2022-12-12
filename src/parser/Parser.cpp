@@ -17,7 +17,6 @@ namespace safec
 
 namespace bfs = ::boost::filesystem;
 namespace bio = ::boost::iostreams;
-namespace lex = ::boost::spirit::lex;
 
 enum Tokens : uint32_t
 {
@@ -26,54 +25,6 @@ enum Tokens : uint32_t
     ID_RETURN,
     ID_DEFER_CALL,
     ID_CHAR
-};
-
-template <typename TLexer>
-struct TokenDefinitions : lex::lexer<TLexer>
-{
-    TokenDefinitions()
-    {
-        // TODO: defer call token regex
-        this->self.add                                                         //
-            ("\\{", Tokens::ID_BRACKET_OPEN)                                   //
-            ("\\}", Tokens::ID_BRACKET_CLOSE)                                  //
-            ("return", Tokens::ID_RETURN)                                      //
-            ("defer [a-zA-Z0-9_]+\\([a-zA-Z0-9_,]*\\)", Tokens::ID_DEFER_CALL) //
-            (".", Tokens::ID_CHAR)                                             //
-            ;
-    }
-};
-
-struct TokenHandler
-{
-    bool operator()(const LexerToken &token, uint32_t &stringIndex, Parser &parser)
-    {
-        switch (token.id())
-        {
-        case Tokens::ID_BRACKET_OPEN:
-            parser.handleBraceOpen(stringIndex);
-            break;
-        case Tokens::ID_BRACKET_CLOSE:
-            parser.handleBraceClose(stringIndex);
-            break;
-        case Tokens::ID_RETURN:
-            parser.handleReturn(stringIndex);
-            break;
-        case Tokens::ID_DEFER_CALL:
-            parser.handleDeferCall(token, stringIndex);
-            break;
-        case Tokens::ID_CHAR:
-            // nothing
-            break;
-        default:
-            throw std::runtime_error{"unknown token id - lexer error"};
-            break;
-        }
-
-        stringIndex += token.value().size();
-
-        return true;
-    }
 };
 
 Parser::Parser() //
@@ -106,7 +57,8 @@ void Parser::parse(const std::string &path)
         std::cout << "yyparse() result: " << parseRes << std::endl;
         assert(parseRes == 0);
 
-        // TODO: lex: add single-line comments
+        // TODO: lex/parse: cleanup externs - move to separate C file
+        // TODO: parser actions to handle all the required things
         // TODO: lex/parse: move extern functions to separate file
         // TODO: lex/parse: add exact position in file
         // TODO: lex/parse: add boolean and sintX_t
@@ -177,19 +129,12 @@ void Parser::handleReturn(const uint32_t stringIndex)
     }
 }
 
-void Parser::handleDeferCall(const LexerToken &token, const uint32_t)
+void Parser::handleDeferCall(const std::string &token, const uint32_t)
 {
     constexpr size_t deferSize = sizeof("defer ") - 1;
-    const size_t tokenSize = token.value().size();
+    const size_t tokenSize = token.length();
 
-    // TODO: fix this...
-    std::stringstream ss;
-    ss << token.value();
-    const std::string tokenValueStr = ss.str();
-    const char *const tokenValue = tokenValueStr.data();
-    const std::string deferredFunctionName( //
-        (tokenValue + deferSize),
-        (tokenSize - deferSize));
+    const std::string deferredFunctionName = token.substr(deferSize, (tokenSize - deferSize));
 
     std::cout << " --> defer detected, brace level: " //
               << mState.mCurrentBraceLevel            //

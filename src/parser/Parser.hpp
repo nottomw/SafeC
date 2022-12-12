@@ -2,7 +2,6 @@
 
 #include "ModPoint.hpp"
 #include <any>
-#include <boost/spirit/include/lex_lexertl.hpp>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -10,10 +9,6 @@
 
 namespace safec
 {
-
-struct TokenHandler;
-
-using LexerToken = boost::spirit::lex::lexertl::token<>;
 
 class Parser
 {
@@ -34,7 +29,7 @@ private:
     void handleBraceOpen(const uint32_t stringIndex);
     void handleBraceClose(const uint32_t stringIndex);
     void handleReturn(const uint32_t stringIndex);
-    void handleDeferCall(const LexerToken &token, const uint32_t stringIndex);
+    void handleDeferCall(const std::string &token, const uint32_t stringIndex);
 
     std::vector<ModPoint> mModPoints;
 
@@ -52,8 +47,6 @@ private:
     };
 
     ParserState mState;
-
-    friend TokenHandler;
 };
 
 } // namespace safec
