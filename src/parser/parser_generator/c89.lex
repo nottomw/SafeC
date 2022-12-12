@@ -58,7 +58,7 @@ int check_type(void);
 "while"			{ count(); return(WHILE); }
 "defer"			{ count(); return(SAFEC_DEFER); }
 
-{L}({L}|{D})*		{ count(); yylval.tokenStrValue = strdup( yytext ); return(check_type()); }
+{L}({L}|{D})*		{ count(); yylval.tokenStrValue = yytext; return(check_type()); }
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
 0{D}+{IS}?		{ count(); return(CONSTANT); }
@@ -179,6 +179,7 @@ void count(void)
 
 	characters += i;
 
+	// display the token
 	ECHO;
 }
 

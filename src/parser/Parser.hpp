@@ -30,6 +30,12 @@ public:
 
     void parse(const std::string &path);
 
+    // TOOD: move to ParserImpl
+    void handleIdentifier(const uint32_t stringIndex, const std::string &&name);
+    void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
+    void handleDeferCall(const uint32_t stringIndex);
+    void handleReturn(const uint32_t stringIndex, const bool returnValueAvailable);
+
 private:
     void parseFile(const boost::filesystem::path &path);
 
@@ -37,8 +43,6 @@ private:
 
     void handleBraceOpen(const uint32_t stringIndex);
     void handleBraceClose(const uint32_t stringIndex);
-    void handleReturn(const uint32_t stringIndex);
-    void handleDeferCall(const std::string &token, const uint32_t stringIndex);
 
     std::vector<ModPoint> mModPoints;
 

@@ -36,6 +36,21 @@ void test_function_file(int arg)
     printf("end of function...\n");
 }
 
+void test_function_nested_defer(void)
+{
+    int a = 5;
+    {
+        int *a = malloc(sizeof(int));
+        defer free(a);
+        printf("malloc-free test: a\n");
+        {
+            int *b = malloc(sizeof(int));
+            defer free(b);
+            printf("malloc-free test: b\n");
+        }
+    }
+}
+
 int main(void)
 {
     {

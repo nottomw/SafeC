@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Parser.hpp"
+
 namespace safec
 {
-
-class Parser;
 
 class ParserFactory final
 {

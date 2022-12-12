@@ -2,14 +2,25 @@
 
 %{
 
-#include <stdio.h>
+#include <cstdio>
+#include "ParserFactory.hpp"
 
 extern char yytext[];
 
-extern int yylex( void );
-extern int yyparse( void );
+extern "C" int yylex( void );
+extern "C" int yyparse( void );
 
-extern void yyerror( const char *str );
+extern int characters;
+
+void yyerror(const char *str)
+{
+	extern int yylineno;
+	extern int column;
+
+    fflush(stdout);
+    printf("\n\nPARSING ERROR: %s (line: %d, column: %d)\n\n", str, yylineno, column);
+    fflush(stdout);
+}
 
 %}
 
@@ -40,7 +51,8 @@ extern void yyerror( const char *str );
 primary_expression
 	: IDENTIFIER
 	{
-		printf("@@@ identifier -->%s<-- @@@", $1);
+		const std::string str {$1};
+		safec::ParserFactory::getParser().handleIdentifier(characters, std::move(str));
 	}
 	| CONSTANT
 	| STRING_LITERAL
@@ -52,15 +64,11 @@ postfix_expression
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
 	{
-		fflush(stdout);
-		printf("@@@ call no arguments @@@");
-		fflush(stdout);
+		safec::ParserFactory::getParser().handlePostfixExpression(characters, false);
 	}
 	| postfix_expression '(' argument_expression_list ')'
 	{
-		fflush(stdout);
-		printf("@@@ call with arguments @@@");
-		fflush(stdout);
+		safec::ParserFactory::getParser().handlePostfixExpression(characters, true);
 	}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
@@ -82,9 +90,7 @@ unary_expression
 	| SIZEOF '(' type_name ')'
 	| SAFEC_DEFER expression
 	{
-		fflush(stdout);
-		printf("@@@ DEFERRED CALL @@@");
-		fflush(stdout);
+		safec::ParserFactory::getParser().handleDeferCall(characters);
 	}
 	;
 
@@ -437,7 +443,13 @@ jump_statement
 	| CONTINUE ';'
 	| BREAK ';'
 	| RETURN ';'
+	{
+		safec::ParserFactory::getParser().handleReturn(characters, false);
+	}
 	| RETURN expression ';'
+	{
+		safec::ParserFactory::getParser().handleReturn(characters, true);
+	}
 	;
 
 translation_unit
