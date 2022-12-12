@@ -7,6 +7,14 @@
 #include <utility>
 #include <vector>
 
+namespace boost
+{
+namespace filesystem
+{
+class path;
+}
+} // namespace boost
+
 namespace safec
 {
 
@@ -23,6 +31,8 @@ public:
     void parse(const std::string &path);
 
 private:
+    void parseFile(const boost::filesystem::path &path);
+
     void addModPoint(ModPoint &&modPoint);
 
     void handleBraceOpen(const uint32_t stringIndex);

@@ -3,6 +3,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <cassert>
 #include <iostream>
 
@@ -39,28 +40,43 @@ void Parser::parse(const std::string &path)
     if (bfs::is_directory(filePathBoost) == true)
     {
         std::cout << "parser: got directory\n";
-        // TODO: for each .sc file in directory...
+        for (auto &entry : boost::make_iterator_range(bfs::directory_iterator(filePathBoost), {}))
+        {
+            parseFile(entry);
+        }
     }
-
-    if (bfs::is_regular_file(filePathBoost) == true)
+    else if (bfs::is_regular_file(filePathBoost) == true)
     {
-        // TODO: mmap the file?
-
-        yyin = fopen(filePathBoost.c_str(), "r");
-        assert(yyin != nullptr);
-
-        const int32_t parseRes = yyparse();
-        std::cout << "yyparse() result: " << parseRes << std::endl;
-        assert(parseRes == 0);
-
-        std::cout << "Characters in file: " << characters << std::endl;
-
-        // TODO: parser action -- defer
-        // TODO: lex/parse: move extern functions to separate file
-        // TODO: lex/parse: add exact position in file
-        // TODO: lex/parse: add boolean and sintX_t
-        // TODO: lex/parse: allow int i in for loop
+        parseFile(filePathBoost);
     }
+    else
+    {
+        throw std::runtime_error{"invalid path?"};
+    }
+}
+
+void Parser::parseFile(const bfs::path &path)
+{
+    assert(bfs::is_regular_file(path) == true);
+
+    std::cout << "-----> " << path << "\n";
+
+    // TODO: mmap the file?
+
+    yyin = fopen(path.c_str(), "r");
+    assert(yyin != nullptr);
+
+    const int32_t parseRes = yyparse();
+    std::cout << "yyparse() result: " << parseRes << std::endl;
+    assert(parseRes == 0);
+
+    std::cout << "Characters in file: " << characters << std::endl;
+
+    // TODO: parser action -- defer
+    // TODO: lex/parse: move extern functions to separate file
+    // TODO: lex/parse: add exact position in file
+    // TODO: lex/parse: add boolean and sintX_t
+    // TODO: lex/parse: allow int i in for loop
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)
