@@ -10,12 +10,11 @@
 namespace safec
 {
 
-class Parser
+class Parser final
 {
 public:
     Parser();
     ~Parser() = default;
-
     Parser(const Parser &) = delete;
     Parser(Parser &&) = delete;
     Parser &operator=(const Parser &) = delete;
@@ -47,6 +46,16 @@ private:
     };
 
     ParserState mState;
+};
+
+class ParserFactory final
+{
+public:
+    static Parser &getParser()
+    {
+        static Parser parser;
+        return parser;
+    }
 };
 
 } // namespace safec
