@@ -406,8 +406,17 @@ labeled_statement
 compound_statement
 	: '{' '}'
 	| '{' statement_list '}'
+	{
+		safec::ParserFactory::getParser().handleCompoundStatement(characters);
+	}
 	| '{' declaration_list '}'
+	{
+		safec::ParserFactory::getParser().handleCompoundStatement(characters);
+	}
 	| '{' declaration_list statement_list '}'
+	{
+		safec::ParserFactory::getParser().handleCompoundStatement(characters);
+	}
 	;
 
 declaration_list

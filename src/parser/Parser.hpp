@@ -35,14 +35,12 @@ public:
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
     void handleDeferCall(const uint32_t stringIndex);
     void handleReturn(const uint32_t stringIndex, const bool returnValueAvailable);
+    void handleCompoundStatement(const uint32_t stringIndex);
 
 private:
     void parseFile(const boost::filesystem::path &path);
 
     void addModPoint(ModPoint &&modPoint);
-
-    void handleBraceOpen(const uint32_t stringIndex);
-    void handleBraceClose(const uint32_t stringIndex);
 
     std::vector<ModPoint> mModPoints;
 

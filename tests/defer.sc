@@ -36,6 +36,24 @@ void test_function_file(int arg)
     printf("end of function...\n");
 }
 
+void test_function_break_continue(void)
+{
+    int i = 0;
+    for(i = 0; i < 10; ++i)
+    {
+        defer printf("deferred loop print at i = %d\n", i);
+        if (i == 5)
+        {
+            continue;
+        }
+
+        if (i == 8)
+        {
+            break;
+        }
+    }
+}
+
 void test_function_nested_defer(void)
 {
     int a = 5;

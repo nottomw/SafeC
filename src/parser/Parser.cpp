@@ -79,11 +79,7 @@ void Parser::parseFile(const bfs::path &path)
     std::cout << "yyparse() result: " << parseRes << std::endl;
     assert(parseRes == 0);
 
-    std::cout << "Characters in file " << path << ":" << characters << std::endl;
-
-    // TODO: lex/parse: add exact position in file
-    // TODO: lex/parse: add boolean and sintX_t
-    // TODO: lex/parse: allow int i in for loop
+    std::cout << "Characters in file " << path << ": " << characters << std::endl;
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)
@@ -129,19 +125,6 @@ void Parser::handleDeferCall(const uint32_t stringIndex)
     // At this point the handler knows the exact location of deferred call end,
     // so to simplify it should just backtrace to the "defer" token and copy the whole
     // call into mod point.
-
-    // constexpr size_t deferSize = sizeof("defer ") - 1;
-    // const size_t tokenSize = token.length();
-
-    // const std::string deferredFunctionName = token.substr(deferSize, (tokenSize - deferSize));
-
-    // std::cout << " --> defer detected, brace level: " //
-    //           << mState.mCurrentBraceLevel            //
-    //           << ", token: "                          //
-    //           << deferredFunctionName                 //
-    //           << std::endl;
-
-    // mState.mDeferAtBraceLevel.emplace_back(std::make_pair(mState.mCurrentBraceLevel, deferredFunctionName));
 }
 
 void Parser::handleReturn(const uint32_t stringIndex, const bool returnValueAvailable)
@@ -155,51 +138,12 @@ void Parser::handleReturn(const uint32_t stringIndex, const bool returnValueAvai
         std::cout << TERM_COLOR_LCYAN << "@@@ return at: " << stringIndex << " @@@" << TERM_COLOR_NC;
     }
 
-    // for (auto it = mState.mDeferAtBraceLevel.begin(); //
-    //      it != mState.mDeferAtBraceLevel.end();
-    //      ++it)
-    // {
-    //     auto &deferAtBrace = it->first;
-    //     if (deferAtBrace <= mState.mCurrentBraceLevel)
-    //     {
-    //         auto &functionName = it->second;
-    //         std::cout << " <-- firing defer at return, brace level " << mState.mCurrentBraceLevel
-    //                   << ", call: " << functionName << std::endl;
-    //         addModPoint(
-    //             ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
-
-    //         // TODO: detect if this is last return in function - if yes, erase
-    //         // mState.mDeferAtBraceLevel.erase(it);
-    //         break;
-    //     }
-    // }
+    // TODO: save last seen return, but defer only at compound stmt
 }
 
-void Parser::handleBraceOpen(const uint32_t)
+void Parser::handleCompoundStatement(const uint32_t stringIndex)
 {
-    mState.mCurrentBraceLevel += 1U;
-}
-
-void Parser::handleBraceClose(const uint32_t stringIndex)
-{
-    for (auto it = mState.mDeferAtBraceLevel.begin(); //
-         it != mState.mDeferAtBraceLevel.end();
-         ++it)
-    {
-        auto &deferAtBrace = it->first;
-        if (deferAtBrace == mState.mCurrentBraceLevel)
-        {
-            auto &functionName = it->second;
-            std::cout << " <-- firing defer at end of brace level " << mState.mCurrentBraceLevel
-                      << ", call: " << functionName << std::endl;
-            addModPoint(
-                ModPoint{stringIndex, ModPoint::ModType::CALL_DEFERRED, ModPoint::DataCallDeferred{functionName}});
-            mState.mDeferAtBraceLevel.erase(it);
-            break;
-        }
-    }
-
-    mState.mCurrentBraceLevel -= 1U;
+    std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt at: " << stringIndex << " @@@" << TERM_COLOR_NC;
 }
 
 } // namespace safec
