@@ -15,13 +15,13 @@ target_include_directories(generated_lexer_parser
 )
 
 add_custom_target(lexer_generate
-    COMMAND flex -o ${SAFEC_LEXER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/c89.lex
+    COMMAND flex -o ${SAFEC_LEXER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/parser_generator/c89.lex
     BYPRODUCTS ${SAFEC_LEXER_PATH}
     COMMENT "Generating C89 lexer..."
 )
 
 add_custom_target(parser_generate
-    COMMAND bison -d -o ${SAFEC_PARSER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/c89.yacc
+    COMMAND bison -d -o ${SAFEC_PARSER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/parser_generator/c89.yacc
     BYPRODUCTS ${SAFEC_PARSER_PATH}
     COMMENT "Generating C89 parser..."
 )
