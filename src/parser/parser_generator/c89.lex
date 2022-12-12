@@ -11,6 +11,7 @@ IS			(u|U|l|L)*
 
 %{
 #include <stdio.h>
+#include <assert.h>
 #include "SafecParser.yacc.h"
 
 void count(void);
@@ -117,7 +118,7 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 "?"			{ count(); return('?'); }
 
 [ \t\v\n\f]		{ count(); }
-.			{ /* ignore bad characters */ }
+.			{ /* ignore bad characters */ assert(NULL == "bad character"); }
 
 %%
 
