@@ -7,6 +7,7 @@ set(SAFEC_PARSER_PATH "${SAFEC_PARSER_LEXER_GENPATH}/SafecParser.yacc.c")
 add_library(generated_lexer_parser
     ${SAFEC_LEXER_PATH}
     ${SAFEC_PARSER_PATH}
+    parser_generator/parser_functions.c
 )
 
 target_include_directories(generated_lexer_parser

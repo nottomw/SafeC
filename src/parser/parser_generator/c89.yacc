@@ -11,12 +11,7 @@ extern int yylineno;
 extern int yylex( void );
 extern int yyparse( void );
 
-void yyerror( const char *str )
-{
-	fflush(stdout);
-	printf("\n\nPARSING ERROR: %s (line: %d, column: %d)\n\n", str, yylineno, column);
-	fflush(stdout);
-}
+extern void yyerror( const char *str );
 
 %}
 

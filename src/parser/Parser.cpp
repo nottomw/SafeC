@@ -8,7 +8,11 @@
 
 extern "C"
 {
-    extern int yyparse(void);
+#include "SafecParser.yacc.h"
+}
+
+extern "C"
+{
     extern FILE *yyin;
     extern int characters;
 }
