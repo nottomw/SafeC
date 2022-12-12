@@ -35,7 +35,8 @@ public:
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
     void handleDeferCall(const uint32_t stringIndex);
     void handleReturn(const uint32_t stringIndex, const bool returnValueAvailable);
-    void handleCompoundStatement(const uint32_t stringIndex);
+    void handleCompoundStatementStart(const uint32_t stringIndex);
+    void handleCompoundStatementEnd(const uint32_t stringIndex);
 
 private:
     void parseFile(const boost::filesystem::path &path);

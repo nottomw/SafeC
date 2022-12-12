@@ -390,7 +390,7 @@ initializer_list
 
 statement
 	: labeled_statement
-	| compound_statement
+	| { safec::ParserFactory::getParser().handleCompoundStatementStart(characters); } compound_statement
 	| expression_statement
 	| selection_statement
 	| iteration_statement
@@ -407,15 +407,15 @@ compound_statement
 	: '{' '}'
 	| '{' statement_list '}'
 	{
-		safec::ParserFactory::getParser().handleCompoundStatement(characters);
+		safec::ParserFactory::getParser().handleCompoundStatementEnd(characters);
 	}
 	| '{' declaration_list '}'
 	{
-		safec::ParserFactory::getParser().handleCompoundStatement(characters);
+		safec::ParserFactory::getParser().handleCompoundStatementEnd(characters);
 	}
 	| '{' declaration_list statement_list '}'
 	{
-		safec::ParserFactory::getParser().handleCompoundStatement(characters);
+		safec::ParserFactory::getParser().handleCompoundStatementEnd(characters);
 	}
 	;
 
@@ -473,7 +473,7 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator compound_statement
+	| declaration_specifiers declarator { safec::ParserFactory::getParser().handleCompoundStatementStart(characters); } compound_statement
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
 	;

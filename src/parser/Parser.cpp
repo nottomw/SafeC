@@ -82,6 +82,7 @@ void Parser::parseFile(const bfs::path &path)
 
     // After the parsing is done we should know the exact layout of intersting code blocks
     // in the provided source file.
+    // TODO: use boost graph?
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)
@@ -143,9 +144,14 @@ void Parser::handleReturn(const uint32_t stringIndex, const bool returnValueAvai
     // TODO: save last seen return, but defer only at compound stmt
 }
 
-void Parser::handleCompoundStatement(const uint32_t stringIndex)
+void Parser::handleCompoundStatementStart(const uint32_t stringIndex)
 {
-    std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt start at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+}
+
+void Parser::handleCompoundStatementEnd(const uint32_t stringIndex)
+{
+    std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt end at: " << stringIndex << " @@@" << TERM_COLOR_NC;
 }
 
 } // namespace safec
