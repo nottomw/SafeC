@@ -17,11 +17,12 @@ Safer version of C89 language - transpiles to C89.
 5. Ranged arrays - automatic checks
 6. Integer overflow checks
 7. Type-safe defines
-8. Fixed width types (uint32_t, int32_t, ...) and booleans
-9. static_assert
+8. Fixed width types (`uint32_t`, `int32_t`, ...) and `bool`
+9. `static_assert`
 10. Templates/generics - type safe defines (?)
-11. pragma once
+11. `pragma once`
 12. Changes for confusing syntax: `volatile`, `static`
+13. Allow `for(int i = 0; ...)`
 ...TBC
 
 ### Build
