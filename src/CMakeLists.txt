@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-
-project(SafeC CXX)
+project(SafeC CXX C)
 
 include(${CMAKE_SOURCE_DIR}/cmake/CompilerOptions.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Deps.cmake)
