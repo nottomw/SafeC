@@ -30,7 +30,7 @@ public:
 
     void parse(const std::string &path);
 
-    // TOOD: move to ParserImpl
+    // TOOD: move to separate Semantics class
     void handleIdentifier(const uint32_t stringIndex, const std::string &&name);
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
     void handleDeferCall(const uint32_t stringIndex);
