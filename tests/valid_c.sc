@@ -1,5 +1,11 @@
 // single line comment
 
+/*
+    multi
+    line
+    comment
+*/
+
 #include <stdio.h>
 
 void mutex_lock()

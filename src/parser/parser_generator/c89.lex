@@ -19,9 +19,9 @@ int check_type(void);
 %}
 
 %%
-"/*"			{ comment(); }
-"//"[^\n]*      { /* consume //-comment */ }
-"#"[^\n]*		{ /* consume preprocessor directives */ }
+"/*"			{ count(); comment(); }
+"//"[^\n]*      { count(); /* consume //-comment */ }
+"#"[^\n]*		{ count(); /* consume preprocessor directives */ }
 
 "auto"			{ count(); return(AUTO); }
 "break"			{ count(); return(BREAK); }
@@ -128,37 +128,54 @@ int yywrap(void)
 
 void comment(void)
 {
-	char c, c1;
-
-loop:
-	while ((c = input()) != '*' && c != 0)
-		putchar(c);
-
-	if ((c1 = input()) != '/' && c != 0)
+ 	char c, c1;
+ 
+ loop:
+ 	while ((c = input()) != '*' && c != 0)
 	{
-		unput(c1);
-		goto loop;
+ 		putchar(c);
 	}
 
 	if (c != 0)
-		putchar(c1);
+	{
+		putchar(c);
+	}
+ 
+ 	if ((c1 = input()) != '/' && c != 0)
+ 	{
+ 		unput(c1);
+ 		goto loop;
+ 	}
+ 
+ 	if (c != 0)
+	{
+ 		putchar(c1);
+	}
 }
 
 int column = 0;
+int characters = 0;
 
 void count(void)
 {
 	int i;
-
 	for (i = 0; yytext[i] != '\0'; i++)
+	{
 		if (yytext[i] == '\n')
 		{
 			column = 0;
 		}
 		else if (yytext[i] == '\t')
+		{
 			column += 8 - (column % 8);
+		}
 		else
+		{
 			column++;
+		}
+	}
+
+	characters += i;
 
 	ECHO;
 }

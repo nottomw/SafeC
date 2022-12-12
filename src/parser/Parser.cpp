@@ -10,6 +10,7 @@ extern "C"
 {
     extern int yyparse(void);
     extern FILE *yyin;
+    extern int characters;
 }
 
 namespace safec
@@ -57,11 +58,14 @@ void Parser::parse(const std::string &path)
         std::cout << "yyparse() result: " << parseRes << std::endl;
         assert(parseRes == 0);
 
+        std::cout << "Characters in file: " << characters << std::endl;
+
         // TODO: lex/parse: cleanup externs - move to separate C file
         // TODO: parser actions to handle all the required things
         // TODO: lex/parse: move extern functions to separate file
         // TODO: lex/parse: add exact position in file
         // TODO: lex/parse: add boolean and sintX_t
+        // TODO: lex/parse: allow int i in for loop
     }
 }
 
