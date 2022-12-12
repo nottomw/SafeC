@@ -25,11 +25,23 @@ extern void yyerror( const char *str );
 
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
+%token SAFEC_DEFER
+
+%union {
+	char *tokenStrValue;
+	int tokenIntValue;
+}
+
+%type<tokenStrValue> IDENTIFIER
+
 %start translation_unit
 %%
 
 primary_expression
 	: IDENTIFIER
+	{
+		printf("@@@ identifier -->%s<-- @@@", $1);
+	}
 	| CONSTANT
 	| STRING_LITERAL
 	| '(' expression ')'
@@ -39,7 +51,17 @@ postfix_expression
 	: primary_expression
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
+	{
+		fflush(stdout);
+		printf("@@@ call no arguments @@@");
+		fflush(stdout);
+	}
 	| postfix_expression '(' argument_expression_list ')'
+	{
+		fflush(stdout);
+		printf("@@@ call with arguments @@@");
+		fflush(stdout);
+	}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
 	| postfix_expression INC_OP
@@ -58,6 +80,12 @@ unary_expression
 	| unary_operator cast_expression
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
+	| SAFEC_DEFER expression
+	{
+		fflush(stdout);
+		printf("@@@ DEFERRED CALL @@@");
+		fflush(stdout);
+	}
 	;
 
 unary_operator

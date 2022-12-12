@@ -59,18 +59,15 @@ void Parser::parseFile(const bfs::path &path)
 {
     assert(bfs::is_regular_file(path) == true);
 
-    std::cout << "-----> " << path << "\n";
-
-    // TODO: mmap the file?
-
     yyin = fopen(path.c_str(), "r");
     assert(yyin != nullptr);
 
     const int32_t parseRes = yyparse();
+
     std::cout << "yyparse() result: " << parseRes << std::endl;
     assert(parseRes == 0);
 
-    std::cout << "Characters in file: " << characters << std::endl;
+    std::cout << "Characters in file " << path << ":" << characters << std::endl;
 
     // TODO: parser action -- defer
     // TODO: lex/parse: move extern functions to separate file

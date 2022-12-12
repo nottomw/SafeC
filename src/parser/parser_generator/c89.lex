@@ -56,8 +56,9 @@ int check_type(void);
 "void"			{ count(); return(VOID); }
 "volatile"		{ count(); return(VOLATILE); }
 "while"			{ count(); return(WHILE); }
+"defer"			{ count(); return(SAFEC_DEFER); }
 
-{L}({L}|{D})*		{ count(); return(check_type()); }
+{L}({L}|{D})*		{ count(); yylval.tokenStrValue = strdup( yytext ); return(check_type()); }
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
 0{D}+{IS}?		{ count(); return(CONSTANT); }
