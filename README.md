@@ -14,12 +14,12 @@ Safer version of C89 language - transpiles to C89.
 2. References
 3. Pointer ownership indication (and enforcement)
 4. NULL - optional automatic checks before dereference whenever possible
-5. ranged arrays - automatic checks
-6. integer overflow checks
-7. type-safe defines
-8. fixed width types: uint32_t, int32_t, ...
+5. Ranged arrays - automatic checks
+6. Integer overflow checks
+7. Type-safe defines
+8. Fixed width types (uint32_t, int32_t, ...) and booleans
 9. static_assert
-10. templates/generics - type safe defines (?)
+10. Templates/generics - type safe defines (?)
 11. pragma once
 12. Changes for confusing syntax: `volatile`, `static`
 ...TBC
