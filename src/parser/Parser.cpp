@@ -51,6 +51,7 @@ void Parser::parse(const std::string &path)
 
     if (bfs::is_directory(filePathBoost) == true)
     {
+        // TODO: fun: multiple processes for multiple files (?)
         std::cout << "parser: got directory\n";
         for (auto &entry : boost::make_iterator_range(bfs::directory_iterator(filePathBoost), {}))
         {
