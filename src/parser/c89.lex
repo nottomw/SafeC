@@ -7,15 +7,21 @@ E			[Ee][+-]?{D}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
 
+%option yylineno
+
 %{
 #include <stdio.h>
-#include "y.tab.h"
+#include "SafecParser.yacc.h"
 
-void count();
+void count(void);
+void comment(void);
+int check_type(void);
 %}
 
 %%
 "/*"			{ comment(); }
+"//"[^\n]*      { /* consume //-comment */ }
+"#"[^\n]*		{ /* consume preprocessor directives */ }
 
 "auto"			{ count(); return(AUTO); }
 "break"			{ count(); return(BREAK); }
@@ -115,13 +121,12 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 
 %%
 
-yywrap()
+int yywrap(void)
 {
-	return(1);
+	return 1;
 }
 
-
-comment()
+void comment(void)
 {
 	char c, c1;
 
@@ -139,16 +144,17 @@ loop:
 		putchar(c1);
 }
 
-
 int column = 0;
 
-void count()
+void count(void)
 {
 	int i;
 
 	for (i = 0; yytext[i] != '\0'; i++)
 		if (yytext[i] == '\n')
+		{
 			column = 0;
+		}
 		else if (yytext[i] == '\t')
 			column += 8 - (column % 8);
 		else
@@ -156,7 +162,6 @@ void count()
 
 	ECHO;
 }
-
 
 int check_type()
 {

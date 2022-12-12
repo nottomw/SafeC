@@ -1,5 +1,25 @@
 /* https://www.quut.com/c/ANSI-C-grammar-l-1995.html */
 
+%{
+
+#include <stdio.h>
+
+extern char yytext[];
+extern int column;
+
+extern int yylineno;
+extern int yylex( void );
+extern int yyparse( void );
+
+void yyerror( const char *str )
+{
+	fflush(stdout);
+	printf("\n\nPARSING ERROR: %s (line: %d, column: %d)\n\n", str, yylineno, column);
+	fflush(stdout);
+}
+
+%}
+
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
@@ -417,14 +437,3 @@ function_definition
 	;
 
 %%
-#include <stdio.h>
-
-extern char yytext[];
-extern int column;
-
-yyerror(s)
-char *s;
-{
-	fflush(stdout);
-	printf("\n%*s\n%*s\n", column, "^", column, s);
-}
