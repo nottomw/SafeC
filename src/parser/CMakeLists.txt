@@ -21,7 +21,7 @@ add_custom_target(lexer_generate
 )
 
 add_custom_target(parser_generate
-    COMMAND bison --yacc -d -o ${SAFEC_PARSER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/c89.yacc
+    COMMAND bison -d -o ${SAFEC_PARSER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/c89.yacc
     BYPRODUCTS ${SAFEC_PARSER_PATH}
     COMMENT "Generating C89 parser..."
 )
