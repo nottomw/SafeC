@@ -1,4 +1,5 @@
 #include "parser/Parser.hpp"
+#include "parser/ParserFactory.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
