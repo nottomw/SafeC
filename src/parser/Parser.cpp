@@ -55,8 +55,7 @@ void Parser::parse(const std::string &path)
 
         std::cout << "Characters in file: " << characters << std::endl;
 
-        // TODO: lex/parse: cleanup externs - move to separate C file
-        // TODO: parser actions to handle all the required things
+        // TODO: parser action -- defer
         // TODO: lex/parse: move extern functions to separate file
         // TODO: lex/parse: add exact position in file
         // TODO: lex/parse: add boolean and sintX_t
