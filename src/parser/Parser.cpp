@@ -6,6 +6,12 @@
 #include <cassert>
 #include <iostream>
 
+extern "C"
+{
+    extern int yyparse(void);
+    extern FILE *yyin;
+}
+
 namespace safec
 {
 
@@ -91,10 +97,19 @@ void Parser::parse(const std::string &path)
 
     if (bfs::is_regular_file(filePathBoost) == true)
     {
-        bio::mapped_file_source source{filePathBoost};
-        const std::string_view sourceView{source.data(), source.size()};
+        // TODO: mmap the file?
 
-        parseString(sourceView);
+        yyin = fopen(filePathBoost.c_str(), "r");
+        assert(yyin != nullptr);
+
+        const int32_t parseRes = yyparse();
+        std::cout << "yyparse() result: " << parseRes << std::endl;
+        assert(parseRes == 0);
+
+        // TODO: lex: add single-line comments
+        // TODO: lex/parse: move extern functions to separate file
+        // TODO: lex/parse: add exact position in file
+        // TODO: lex/parse: add boolean and sintX_t
     }
 }
 
@@ -183,30 +198,6 @@ void Parser::handleDeferCall(const LexerToken &token, const uint32_t)
               << std::endl;
 
     mState.mDeferAtBraceLevel.emplace_back(std::make_pair(mState.mCurrentBraceLevel, deferredFunctionName));
-}
-
-void Parser::parseString(const std::string_view &source)
-{
-    // TODO: for more advanced stuff probably need to use lex&yacc...
-    TokenDefinitions<lex::lexertl::lexer<>> findTokens;
-
-    uint32_t stringIndex = 0U;
-    auto tokenHandler = std::bind( //
-        TokenHandler(),
-        std::placeholders::_1,
-        std::ref(stringIndex),
-        std::ref(*this));
-
-    auto first = source.begin();
-    auto last = source.end();
-
-    const bool lexSuccess = lex::tokenize( //
-        first,
-        last,
-        findTokens,
-        tokenHandler);
-
-    assert(lexSuccess == true);
 }
 
 } // namespace safec

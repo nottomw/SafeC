@@ -29,8 +29,6 @@ public:
     void parse(const std::string &path);
 
 private:
-    void parseString(const std::string_view &source);
-
     void addModPoint(ModPoint &&modPoint);
 
     void handleBraceOpen(const uint32_t stringIndex);
