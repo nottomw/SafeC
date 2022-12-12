@@ -26,7 +26,7 @@ Safer version of C89 language - transpiles to C89.
 ...TBC
 
 ### Build
-Requires: conan, cmake, ninja, clang++.
+Requires: conan, cmake, ninja, clang++, flex, bison.
 
 ```
 SafeC $ mkdir build
