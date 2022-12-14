@@ -51,7 +51,7 @@ void yyerror(const char *str)
 primary_expression
 	: IDENTIFIER
 	{
-		const std::string str {$1};
+		std::string str {$1};
 		safec::ParserFactory::getParser().handleIdentifier(characters, std::move(str));
 	}
 	| CONSTANT

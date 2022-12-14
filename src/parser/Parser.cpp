@@ -30,6 +30,13 @@ extern "C"
 #define TERM_COLOR_LPURPLE "\033[01;35m"
 #define TERM_COLOR_LCYAN "\033[01;36m"
 
+static void syntaxReport(const uint32_t stringIndex,
+                         const std::string &name,
+                         const std::string color = TERM_COLOR_LCYAN)
+{
+    std::cout << color << "@ " << name << " at: " << stringIndex << " @" << TERM_COLOR_NC;
+}
+
 namespace safec
 {
 
@@ -100,31 +107,27 @@ void Parser::addModPoint(ModPoint &&modPoint)
     mModPoints.emplace_back(std::move(modPoint));
 }
 
-void Parser::handleIdentifier(const uint32_t stringIndex, const std::string &&name)
+void Parser::handleIdentifier(const uint32_t stringIndex, std::string &&name)
 {
-    // std::cout << TERM_COLOR_LRED            //
-    //           << "@@@ identifier: " << name //
-    //           << " at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    name.insert(0, "identifier: ");
+    syntaxReport(stringIndex, name);
 }
 
 void Parser::handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments)
 {
-    // if (containsArguments == true)
-    // {
-    //     std::cout << TERM_COLOR_LGREEN //
-    //               << "@@@ call with arguments at: " << stringIndex << " @@@" << TERM_COLOR_NC;
-    // }
-    // else
-    // {
-    //     std::cout << TERM_COLOR_LGREEN //
-    //               << "@@@ call no arguments at: " << stringIndex << " @@@" << TERM_COLOR_NC;
-    // }
+    if (containsArguments == true)
+    {
+        syntaxReport(stringIndex, "call with args");
+    }
+    else
+    {
+        syntaxReport(stringIndex, "call no args");
+    }
 }
 
 void Parser::handleDeferCall(const uint32_t stringIndex)
 {
-    std::cout << TERM_COLOR_LBLUE << "@@@ defer at: " << stringIndex << ", braceLevel: " << mState.mCurrentBraceLevel
-              << " @@@" << TERM_COLOR_NC;
+    syntaxReport(stringIndex, "defer", TERM_COLOR_LBLUE);
 
     // At this point the handler knows the exact location of deferred call end,
     // so to simplify it should just backtrace to the "defer" token and copy the whole
@@ -137,35 +140,38 @@ void Parser::handleReturn(const uint32_t stringIndex, const bool returnValueAvai
 {
     if (returnValueAvailable == true)
     {
-        std::cout << TERM_COLOR_LCYAN << "@@@ return with value at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+        syntaxReport(stringIndex, "return with value", TERM_COLOR_LRED);
     }
     else
     {
-        std::cout << TERM_COLOR_LCYAN << "@@@ return at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+        syntaxReport(stringIndex, "return", TERM_COLOR_LRED);
     }
 }
 
 void Parser::handleCompoundStatementStart(const uint32_t stringIndex)
 {
-    std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt start at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    syntaxReport(stringIndex, "compound stmt start");
+
     mState.mCurrentBraceLevel += 1U;
 }
 
 void Parser::handleCompoundStatementEnd(const uint32_t stringIndex)
 {
-    std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt end at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    syntaxReport(stringIndex, "compound stmt end");
 
     // handle defers in current brace level
     auto it = mState.mDeferAtBraceLevel.begin();
     while (it != mState.mDeferAtBraceLevel.end())
     {
-        // TODO: if the currentBraceLevel is bigger than it->first, then either the
-        // defer needs to be ignored or it has to be fired, depending if we do any
-        // return/continue/break.
+        // TODO: handle return/continue/break/loops
+        //  - return: always fire before return
+        //  - break: fire only if the defer was called in current loop
+        //  - continue: same as break
+        //  - scope end: fire only if the defer was at current scope
 
         if (it->first == mState.mCurrentBraceLevel)
         {
-            std::cout << TERM_COLOR_LBLUE << "@@@ making a defer call: '" << it->second << "' @@@" << TERM_COLOR_NC
+            std::cout << TERM_COLOR_LYELLOW << "@@@ firing a defer call: '" << it->second << "' @@@" << TERM_COLOR_NC
                       << std::endl;
         }
 
