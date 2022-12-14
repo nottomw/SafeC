@@ -102,32 +102,35 @@ void Parser::addModPoint(ModPoint &&modPoint)
 
 void Parser::handleIdentifier(const uint32_t stringIndex, const std::string &&name)
 {
-    std::cout << TERM_COLOR_LRED            //
-              << "@@@ identifier: " << name //
-              << " at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    // std::cout << TERM_COLOR_LRED            //
+    //           << "@@@ identifier: " << name //
+    //           << " at: " << stringIndex << " @@@" << TERM_COLOR_NC;
 }
 
 void Parser::handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments)
 {
-    if (containsArguments == true)
-    {
-        std::cout << TERM_COLOR_LGREEN //
-                  << "@@@ call with arguments at: " << stringIndex << " @@@" << TERM_COLOR_NC;
-    }
-    else
-    {
-        std::cout << TERM_COLOR_LGREEN //
-                  << "@@@ call no arguments at: " << stringIndex << " @@@" << TERM_COLOR_NC;
-    }
+    // if (containsArguments == true)
+    // {
+    //     std::cout << TERM_COLOR_LGREEN //
+    //               << "@@@ call with arguments at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    // }
+    // else
+    // {
+    //     std::cout << TERM_COLOR_LGREEN //
+    //               << "@@@ call no arguments at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    // }
 }
 
 void Parser::handleDeferCall(const uint32_t stringIndex)
 {
-    std::cout << TERM_COLOR_LYELLOW << "@@@ defer at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    std::cout << TERM_COLOR_LBLUE << "@@@ defer at: " << stringIndex << ", braceLevel: " << mState.mCurrentBraceLevel
+              << " @@@" << TERM_COLOR_NC;
 
     // At this point the handler knows the exact location of deferred call end,
     // so to simplify it should just backtrace to the "defer" token and copy the whole
     // call into mod point.
+
+    mState.mDeferAtBraceLevel.emplace_back(mState.mCurrentBraceLevel, "to_be_implemented()");
 }
 
 void Parser::handleReturn(const uint32_t stringIndex, const bool returnValueAvailable)
@@ -140,18 +143,43 @@ void Parser::handleReturn(const uint32_t stringIndex, const bool returnValueAvai
     {
         std::cout << TERM_COLOR_LCYAN << "@@@ return at: " << stringIndex << " @@@" << TERM_COLOR_NC;
     }
-
-    // TODO: save last seen return, but defer only at compound stmt
 }
 
 void Parser::handleCompoundStatementStart(const uint32_t stringIndex)
 {
     std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt start at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+    mState.mCurrentBraceLevel += 1U;
 }
 
 void Parser::handleCompoundStatementEnd(const uint32_t stringIndex)
 {
     std::cout << TERM_COLOR_LPURPLE << "@@@ compound stmt end at: " << stringIndex << " @@@" << TERM_COLOR_NC;
+
+    // handle defers in current brace level
+    auto it = mState.mDeferAtBraceLevel.begin();
+    while (it != mState.mDeferAtBraceLevel.end())
+    {
+        // TODO: if the currentBraceLevel is bigger than it->first, then either the
+        // defer needs to be ignored or it has to be fired, depending if we do any
+        // return/continue/break.
+
+        if (it->first == mState.mCurrentBraceLevel)
+        {
+            std::cout << TERM_COLOR_LBLUE << "@@@ making a defer call: '" << it->second << "' @@@" << TERM_COLOR_NC
+                      << std::endl;
+        }
+
+        if (it->first == mState.mCurrentBraceLevel)
+        {
+            it = mState.mDeferAtBraceLevel.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    mState.mCurrentBraceLevel -= 1U;
 }
 
 } // namespace safec
