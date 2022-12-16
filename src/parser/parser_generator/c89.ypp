@@ -21,7 +21,7 @@ void yyerror(const char *str)
 	extern int column;
 
     fflush(stdout);
-    printf("\n\nPARSING ERROR: %s (line: %d, column: %d)\n\n", str, yylineno, column);
+    printf("\n\nPARSING ERROR: %s (line: %d, column: %d, char_no: %d)\n\n", str, yylineno, column, lex_current_char);
     fflush(stdout);
 }
 
