@@ -12,7 +12,7 @@ add_custom_target(lexer_generate
 )
 
 add_custom_target(parser_generate
-    COMMAND bison -d -o ${SAFEC_PARSER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/parser_generator/c89.ypp
+    COMMAND bison -d -Wno-conflicts-sr -o ${SAFEC_PARSER_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/parser_generator/c89.ypp
     BYPRODUCTS ${SAFEC_PARSER_PATH}
     COMMENT "Generating C89 parser..."
 )
