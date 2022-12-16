@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ModPoint.hpp"
+
 #include <any>
 #include <string>
 #include <string_view>
@@ -25,6 +26,7 @@ class Parser final
 public:
     Parser(Semantics &sem);
     ~Parser() = default;
+
     Parser(const Parser &) = delete;
     Parser(Parser &&) = delete;
     Parser &operator=(const Parser &) = delete;

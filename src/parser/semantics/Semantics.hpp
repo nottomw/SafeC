@@ -13,6 +13,11 @@ class Semantics
 public:
     Semantics();
 
+    Semantics(const Semantics &) = delete;
+    Semantics(Semantics &&) = delete;
+    Semantics &operator=(const Semantics &) = delete;
+    Semantics &operator=(Semantics &&) = delete;
+
     void display();
     void newTranslationUnit();
 
