@@ -27,7 +27,7 @@ public:
     void handleFunctionEnd(const uint32_t stringIndex);
 
 private:
-    SemNode mTranslationUnit;
+    SemNodeTranslationUnit mTranslationUnit;
 };
 
 } // namespace safec

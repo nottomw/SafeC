@@ -59,7 +59,7 @@ static void syntaxReport(const uint32_t stringIndex,
 }
 
 Semantics::Semantics() //
-    : mTranslationUnit{SemNode::Type::TranslationUnit}
+    : mTranslationUnit{}
 {
 }
 

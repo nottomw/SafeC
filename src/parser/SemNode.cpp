@@ -28,6 +28,11 @@ void SemNode::attach(std::shared_ptr<SemNode> node)
     mRelatedNodes.push_back(node);
 }
 
+SemNodeTranslationUnit::SemNodeTranslationUnit()
+{
+    mType = Type::TranslationUnit;
+}
+
 SemNodeScope::SemNodeScope(const uint32_t start) //
     : mStartIndex{start}, mEndIndex{0}
 {

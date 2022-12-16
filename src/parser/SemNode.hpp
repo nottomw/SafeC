@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SemNodeEnumeration.hpp"
+
 #include <cassert>
 #include <iostream>
 #include <memory>
@@ -12,21 +14,13 @@ namespace safec
 
 class SemNodeWalker;
 
-// Magic X-Macro to generate enum & enum to string converter.
 // clang-format off
-#define SEMNODE_TYPE_ENUMERATE(selector) \
-        selector(Undefined) \
-        selector(TranslationUnit) \
-        selector(Loop) \
-        selector(Scope) \
-        selector(Function) \
-        selector(RawText) \
-        selector(Defer) \
-        selector(Return)
-
 #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
-#define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x) \
-    case Type::x: { return #x; } break;
+#define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)                                                                          \
+    case Type::x: {                                                                                                    \
+        return #x;                                                                                                     \
+    }                                                                                                                  \
+    break;
 // clang-format on
 
 class SemNode
@@ -62,6 +56,12 @@ protected:
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
 
     friend class SemNodeWalker;
+};
+
+class SemNodeTranslationUnit : public SemNode
+{
+public:
+    SemNodeTranslationUnit();
 };
 
 // Semantic node with dual position info (start & end).
@@ -107,5 +107,11 @@ class SemNodeReturn final : public SemNodePositional
 public:
     SemNodeReturn(const uint32_t index);
 };
+
+// clang-format off
+class SemNodeUndefined : public SemNode{};
+class SemNodeLoop : public SemNode{};
+class SemNodeRawText : public SemNode{};
+// clang-format on
 
 } // namespace safec

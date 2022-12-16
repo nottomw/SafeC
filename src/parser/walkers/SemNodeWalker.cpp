@@ -1,6 +1,7 @@
 #include "SemNodeWalker.hpp"
 
 #include "SemNode.hpp"
+#include "SemNodeEnumeration.hpp"
 #include "WalkerStrategy.hpp"
 
 namespace safec
@@ -13,43 +14,22 @@ void SemNodeWalker::walk(SemNode &node, WalkerStrategy &strategy)
 
 void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const uint32_t level)
 {
-    // Could be reworked to visitor but all nodes would have to have accept
-    // implementation with ast level management... maybe later
-
-    // Could be also generated from a X-Macro
+// Create switch..case for each SemNode type.
+// clang-format off
+    #define SEMNODE_TYPE_SELECTOR_TYPED_PEEK_CALL(x) \
+        case SemNode::Type::x: \
+        { \
+            using NodeType = SemNode##x; \
+            NodeType &nodeTyped = static_cast<NodeType &>(node); \
+            strategy.peek(nodeTyped, level); \
+        } \
+        break;
+    // clang-format on
 
     switch (node.getType())
     {
-    case SemNode::Type::Undefined:
-        strategy.peek(node, level);
-        break;
-    case SemNode::Type::TranslationUnit:
-        strategy.peek(node, level);
-        break;
-    case SemNode::Type::Loop:
-        strategy.peek(node, level);
-        break;
-    case SemNode::Type::Scope: {
-        SemNodeScope &scope = static_cast<SemNodeScope &>(node);
-        strategy.peek(scope, level);
-    }
-    break;
-    case SemNode::Type::Function: {
-        SemNodeFunction &fun = static_cast<SemNodeFunction &>(node);
-        strategy.peek(fun, level);
-    }
-    break;
-    case SemNode::Type::RawText:
-        strategy.peek(node, level);
-        break;
-    case SemNode::Type::Defer: {
-        SemNodeDefer &def = static_cast<SemNodeDefer &>(node);
-        strategy.peek(def, level);
-    }
-    case SemNode::Type::Return: {
-        strategy.peek(node, level);
-    }
-    break;
+        SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_TYPED_PEEK_CALL)
+
     default:
         throw std::runtime_error("invalid SemNode type");
         break;
