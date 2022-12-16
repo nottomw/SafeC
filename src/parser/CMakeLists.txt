@@ -18,11 +18,14 @@ add_custom_target(parser_generate
 )
 
 add_library(parser
-    Parser.cpp
-    Semantics.cpp
-    SemNodeWalker.cpp
     ${SAFEC_LEXER_PATH}
     ${SAFEC_PARSER_PATH}
+
+    Parser.cpp
+    Semantics.cpp
+    SemNode.cpp
+    walkers/SemNodeWalker.cpp
+    walkers/WalkerPrint.cpp
 )
 
 add_library(safec::parser ALIAS parser)

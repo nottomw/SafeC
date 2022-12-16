@@ -1,6 +1,7 @@
 #include "Semantics.hpp"
 
-#include "SemNodeWalker.hpp"
+#include "walkers/SemNodeWalker.hpp"
+#include "walkers/WalkerPrint.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -18,15 +19,12 @@ namespace
 
 struct SemanticsState
 {
-    SemanticsState()             //
-        : mFunctionStartIndex{0} //
-        , mScopeStack{}
+    SemanticsState() //
+        : mScopeStack{}
     {
     }
 
     using SemNodeScopePtr = std::weak_ptr<SemNodeScope>;
-
-    uint32_t mFunctionStartIndex;
     std::vector<SemNodeScopePtr> mScopeStack;
 };
 
@@ -69,8 +67,9 @@ void Semantics::display()
 {
     std::cout << "Current AST:" << std::endl;
 
-    SemNodePrinter printer;
-    printer.walk(mTranslationUnit);
+    WalkerPrint printer;
+    SemNodeWalker walker;
+    walker.walk(mTranslationUnit, printer);
 }
 
 void Semantics::newTranslationUnit()

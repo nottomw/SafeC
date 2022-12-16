@@ -9,11 +9,12 @@
 namespace safec
 {
 
-class SemNodePrinter;
+class SemNodeWalker;
 
 class SemNode
 {
 public:
+    // TODO: x-macro to have stringified versions
     enum class Type : uint32_t
     {
         UNDEFINED = 1,
@@ -25,69 +26,27 @@ public:
         DEFER_CALL
     };
 
-    SemNode() //
-        : mType{Type::UNDEFINED}
-    {
-    }
-
-    SemNode(const Type type) //
-        : mType{type}
-    {
-    }
-
+    SemNode();
+    SemNode(const Type type);
     virtual ~SemNode() = default;
-
-    void reset()
-    {
-        mRelatedNodes.clear();
-    }
-
-    void setType(const Type type)
-    {
-        // TODO: allow only some changes (like scope --> function)
-        mType = type;
-    }
-
-    Type getType() const
-    {
-        return mType;
-    }
-
-    void attach(std::shared_ptr<SemNode> node)
-    {
-        mRelatedNodes.push_back(node);
-    }
+    void reset();
+    Type getType() const;
+    void attach(std::shared_ptr<SemNode> node);
 
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
 
-    friend class SemNodePrinter;
+    friend class SemNodeWalker;
 };
 
 class SemNodeScope : public SemNode
 {
 public:
-    SemNodeScope(const uint32_t start) //
-        : mStartIndex{start}, mEndIndex{0}
-    {
-        mType = Type::SCOPE;
-    }
-
-    void setEnd(const uint32_t end)
-    {
-        mEndIndex = end;
-    }
-
-    uint32_t getStart() const
-    {
-        return mStartIndex;
-    }
-
-    uint32_t getEnd() const
-    {
-        return mEndIndex;
-    }
+    SemNodeScope(const uint32_t start);
+    void setEnd(const uint32_t end);
+    uint32_t getStart() const;
+    uint32_t getEnd() const;
 
 protected:
     uint32_t mStartIndex;
@@ -97,25 +56,14 @@ protected:
 class SemNodeFunction final : public SemNodeScope
 {
 public:
-    SemNodeFunction(const uint32_t start) //
-        : SemNodeScope{start}             //
-    {
-        mType = Type::FUNCTION;
-    }
+    SemNodeFunction(const uint32_t start);
 };
 
 class SemNodeDefer final : public SemNode
 {
 public:
-    SemNodeDefer(const uint32_t index) : mDeferEndIndex{index}
-    {
-        mType = Type::DEFER_CALL;
-    }
-
-    uint32_t getPos() const
-    {
-        return mDeferEndIndex;
-    }
+    SemNodeDefer(const uint32_t index);
+    uint32_t getPos() const;
 
 private:
     uint32_t mDeferEndIndex;
