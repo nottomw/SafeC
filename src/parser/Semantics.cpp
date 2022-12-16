@@ -1,5 +1,6 @@
 #include "Semantics.hpp"
 
+#include "logger/Logger.hpp"
 #include "walkers/SemNodeWalker.hpp"
 #include "walkers/WalkerPrint.hpp"
 
@@ -39,25 +40,6 @@ std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::weak_ptr<SemNode> &w)
 
 } // namespace
 
-// TODO: fix & move to logger when available
-#define TERM_COLOR_NC "\033[0m"
-#define TERM_COLOR_YELLOW "\033[00;33m"
-#define TERM_COLOR_RED "\033[00;31m"
-#define TERM_COLOR_GREEN "\033[00;32m"
-#define TERM_COLOR_LRED "\033[01;31m"
-#define TERM_COLOR_LGREEN "\033[01;32m"
-#define TERM_COLOR_LYELLOW "\033[01;33m"
-#define TERM_COLOR_LBLUE "\033[01;34m"
-#define TERM_COLOR_LPURPLE "\033[01;35m"
-#define TERM_COLOR_LCYAN "\033[01;36m"
-
-static void syntaxReport(const uint32_t stringIndex,
-                         const std::string &name,
-                         const std::string color = TERM_COLOR_LCYAN)
-{
-    std::cout << color << "@ " << name << " at: " << stringIndex << " @" << TERM_COLOR_NC;
-}
-
 Semantics::Semantics() //
     : mTranslationUnit{}
 {
@@ -77,7 +59,7 @@ void Semantics::newTranslationUnit()
 
 void Semantics::print(const uint32_t stringIndex, const std::string &str)
 {
-    syntaxReport(stringIndex, str, TERM_COLOR_LGREEN);
+    log::syntaxReport(stringIndex, str, LOGGER_TERM_COLOR_LGREEN);
 }
 
 void Semantics::handlePostfixExpression( //
@@ -86,18 +68,18 @@ void Semantics::handlePostfixExpression( //
 {
     // if (containsArguments == true)
     // {
-    //     syntaxReport(stringIndex, "call with args");
+    //     log::syntaxReport(stringIndex, "call with args");
     // }
     // else
     // {
-    //     syntaxReport(stringIndex, "call no args");
+    //     log::syntaxReport(stringIndex, "call no args");
     // }
 }
 
 void Semantics::handleDeferCall( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    syntaxReport(stringIndex, "defer", TERM_COLOR_LBLUE);
+    log::syntaxReport(stringIndex, "defer", LOGGER_TERM_COLOR_LBLUE);
 
     // Add deferred call to current scope.
 
@@ -112,7 +94,7 @@ void Semantics::handleReturn( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool returnValueAvailable)
 {
-    syntaxReport(stringIndex, "return", TERM_COLOR_LRED);
+    log::syntaxReport(stringIndex, "return", LOGGER_TERM_COLOR_LRED);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -124,7 +106,7 @@ void Semantics::handleReturn( //
 void Semantics::handleCompoundStatementStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    syntaxReport(stringIndex, "scope start");
+    log::syntaxReport(stringIndex, "scope start");
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -139,7 +121,7 @@ void Semantics::handleCompoundStatementStart( //
 void Semantics::handleCompoundStatementEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    syntaxReport(stringIndex, "scope end");
+    log::syntaxReport(stringIndex, "scope end");
 
     {
         auto currentScope = semState.mScopeStack.back();
@@ -155,7 +137,7 @@ void Semantics::handleCompoundStatementEnd( //
 void Semantics::handleFunctionStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    syntaxReport(stringIndex, "function start", TERM_COLOR_LPURPLE);
+    log::syntaxReport(stringIndex, "function start", LOGGER_TERM_COLOR_LPURPLE);
 
     auto functionNode = std::make_shared<SemNodeFunction>(stringIndex);
     mTranslationUnit.attach(functionNode);
@@ -166,7 +148,7 @@ void Semantics::handleFunctionStart( //
 void Semantics::handleFunctionEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    syntaxReport(stringIndex, "function end", TERM_COLOR_LPURPLE);
+    log::syntaxReport(stringIndex, "function end", LOGGER_TERM_COLOR_LPURPLE);
 }
 
 } // namespace safec

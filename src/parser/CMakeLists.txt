@@ -17,6 +17,8 @@ add_custom_target(parser_generate
     COMMENT "Generating C89 parser..."
 )
 
+add_subdirectory(logger)
+
 add_library(parser
     ${SAFEC_LEXER_PATH}
     ${SAFEC_PARSER_PATH}
@@ -33,6 +35,8 @@ add_library(safec::parser ALIAS parser)
 target_link_libraries(parser
     PUBLIC
         CONAN_PKG::boost
+    PRIVATE
+        safec::logger
 )
 
 target_include_directories(parser

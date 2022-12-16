@@ -8,8 +8,6 @@
 
 namespace po = boost::program_options;
 
-// TODO: add logger...
-
 int main(int argc, char **argv)
 {
     po::options_description desc("All SafeC transpiler options:");
