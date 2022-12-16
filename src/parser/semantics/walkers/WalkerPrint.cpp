@@ -1,6 +1,6 @@
 #include "WalkerPrint.hpp"
 
-#include "SemNode.hpp"
+#include "semantics/SemNode.hpp"
 
 #include <iostream>
 

@@ -1,5 +1,5 @@
 #include "parser/Parser.hpp"
-#include "parser/SemanticsFactory.hpp"
+#include "parser/semantics/SemanticsFactory.hpp"
 
 #include <boost/program_options.hpp>
 #include <iostream>

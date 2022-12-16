@@ -1,6 +1,6 @@
 #include "Parser.hpp"
 
-#include "Semantics.hpp"
+#include "semantics/Semantics.hpp"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>

@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
-#include "SemanticsFactory.hpp"
+#include "semantics/SemanticsFactory.hpp"
 
 extern char yytext[];
 

@@ -18,16 +18,13 @@ add_custom_target(parser_generate
 )
 
 add_subdirectory(logger)
+add_subdirectory(semantics)
 
 add_library(parser
     ${SAFEC_LEXER_PATH}
     ${SAFEC_PARSER_PATH}
 
     Parser.cpp
-    Semantics.cpp
-    SemNode.cpp
-    walkers/SemNodeWalker.cpp
-    walkers/WalkerPrint.cpp
 )
 
 add_library(safec::parser ALIAS parser)
@@ -37,6 +34,7 @@ target_link_libraries(parser
         CONAN_PKG::boost
     PRIVATE
         safec::logger
+        safec::semantics
 )
 
 target_include_directories(parser
