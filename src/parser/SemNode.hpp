@@ -21,7 +21,8 @@ class SemNodeWalker;
         selector(Scope) \
         selector(Function) \
         selector(RawText) \
-        selector(Defer)
+        selector(Defer) \
+        selector(Return)
 
 #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
 #define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x) \
@@ -63,6 +64,7 @@ protected:
     friend class SemNodeWalker;
 };
 
+// Semantic node with dual position info (start & end).
 class SemNodeScope : public SemNode
 {
 public:
@@ -82,14 +84,28 @@ public:
     SemNodeFunction(const uint32_t start);
 };
 
-class SemNodeDefer final : public SemNode
+// Semantic node with a single position info.
+class SemNodePositional : public SemNode
 {
 public:
-    SemNodeDefer(const uint32_t index);
+    SemNodePositional(const uint32_t pos);
+
     uint32_t getPos() const;
 
 private:
-    uint32_t mDeferEndIndex;
+    uint32_t mPos;
+};
+
+class SemNodeDefer final : public SemNodePositional
+{
+public:
+    SemNodeDefer(const uint32_t index);
+};
+
+class SemNodeReturn final : public SemNodePositional
+{
+public:
+    SemNodeReturn(const uint32_t index);
 };
 
 } // namespace safec

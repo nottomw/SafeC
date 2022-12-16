@@ -55,14 +55,27 @@ SemNodeFunction::SemNodeFunction(const uint32_t start) //
     mType = Type::Function;
 }
 
-SemNodeDefer::SemNodeDefer(const uint32_t index) : mDeferEndIndex{index}
+SemNodePositional::SemNodePositional(const uint32_t pos) //
+    : mPos{pos}
+{
+    mType = Type::Undefined;
+}
+
+uint32_t SemNodePositional::getPos() const
+{
+    return mPos;
+}
+
+SemNodeDefer::SemNodeDefer(const uint32_t index) //
+    : SemNodePositional{index}
 {
     mType = Type::Defer;
 }
 
-uint32_t SemNodeDefer::getPos() const
+SemNodeReturn::SemNodeReturn(const uint32_t index) //
+    : SemNodePositional{index}
 {
-    return mDeferEndIndex;
+    mType = Type::Return;
 }
 
 } // namespace safec

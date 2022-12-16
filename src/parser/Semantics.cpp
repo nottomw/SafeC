@@ -94,7 +94,8 @@ void Semantics::handlePostfixExpression( //
     // }
 }
 
-void Semantics::handleDeferCall(const uint32_t stringIndex)
+void Semantics::handleDeferCall( //
+    [[maybe_unused]] const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "defer", TERM_COLOR_LBLUE);
 
@@ -111,17 +112,17 @@ void Semantics::handleReturn( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool returnValueAvailable)
 {
-    // if (returnValueAvailable == true)
-    // {
-    //     syntaxReport(stringIndex, "return with value", TERM_COLOR_LRED);
-    // }
-    // else
-    // {
-    //     syntaxReport(stringIndex, "return", TERM_COLOR_LRED);
-    // }
+    syntaxReport(stringIndex, "return", TERM_COLOR_LRED);
+
+    auto currentScope = semState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
+
+    currentScopeSnap->attach(std::make_shared<SemNodeReturn>(stringIndex));
 }
 
-void Semantics::handleCompoundStatementStart(const uint32_t stringIndex)
+void Semantics::handleCompoundStatementStart( //
+    [[maybe_unused]] const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "scope start");
 
@@ -135,7 +136,8 @@ void Semantics::handleCompoundStatementStart(const uint32_t stringIndex)
     semState.mScopeStack.push_back(scopeNode);
 }
 
-void Semantics::handleCompoundStatementEnd(const uint32_t stringIndex)
+void Semantics::handleCompoundStatementEnd( //
+    [[maybe_unused]] const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "scope end");
 
@@ -150,7 +152,8 @@ void Semantics::handleCompoundStatementEnd(const uint32_t stringIndex)
     semState.mScopeStack.pop_back();
 }
 
-void Semantics::handleFunctionStart(const uint32_t stringIndex)
+void Semantics::handleFunctionStart( //
+    [[maybe_unused]] const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "function start", TERM_COLOR_LPURPLE);
 
@@ -160,19 +163,10 @@ void Semantics::handleFunctionStart(const uint32_t stringIndex)
     semState.mScopeStack.push_back(functionNode);
 }
 
-void Semantics::handleFunctionEnd(const uint32_t stringIndex)
+void Semantics::handleFunctionEnd( //
+    [[maybe_unused]] const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "function end", TERM_COLOR_LPURPLE);
-
-    // {
-    //     auto currentFunction = semState.mScopeStack.back();
-    //     auto lastFunctionNode = semNodeConvert<SemNodeFunction>(currentFunction);
-    //     assert(lastFunctionNode);
-
-    //     lastFunctionNode->setEnd(stringIndex);
-    // }
-
-    // semState.mScopeStack.pop_back();
 }
 
 } // namespace safec

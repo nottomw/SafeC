@@ -69,6 +69,20 @@ void test_function_nested_defer(void)
     }
 }
 
+int test_defer_with_rv(const int arg)
+{
+    if (arg == 0)
+    {
+        return 0;
+    }
+    else if (arg < 5)
+    {
+        return 5;
+    }
+
+    return 10;
+}
+
 int main(void)
 {
     {

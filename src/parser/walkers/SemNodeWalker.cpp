@@ -16,6 +16,8 @@ void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const u
     // Could be reworked to visitor but all nodes would have to have accept
     // implementation with ast level management... maybe later
 
+    // Could be also generated from a X-Macro
+
     switch (node.getType())
     {
     case SemNode::Type::Undefined:
@@ -43,6 +45,9 @@ void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const u
     case SemNode::Type::Defer: {
         SemNodeDefer &def = static_cast<SemNodeDefer &>(node);
         strategy.peek(def, level);
+    }
+    case SemNode::Type::Return: {
+        strategy.peek(node, level);
     }
     break;
     default:
