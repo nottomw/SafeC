@@ -27,7 +27,6 @@ function(safec_parser_generate)
         message(FATAL_ERROR "missing PARSE_OUTPUT argument")
     endif()
 
-    # TODO: try to generate C++
     add_custom_target(${ARG_TARGET}_lexer_generate
         COMMAND flex -o "${ARG_LEX_OUTPUT}" "${ARG_LEX_INPUT}"
         BYPRODUCTS "${ARG_LEX_OUTPUT}"

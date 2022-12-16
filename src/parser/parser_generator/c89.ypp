@@ -12,7 +12,7 @@ extern char yytext[];
 extern "C" int yylex( void );
 extern "C" int yyparse( void );
 
-extern int characters;
+extern int lex_current_char;
 
 void yyerror(const char *str)
 {
@@ -64,11 +64,11 @@ postfix_expression
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
 	{
-		sem.handlePostfixExpression(characters, false);
+		sem.handlePostfixExpression(lex_current_char, false);
 	}
 	| postfix_expression '(' argument_expression_list ')'
 	{
-		sem.handlePostfixExpression(characters, true);
+		sem.handlePostfixExpression(lex_current_char, true);
 	}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
@@ -90,7 +90,7 @@ unary_expression
 	| SIZEOF '(' type_name ')'
 	| SAFEC_DEFER expression
 	{
-		sem.handleDeferCall(characters);
+		sem.handleDeferCall(lex_current_char);
 	}
 	;
 
@@ -390,7 +390,7 @@ initializer_list
 
 statement
 	: labeled_statement
-	| { sem.handleCompoundStatementStart(characters); } compound_statement
+	| { sem.handleCompoundStatementStart(lex_current_char); } compound_statement
 	| expression_statement
 	| selection_statement
 	| iteration_statement
@@ -407,15 +407,15 @@ compound_statement
 	: '{' '}'
 	| '{' statement_list '}'
 	{
-		sem.handleCompoundStatementEnd(characters);
+		sem.handleCompoundStatementEnd(lex_current_char);
 	}
 	| '{' declaration_list '}'
 	{
-		sem.handleCompoundStatementEnd(characters);
+		sem.handleCompoundStatementEnd(lex_current_char);
 	}
 	| '{' declaration_list statement_list '}'
 	{
-		sem.handleCompoundStatementEnd(characters);
+		sem.handleCompoundStatementEnd(lex_current_char);
 	}
 	;
 
@@ -453,11 +453,11 @@ jump_statement
 	| BREAK ';'
 	| RETURN ';'
 	{
-		sem.handleReturn(characters, false);
+		sem.handleReturn(lex_current_char, false);
 	}
 	| RETURN expression ';'
 	{
-		sem.handleReturn(characters, true);
+		sem.handleReturn(lex_current_char, true);
 	}
 	;
 
@@ -473,8 +473,8 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator { sem.handleFunctionStart(characters); } compound_statement
-	{ sem.handleFunctionEnd(characters); }
+	| declaration_specifiers declarator { sem.handleFunctionStart(lex_current_char); } compound_statement
+	{ sem.handleFunctionEnd(lex_current_char); }
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
 	;

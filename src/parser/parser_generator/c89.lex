@@ -119,7 +119,7 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 "?"			{ count(); return('?'); }
 
 [ \t\v\n\f]		{ count(); }
-.			{ /* ignore bad characters */ assert(NULL == "bad character"); }
+.			{ assert(NULL == "bad character"); }
 
 %%
 
@@ -156,7 +156,7 @@ void comment(void)
 }
 
 int column = 0;
-int characters = 0;
+int lex_current_char = 0;
 
 void count(void)
 {
@@ -177,7 +177,7 @@ void count(void)
 		}
 	}
 
-	characters += i;
+	lex_current_char += i;
 
 	// display the token
 	ECHO;

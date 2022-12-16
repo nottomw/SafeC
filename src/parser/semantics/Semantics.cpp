@@ -9,7 +9,7 @@
 
 extern "C"
 {
-    extern int characters;
+    extern int lex_current_char;
 }
 
 namespace safec

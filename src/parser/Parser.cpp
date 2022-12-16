@@ -17,7 +17,7 @@ extern "C"
 extern "C"
 {
     extern FILE *yyin;
-    extern int characters;
+    extern int lex_current_char;
 }
 
 namespace safec
@@ -70,7 +70,7 @@ void Parser::parseFile(const bfs::path &path)
     const int32_t parseRes = yyparse();
     assert(parseRes == 0);
 
-    std::cout << "\nParsing done, characters in file " << path << ": " << characters << "\n\n";
+    std::cout << "\nParsing done, characters in file " << path << ": " << lex_current_char << "\n\n";
 
     // After the parsing is done we should know the exact layout of intersting code blocks
     // in the provided source file.
