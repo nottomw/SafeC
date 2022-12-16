@@ -11,7 +11,9 @@ namespace safec
 class Semantics
 {
 public:
-    void display() const;
+    Semantics();
+
+    void display();
     void newTranslationUnit();
 
     void print(const uint32_t stringIndex, const std::string &str);

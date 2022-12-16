@@ -20,6 +20,7 @@ add_custom_target(parser_generate
 add_library(parser
     Parser.cpp
     Semantics.cpp
+    SemNodeWalker.cpp
     ${SAFEC_LEXER_PATH}
     ${SAFEC_PARSER_PATH}
 )
