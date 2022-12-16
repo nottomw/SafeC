@@ -70,12 +70,14 @@ void Parser::parseFile(const bfs::path &path)
     const int32_t parseRes = yyparse();
     assert(parseRes == 0);
 
-    std::cout << "Parsing done, characters in file " << path << ": " << characters << std::endl;
+    std::cout << "\nParsing done, characters in file " << path << ": " << characters << "\n\n";
 
     // After the parsing is done we should know the exact layout of intersting code blocks
     // in the provided source file.
 
+    std::cout << "Current AST:\n";
     mSemantics.display();
+    std::cout << "\n\n";
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)

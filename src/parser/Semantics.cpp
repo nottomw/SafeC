@@ -59,14 +59,12 @@ static void syntaxReport(const uint32_t stringIndex,
 }
 
 Semantics::Semantics() //
-    : mTranslationUnit{SemNode::Type::TRANSLATION_UNIT}
+    : mTranslationUnit{SemNode::Type::TranslationUnit}
 {
 }
 
 void Semantics::display()
 {
-    std::cout << "Current AST:" << std::endl;
-
     WalkerPrint printer;
     SemNodeWalker walker;
     walker.walk(mTranslationUnit, printer);
@@ -82,7 +80,9 @@ void Semantics::print(const uint32_t stringIndex, const std::string &str)
     syntaxReport(stringIndex, str, TERM_COLOR_LGREEN);
 }
 
-void Semantics::handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments)
+void Semantics::handlePostfixExpression( //
+    [[maybe_unused]] const uint32_t stringIndex,
+    [[maybe_unused]] const bool containsArguments)
 {
     // if (containsArguments == true)
     // {
@@ -107,7 +107,9 @@ void Semantics::handleDeferCall(const uint32_t stringIndex)
     currentScopeSnap->attach(std::make_shared<SemNodeDefer>(stringIndex));
 }
 
-void Semantics::handleReturn(const uint32_t stringIndex, const bool returnValueAvailable)
+void Semantics::handleReturn( //
+    [[maybe_unused]] const uint32_t stringIndex,
+    [[maybe_unused]] const bool returnValueAvailable)
 {
     // if (returnValueAvailable == true)
     // {

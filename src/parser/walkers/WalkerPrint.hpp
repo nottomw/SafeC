@@ -15,7 +15,7 @@ public:
     void peek(SemNodeDefer &node, const uint32_t astLevel) override;
 
 private:
-    std::string getPrefix(const uint32_t astLevel);
+    std::string getPrefix(SemNode &node, const uint32_t astLevel);
 };
 
 } // namespace safec

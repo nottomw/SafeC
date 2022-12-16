@@ -18,29 +18,29 @@ void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const u
 
     switch (node.getType())
     {
-    case SemNode::Type::UNDEFINED:
+    case SemNode::Type::Undefined:
         strategy.peek(node, level);
         break;
-    case SemNode::Type::TRANSLATION_UNIT:
+    case SemNode::Type::TranslationUnit:
         strategy.peek(node, level);
         break;
-    case SemNode::Type::LOOP:
+    case SemNode::Type::Loop:
         strategy.peek(node, level);
         break;
-    case SemNode::Type::SCOPE: {
+    case SemNode::Type::Scope: {
         SemNodeScope &scope = static_cast<SemNodeScope &>(node);
         strategy.peek(scope, level);
     }
     break;
-    case SemNode::Type::FUNCTION: {
+    case SemNode::Type::Function: {
         SemNodeFunction &fun = static_cast<SemNodeFunction &>(node);
         strategy.peek(fun, level);
     }
     break;
-    case SemNode::Type::RAW_TEXT:
+    case SemNode::Type::RawText:
         strategy.peek(node, level);
         break;
-    case SemNode::Type::DEFER_CALL: {
+    case SemNode::Type::Defer: {
         SemNodeDefer &def = static_cast<SemNodeDefer &>(node);
         strategy.peek(def, level);
     }

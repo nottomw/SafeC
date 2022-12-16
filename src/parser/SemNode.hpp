@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <string_view>
 #include <vector>
 
 namespace safec
@@ -11,19 +12,41 @@ namespace safec
 
 class SemNodeWalker;
 
+// Magic X-Macro to generate enum & enum to string converter.
+// clang-format off
+#define SEMNODE_TYPE_ENUMERATE(selector) \
+        selector(Undefined) \
+        selector(TranslationUnit) \
+        selector(Loop) \
+        selector(Scope) \
+        selector(Function) \
+        selector(RawText) \
+        selector(Defer)
+
+#define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
+#define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x) \
+    case Type::x: { return #x; } break;
+// clang-format on
+
 class SemNode
 {
 public:
-    // TODO: x-macro to have stringified versions
     enum class Type : uint32_t
     {
-        UNDEFINED = 1,
-        TRANSLATION_UNIT,
-        LOOP,
-        SCOPE,
-        FUNCTION,
-        RAW_TEXT,
-        DEFER_CALL
+        SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_VALUE)
+    };
+
+    struct TypeInfo
+    {
+        static constexpr std::string_view toStr(const Type type)
+        {
+            switch (type)
+            {
+                SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_VALUE_TO_STR)
+            }
+
+            return "undefined";
+        }
     };
 
     SemNode();

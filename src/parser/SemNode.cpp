@@ -4,7 +4,7 @@ namespace safec
 {
 
 SemNode::SemNode() //
-    : mType{Type::UNDEFINED}
+    : mType{Type::Undefined}
 {
 }
 
@@ -31,7 +31,7 @@ void SemNode::attach(std::shared_ptr<SemNode> node)
 SemNodeScope::SemNodeScope(const uint32_t start) //
     : mStartIndex{start}, mEndIndex{0}
 {
-    mType = Type::SCOPE;
+    mType = Type::Scope;
 }
 
 void SemNodeScope::setEnd(const uint32_t end)
@@ -52,12 +52,12 @@ uint32_t SemNodeScope::getEnd() const
 SemNodeFunction::SemNodeFunction(const uint32_t start) //
     : SemNodeScope{start}                              //
 {
-    mType = Type::FUNCTION;
+    mType = Type::Function;
 }
 
 SemNodeDefer::SemNodeDefer(const uint32_t index) : mDeferEndIndex{index}
 {
-    mType = Type::DEFER_CALL;
+    mType = Type::Defer;
 }
 
 uint32_t SemNodeDefer::getPos() const

@@ -9,31 +9,39 @@ namespace safec
 
 void WalkerPrint::peek(SemNode &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(astLevel) << "NODE type: " << static_cast<uint32_t>(node.getType()) << std::endl;
+    std::cout << getPrefix(node, astLevel) << std::endl;
 }
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(astLevel) << "FUNCTION { " << node.getStart() << ", " << node.getEnd() << " } " << std::endl;
+    std::cout << getPrefix(node, astLevel) << " { " << node.getStart() << ", " << node.getEnd() << " } " << std::endl;
 }
 
 void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(astLevel) << "SCOPE { " << node.getStart() << ", " << node.getEnd() << " } " << std::endl;
+    std::cout << getPrefix(node, astLevel) << " { " << node.getStart() << ", " << node.getEnd() << " } " << std::endl;
 }
 
 void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(astLevel) << "DEFER_CALL { " << node.getPos() << " }" << std::endl;
+    std::cout << getPrefix(node, astLevel) << " { " << node.getPos() << " }" << std::endl;
 }
 
-std::string WalkerPrint::getPrefix(const uint32_t astLevel)
+std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
 {
-    std::string prefix;
+    std::string prefix{};
+
     for (uint32_t i = 0U; i < astLevel; ++i)
     {
         prefix.append("\t");
     }
+
+    if (astLevel != 0U)
+    {
+        prefix.append(" ");
+    }
+
+    prefix.append(SemNode::TypeInfo::toStr(node.getType()));
 
     return prefix;
 }
