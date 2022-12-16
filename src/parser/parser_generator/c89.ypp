@@ -3,7 +3,9 @@
 %{
 
 #include <cstdio>
-#include "ParserFactory.hpp"
+#include <iostream>
+#include <string>
+#include "SemanticsFactory.hpp"
 
 extern char yytext[];
 
@@ -21,6 +23,8 @@ void yyerror(const char *str)
     printf("\n\nPARSING ERROR: %s (line: %d, column: %d)\n\n", str, yylineno, column);
     fflush(stdout);
 }
+
+auto &sem = safec::SemanticsFactory::get();
 
 %}
 
@@ -50,10 +54,6 @@ void yyerror(const char *str)
 
 primary_expression
 	: IDENTIFIER
-	{
-		std::string str {$1};
-		safec::ParserFactory::getParser().handleIdentifier(characters, std::move(str));
-	}
 	| CONSTANT
 	| STRING_LITERAL
 	| '(' expression ')'
@@ -64,11 +64,11 @@ postfix_expression
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
 	{
-		safec::ParserFactory::getParser().handlePostfixExpression(characters, false);
+		sem.handlePostfixExpression(characters, false);
 	}
 	| postfix_expression '(' argument_expression_list ')'
 	{
-		safec::ParserFactory::getParser().handlePostfixExpression(characters, true);
+		sem.handlePostfixExpression(characters, true);
 	}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
@@ -90,7 +90,7 @@ unary_expression
 	| SIZEOF '(' type_name ')'
 	| SAFEC_DEFER expression
 	{
-		safec::ParserFactory::getParser().handleDeferCall(characters);
+		sem.handleDeferCall(characters);
 	}
 	;
 
@@ -390,7 +390,7 @@ initializer_list
 
 statement
 	: labeled_statement
-	| { safec::ParserFactory::getParser().handleCompoundStatementStart(characters); } compound_statement
+	| { sem.handleCompoundStatementStart(characters); } compound_statement
 	| expression_statement
 	| selection_statement
 	| iteration_statement
@@ -407,15 +407,15 @@ compound_statement
 	: '{' '}'
 	| '{' statement_list '}'
 	{
-		safec::ParserFactory::getParser().handleCompoundStatementEnd(characters);
+		sem.handleCompoundStatementEnd(characters);
 	}
 	| '{' declaration_list '}'
 	{
-		safec::ParserFactory::getParser().handleCompoundStatementEnd(characters);
+		sem.handleCompoundStatementEnd(characters);
 	}
 	| '{' declaration_list statement_list '}'
 	{
-		safec::ParserFactory::getParser().handleCompoundStatementEnd(characters);
+		sem.handleCompoundStatementEnd(characters);
 	}
 	;
 
@@ -453,11 +453,11 @@ jump_statement
 	| BREAK ';'
 	| RETURN ';'
 	{
-		safec::ParserFactory::getParser().handleReturn(characters, false);
+		sem.handleReturn(characters, false);
 	}
 	| RETURN expression ';'
 	{
-		safec::ParserFactory::getParser().handleReturn(characters, true);
+		sem.handleReturn(characters, true);
 	}
 	;
 
@@ -473,7 +473,8 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator { safec::ParserFactory::getParser().handleCompoundStatementStart(characters); } compound_statement
+	| declaration_specifiers declarator { sem.handleFunctionStart(characters); } compound_statement
+	{ sem.handleFunctionEnd(characters); }
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
 	;

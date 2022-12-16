@@ -1,10 +1,10 @@
 #include "parser/Parser.hpp"
-#include "parser/ParserFactory.hpp"
+#include "parser/SemanticsFactory.hpp"
+
+#include <boost/program_options.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
     if (vm.count("file") > 0)
     {
-        auto &parser = safec::ParserFactory::getParser();
+        safec::Parser parser{safec::SemanticsFactory::get()};
 
         std::cout << "Parsing files:\n";
         auto &filesToParse = vm["file"].as<std::vector<std::string>>();
