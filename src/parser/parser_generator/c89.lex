@@ -12,7 +12,7 @@ IS			(u|U|l|L)*
 %{
 #include <stdio.h>
 #include <assert.h>
-#include "SafecParser.yacc.h"
+#include "SafecParser.yacc.hpp"
 
 void count(void);
 void comment(void);
