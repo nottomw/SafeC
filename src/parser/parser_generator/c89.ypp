@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include "semantics/SemanticsFactory.hpp"
+#include "logger/Logger.hpp"
 
 extern char yytext[];
 

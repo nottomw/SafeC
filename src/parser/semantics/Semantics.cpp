@@ -57,11 +57,6 @@ void Semantics::newTranslationUnit()
     mTranslationUnit.reset();
 }
 
-void Semantics::print(const uint32_t stringIndex, const std::string &str)
-{
-    log::syntaxReport(stringIndex, str, LOGGER_TERM_COLOR_LGREEN);
-}
-
 void Semantics::handlePostfixExpression( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool containsArguments)
