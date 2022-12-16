@@ -22,6 +22,7 @@ add_library(parser_generated
 target_include_directories(parser_generated
     PUBLIC
         ${SAFEC_PARSER_LEXER_GENPATH}
+    PRIVATE
         ${PROJECT_SOURCE_DIR}/parser
 )
 

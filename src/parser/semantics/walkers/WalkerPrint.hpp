@@ -7,7 +7,7 @@ namespace safec
 {
 
 // Print the whole ast.
-class WalkerPrint : public WalkerStrategy
+class WalkerPrint final : public WalkerStrategy
 {
 public:
     void peek(SemNode &node, const uint32_t astLevel) override;

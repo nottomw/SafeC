@@ -72,18 +72,17 @@ void Parser::parseFile(const bfs::path &path)
 
     std::cout << "\nParsing done, characters in file " << path << ": " << lex_current_char << "\n\n";
 
-    // After the parsing is done we should know the exact layout of intersting code blocks
-    // in the provided source file.
-
     std::cout << "Current AST:\n";
     mSemantics.display();
     std::cout << "\n\n";
+
+    // TODO: create walker to try to identify defer call points
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)
 {
     std::cout << "Adding mod point:\n";
-    if (modPoint.getModType() == ModPoint::ModType::CALL_DEFERRED)
+    if (modPoint.getModType() == ModPoint::ModType::CallDeferred)
     {
         const auto functionName = std::any_cast<ModPoint::DataCallDeferred>(modPoint.getData()).functionName;
         std::cout << "\tCALL_DEFERRED\n";

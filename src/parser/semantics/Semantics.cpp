@@ -66,14 +66,6 @@ void Semantics::handlePostfixExpression( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool containsArguments)
 {
-    // if (containsArguments == true)
-    // {
-    //     log::syntaxReport(stringIndex, "call with args");
-    // }
-    // else
-    // {
-    //     log::syntaxReport(stringIndex, "call no args");
-    // }
 }
 
 void Semantics::handleDeferCall( //
@@ -81,7 +73,7 @@ void Semantics::handleDeferCall( //
 {
     log::syntaxReport(stringIndex, "defer", LOGGER_TERM_COLOR_LBLUE);
 
-    // Add deferred call to current scope.
+    // TODO: for proper defer need to handle also break & continue
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();

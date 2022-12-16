@@ -14,7 +14,7 @@ class ModPoint
 public:
     enum class ModType
     {
-        CALL_DEFERRED
+        CallDeferred
     };
 
     ModPoint( //
