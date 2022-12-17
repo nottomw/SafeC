@@ -34,10 +34,10 @@ public:
 
 protected:
     // Helper template to forward the typed call to common base call.
-    template <typename TNode>
-    void peekDefault(TNode &node, const uint32_t astLevel)
+    template <typename TNodeTarget = SemNode>
+    void peekDefault(SemNode &node, const uint32_t astLevel)
     {
-        peek(static_cast<SemNode &>(node), astLevel);
+        peek(static_cast<TNodeTarget &>(node), astLevel);
     }
 };
 
