@@ -78,7 +78,7 @@ void Parser::parseFile(const bfs::path &path)
     mSemantics.display();
     std::cout << "\n\n";
 
-    // TODO: create walker to try to identify defer call points
+    // Try to identify defer call points.
     WalkerDefer walkerDefer;
     SemNodeWalker walker;
     mSemantics.walk(walker, walkerDefer);
