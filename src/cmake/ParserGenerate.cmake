@@ -34,7 +34,7 @@ function(safec_parser_generate)
     )
 
     add_custom_target(${ARG_TARGET}_parser_generate
-        COMMAND bison -d -Wno-conflicts-sr -o "${ARG_PARSE_OUTPUT}" "${ARG_PARSE_INPUT}"
+        COMMAND bison -d -o "${ARG_PARSE_OUTPUT}" "${ARG_PARSE_INPUT}"
         BYPRODUCTS "${ARG_PARSE_OUTPUT}"
         COMMENT "Generating C89 parser..."
     )
