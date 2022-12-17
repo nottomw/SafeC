@@ -15,7 +15,7 @@ namespace safec
 
 // clang-format off
 #define SEMNODE_TYPE_SELECTOR_WALKER_PEEKERS_INTERFACE_CREATE(x) \
-    virtual void peek([[maybe_unused]] SemNode##x &node, [[maybe_unused]] const uint32_t astLevel) { assert(nullptr == "peek method not implemented" ); }
+    virtual void peek([[maybe_unused]] SemNode##x &node, [[maybe_unused]] const uint32_t astLevel) {}
 // clang-format on
 
 SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_FORWARD_DECLARE)
@@ -27,7 +27,6 @@ public:
         [[maybe_unused]] SemNode &node,
         [[maybe_unused]] const uint32_t astLevel)
     {
-        assert(nullptr == "peek method not implemented");
     }
 
     SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_WALKER_PEEKERS_INTERFACE_CREATE)
