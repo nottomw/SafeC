@@ -68,8 +68,6 @@ void Semantics::handleDeferCall( //
 {
     log::syntaxReport(stringIndex, "defer", LOGGER_TERM_COLOR_LBLUE);
 
-    // TODO: for proper defer need to handle also break & continue
-
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
