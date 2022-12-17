@@ -27,6 +27,13 @@ void yyerror(const char *str)
 
 auto &sem = safec::SemanticsFactory::get();
 
+[[maybe_unused]] const auto pr = [](
+	const char* const str,
+	const char* const color = LOGGER_TERM_COLOR_YELLOW)
+{
+	safec::log::syntaxReport(lex_current_char, str, color);
+};
+
 %}
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
