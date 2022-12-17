@@ -10,7 +10,6 @@
         selector(Loop) \
         selector(Scope) \
         selector(Function) \
-        selector(RawText) \
         selector(Defer) \
         selector(Return) \
         selector(Break) \

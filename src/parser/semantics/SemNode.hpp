@@ -128,7 +128,6 @@ public:
 
 // clang-format off
 class SemNodeUndefined : public SemNode{};
-class SemNodeRawText : public SemNode{};
 // clang-format on
 
 } // namespace safec
