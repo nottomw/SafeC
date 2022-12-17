@@ -8,13 +8,10 @@
 #include <utility>
 #include <vector>
 
-namespace boost
-{
-namespace filesystem
+namespace boost::filesystem
 {
 class path;
-}
-} // namespace boost
+} // namespace boost::filesystem
 
 namespace safec
 {

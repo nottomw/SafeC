@@ -1,9 +1,6 @@
 #include "Logger.hpp"
 
-namespace safec
-{
-
-namespace log
+namespace safec::log
 {
 
 void syntaxReport(const uint32_t stringIndex, const std::string &name, const std::string color)
@@ -11,6 +8,4 @@ void syntaxReport(const uint32_t stringIndex, const std::string &name, const std
     std::cout << color << "@ " << name << " at: " << stringIndex << " @" << LOGGER_TERM_COLOR_NC;
 }
 
-} // namespace log
-
-} // namespace safec
+} // namespace safec::log

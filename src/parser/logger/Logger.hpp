@@ -4,10 +4,7 @@
 #include <iostream>
 #include <string>
 
-namespace safec
-{
-
-namespace log
+namespace safec::log
 {
 
 // TODO: add proper logger
@@ -27,6 +24,4 @@ void syntaxReport(const uint32_t stringIndex,
                   const std::string &name,
                   const std::string color = LOGGER_TERM_COLOR_LCYAN);
 
-} // namespace log
-
-} // namespace safec
+} // namespace safec::log

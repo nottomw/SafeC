@@ -17,6 +17,8 @@ namespace safec
 class WalkerStrategy
 {
 public:
+    virtual ~WalkerStrategy() = default;
+
     virtual void peek( //
         [[maybe_unused]] SemNode &node,
         [[maybe_unused]] const uint32_t astLevel)
