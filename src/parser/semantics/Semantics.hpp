@@ -8,6 +8,9 @@
 namespace safec
 {
 
+class SemNodeWalker;
+class WalkerStrategy;
+
 class Semantics
 {
 public:
@@ -20,6 +23,7 @@ public:
 
     void display();
     void newTranslationUnit();
+    void walk(SemNodeWalker &walker, WalkerStrategy &strategy);
 
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
     void handleDeferCall(const uint32_t stringIndex);

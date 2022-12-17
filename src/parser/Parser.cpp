@@ -1,6 +1,8 @@
 #include "Parser.hpp"
 
 #include "semantics/Semantics.hpp"
+#include "semantics/walkers/SemNodeWalker.hpp"
+#include "semantics/walkers/WalkerDefer.hpp"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -77,6 +79,9 @@ void Parser::parseFile(const bfs::path &path)
     std::cout << "\n\n";
 
     // TODO: create walker to try to identify defer call points
+    WalkerDefer walkerDefer;
+    SemNodeWalker walker;
+    mSemantics.walk(walker, walkerDefer);
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)

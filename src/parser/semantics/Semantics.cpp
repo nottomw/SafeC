@@ -57,6 +57,11 @@ void Semantics::newTranslationUnit()
     mTranslationUnit.reset();
 }
 
+void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
+{
+    walker.walk(mTranslationUnit, strategy);
+}
+
 void Semantics::handlePostfixExpression( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool containsArguments)
