@@ -61,11 +61,9 @@ std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
         prefix.append("\t");
     }
 
-    if (astLevel != 0U)
-    {
-        prefix.append(" ");
-    }
-
+    prefix.append("[");
+    prefix.append(std::to_string(astLevel));
+    prefix.append("] ");
     prefix.append(SemNode::TypeInfo::toStr(node.getType()));
 
     return prefix;
