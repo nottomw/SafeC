@@ -83,4 +83,22 @@ SemNodeReturn::SemNodeReturn(const uint32_t index) //
     mType = Type::Return;
 }
 
+SemNodeLoop::SemNodeLoop(const uint32_t start) //
+    : SemNodeScope{start}
+{
+    mType = Type::Loop;
+}
+
+SemNodeBreak::SemNodeBreak(const uint32_t pos) //
+    : SemNodePositional{pos}
+{
+    mType = Type::Break;
+}
+
+SemNodeContinue::SemNodeContinue(const uint32_t pos) //
+    : SemNodePositional{pos}
+{
+    mType = Type::Continue;
+}
+
 } // namespace safec

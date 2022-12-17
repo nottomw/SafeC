@@ -9,7 +9,7 @@ namespace safec
 
 void WalkerPrint::peek(SemNode &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(node, astLevel) << " (SemNode generic peek)" << std::endl;
+    std::cout << getPrefix(node, astLevel) << std::endl;
 }
 
 void WalkerPrint::peek(SemNodeTranslationUnit &node, const uint32_t astLevel)
@@ -33,6 +33,21 @@ void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
 }
 
 void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
+{
+    peekDefault(node, astLevel);
+}
+
+void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
+{
+    peekDefault<SemNodeScope>(node, astLevel);
+}
+
+void WalkerPrint::peek(SemNodeBreak &node, const uint32_t astLevel)
+{
+    peekDefault(node, astLevel);
+}
+
+void WalkerPrint::peek(SemNodeContinue &node, const uint32_t astLevel)
 {
     peekDefault(node, astLevel);
 }

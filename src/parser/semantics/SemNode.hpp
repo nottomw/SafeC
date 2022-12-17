@@ -108,9 +108,26 @@ public:
     SemNodeReturn(const uint32_t index);
 };
 
+class SemNodeLoop : public SemNodeScope
+{
+public:
+    SemNodeLoop(const uint32_t start);
+};
+
+class SemNodeBreak : public SemNodePositional
+{
+public:
+    SemNodeBreak(const uint32_t pos);
+};
+
+class SemNodeContinue : public SemNodePositional
+{
+public:
+    SemNodeContinue(const uint32_t pos);
+};
+
 // clang-format off
 class SemNodeUndefined : public SemNode{};
-class SemNodeLoop : public SemNode{};
 class SemNodeRawText : public SemNode{};
 // clang-format on
 

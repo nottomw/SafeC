@@ -52,6 +52,11 @@ void test_function_break_continue(int a, int b)
             break;
         }
     }
+
+    for(i = 0; i < 10; ++i)
+        printf("%d\n", i);
+    
+    // TODO: test while, do..while
 }
 
 void test_function_nested_defer(void)

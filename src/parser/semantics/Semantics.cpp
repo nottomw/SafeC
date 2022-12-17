@@ -110,13 +110,11 @@ void Semantics::handleCompoundStatementEnd( //
 {
     log::syntaxReport(stringIndex, "scope end");
 
-    {
-        auto currentScope = semState.mScopeStack.back();
-        auto currentScopeSnap = currentScope.lock();
-        assert(currentScopeSnap);
+    auto currentScope = semState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
 
-        currentScopeSnap->setEnd(stringIndex);
-    }
+    currentScopeSnap->setEnd(stringIndex);
 
     semState.mScopeStack.pop_back();
 }
@@ -128,6 +126,7 @@ void Semantics::handleFunctionStart( //
 
     auto functionNode = std::make_shared<SemNodeFunction>(stringIndex);
     mTranslationUnit.attach(functionNode);
+    // TODO: maybe should add to scope instead of translation unit
 
     semState.mScopeStack.push_back(functionNode);
 }
@@ -136,6 +135,57 @@ void Semantics::handleFunctionEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
     log::syntaxReport(stringIndex, "function end", LOGGER_TERM_COLOR_LPURPLE);
+}
+
+void Semantics::handleLoopStart( //
+    [[maybe_unused]] const uint32_t stringIndex)
+{
+    log::syntaxReport(stringIndex, "loop start", LOGGER_TERM_COLOR_LYELLOW);
+
+    auto currentScope = semState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
+
+    auto loop = std::make_shared<SemNodeLoop>(stringIndex);
+    currentScopeSnap->attach(loop);
+
+    semState.mScopeStack.push_back(loop);
+}
+
+void Semantics::handleLoopEnd( //
+    [[maybe_unused]] const uint32_t stringIndex)
+{
+    log::syntaxReport(stringIndex, "loop end", LOGGER_TERM_COLOR_LYELLOW);
+
+    auto currentScope = semState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
+
+    currentScopeSnap->setEnd(stringIndex);
+
+    semState.mScopeStack.pop_back();
+}
+
+void Semantics::handleBreak(const uint32_t stringIndex)
+{
+    log::syntaxReport(stringIndex, "break", LOGGER_TERM_COLOR_LYELLOW);
+
+    auto currentScope = semState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
+
+    currentScopeSnap->attach(std::make_shared<SemNodeBreak>(stringIndex));
+}
+
+void Semantics::handleContinue(const uint32_t stringIndex)
+{
+    log::syntaxReport(stringIndex, "continue", LOGGER_TERM_COLOR_LYELLOW);
+
+    auto currentScope = semState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
+
+    currentScopeSnap->attach(std::make_shared<SemNodeContinue>(stringIndex));
 }
 
 } // namespace safec

@@ -449,16 +449,22 @@ selection_statement
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement
-	| DO statement WHILE '(' expression ')' ';'
-	| FOR '(' expression_statement expression_statement ')' statement
-	| FOR '(' expression_statement expression_statement expression ')' statement
+	: WHILE '(' expression ')' { sem.handleLoopStart(lex_current_char); } statement { sem.handleLoopEnd(lex_current_char); }
+	| DO { sem.handleLoopStart(lex_current_char); } statement WHILE '(' expression ')' ';' { sem.handleLoopEnd(lex_current_char); }
+	| FOR '(' expression_statement expression_statement ')' { sem.handleLoopStart(lex_current_char); } statement { sem.handleLoopEnd(lex_current_char); }
+	| FOR '(' expression_statement expression_statement expression ')' { sem.handleLoopStart(lex_current_char); } statement { sem.handleLoopEnd(lex_current_char); }
 	;
 
 jump_statement
 	: GOTO IDENTIFIER ';'
 	| CONTINUE ';'
+	{
+		sem.handleContinue(lex_current_char);
+	}
 	| BREAK ';'
+	{
+		sem.handleBreak(lex_current_char);
+	}
 	| RETURN ';'
 	{
 		sem.handleReturn(lex_current_char, false);

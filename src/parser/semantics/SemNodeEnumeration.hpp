@@ -12,5 +12,7 @@
         selector(Function) \
         selector(RawText) \
         selector(Defer) \
-        selector(Return)
+        selector(Return) \
+        selector(Break) \
+        selector(Continue)
 // clang-format on
