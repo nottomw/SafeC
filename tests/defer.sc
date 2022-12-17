@@ -54,9 +54,23 @@ void test_function_break_continue(int a, int b)
     }
 
     for(i = 0; i < 10; ++i)
-        printf("%d\n", i);
+        defer printf("%d\n", i);
     
-    // TODO: test while, do..while
+    i = 0;
+    while(i == 0)
+    {
+        defer printf("while loop end\n");
+        printf("in while loop\n");
+        i = 1;
+    }
+
+    i = 0;
+    do
+    {
+        defer printf("do..while loop end\n");
+        printf("in do..while loop\n");
+        i = 1;
+    } while(i == 0);
 }
 
 void test_function_nested_defer(void)
