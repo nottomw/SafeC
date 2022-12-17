@@ -78,6 +78,8 @@ void Parser::parseFile(const bfs::path &path)
     mSemantics.display();
     std::cout << "\n\n";
 
+    // TODO: fun: multiple walkers can run in parallel
+
     // Try to identify defer call points.
     WalkerDefer walkerDefer;
     SemNodeWalker walker;
