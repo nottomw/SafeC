@@ -58,6 +58,10 @@ protected:
     friend class SemNodeWalker;
 };
 
+// clang-format off
+class SemNodeUndefined : public SemNode{};
+// clang-format on
+
 class SemNodeTranslationUnit : public SemNode
 {
 public:
@@ -125,9 +129,5 @@ class SemNodeContinue : public SemNodePositional
 public:
     SemNodeContinue(const uint32_t pos);
 };
-
-// clang-format off
-class SemNodeUndefined : public SemNode{};
-// clang-format on
 
 } // namespace safec

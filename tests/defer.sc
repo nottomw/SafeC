@@ -64,6 +64,9 @@ void test_function_break_continue(int a, int b)
         i = 1;
     }
 
+    // TODO: this is not allowed - declarations only top of scope, allow
+    // int j = 5;
+
     i = 0;
     do
     {
