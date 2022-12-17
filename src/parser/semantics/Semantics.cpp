@@ -131,6 +131,8 @@ void Semantics::handleFunctionStart( //
     mTranslationUnit.attach(functionNode);
     // TODO: maybe should add to scope instead of translation unit
 
+    // Hacky: function start is matched with compound statement end.
+
     semState.mScopeStack.push_back(functionNode);
 }
 

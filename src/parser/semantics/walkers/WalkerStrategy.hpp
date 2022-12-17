@@ -1,5 +1,6 @@
 #pragma once
 
+#include "semantics/SemNode.hpp"
 #include "semantics/SemNodeEnumeration.hpp"
 
 #include <cassert>
@@ -9,16 +10,9 @@ namespace safec
 {
 
 // clang-format off
-#define SEMNODE_TYPE_SELECTOR_FORWARD_DECLARE(x) \
-    class SemNode##x;
-// clang-format on
-
-// clang-format off
 #define SEMNODE_TYPE_SELECTOR_WALKER_PEEKERS_INTERFACE_CREATE(x) \
-    virtual void peek([[maybe_unused]] SemNode##x &node, [[maybe_unused]] const uint32_t astLevel) {}
+    virtual void peek(SemNode##x &node, const uint32_t astLevel) { peekDefault(node, astLevel); }
 // clang-format on
-
-SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_FORWARD_DECLARE)
 
 class WalkerStrategy
 {
@@ -27,6 +21,7 @@ public:
         [[maybe_unused]] SemNode &node,
         [[maybe_unused]] const uint32_t astLevel)
     {
+        assert(nullptr == "default peeker not implemented");
     }
 
     SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_WALKER_PEEKERS_INTERFACE_CREATE)

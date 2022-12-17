@@ -7,6 +7,11 @@
 namespace safec
 {
 
+void WalkerDefer::peek(SemNode &, const uint32_t)
+{
+    // not interested
+}
+
 void WalkerDefer::peek(SemNodeScope &, const uint32_t)
 {
     // potentially fire deferred call
