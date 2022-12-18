@@ -110,6 +110,7 @@ int main(void)
     {
         mutex_lock();
         defer mutex_unlock();
+        defer printf("second defer in scope\n");
 
         printf("this is guarded by mutex...\n");
     }
