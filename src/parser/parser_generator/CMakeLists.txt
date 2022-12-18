@@ -26,6 +26,10 @@ target_include_directories(parser_generated
         ${PROJECT_SOURCE_DIR}/parser
 )
 
+target_link_libraries(parser_generated
+    safec::logger
+)
+
 add_library(safec::parser_generated ALIAS parser_generated)
 
 add_dependencies(parser_generated
