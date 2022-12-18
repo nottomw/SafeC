@@ -77,6 +77,8 @@ void Semantics::handleDeferCall( //
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
+    // TODO: add metadata to defer - whole text call (help from lexer?)
+
     currentScopeSnap->attach(std::make_shared<SemNodeDefer>(stringIndex));
 }
 
@@ -129,7 +131,6 @@ void Semantics::handleFunctionStart( //
 
     auto functionNode = std::make_shared<SemNodeFunction>(stringIndex);
     mTranslationUnit.attach(functionNode);
-    // TODO: maybe should add to scope instead of translation unit
 
     // Hacky: function start is matched with compound statement end.
 

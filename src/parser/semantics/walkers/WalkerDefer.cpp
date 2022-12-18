@@ -3,34 +3,9 @@
 #include "semantics/SemNode.hpp"
 
 #include <algorithm>
-#include <map>
-#include <vector>
 
 namespace safec
 {
-
-enum class ElemType
-{
-    ScopeStart, // or FunctionStart
-    ScopeEnd,
-    LoopStart,
-    LoopEnd,
-    Return,
-    Break,
-    Continue,
-    Defer
-};
-
-struct ProgramElem
-{
-    ElemType type;
-    uint32_t astLevel;
-};
-
-std::multimap<uint32_t, ProgramElem> programStructure; // TODO: move to class
-
-// astLevel
-std::vector<uint32_t> loopStack;
 
 void WalkerDefer::peek(SemNode &node, const uint32_t)
 {
@@ -39,46 +14,48 @@ void WalkerDefer::peek(SemNode &node, const uint32_t)
 
 void WalkerDefer::peek(SemNodeScope &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getStart(), ProgramElem{ElemType::ScopeStart, astLevel});
-    programStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
+    mProgramStructure.emplace(node.getStart(), ProgramElem{ElemType::ScopeStart, astLevel});
+    mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getStart(), ProgramElem{ElemType::ScopeStart, astLevel});
-    programStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
+    mProgramStructure.emplace(node.getStart(), ProgramElem{ElemType::ScopeStart, astLevel});
+    mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getStart(), ProgramElem{ElemType::LoopStart, astLevel});
-    programStructure.emplace(node.getEnd(), ProgramElem{ElemType::LoopEnd, astLevel});
+    mProgramStructure.emplace(node.getStart(), ProgramElem{ElemType::LoopStart, astLevel});
+    mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::LoopEnd, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeDefer &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getPos(), ProgramElem{ElemType::Defer, astLevel});
+    mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Defer, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeReturn &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getPos(), ProgramElem{ElemType::Return, astLevel});
+    mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Return, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeBreak &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getPos(), ProgramElem{ElemType::Break, astLevel});
+    mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Break, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeContinue &node, const uint32_t astLevel)
 {
-    programStructure.emplace(node.getPos(), ProgramElem{ElemType::Continue, astLevel});
+    mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Continue, astLevel});
 }
 
-WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires() const
+WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
 {
     // Vector of astLevels where defer was seen
     std::vector<uint32_t> activeDefers;
+
+    // TODO: cleanup defer fire analysis
 
     auto removeFromDefers = [&activeDefers](
                                 const uint32_t astLevel,
@@ -102,7 +79,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires() const
 
     // TODO: grab the defer function call
 
-    for (const auto &it : programStructure)
+    for (const auto &it : mProgramStructure)
     {
         for (uint32_t i = 0; i < it.second.astLevel; ++i)
         {
@@ -112,7 +89,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires() const
         std::cout << it.first << " PROGRAM: " << static_cast<uint32_t>(it.second.type) << std::endl;
     }
 
-    for (const auto &it : programStructure)
+    for (const auto &it : mProgramStructure)
     {
         const uint32_t pos = it.first;
         const ProgramElem &elem = it.second;
@@ -157,7 +134,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires() const
         {
             std::cout << elem.astLevel << " ~~ break/continue at " << pos << std::endl;
 
-            const uint32_t currentLoopAstLevel = loopStack.back();
+            const uint32_t currentLoopAstLevel = mLoopStack.back();
             auto cond = [&currentLoopAstLevel](const uint32_t astLevelDefer) {
                 return (currentLoopAstLevel < astLevelDefer);
             };
@@ -172,7 +149,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires() const
         {
             std::cout << elem.astLevel << " ~~ loop start at " << pos << std::endl;
 
-            loopStack.push_back(elem.astLevel);
+            mLoopStack.push_back(elem.astLevel);
         }
         else if (elem.type == ElemType::LoopEnd)
         {
@@ -180,7 +157,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires() const
 
             removeFromDefers(elem.astLevel);
 
-            loopStack.erase(std::remove(loopStack.begin(), loopStack.end(), elem.astLevel), loopStack.end());
+            mLoopStack.erase(std::remove(mLoopStack.begin(), mLoopStack.end(), elem.astLevel), mLoopStack.end());
         }
     }
 

@@ -3,6 +3,9 @@
 #include "SemNodeWalker.hpp"
 #include "WalkerStrategy.hpp"
 
+#include <map>
+#include <vector>
+
 namespace safec
 {
 
@@ -20,9 +23,32 @@ public:
 
     using DeferFiresVector = std::vector<std::pair<uint32_t, std::string>>;
 
-    DeferFiresVector getDeferFires() const;
+    DeferFiresVector getDeferFires();
 
 private:
+    enum class ElemType
+    {
+        ScopeStart, // or FunctionStart
+        ScopeEnd,
+        LoopStart,
+        LoopEnd,
+        Return,
+        Break,
+        Continue,
+        Defer
+    };
+
+    struct ProgramElem
+    {
+        ElemType type;
+        uint32_t astLevel;
+    };
+
+    using AstLevel = uint32_t;
+
+    std::multimap<AstLevel, ProgramElem> mProgramStructure;
+    std::vector<AstLevel> mLoopStack;
+
     DeferFiresVector mDeferFires;
 };
 
