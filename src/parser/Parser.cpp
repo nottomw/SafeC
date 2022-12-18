@@ -72,6 +72,8 @@ void Parser::parseFile(const bfs::path &path)
     const int32_t parseRes = yyparse();
     assert(parseRes == 0);
 
+    fclose(yyin);
+
     std::cout << "\nParsing done, characters in file " << path << ": " << lex_current_char << "\n\n";
 
     std::cout << "Current AST:\n";
@@ -84,6 +86,8 @@ void Parser::parseFile(const bfs::path &path)
     WalkerDefer walkerDefer;
     SemNodeWalker walker;
     mSemantics.walk(walker, walkerDefer);
+
+    (void)walkerDefer.getDeferFires();
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)
