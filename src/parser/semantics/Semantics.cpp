@@ -35,7 +35,12 @@ struct SemanticsState
     std::weak_ptr<SemNodeDefer> mDeferCallStart;
 };
 
-SemanticsState semState;
+SemanticsState gSemState;
+
+void syntaxReport(const uint32_t stringIndex, const char *const name, const Color color = Color::LightGreen)
+{
+    safec::log("@ % at % @", color).noNewLine().arg(name).arg(stringIndex);
+}
 
 template <typename TUnderlyingSemNode>
 std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::weak_ptr<SemNode> &w)
@@ -99,13 +104,13 @@ void Semantics::handleDeferCallStart( //
 {
     syntaxReport(stringIndex, "defer start", Color::LightBlue);
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
     auto deferNode = std::make_shared<SemNodeDefer>(stringIndex);
     currentScopeSnap->attach(deferNode);
-    semState.mDeferCallStart = deferNode;
+    gSemState.mDeferCallStart = deferNode;
 }
 
 void Semantics::handleDeferCall( //
@@ -113,7 +118,7 @@ void Semantics::handleDeferCall( //
 {
     syntaxReport(stringIndex, "defer end", Color::LightBlue);
 
-    auto deferNode = semState.mDeferCallStart.lock();
+    auto deferNode = gSemState.mDeferCallStart.lock();
     assert(deferNode);
 
     const uint32_t textStart = deferNode->getPos();
@@ -130,7 +135,7 @@ void Semantics::handleReturn( //
 {
     syntaxReport(stringIndex, "return", Color::LightRed);
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
@@ -142,14 +147,14 @@ void Semantics::handleCompoundStatementStart( //
 {
     syntaxReport(stringIndex, "scope start");
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
     auto scopeNode = std::make_shared<SemNodeScope>(stringIndex);
     currentScopeSnap->attach(scopeNode);
 
-    semState.mScopeStack.push_back(scopeNode);
+    gSemState.mScopeStack.push_back(scopeNode);
 }
 
 void Semantics::handleCompoundStatementEnd( //
@@ -157,13 +162,13 @@ void Semantics::handleCompoundStatementEnd( //
 {
     syntaxReport(stringIndex, "scope end");
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
     currentScopeSnap->setEnd(stringIndex);
 
-    semState.mScopeStack.pop_back();
+    gSemState.mScopeStack.pop_back();
 }
 
 void Semantics::handleFunctionStart( //
@@ -176,7 +181,7 @@ void Semantics::handleFunctionStart( //
 
     // Hacky: function start is matched with compound statement end.
 
-    semState.mScopeStack.push_back(functionNode);
+    gSemState.mScopeStack.push_back(functionNode);
 }
 
 void Semantics::handleFunctionEnd( //
@@ -190,14 +195,14 @@ void Semantics::handleLoopStart( //
 {
     syntaxReport(stringIndex, "loop start", Color::LightYellow);
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
     auto loop = std::make_shared<SemNodeLoop>(stringIndex);
     currentScopeSnap->attach(loop);
 
-    semState.mScopeStack.push_back(loop);
+    gSemState.mScopeStack.push_back(loop);
 }
 
 void Semantics::handleLoopEnd( //
@@ -205,20 +210,20 @@ void Semantics::handleLoopEnd( //
 {
     syntaxReport(stringIndex, "loop end", Color::LightYellow);
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
     currentScopeSnap->setEnd(stringIndex);
 
-    semState.mScopeStack.pop_back();
+    gSemState.mScopeStack.pop_back();
 }
 
 void Semantics::handleBreak(const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "break", Color::LightYellow);
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
@@ -229,7 +234,7 @@ void Semantics::handleContinue(const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "continue", Color::LightYellow);
 
-    auto currentScope = semState.mScopeStack.back();
+    auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 

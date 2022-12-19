@@ -47,10 +47,4 @@ private:
 // example: log("text % % %").arg(5).arg(3.14).arg("text");
 LogHelper log(const char *const formatString, Color color = Color::NoColor);
 
-// TODO: remove (?)
-void syntaxReport( //
-    const uint32_t stringIndex,
-    const char *const name,
-    const Color color = Color::Green);
-
 } // namespace safec

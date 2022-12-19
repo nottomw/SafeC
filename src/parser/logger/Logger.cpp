@@ -151,9 +151,4 @@ LogHelper log(const char *const formatString, Color color)
     return helper;
 }
 
-void syntaxReport(const uint32_t stringIndex, const char *const name, const Color color)
-{
-    safec::log("@ % at % @", color).noNewLine().arg(name).arg(stringIndex);
-}
-
 } // namespace safec
