@@ -49,9 +49,9 @@ static constexpr const char *colorToTermColor(Color c)
     return LOGGER_TERM_COLOR_NC;
 }
 
-LogHelper::LogHelper(const char *const formatString, Color color)
+LogHelper::LogHelper(const char *const formatString, logger::Properties &&props)
     : mFormatString{formatString}
-    , mColor{color}
+    , mProperties{std::move(props)}
 {
 }
 
@@ -100,55 +100,77 @@ LogHelper &LogHelper::arg(const std::string &a)
     return *this;
 }
 
-LogHelper &LogHelper::noNewLine()
-{
-    mNoNewLine = true;
-    return *this;
-}
-
 void LogHelper::logIfAllArgsProvided()
 {
     if (mArgsLeft == 0U)
     {
-        std::cout << colorToTermColor(mColor) //
-                  << mFormatString            //
+        std::cout << colorToTermColor(mProperties.getColor()) //
+                  << mFormatString                            //
                   << colorToTermColor(Color::NoColor);
 
-        if (mNoNewLine == false)
+        if (mProperties.getNewLine() == logger::NewLine::Yes)
         {
             std::cout << '\n';
         }
     }
 }
 
-LogHelper log(const char *const formatString, Color color)
+LogHelper log(const char *const formatString, logger::Properties &&props)
 {
     assert(formatString != nullptr);
 
-    LogHelper helper{formatString, color};
-
-    // TODO: escape for %%
+    // TODO: need escape for %%
+    uint32_t argsLeft = 0U;
 
     const char *p = formatString;
     while (*p != '\0')
     {
         if (*p == '%')
         {
-            helper.mArgsLeft++;
+            argsLeft++;
         }
 
         p++;
     }
 
-    if (helper.mArgsLeft == 0U)
+    if (argsLeft == 0U)
     {
-        std::cout << colorToTermColor(color)          //
-                  << formatString                     //
-                  << colorToTermColor(Color::NoColor) //
+        std::cout << colorToTermColor(props.getColor()) //
+                  << formatString                       //
+                  << colorToTermColor(Color::NoColor)   //
                   << '\n';
     }
+    else
+    {
+        LogHelper helper{formatString, std::move(props)};
+        helper.mArgsLeft = argsLeft;
 
-    return helper;
+        return helper;
+    }
+
+    return LogHelper{formatString, std::move(props)};
+}
+
+logger::Properties::Properties(const Color color, const NewLine nl)
+    : mNewLine{nl}
+    , mColor{color}
+{
+}
+
+logger::Properties::Properties(const NewLine nl)
+    : mNewLine{nl}
+    , mColor{Color::NoColor}
+{
+}
+
+logger::NewLine logger::Properties::getNewLine() const
+{
+    return mNewLine;
+}
+
+Color logger::Properties::getColor() const
+{
+    return mColor;
 }
 
 } // namespace safec

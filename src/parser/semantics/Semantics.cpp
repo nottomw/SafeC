@@ -39,7 +39,7 @@ SemanticsState gSemState;
 
 void syntaxReport(const uint32_t stringIndex, const char *const name, const Color color = Color::LightGreen)
 {
-    safec::log("@ % at % @", color).noNewLine().arg(name).arg(stringIndex);
+    log("@ % at % @", {color, logger::NewLine::No}).arg(name).arg(stringIndex);
 }
 
 template <typename TUnderlyingSemNode>
