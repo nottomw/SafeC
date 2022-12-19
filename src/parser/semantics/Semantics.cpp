@@ -71,7 +71,7 @@ void Semantics::handlePostfixExpression( //
 void Semantics::handleDeferCall( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "defer", LOGGER_TERM_COLOR_LBLUE);
+    log::syntaxReport(stringIndex, "defer", log::Color::LightBlue);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -86,7 +86,7 @@ void Semantics::handleReturn( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool returnValueAvailable)
 {
-    log::syntaxReport(stringIndex, "return", LOGGER_TERM_COLOR_LRED);
+    log::syntaxReport(stringIndex, "return", log::Color::LightRed);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -127,7 +127,7 @@ void Semantics::handleCompoundStatementEnd( //
 void Semantics::handleFunctionStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "function start", LOGGER_TERM_COLOR_LPURPLE);
+    log::syntaxReport(stringIndex, "function start", log::Color::LightPurple);
 
     auto functionNode = std::make_shared<SemNodeFunction>(stringIndex);
     mTranslationUnit.attach(functionNode);
@@ -140,13 +140,13 @@ void Semantics::handleFunctionStart( //
 void Semantics::handleFunctionEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "function end", LOGGER_TERM_COLOR_LPURPLE);
+    log::syntaxReport(stringIndex, "function end", log::Color::LightPurple);
 }
 
 void Semantics::handleLoopStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "loop start", LOGGER_TERM_COLOR_LYELLOW);
+    log::syntaxReport(stringIndex, "loop start", log::Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -161,7 +161,7 @@ void Semantics::handleLoopStart( //
 void Semantics::handleLoopEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "loop end", LOGGER_TERM_COLOR_LYELLOW);
+    log::syntaxReport(stringIndex, "loop end", log::Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -174,7 +174,7 @@ void Semantics::handleLoopEnd( //
 
 void Semantics::handleBreak(const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "break", LOGGER_TERM_COLOR_LYELLOW);
+    log::syntaxReport(stringIndex, "break", log::Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -185,7 +185,7 @@ void Semantics::handleBreak(const uint32_t stringIndex)
 
 void Semantics::handleContinue(const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "continue", LOGGER_TERM_COLOR_LYELLOW);
+    log::syntaxReport(stringIndex, "continue", log::Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();

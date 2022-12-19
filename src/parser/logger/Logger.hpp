@@ -1,27 +1,53 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
 #include <string>
 
 namespace safec::log
 {
 
-// TODO: add proper logger
+enum class Color
+{
+    NoColor,
+    Yellow,
+    Red,
+    Green,
+    LightRed,
+    LightGreen,
+    LightYellow,
+    LightBlue,
+    LightPurple,
+    LightCyan
+};
 
-#define LOGGER_TERM_COLOR_NC "\033[0m"
-#define LOGGER_TERM_COLOR_YELLOW "\033[00;33m"
-#define LOGGER_TERM_COLOR_RED "\033[00;31m"
-#define LOGGER_TERM_COLOR_GREEN "\033[00;32m"
-#define LOGGER_TERM_COLOR_LRED "\033[01;31m"
-#define LOGGER_TERM_COLOR_LGREEN "\033[01;32m"
-#define LOGGER_TERM_COLOR_LYELLOW "\033[01;33m"
-#define LOGGER_TERM_COLOR_LBLUE "\033[01;34m"
-#define LOGGER_TERM_COLOR_LPURPLE "\033[01;35m"
-#define LOGGER_TERM_COLOR_LCYAN "\033[01;36m"
+class LogHelper
+{
+public:
+    LogHelper(const char *const formatString, Color color);
+    LogHelper &arg(const uint32_t a);
+    LogHelper &arg(const char *const a);
 
-void syntaxReport(const uint32_t stringIndex,
-                  const std::string &name,
-                  const std::string color = LOGGER_TERM_COLOR_LCYAN);
+    // maybe change to setProp(NoNewLine, ...)
+    LogHelper &noNewLine();
+
+private:
+    static constexpr char mFormatChar = '%';
+    uint32_t mArgsLeft{0U};
+    std::string mFormatString;
+    Color mColor;
+    bool mNoNewLine{false};
+
+    void logIfAllArgsProvided();
+
+    friend LogHelper log(const char *const, Color);
+};
+
+// example: log("text % % %").arg(5).arg(3.14).arg("text");
+LogHelper log(const char *const formatString, Color color = Color::NoColor);
+
+void syntaxReport( //
+    const uint32_t stringIndex,
+    const char *const name,
+    const Color color = Color::Green);
 
 } // namespace safec::log
