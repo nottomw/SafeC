@@ -17,6 +17,7 @@ namespace safec
 #define LOGGER_TERM_COLOR_LBLUE "\033[01;34m"
 #define LOGGER_TERM_COLOR_LPURPLE "\033[01;35m"
 #define LOGGER_TERM_COLOR_LCYAN "\033[01;36m"
+#define LOGGER_TERM_COLOR_MAGENTA "\033[01;35m"
 
 static constexpr const char *colorToTermColor(Color c)
 {
@@ -42,6 +43,8 @@ static constexpr const char *colorToTermColor(Color c)
             return LOGGER_TERM_COLOR_LPURPLE;
         case Color::LightCyan:
             return LOGGER_TERM_COLOR_LCYAN;
+        case Color::Magenta:
+            return LOGGER_TERM_COLOR_MAGENTA;
         default:
             break;
     }

@@ -18,7 +18,8 @@ enum class Color
     LightYellow,
     LightBlue,
     LightPurple,
-    LightCyan
+    LightCyan,
+    Magenta
 };
 
 namespace logger

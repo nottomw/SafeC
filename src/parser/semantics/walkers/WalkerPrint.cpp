@@ -1,5 +1,6 @@
 #include "WalkerPrint.hpp"
 
+#include "logger/Logger.hpp"
 #include "semantics/SemNode.hpp"
 
 #include <iostream>
@@ -9,22 +10,27 @@ namespace safec
 
 void WalkerPrint::peek(SemNode &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(node, astLevel) << std::endl;
+    log("%", Color::Magenta).arg(getPrefix(node, astLevel));
 }
 
 void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(node, astLevel) << " { " << node.getStart() << ", " << node.getEnd() << " } " << std::endl;
+    log("% { %, % }", Color::LightYellow) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.getStart())
+        .arg(node.getEnd());
 }
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(node, astLevel) << " { " << node.getStart() << ", " << node.getEnd() << " } " << std::endl;
+    peekDefault<SemNodeScope>(node, astLevel);
 }
 
 void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
 {
-    std::cout << getPrefix(node, astLevel) << " { " << node.getPos() << " }" << std::endl;
+    log("% { % }", Color::LightGreen) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.getPos());
 }
 
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)

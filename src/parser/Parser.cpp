@@ -43,7 +43,7 @@ void Parser::parse(const std::string &path)
     if (bfs::is_directory(filePathBoost) == true)
     {
         // TODO: fun: multiple processes for multiple files (?)
-        std::cout << "parser: got directory\n";
+        log("parser: got directory");
         for (auto &entry : boost::make_iterator_range(bfs::directory_iterator(filePathBoost), {}))
         {
             parseFile(entry);
@@ -73,11 +73,13 @@ void Parser::parseFile(const bfs::path &path)
 
     fclose(yyin);
 
-    std::cout << "\nParsing done, characters in file " << path << ": " << lex_current_char << "\n\n";
+    log("\nParsing done, characters in file %: %\n") //
+        .arg(path.c_str())
+        .arg(lex_current_char);
 
-    std::cout << "Current AST:\n";
+    log("Current AST:");
     mSemantics.display();
-    std::cout << "\n\n";
+    log("\n\n", {logger::NewLine::No});
 
     // TODO: fun: multiple walkers can run in parallel
 
@@ -98,14 +100,18 @@ void Parser::parseFile(const bfs::path &path)
 
 void Parser::addModPoint(ModPoint &&modPoint)
 {
-    std::cout << "Adding mod point:\n";
+    log("Adding mod point: ", {logger::NewLine::No});
+
     if (modPoint.getModType() == ModPoint::ModType::CallDeferred)
     {
         const auto functionName = std::any_cast<ModPoint::DataCallDeferred>(modPoint.getData()).functionName;
-        std::cout << "\tCALL_DEFERRED\n";
-        std::cout << "\t ~ file index: " << modPoint.getIndex() << "\n";
-        std::cout << "\t ~ mod type: " << static_cast<uint32_t>(modPoint.getModType()) << "\n";
-        std::cout << "\t ~ function name: " << functionName << "\n";
+        log("\tCALL_DEFERRED\n"    //
+            "\t ~ file index: %\n" //
+            "\t ~ mod type: %\n"   //
+            "\t ~ function name: %")
+            .arg(modPoint.getIndex())
+            .arg(static_cast<uint32_t>(modPoint.getModType()))
+            .arg(functionName);
     }
 
     mModPoints.emplace_back(std::move(modPoint));

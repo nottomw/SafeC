@@ -1,3 +1,4 @@
+#include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
 #include "parser/semantics/SemanticsFactory.hpp"
 
@@ -22,18 +23,17 @@ int main(int argc, char **argv)
 
     if (vm.count("help") > 0)
     {
-        std::cout << desc;
-
+        std::cout << desc << std::endl;
         return 0;
     }
 
     if (vm.count("disable") > 0)
     {
-        std::cout << "Disabled features: \n";
+        safec::log("Disabled features:");
         auto &disabledFeatures = vm["disable"].as<std::vector<std::string>>();
         for (const auto &it : disabledFeatures)
         {
-            std::cout << " - " << it << std::endl;
+            safec::log("\t--> %").arg(it);
         }
     }
 
@@ -41,11 +41,11 @@ int main(int argc, char **argv)
     {
         safec::Parser parser{safec::SemanticsFactory::get()};
 
-        std::cout << "Parsing files:\n";
+        safec::log("Parsing files:");
         auto &filesToParse = vm["file"].as<std::vector<std::string>>();
         for (const auto &it : filesToParse)
         {
-            std::cout << " - " << it << std::endl;
+            safec::log("\t--> %").arg(it);
             parser.parse(it);
         }
     }
