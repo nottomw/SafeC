@@ -24,8 +24,10 @@ class LogHelper
 {
 public:
     LogHelper(const char *const formatString, Color color);
+
     LogHelper &arg(const uint32_t a);
     LogHelper &arg(const char *const a);
+    LogHelper &arg(const std::string &a);
 
     // maybe change to setProp(NoNewLine, ...)
     LogHelper &noNewLine();

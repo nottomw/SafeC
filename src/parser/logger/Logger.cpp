@@ -85,6 +85,21 @@ LogHelper &LogHelper::arg(const char *const a)
     return *this;
 }
 
+LogHelper &LogHelper::arg(const std::string &a)
+{
+    assert(mArgsLeft > 0U);
+
+    size_t pos = mFormatString.find(mFormatChar);
+    assert(pos != std::string::npos);
+
+    mFormatString.replace(pos, 1, a);
+
+    mArgsLeft--;
+
+    logIfAllArgsProvided();
+    return *this;
+}
+
 LogHelper &LogHelper::noNewLine()
 {
     mNoNewLine = true;
