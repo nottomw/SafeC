@@ -40,8 +40,18 @@ private:
 
     struct ProgramElem
     {
+        ProgramElem(const ElemType tp, const uint32_t ast) : type{tp}, astLevel{ast}
+        {
+        }
+
+        ProgramElem(const ElemType tp, const uint32_t ast, const SemNodeDefer *const def)
+            : type{tp}, astLevel{ast}, defer{def}
+        {
+        }
+
         ElemType type;
         uint32_t astLevel;
+        const SemNodeDefer *defer;
     };
 
     using AstLevel = uint32_t;

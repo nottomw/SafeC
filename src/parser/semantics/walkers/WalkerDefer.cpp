@@ -1,5 +1,6 @@
 #include "WalkerDefer.hpp"
 
+#include "logger/Logger.hpp"
 #include "semantics/SemNode.hpp"
 
 #include <algorithm>
@@ -32,7 +33,7 @@ void WalkerDefer::peek(SemNodeLoop &node, const uint32_t astLevel)
 
 void WalkerDefer::peek(SemNodeDefer &node, const uint32_t astLevel)
 {
-    mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Defer, astLevel});
+    mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Defer, astLevel, &node});
 }
 
 void WalkerDefer::peek(SemNodeReturn &node, const uint32_t astLevel)
@@ -53,30 +54,10 @@ void WalkerDefer::peek(SemNodeContinue &node, const uint32_t astLevel)
 WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
 {
     // Vector of astLevels where defer was seen
-    std::vector<uint32_t> activeDefers;
+    using AstDeferNodePair = std::pair<uint32_t, const SemNodeDefer *>;
+    std::vector<AstDeferNodePair> activeDefers;
 
     // TODO: cleanup defer fire analysis
-
-    auto removeFromDefers = [&activeDefers](
-                                const uint32_t astLevel,
-                                std::function<bool(const uint32_t, const uint32_t)> cmp =
-                                    [](const uint32_t a, const uint32_t b) { return a == b; }) {
-        auto it = activeDefers.begin();
-        while (it != activeDefers.end())
-        {
-            auto itAstLevel = *it;
-            if (cmp(itAstLevel, astLevel))
-            {
-                it = activeDefers.erase(it);
-            }
-            else
-            {
-                it++;
-            }
-        }
-    };
-
-    // TODO: grab the defer function call
 
     for (const auto &it : mProgramStructure)
     {
@@ -100,7 +81,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
             std::cout << elem.astLevel << " ~~ defer at " << pos << " active in astLevel: " << (elem.astLevel - 1)
                       << std::endl;
 
-            activeDefers.push_back(elem.astLevel - 1);
+            activeDefers.emplace_back(std::make_pair(elem.astLevel - 1, elem.defer));
             continue;
         }
 
@@ -108,25 +89,40 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
         {
             std::cout << elem.astLevel << " ~~ scope end at " << pos << std::endl;
 
-            const uint32_t defersInThisScope = std::count(activeDefers.begin(), activeDefers.end(), elem.astLevel);
-            if (defersInThisScope > 0)
+            auto it = activeDefers.begin();
+            while (it != activeDefers.end())
             {
-                std::cout << "scope end, firing " << defersInThisScope << " defers\n";
-                removeFromDefers(elem.astLevel);
+                if (it->first == elem.astLevel)
+                {
+                    safec::log::log("SCOPE END: found matching defer on astLevel: %, pos: %, text: '%'")
+                        .arg(elem.astLevel)
+                        .arg(pos)
+                        .arg(it->second->getDeferredText());
+
+                    it = activeDefers.erase(it);
+                }
+                else
+                {
+                    it++;
+                }
             }
         }
         else if (elem.type == ElemType::Return)
         {
             std::cout << elem.astLevel << " ~~ return at " << pos << std::endl;
 
-            auto cond = [&astLevel = elem.astLevel](const uint32_t astLevelDefer) {
-                return (astLevel > astLevelDefer);
-            };
-
-            const uint32_t defersInThisScope = std::count_if(activeDefers.begin(), activeDefers.end(), cond);
-            if (defersInThisScope > 0)
+            auto it = activeDefers.begin();
+            while (it != activeDefers.end())
             {
-                std::cout << "return, firing " << defersInThisScope << " defers\n";
+                if (it->first < elem.astLevel)
+                {
+                    safec::log::log("RETURN: found matching defer on astLevel: %, pos: %, text: '%'")
+                        .arg(elem.astLevel)
+                        .arg(pos)
+                        .arg(it->second->getDeferredText());
+                }
+
+                it++;
             }
         }
         else if ((elem.type == ElemType::Break) || (elem.type == ElemType::Continue))
@@ -134,27 +130,35 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
             std::cout << elem.astLevel << " ~~ break/continue at " << pos << std::endl;
 
             const uint32_t currentLoopAstLevel = mLoopStack.back();
-            auto cond = [&currentLoopAstLevel](const uint32_t astLevelDefer) {
-                return (currentLoopAstLevel < astLevelDefer);
-            };
 
-            const uint32_t defersInThisScope = std::count_if(activeDefers.begin(), activeDefers.end(), cond);
-            if (defersInThisScope > 0)
+            auto it = activeDefers.begin();
+            while (it != activeDefers.end())
             {
-                std::cout << "break/continue, firing " << defersInThisScope << " defers\n";
+                if (it->first > currentLoopAstLevel)
+                {
+                    safec::log::log("BREAK/CONTINUE: found matching defer on astLevel: %, pos: %, text: '%'")
+                        .arg(elem.astLevel)
+                        .arg(pos)
+                        .arg(it->second->getDeferredText());
+                }
+
+                it++;
             }
         }
         else if (elem.type == ElemType::LoopStart)
         {
             std::cout << elem.astLevel << " ~~ loop start at " << pos << std::endl;
-
             mLoopStack.push_back(elem.astLevel);
         }
         else if (elem.type == ElemType::LoopEnd)
         {
             std::cout << elem.astLevel << " ~~ loop end at " << pos << std::endl;
 
-            removeFromDefers(elem.astLevel);
+            activeDefers.erase(
+                std::remove_if(activeDefers.begin(),
+                               activeDefers.end(),
+                               [&e = elem.astLevel](const AstDeferNodePair &p) -> bool { return (e == p.first); }),
+                activeDefers.end());
 
             mLoopStack.erase(std::remove(mLoopStack.begin(), mLoopStack.end(), elem.astLevel), mLoopStack.end());
         }
