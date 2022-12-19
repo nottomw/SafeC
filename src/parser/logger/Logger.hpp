@@ -29,7 +29,7 @@ public:
     LogHelper &arg(const char *const a);
     LogHelper &arg(const std::string &a);
 
-    // maybe change to setProp(NoNewLine, ...)
+    // maybe change to log("format str", { Color::X, Prop::NoNewline })
     LogHelper &noNewLine();
 
 private:

@@ -21,36 +21,36 @@ static constexpr const char *colorToTermColor(Color c)
 {
     switch (c)
     {
-    case Color::NoColor:
-        return LOGGER_TERM_COLOR_NC;
-    case Color::Yellow:
-        return LOGGER_TERM_COLOR_YELLOW;
-    case Color::Red:
-        return LOGGER_TERM_COLOR_RED;
-    case Color::Green:
-        return LOGGER_TERM_COLOR_GREEN;
-    case Color::LightRed:
-        return LOGGER_TERM_COLOR_LRED;
-    case Color::LightGreen:
-        return LOGGER_TERM_COLOR_LGREEN;
-    case Color::LightYellow:
-        return LOGGER_TERM_COLOR_LYELLOW;
-    case Color::LightBlue:
-        return LOGGER_TERM_COLOR_LBLUE;
-    case Color::LightPurple:
-        return LOGGER_TERM_COLOR_LPURPLE;
-    case Color::LightCyan:
-        return LOGGER_TERM_COLOR_LCYAN;
-    default:
-        break;
+        case Color::NoColor:
+            return LOGGER_TERM_COLOR_NC;
+        case Color::Yellow:
+            return LOGGER_TERM_COLOR_YELLOW;
+        case Color::Red:
+            return LOGGER_TERM_COLOR_RED;
+        case Color::Green:
+            return LOGGER_TERM_COLOR_GREEN;
+        case Color::LightRed:
+            return LOGGER_TERM_COLOR_LRED;
+        case Color::LightGreen:
+            return LOGGER_TERM_COLOR_LGREEN;
+        case Color::LightYellow:
+            return LOGGER_TERM_COLOR_LYELLOW;
+        case Color::LightBlue:
+            return LOGGER_TERM_COLOR_LBLUE;
+        case Color::LightPurple:
+            return LOGGER_TERM_COLOR_LPURPLE;
+        case Color::LightCyan:
+            return LOGGER_TERM_COLOR_LCYAN;
+        default:
+            break;
     }
 
     assert(nullptr == "invalid logger color");
     return LOGGER_TERM_COLOR_NC;
 }
 
-LogHelper::LogHelper(const char *const formatString, Color color) //
-    : mFormatString{formatString}                                 //
+LogHelper::LogHelper(const char *const formatString, Color color)
+    : mFormatString{formatString}
     , mColor{color}
 {
 }
@@ -138,6 +138,14 @@ LogHelper log(const char *const formatString, Color color)
         }
 
         p++;
+    }
+
+    if (helper.mArgsLeft == 0U)
+    {
+        std::cout << colorToTermColor(color)          //
+                  << formatString                     //
+                  << colorToTermColor(Color::NoColor) //
+                  << '\n';
     }
 
     return helper;
