@@ -63,7 +63,6 @@ LogHelper &LogHelper::arg(const std::string &a)
     const uint32_t argIndex = mArgsOffsets.size() - mArgsLeft;
     const uint32_t argOffset = mArgsOffsets[argIndex];
 
-    // TODO: can just add current size to next param without for_each
     // align saved % offsets
     const size_t argStrSize = a.size() - 1;
     std::for_each(mArgsOffsets.begin() + argIndex, //
