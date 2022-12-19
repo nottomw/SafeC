@@ -38,26 +38,33 @@ private:
         Defer
     };
 
+    using AstLevel = uint32_t;
+    using AstDeferNodePair = std::pair<AstLevel, const SemNodeDefer *>;
+
     struct ProgramElem
     {
-        ProgramElem(const ElemType tp, const uint32_t ast) : type{tp}, astLevel{ast}
+        ProgramElem(const ElemType tp, const AstLevel ast) : type{tp}, astLevel{ast}
         {
         }
 
-        ProgramElem(const ElemType tp, const uint32_t ast, const SemNodeDefer *const def)
+        ProgramElem(const ElemType tp, const AstLevel ast, const SemNodeDefer *const def)
             : type{tp}, astLevel{ast}, defer{def}
         {
         }
 
         ElemType type;
-        uint32_t astLevel;
+        AstLevel astLevel;
         const SemNodeDefer *defer;
     };
 
-    using AstLevel = uint32_t;
+    void checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
+    void checkReturnDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
+    void checkBreakContinueDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
 
     std::multimap<AstLevel, ProgramElem> mProgramStructure;
     std::vector<AstLevel> mLoopStack;
+
+    std::vector<AstDeferNodePair> mActiveDefers;
 
     DeferFiresVector mDeferFires;
 };

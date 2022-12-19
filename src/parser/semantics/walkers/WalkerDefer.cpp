@@ -8,9 +8,9 @@
 namespace safec
 {
 
-void WalkerDefer::peek(SemNode &node, const uint32_t)
+void WalkerDefer::peek(SemNode &, const uint32_t)
 {
-    std::cout << "not interested: " << SemNode::TypeInfo::toStr(node.getType()) << std::endl;
+    // nothing to do
 }
 
 void WalkerDefer::peek(SemNodeScope &node, const uint32_t astLevel)
@@ -53,118 +53,104 @@ void WalkerDefer::peek(SemNodeContinue &node, const uint32_t astLevel)
 
 WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
 {
-    // Vector of astLevels where defer was seen
-    using AstDeferNodePair = std::pair<uint32_t, const SemNodeDefer *>;
-    std::vector<AstDeferNodePair> activeDefers;
-
-    // TODO: cleanup defer fire analysis
-
     for (const auto &it : mProgramStructure)
     {
-        for (uint32_t i = 0; i < it.second.astLevel; ++i)
-        {
-            std::cout << "\t";
-        }
-
-        std::cout << it.first << " PROGRAM: " << static_cast<uint32_t>(it.second.type) << std::endl;
-    }
-
-    for (const auto &it : mProgramStructure)
-    {
-        const uint32_t pos = it.first;
+        const uint32_t elemCharacterPos = it.first;
         const ProgramElem &elem = it.second;
-
-        std::cout << "------------------------------------------- DEFER COUNT: " << activeDefers.size() << std::endl;
 
         if (elem.type == ElemType::Defer)
         {
-            std::cout << elem.astLevel << " ~~ defer at " << pos << " active in astLevel: " << (elem.astLevel - 1)
-                      << std::endl;
-
-            activeDefers.emplace_back(std::make_pair(elem.astLevel - 1, elem.defer));
+            const AstLevel deferActiveAtLevel = elem.astLevel - 1;
+            mActiveDefers.emplace_back(std::make_pair(deferActiveAtLevel, elem.defer));
             continue;
         }
 
         if (elem.type == ElemType::ScopeEnd)
         {
-            std::cout << elem.astLevel << " ~~ scope end at " << pos << std::endl;
-
-            auto it = activeDefers.begin();
-            while (it != activeDefers.end())
-            {
-                if (it->first == elem.astLevel)
-                {
-                    safec::log::log("SCOPE END: found matching defer on astLevel: %, pos: %, text: '%'")
-                        .arg(elem.astLevel)
-                        .arg(pos)
-                        .arg(it->second->getDeferredText());
-
-                    it = activeDefers.erase(it);
-                }
-                else
-                {
-                    it++;
-                }
-            }
+            checkScopeEndDefers(elem, elemCharacterPos);
         }
         else if (elem.type == ElemType::Return)
         {
-            std::cout << elem.astLevel << " ~~ return at " << pos << std::endl;
-
-            auto it = activeDefers.begin();
-            while (it != activeDefers.end())
-            {
-                if (it->first < elem.astLevel)
-                {
-                    safec::log::log("RETURN: found matching defer on astLevel: %, pos: %, text: '%'")
-                        .arg(elem.astLevel)
-                        .arg(pos)
-                        .arg(it->second->getDeferredText());
-                }
-
-                it++;
-            }
+            checkReturnDefers(elem, elemCharacterPos);
         }
         else if ((elem.type == ElemType::Break) || (elem.type == ElemType::Continue))
         {
-            std::cout << elem.astLevel << " ~~ break/continue at " << pos << std::endl;
-
-            const uint32_t currentLoopAstLevel = mLoopStack.back();
-
-            auto it = activeDefers.begin();
-            while (it != activeDefers.end())
-            {
-                if (it->first > currentLoopAstLevel)
-                {
-                    safec::log::log("BREAK/CONTINUE: found matching defer on astLevel: %, pos: %, text: '%'")
-                        .arg(elem.astLevel)
-                        .arg(pos)
-                        .arg(it->second->getDeferredText());
-                }
-
-                it++;
-            }
+            checkBreakContinueDefers(elem, elemCharacterPos);
         }
         else if (elem.type == ElemType::LoopStart)
         {
-            std::cout << elem.astLevel << " ~~ loop start at " << pos << std::endl;
             mLoopStack.push_back(elem.astLevel);
         }
         else if (elem.type == ElemType::LoopEnd)
         {
-            std::cout << elem.astLevel << " ~~ loop end at " << pos << std::endl;
-
-            activeDefers.erase(
-                std::remove_if(activeDefers.begin(),
-                               activeDefers.end(),
+            mActiveDefers.erase(
+                std::remove_if(mActiveDefers.begin(),
+                               mActiveDefers.end(),
                                [&e = elem.astLevel](const AstDeferNodePair &p) -> bool { return (e == p.first); }),
-                activeDefers.end());
+                mActiveDefers.end());
 
             mLoopStack.erase(std::remove(mLoopStack.begin(), mLoopStack.end(), elem.astLevel), mLoopStack.end());
         }
     }
 
     return mDeferFires;
+}
+
+void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos)
+{
+    auto it = mActiveDefers.begin();
+    while (it != mActiveDefers.end())
+    {
+        if (it->first == elem.astLevel)
+        {
+            safec::log::log("SCOPE END: defer fire - astLevel: %, pos: %, text: '%'")
+                .arg(elem.astLevel)
+                .arg(elemCharacterPos)
+                .arg(it->second->getDeferredText());
+
+            it = mActiveDefers.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
+}
+
+void WalkerDefer::checkReturnDefers(const ProgramElem &elem, const uint32_t elemCharacterPos)
+{
+    auto it = mActiveDefers.begin();
+    while (it != mActiveDefers.end())
+    {
+        if (it->first < elem.astLevel)
+        {
+            safec::log::log("RETURN: defer fire - astLevel: %, pos: %, text: '%'")
+                .arg(elem.astLevel)
+                .arg(elemCharacterPos)
+                .arg(it->second->getDeferredText());
+        }
+
+        it++;
+    }
+}
+
+void WalkerDefer::checkBreakContinueDefers(const ProgramElem &elem, const uint32_t elemCharacterPos)
+{
+    const uint32_t currentLoopAstLevel = mLoopStack.back();
+
+    auto it = mActiveDefers.begin();
+    while (it != mActiveDefers.end())
+    {
+        if (it->first > currentLoopAstLevel)
+        {
+            safec::log::log("BREAK/CONTINUE: defer fire - astLevel: %, pos: %, text: '%'")
+                .arg(elem.astLevel)
+                .arg(elemCharacterPos)
+                .arg(it->second->getDeferredText());
+        }
+
+        it++;
+    }
 }
 
 } // namespace safec
