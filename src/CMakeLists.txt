@@ -4,6 +4,7 @@ project(SafeC CXX C)
 include(${CMAKE_SOURCE_DIR}/cmake/CompilerOptions.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Deps.cmake)
 
+add_subdirectory(logger)
 add_subdirectory(parser)
 
 add_executable(SafeCTranspiler

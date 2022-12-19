@@ -12,3 +12,8 @@ target_include_directories(walkers
     PUBLIC
         ${PROJECT_SOURCE_DIR}/parser
 )
+
+target_link_libraries(walkers
+    PRIVATE
+        safec::logger
+)
