@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 
-namespace safec::log
+namespace safec
 {
 
 #define LOGGER_TERM_COLOR_NC "\033[0m"
@@ -153,7 +153,7 @@ LogHelper log(const char *const formatString, Color color)
 
 void syntaxReport(const uint32_t stringIndex, const char *const name, const Color color)
 {
-    safec::log::log("@ % at % @", color).noNewLine().arg(name).arg(stringIndex);
+    safec::log("@ % at % @", color).noNewLine().arg(name).arg(stringIndex);
 }
 
-} // namespace safec::log
+} // namespace safec

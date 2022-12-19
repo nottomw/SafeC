@@ -29,9 +29,9 @@ auto &sem = safec::SemanticsFactory::get();
 
 [[maybe_unused]] static void pr(
 	const char* const str,
-	safec::log::Color color = safec::log::Color::Yellow)
+	safec::Color color = safec::Color::Yellow)
 {
-	safec::log::log("@ % at % @", color).noNewLine().arg(str).arg(lex_current_char);
+	safec::log("@ % at % @", color).noNewLine().arg(str).arg(lex_current_char);
 }
 
 %}

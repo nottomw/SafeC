@@ -97,7 +97,7 @@ void Semantics::handlePostfixExpression( //
 void Semantics::handleDeferCallStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "defer start", log::Color::LightBlue);
+    syntaxReport(stringIndex, "defer start", Color::LightBlue);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -111,7 +111,7 @@ void Semantics::handleDeferCallStart( //
 void Semantics::handleDeferCall( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "defer end", log::Color::LightBlue);
+    syntaxReport(stringIndex, "defer end", Color::LightBlue);
 
     auto deferNode = semState.mDeferCallStart.lock();
     assert(deferNode);
@@ -128,7 +128,7 @@ void Semantics::handleReturn( //
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool returnValueAvailable)
 {
-    log::syntaxReport(stringIndex, "return", log::Color::LightRed);
+    syntaxReport(stringIndex, "return", Color::LightRed);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -140,7 +140,7 @@ void Semantics::handleReturn( //
 void Semantics::handleCompoundStatementStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "scope start");
+    syntaxReport(stringIndex, "scope start");
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -155,7 +155,7 @@ void Semantics::handleCompoundStatementStart( //
 void Semantics::handleCompoundStatementEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "scope end");
+    syntaxReport(stringIndex, "scope end");
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -169,7 +169,7 @@ void Semantics::handleCompoundStatementEnd( //
 void Semantics::handleFunctionStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "function start", log::Color::LightPurple);
+    syntaxReport(stringIndex, "function start", Color::LightPurple);
 
     auto functionNode = std::make_shared<SemNodeFunction>(stringIndex);
     mTranslationUnit.attach(functionNode);
@@ -182,13 +182,13 @@ void Semantics::handleFunctionStart( //
 void Semantics::handleFunctionEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "function end", log::Color::LightPurple);
+    syntaxReport(stringIndex, "function end", Color::LightPurple);
 }
 
 void Semantics::handleLoopStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "loop start", log::Color::LightYellow);
+    syntaxReport(stringIndex, "loop start", Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -203,7 +203,7 @@ void Semantics::handleLoopStart( //
 void Semantics::handleLoopEnd( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "loop end", log::Color::LightYellow);
+    syntaxReport(stringIndex, "loop end", Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -216,7 +216,7 @@ void Semantics::handleLoopEnd( //
 
 void Semantics::handleBreak(const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "break", log::Color::LightYellow);
+    syntaxReport(stringIndex, "break", Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
@@ -227,7 +227,7 @@ void Semantics::handleBreak(const uint32_t stringIndex)
 
 void Semantics::handleContinue(const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "continue", log::Color::LightYellow);
+    syntaxReport(stringIndex, "continue", Color::LightYellow);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();

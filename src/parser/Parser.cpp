@@ -86,11 +86,11 @@ void Parser::parseFile(const bfs::path &path)
     SemNodeWalker walker;
     mSemantics.walk(walker, walkerDefer);
 
-    log::log("Defer fire analysis: ", log::Color::Yellow);
+    log("Defer fire analysis: ", Color::Yellow);
     const auto deferFires = walkerDefer.getDeferFires();
     for (const auto &it : deferFires)
     {
-        log::log("\t'defer' fire at: %, \ttext: '%'") //
+        log("\t'defer' fire at: %, \ttext: '%'") //
             .arg(it.first)
             .arg(it.second);
     }

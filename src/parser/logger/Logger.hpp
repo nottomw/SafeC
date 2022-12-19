@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-namespace safec::log
+namespace safec
 {
 
 enum class Color
@@ -53,4 +53,4 @@ void syntaxReport( //
     const char *const name,
     const Color color = Color::Green);
 
-} // namespace safec::log
+} // namespace safec
