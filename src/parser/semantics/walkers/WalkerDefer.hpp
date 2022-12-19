@@ -28,7 +28,6 @@ public:
 private:
     enum class ElemType
     {
-        ScopeStart, // or FunctionStart
         ScopeEnd,
         LoopStart,
         LoopEnd,
@@ -43,23 +42,27 @@ private:
 
     struct ProgramElem
     {
-        ProgramElem(const ElemType tp, const AstLevel ast) : type{tp}, astLevel{ast}
+        ProgramElem(const ElemType type, const AstLevel ast)
+            : mType{type}
+            , mAstLevel{ast}
         {
         }
 
-        ProgramElem(const ElemType tp, const AstLevel ast, const SemNodeDefer *const def)
-            : type{tp}, astLevel{ast}, defer{def}
+        ProgramElem(const ElemType type, const AstLevel ast, const SemNodeDefer *const deferNode)
+            : mType{type}
+            , mAstLevel{ast}
+            , mDefer{deferNode}
         {
         }
 
-        ElemType type;
-        AstLevel astLevel;
-        const SemNodeDefer *defer;
+        ElemType mType;
+        AstLevel mAstLevel;
+        const SemNodeDefer *mDefer;
     };
 
     void checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
     void checkReturnDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
-    void checkBreakContinueDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
+    void checkBreakContinueDefers(const uint32_t elemCharacterPos);
 
     std::multimap<AstLevel, ProgramElem> mProgramStructure;
     std::vector<AstLevel> mLoopStack;

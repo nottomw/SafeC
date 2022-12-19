@@ -1,5 +1,6 @@
 #include "Parser.hpp"
 
+#include "logger/Logger.hpp"
 #include "semantics/Semantics.hpp"
 #include "semantics/walkers/SemNodeWalker.hpp"
 #include "semantics/walkers/WalkerDefer.hpp"
@@ -85,7 +86,14 @@ void Parser::parseFile(const bfs::path &path)
     SemNodeWalker walker;
     mSemantics.walk(walker, walkerDefer);
 
-    (void)walkerDefer.getDeferFires();
+    log::log("Defer fire analysis: ", log::Color::Yellow);
+    const auto deferFires = walkerDefer.getDeferFires();
+    for (const auto &it : deferFires)
+    {
+        log::log("\t'defer' fire at: %, \ttext: '%'") //
+            .arg(it.first)
+            .arg(it.second);
+    }
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)

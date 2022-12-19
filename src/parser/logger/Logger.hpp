@@ -29,7 +29,7 @@ public:
     LogHelper &arg(const char *const a);
     LogHelper &arg(const std::string &a);
 
-    // maybe change to log("format str", { Color::X, Prop::NoNewline })
+    // TODO: maybe change to log("format str", { Color::X, Prop::NoNewline })
     LogHelper &noNewLine();
 
 private:
@@ -47,6 +47,7 @@ private:
 // example: log("text % % %").arg(5).arg(3.14).arg("text");
 LogHelper log(const char *const formatString, Color color = Color::NoColor);
 
+// TODO: remove (?)
 void syntaxReport( //
     const uint32_t stringIndex,
     const char *const name,

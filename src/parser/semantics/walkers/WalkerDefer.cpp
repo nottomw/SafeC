@@ -15,13 +15,11 @@ void WalkerDefer::peek(SemNode &, const uint32_t)
 
 void WalkerDefer::peek(SemNodeScope &node, const uint32_t astLevel)
 {
-    mProgramStructure.emplace(node.getStart(), ProgramElem{ElemType::ScopeStart, astLevel});
     mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
 }
 
 void WalkerDefer::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    mProgramStructure.emplace(node.getStart(), ProgramElem{ElemType::ScopeStart, astLevel});
     mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
 }
 
@@ -58,40 +56,56 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
         const uint32_t elemCharacterPos = it.first;
         const ProgramElem &elem = it.second;
 
-        if (elem.type == ElemType::Defer)
+        switch (elem.mType)
         {
-            const AstLevel deferActiveAtLevel = elem.astLevel - 1;
-            mActiveDefers.emplace_back(std::make_pair(deferActiveAtLevel, elem.defer));
-            continue;
-        }
+            case ElemType::Defer:
+                {
+                    const AstLevel deferActiveAtLevel = elem.mAstLevel - 1;
+                    mActiveDefers.emplace_back(std::make_pair(deferActiveAtLevel, elem.mDefer));
+                    continue;
+                }
+                break;
 
-        if (elem.type == ElemType::ScopeEnd)
-        {
-            checkScopeEndDefers(elem, elemCharacterPos);
-        }
-        else if (elem.type == ElemType::Return)
-        {
-            checkReturnDefers(elem, elemCharacterPos);
-        }
-        else if ((elem.type == ElemType::Break) || (elem.type == ElemType::Continue))
-        {
-            checkBreakContinueDefers(elem, elemCharacterPos);
-        }
-        else if (elem.type == ElemType::LoopStart)
-        {
-            mLoopStack.push_back(elem.astLevel);
-        }
-        else if (elem.type == ElemType::LoopEnd)
-        {
-            mActiveDefers.erase(
-                std::remove_if(mActiveDefers.begin(),
-                               mActiveDefers.end(),
-                               [&e = elem.astLevel](const AstDeferNodePair &p) -> bool { return (e == p.first); }),
-                mActiveDefers.end());
+            case ElemType::ScopeEnd:
+                checkScopeEndDefers(elem, elemCharacterPos);
+                break;
 
-            mLoopStack.erase(std::remove(mLoopStack.begin(), mLoopStack.end(), elem.astLevel), mLoopStack.end());
+            case ElemType::Return:
+                checkReturnDefers(elem, elemCharacterPos);
+                break;
+
+            case ElemType::Break:
+                [[fallthrough]];
+            case ElemType::Continue:
+                checkBreakContinueDefers(elemCharacterPos);
+                break;
+
+            case ElemType::LoopStart:
+                mLoopStack.push_back(elem.mAstLevel);
+                break;
+
+            case ElemType::LoopEnd:
+                {
+                    mActiveDefers.erase(std::remove_if(mActiveDefers.begin(),
+                                                       mActiveDefers.end(),
+                                                       [&e = elem.mAstLevel](const AstDeferNodePair &p) -> bool {
+                                                           return (e == p.first);
+                                                       }),
+                                        mActiveDefers.end());
+
+                    mLoopStack.erase(std::remove(mLoopStack.begin(), mLoopStack.end(), elem.mAstLevel),
+                                     mLoopStack.end());
+                }
+                break;
+
+            default:
+                assert(nullptr == "invalid elem.type");
+                break;
         }
     }
+
+    // TODO: defer on the same char should be in reverse order
+    // TODO: precise defer positions - before closing bracket, before return, etc.
 
     return mDeferFires;
 }
@@ -101,13 +115,9 @@ void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t el
     auto it = mActiveDefers.begin();
     while (it != mActiveDefers.end())
     {
-        if (it->first == elem.astLevel)
+        if (it->first == elem.mAstLevel)
         {
-            safec::log::log("SCOPE END: defer fire - astLevel: %, pos: %, text: '%'")
-                .arg(elem.astLevel)
-                .arg(elemCharacterPos)
-                .arg(it->second->getDeferredText());
-
+            mDeferFires.emplace_back(std::make_pair(elemCharacterPos, it->second->getDeferredText()));
             it = mActiveDefers.erase(it);
         }
         else
@@ -122,19 +132,16 @@ void WalkerDefer::checkReturnDefers(const ProgramElem &elem, const uint32_t elem
     auto it = mActiveDefers.begin();
     while (it != mActiveDefers.end())
     {
-        if (it->first < elem.astLevel)
+        if (it->first < elem.mAstLevel)
         {
-            safec::log::log("RETURN: defer fire - astLevel: %, pos: %, text: '%'")
-                .arg(elem.astLevel)
-                .arg(elemCharacterPos)
-                .arg(it->second->getDeferredText());
+            mDeferFires.emplace_back(std::make_pair(elemCharacterPos, it->second->getDeferredText()));
         }
 
         it++;
     }
 }
 
-void WalkerDefer::checkBreakContinueDefers(const ProgramElem &elem, const uint32_t elemCharacterPos)
+void WalkerDefer::checkBreakContinueDefers(const uint32_t elemCharacterPos)
 {
     const uint32_t currentLoopAstLevel = mLoopStack.back();
 
@@ -143,10 +150,7 @@ void WalkerDefer::checkBreakContinueDefers(const ProgramElem &elem, const uint32
     {
         if (it->first > currentLoopAstLevel)
         {
-            safec::log::log("BREAK/CONTINUE: defer fire - astLevel: %, pos: %, text: '%'")
-                .arg(elem.astLevel)
-                .arg(elemCharacterPos)
-                .arg(it->second->getDeferredText());
+            mDeferFires.emplace_back(std::make_pair(elemCharacterPos, it->second->getDeferredText()));
         }
 
         it++;
