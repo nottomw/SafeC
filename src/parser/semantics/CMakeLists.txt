@@ -13,6 +13,7 @@ target_link_libraries(semantics
     PUBLIC
         safec::walkers
         safec::logger 
+        CONAN_PKG::boost
 )
 
 target_include_directories(semantics

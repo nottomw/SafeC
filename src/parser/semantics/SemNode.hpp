@@ -104,6 +104,12 @@ class SemNodeDefer final : public SemNodePositional
 {
 public:
     SemNodeDefer(const uint32_t index);
+
+    void setDeferredText(std::string &&deferredText);
+    std::string getDeferredText() const;
+
+private:
+    std::string mDeferredText;
 };
 
 class SemNodeReturn final : public SemNodePositional

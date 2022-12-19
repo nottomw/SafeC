@@ -4,6 +4,7 @@
 #include "walkers/SemNodeWalker.hpp"
 #include "walkers/WalkerPrint.hpp"
 
+#include <boost/filesystem/path.hpp>
 #include <cassert>
 #include <iostream>
 
@@ -14,6 +15,9 @@ extern "C"
 
 namespace safec
 {
+
+namespace bio = ::boost::iostreams;
+namespace bfs = ::boost::filesystem;
 
 namespace
 {
@@ -27,6 +31,8 @@ struct SemanticsState
 
     using SemNodeScopePtr = std::weak_ptr<SemNodeScope>;
     std::vector<SemNodeScopePtr> mScopeStack;
+
+    std::weak_ptr<SemNodeDefer> mDeferCallStart;
 };
 
 SemanticsState semState;
@@ -36,6 +42,25 @@ std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::weak_ptr<SemNode> &w)
 {
     auto snap = w.lock();
     return static_cast<std::shared_ptr<TUnderlyingSemNode>>(snap);
+}
+
+std::string deferGetText(const char *const str, const uint32_t len)
+{
+    const char *p = str;
+    uint32_t i = 0U;
+    for (i = 0U; i < len; ++i)
+    {
+        if (isspace(p[i]))
+        {
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return std::string{&str[i], (len - i)};
 }
 
 } // namespace
@@ -52,9 +77,10 @@ void Semantics::display()
     walker.walk(mTranslationUnit, printer);
 }
 
-void Semantics::newTranslationUnit()
+void Semantics::newTranslationUnit(const bfs::path &path)
 {
     mTranslationUnit.reset();
+    mSemanticsSourceFile = bio::mapped_file_source{path};
 }
 
 void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
@@ -68,18 +94,34 @@ void Semantics::handlePostfixExpression( //
 {
 }
 
-void Semantics::handleDeferCall( //
+void Semantics::handleDeferCallStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
-    log::syntaxReport(stringIndex, "defer", log::Color::LightBlue);
+    log::syntaxReport(stringIndex, "defer start", log::Color::LightBlue);
 
     auto currentScope = semState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
-    // TODO: add metadata to defer - whole text call (help from lexer?)
+    auto deferNode = std::make_shared<SemNodeDefer>(stringIndex);
+    currentScopeSnap->attach(deferNode);
+    semState.mDeferCallStart = deferNode;
+}
 
-    currentScopeSnap->attach(std::make_shared<SemNodeDefer>(stringIndex));
+void Semantics::handleDeferCall( //
+    [[maybe_unused]] const uint32_t stringIndex)
+{
+    log::syntaxReport(stringIndex, "defer end", log::Color::LightBlue);
+
+    auto deferNode = semState.mDeferCallStart.lock();
+    assert(deferNode);
+
+    const uint32_t textStart = deferNode->getPos();
+    const uint32_t textEnd = stringIndex;
+    const uint32_t textLen = textEnd - textStart;
+    auto text = deferGetText(&mSemanticsSourceFile.data()[textStart], textLen);
+
+    deferNode->setDeferredText(std::move(text));
 }
 
 void Semantics::handleReturn( //

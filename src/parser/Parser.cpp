@@ -6,7 +6,6 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 #include <iostream>
@@ -26,7 +25,6 @@ namespace safec
 {
 
 namespace bfs = ::boost::filesystem;
-namespace bio = ::boost::iostreams;
 
 Parser::Parser(Semantics &sem) //
     : mSemantics{sem}
@@ -67,7 +65,7 @@ void Parser::parseFile(const bfs::path &path)
     yyin = fopen(path.c_str(), "r");
     assert(yyin != nullptr);
 
-    mSemantics.newTranslationUnit();
+    mSemantics.newTranslationUnit(path);
 
     const int32_t parseRes = yyparse();
     assert(parseRes == 0);

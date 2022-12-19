@@ -68,7 +68,6 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
             if (cmp(itAstLevel, astLevel))
             {
                 it = activeDefers.erase(it);
-                std::cout << "DEFER DELETED\n";
             }
             else
             {

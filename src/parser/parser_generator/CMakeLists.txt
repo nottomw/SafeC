@@ -27,7 +27,9 @@ target_include_directories(parser_generated
 )
 
 target_link_libraries(parser_generated
-    safec::logger
+    PUBLIC
+        safec::logger
+        CONAN_PKG::boost
 )
 
 add_library(safec::parser_generated ALIAS parser_generated)

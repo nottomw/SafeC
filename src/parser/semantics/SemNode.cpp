@@ -77,6 +77,16 @@ SemNodeDefer::SemNodeDefer(const uint32_t index) //
     mType = Type::Defer;
 }
 
+void SemNodeDefer::setDeferredText(std::string &&deferredText)
+{
+    mDeferredText = std::move(deferredText);
+}
+
+std::string SemNodeDefer::getDeferredText() const
+{
+    return mDeferredText;
+}
+
 SemNodeReturn::SemNodeReturn(const uint32_t index) //
     : SemNodePositional{index}
 {

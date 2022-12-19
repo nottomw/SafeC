@@ -96,7 +96,7 @@ unary_expression
 	| unary_operator cast_expression
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
-	| SAFEC_DEFER expression
+	| { sem.handleDeferCallStart(lex_current_char); } SAFEC_DEFER expression
 	{
 		sem.handleDeferCall(lex_current_char);
 	}
