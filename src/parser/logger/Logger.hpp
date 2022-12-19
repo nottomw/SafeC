@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 namespace safec
 {
@@ -50,15 +51,16 @@ class LogHelper
 public:
     LogHelper(const char *const formatString, logger::Properties &&props);
 
+    LogHelper &arg(const std::string &a);
     LogHelper &arg(const uint32_t a);
     LogHelper &arg(const char *const a);
-    LogHelper &arg(const std::string &a);
 
 private:
     static constexpr char mFormatChar = '%';
     uint32_t mArgsLeft{0U};
     std::string mFormatString;
     logger::Properties mProperties;
+    std::vector<size_t> mArgsOffsets;
 
     void logIfAllArgsProvided();
 

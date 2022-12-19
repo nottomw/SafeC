@@ -1,5 +1,6 @@
 #include "Logger.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 
@@ -55,49 +56,37 @@ LogHelper::LogHelper(const char *const formatString, logger::Properties &&props)
 {
 }
 
-LogHelper &LogHelper::arg(const uint32_t a)
-{
-    assert(mArgsLeft > 0U);
-
-    size_t pos = mFormatString.find(mFormatChar);
-    assert(pos != std::string::npos);
-
-    mFormatString.replace(pos, 1, std::to_string(a));
-
-    mArgsLeft--;
-
-    logIfAllArgsProvided();
-    return *this;
-}
-
-LogHelper &LogHelper::arg(const char *const a)
-{
-    assert(mArgsLeft > 0U);
-
-    size_t pos = mFormatString.find(mFormatChar);
-    assert(pos != std::string::npos);
-
-    mFormatString.replace(pos, 1, a);
-
-    mArgsLeft--;
-
-    logIfAllArgsProvided();
-    return *this;
-}
-
 LogHelper &LogHelper::arg(const std::string &a)
 {
     assert(mArgsLeft > 0U);
 
-    size_t pos = mFormatString.find(mFormatChar);
-    assert(pos != std::string::npos);
+    const uint32_t argIndex = mArgsOffsets.size() - mArgsLeft;
+    const uint32_t argOffset = mArgsOffsets[argIndex];
 
-    mFormatString.replace(pos, 1, a);
+    // TODO: can just add current size to next param without for_each
+    // align saved % offsets
+    const size_t argStrSize = a.size() - 1;
+    std::for_each(mArgsOffsets.begin() + argIndex, //
+                  mArgsOffsets.end(),
+                  [argStrSize](size_t &off) { off += argStrSize; });
+
+    mFormatString.replace(argOffset, 1, a);
 
     mArgsLeft--;
 
     logIfAllArgsProvided();
     return *this;
+}
+
+LogHelper &LogHelper::arg(const uint32_t a)
+{
+    std::string argStr = std::to_string(a);
+    return arg(argStr);
+}
+
+LogHelper &LogHelper::arg(const char *const a)
+{
+    return arg(std::string(a));
 }
 
 void LogHelper::logIfAllArgsProvided()
@@ -119,18 +108,31 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
 {
     assert(formatString != nullptr);
 
-    // TODO: need escape for %%
     uint32_t argsLeft = 0U;
+    std::vector<size_t> argsOffsets;
 
+    // TODO: just use the index....
+    uint32_t idx = 0U;
     const char *p = formatString;
     while (*p != '\0')
     {
         if (*p == '%')
         {
-            argsLeft++;
+            if (*(p + 1) == '%')
+            {
+                // double percent, needs to be escaped
+                p++;
+                idx++;
+            }
+            else
+            {
+                argsOffsets.push_back(idx);
+                argsLeft++;
+            }
         }
 
         p++;
+        idx++;
     }
 
     if (argsLeft == 0U)
@@ -144,6 +146,7 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
     {
         LogHelper helper{formatString, std::move(props)};
         helper.mArgsLeft = argsLeft;
+        helper.mArgsOffsets = std::move(argsOffsets);
 
         return helper;
     }
