@@ -110,17 +110,14 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
     uint32_t argsLeft = 0U;
     std::vector<size_t> argsOffsets;
 
-    // TODO: just use the index....
     uint32_t idx = 0U;
-    const char *p = formatString;
-    while (*p != '\0')
+    while (formatString[idx] != '\0')
     {
-        if (*p == '%')
+        if (formatString[idx] == '%')
         {
-            if (*(p + 1) == '%')
+            if (formatString[idx + 1U] == '%')
             {
                 // double percent, needs to be escaped
-                p++;
                 idx++;
             }
             else
@@ -130,7 +127,6 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
             }
         }
 
-        p++;
         idx++;
     }
 
