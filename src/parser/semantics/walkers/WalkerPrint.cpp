@@ -50,6 +50,16 @@ void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
     peekDefault<SemNodePositional>(node, astLevel);
 }
 
+void WalkerPrint::peek(SemNodeBreak &node, const uint32_t astLevel)
+{
+    peekDefault<SemNodePositional>(node, astLevel);
+}
+
+void WalkerPrint::peek(SemNodeContinue &node, const uint32_t astLevel)
+{
+    peekDefault<SemNodePositional>(node, astLevel);
+}
+
 std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
 {
     std::string prefix{};
