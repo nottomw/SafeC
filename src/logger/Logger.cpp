@@ -149,8 +149,12 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
     {
         std::cout << colorToTermColor(props.getColor()) //
                   << formatString                       //
-                  << colorToTermColor(Color::NoColor)   //
-                  << '\n';
+                  << colorToTermColor(Color::NoColor);  //
+
+        if (props.getNewLine() == logger::NewLine::Yes)
+        {
+            std::cout << '\n';
+        }
     }
     else
     {
