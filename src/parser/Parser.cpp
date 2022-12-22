@@ -89,21 +89,10 @@ void Parser::parseFile(const bfs::path &path)
     mSemantics.walk(walker, walkerDefer);
 
     log("Defer fire analysis: ", Color::Yellow);
-    const auto deferFires = walkerDefer.getDeferFires();
-    for (const auto &it : deferFires)
-    {
-        log("\t'defer' fire at: %, \ttext: '%'") //
-            .arg(it.first)
-            .arg(it.second);
-    }
 
+    const auto deferFires = walkerDefer.getDeferFires();
     const auto deferRemoves = walkerDefer.getDeferRemoves();
-    for (const auto &it : deferRemoves)
-    {
-        log("\t'defer' remove at: %, len: %") //
-            .arg(it.first)
-            .arg(it.second);
-    }
+    assert(deferFires.size() >= deferRemoves.size());
 
     log("\n\n--- file dump ---");
 
@@ -127,8 +116,13 @@ void Parser::parseFile(const bfs::path &path)
         {
             if (it.first == i)
             {
+                const std::string_view removedStr(&fileSource[i], it.second + 1U);
+                log("/* defer removed: % chars, '%' */", {logger::NewLine::No}) //
+                    .arg(it.second)
+                    .arg(removedStr);
+
+                // move past the to-be deleted defer
                 i += it.second;
-                log("/* defer removed: % chars */", {logger::NewLine::No}).arg(it.second);
             }
         }
     }
