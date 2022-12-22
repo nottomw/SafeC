@@ -26,6 +26,12 @@ public:
         assert(nullptr == "default peeker not implemented");
     }
 
+    // peek for internal "positional" type
+    virtual void peek(SemNodePositional &node, const uint32_t astLevel)
+    {
+        peekDefault(node, astLevel);
+    }
+
     SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_WALKER_PEEKERS_INTERFACE_CREATE)
 
 protected:
