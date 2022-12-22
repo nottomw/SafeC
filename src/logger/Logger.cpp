@@ -103,6 +103,11 @@ LogHelper &LogHelper::arg(const char *const a)
     return arg(std::string(a));
 }
 
+LogHelper &LogHelper::arg(const std::string_view a)
+{
+    return arg(std::string(a));
+}
+
 void LogHelper::logIfAllArgsProvided()
 {
     if (mArgsLeft == 0U)
