@@ -34,7 +34,8 @@ SemNodeTranslationUnit::SemNodeTranslationUnit()
 }
 
 SemNodeScope::SemNodeScope(const uint32_t start) //
-    : mStartIndex{start}, mEndIndex{0}
+    : mStartIndex{start}
+    , mEndIndex{0}
 {
     mType = Type::Scope;
 }
@@ -85,6 +86,16 @@ void SemNodeDefer::setDeferredText(std::string &&deferredText)
 std::string SemNodeDefer::getDeferredText() const
 {
     return mDeferredText;
+}
+
+void SemNodeDefer::setDeferredStatementLen(const uint32_t len)
+{
+    mDeferredStatementLen = len;
+}
+
+uint32_t SemNodeDefer::getDeferredStatementLen() const
+{
+    return mDeferredStatementLen;
 }
 
 SemNodeReturn::SemNodeReturn(const uint32_t index) //

@@ -31,8 +31,6 @@ struct SemanticsState
 
     using SemNodeScopePtr = std::weak_ptr<SemNodeScope>;
     std::vector<SemNodeScopePtr> mScopeStack;
-
-    std::weak_ptr<SemNodeDefer> mDeferCallStart;
 };
 
 SemanticsState gSemState;
@@ -52,8 +50,10 @@ std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::weak_ptr<SemNode> &w)
 std::string deferGetText(const char *const str, const uint32_t len)
 {
     const char *p = str;
-    uint32_t i = 0U;
-    for (i = 0U; i < len; ++i)
+    constexpr uint32_t deferKeywordSize = sizeof("defer");
+
+    uint32_t i = deferKeywordSize;
+    for (/* nothing */; i < len; ++i)
     {
         if (isspace(p[i]))
         {
@@ -99,30 +99,22 @@ void Semantics::handlePostfixExpression( //
 {
 }
 
-// TODO: could be reworked to use "token start" from lexer
-void Semantics::handleDeferCallStart( //
-    [[maybe_unused]] const uint32_t stringIndex)
+void Semantics::handleDeferCall( //
+    const uint32_t tokenStartStringIndex,
+    const uint32_t stringIndex)
 {
-    syntaxReport(stringIndex, "defer start", Color::LightBlue);
+    syntaxReport(stringIndex, "defer", Color::LightBlue);
 
     auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
-    auto deferNode = std::make_shared<SemNodeDefer>(stringIndex);
+    auto deferNode = std::make_shared<SemNodeDefer>(tokenStartStringIndex);
     currentScopeSnap->attach(deferNode);
-    gSemState.mDeferCallStart = deferNode;
-}
 
-void Semantics::handleDeferCall( //
-    [[maybe_unused]] const uint32_t stringIndex)
-{
-    syntaxReport(stringIndex, "defer end", Color::LightBlue);
+    deferNode->setDeferredStatementLen(stringIndex - tokenStartStringIndex);
 
-    auto deferNode = gSemState.mDeferCallStart.lock();
-    assert(deferNode);
-
-    const uint32_t textStart = deferNode->getPos();
+    const uint32_t textStart = tokenStartStringIndex;
     const uint32_t textEnd = stringIndex;
     const uint32_t textLen = textEnd - textStart;
     auto text = deferGetText(&mSemanticsSourceFile.data()[textStart], textLen);

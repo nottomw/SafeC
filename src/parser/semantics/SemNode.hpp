@@ -108,8 +108,12 @@ public:
     void setDeferredText(std::string &&deferredText);
     std::string getDeferredText() const;
 
+    void setDeferredStatementLen(const uint32_t len);
+    uint32_t getDeferredStatementLen() const;
+
 private:
     std::string mDeferredText;
+    uint32_t mDeferredStatementLen;
 };
 
 class SemNodeReturn final : public SemNodePositional

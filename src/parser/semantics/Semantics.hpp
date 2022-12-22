@@ -32,8 +32,7 @@ public:
     void walk(SemNodeWalker &walker, WalkerStrategy &strategy);
 
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
-    void handleDeferCallStart(const uint32_t stringIndex);
-    void handleDeferCall(const uint32_t stringIndex);
+    void handleDeferCall(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
     void handleReturn(const uint32_t tokenStartStringIndex,
                       const uint32_t stringIndex,
                       const bool returnValueAvailable);

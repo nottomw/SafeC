@@ -105,8 +105,6 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
     }
 
     // TODO: defer on the same char should be in reverse order
-    // TODO: precise defer positions - before closing bracket, before return, etc.
-    // TODO: need to provide "removes" too: remove the "defer abc" call
 
     return mDeferFires;
 }
@@ -120,7 +118,9 @@ WalkerDefer::DeferRemovesVector WalkerDefer::getDeferRemoves()
         if (it.second.mType == ElemType::Defer)
         {
             const SemNodeDefer *const node = it.second.mDefer;
-            removes.emplace_back(node->getPos());
+            constexpr uint32_t deferOffset = 1U;
+            const uint32_t newPos = node->getPos() - deferOffset;
+            removes.emplace_back(newPos, node->getDeferredStatementLen());
         }
     }
 

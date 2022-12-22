@@ -16,7 +16,7 @@ IS			(u|U|l|L)*
 
 int column = 0;
 int lex_current_char = 0;
-int keyword_start_index = 0;
+int lex_keyword_start_index = 0;
 
 void count(void);
 void comment(void);
@@ -29,11 +29,11 @@ int check_type(void);
 "#"[^\n]*		{ count(); /* consume preprocessor directives */ }
 
 "auto"			{ count(); return(AUTO); }
-"break"			{ keyword_start_index = lex_current_char; count(); return(BREAK); }
+"break"			{ lex_keyword_start_index = lex_current_char; count(); return(BREAK); }
 "case"			{ count(); return(CASE); }
 "char"			{ count(); return(CHAR); }
 "const"			{ count(); return(CONST); }
-"continue"		{ keyword_start_index = lex_current_char; count(); return(CONTINUE); }
+"continue"		{ lex_keyword_start_index = lex_current_char; count(); return(CONTINUE); }
 "default"		{ count(); return(DEFAULT); }
 "do"			{ count(); return(DO); }
 "double"		{ count(); return(DOUBLE); }
@@ -47,7 +47,7 @@ int check_type(void);
 "int"			{ count(); return(INT); }
 "long"			{ count(); return(LONG); }
 "register"		{ count(); return(REGISTER); }
-"return"		{ keyword_start_index = lex_current_char; count(); return(RETURN); }
+"return"		{ lex_keyword_start_index = lex_current_char; count(); return(RETURN); }
 "short"			{ count(); return(SHORT); }
 "signed"		{ count(); return(SIGNED); }
 "sizeof"		{ count(); return(SIZEOF); }
@@ -60,7 +60,7 @@ int check_type(void);
 "void"			{ count(); return(VOID); }
 "volatile"		{ count(); return(VOLATILE); }
 "while"			{ count(); return(WHILE); }
-"defer"			{ keyword_start_index = lex_current_char; count(); return(SAFEC_DEFER); }
+"defer"			{ lex_keyword_start_index = lex_current_char; count(); return(SAFEC_DEFER); }
 
 {L}({L}|{D})*		{ count(); yylval.tokenStrValue = yytext; return(check_type()); }
 

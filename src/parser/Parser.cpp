@@ -100,8 +100,9 @@ void Parser::parseFile(const bfs::path &path)
     const auto deferRemoves = walkerDefer.getDeferRemoves();
     for (const auto &it : deferRemoves)
     {
-        log("\t'defer' remove at: %") //
-            .arg(it);
+        log("\t'defer' remove at: %, len: %") //
+            .arg(it.first)
+            .arg(it.second);
     }
 
     log("\n\n--- file dump ---");
@@ -124,13 +125,10 @@ void Parser::parseFile(const bfs::path &path)
 
         for (const auto &it : deferRemoves)
         {
-            if (it == i)
+            if (it.first == i)
             {
-                // searching for end of "defer ...;" statement
-                while (fileSource[i] != ';')
-                {
-                    i++;
-                }
+                i += it.second;
+                log("/* defer removed: % chars */", {logger::NewLine::No}).arg(it.second);
             }
         }
     }

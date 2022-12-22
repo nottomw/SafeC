@@ -25,7 +25,8 @@ public:
     using DeferFiresVector = std::vector<std::pair<uint32_t, std::string>>;
     DeferFiresVector getDeferFires();
 
-    using DeferRemovesVector = std::vector<uint32_t>;
+    // pair: defer index, defer statement length
+    using DeferRemovesVector = std::vector<std::pair<uint32_t, uint32_t>>;
     DeferRemovesVector getDeferRemoves();
 
 private:

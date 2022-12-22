@@ -14,7 +14,7 @@ extern "C" int yylex( void );
 extern "C" int yyparse( void );
 
 extern int lex_current_char;
-extern int keyword_start_index;
+extern int lex_keyword_start_index;
 
 void yyerror(const char *str)
 {
@@ -97,9 +97,9 @@ unary_expression
 	| unary_operator cast_expression
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
-	| { sem.handleDeferCallStart(lex_current_char); } SAFEC_DEFER expression
+	| SAFEC_DEFER expression
 	{
-		sem.handleDeferCall(lex_current_char);
+		sem.handleDeferCall(lex_keyword_start_index, lex_current_char);
 	}
 	;
 
@@ -460,19 +460,19 @@ jump_statement
 	: GOTO IDENTIFIER ';'
 	| CONTINUE ';'
 	{
-		sem.handleContinue(keyword_start_index, lex_current_char);
+		sem.handleContinue(lex_keyword_start_index, lex_current_char);
 	}
 	| BREAK ';'
 	{
-		sem.handleBreak(keyword_start_index, lex_current_char);
+		sem.handleBreak(lex_keyword_start_index, lex_current_char);
 	}
 	| RETURN ';'
 	{
-		sem.handleReturn(keyword_start_index, lex_current_char, false);
+		sem.handleReturn(lex_keyword_start_index, lex_current_char, false);
 	}
 	| RETURN expression ';'
 	{
-		sem.handleReturn(keyword_start_index, lex_current_char, true);
+		sem.handleReturn(lex_keyword_start_index, lex_current_char, true);
 	}
 	;
 
