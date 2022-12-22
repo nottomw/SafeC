@@ -53,6 +53,8 @@ public:
     LogHelper(const char *const formatString, logger::Properties &&props);
 
     LogHelper &arg(const std::string &a);
+    LogHelper &arg(const char a);
+    LogHelper &arg(const int32_t a);
     LogHelper &arg(const uint32_t a);
     LogHelper &arg(const char *const a);
 

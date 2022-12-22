@@ -80,6 +80,18 @@ LogHelper &LogHelper::arg(const std::string &a)
     return *this;
 }
 
+LogHelper &LogHelper::arg(const char a)
+{
+    std::string str(1, a);
+    return arg(str);
+}
+
+LogHelper &LogHelper::arg(const int32_t a)
+{
+    std::string argStr = std::to_string(a);
+    return arg(argStr);
+}
+
 LogHelper &LogHelper::arg(const uint32_t a)
 {
     std::string argStr = std::to_string(a);
