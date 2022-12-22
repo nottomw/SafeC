@@ -106,8 +106,25 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
 
     // TODO: defer on the same char should be in reverse order
     // TODO: precise defer positions - before closing bracket, before return, etc.
+    // TODO: need to provide "removes" too: remove the "defer abc" call
 
     return mDeferFires;
+}
+
+WalkerDefer::DeferRemovesVector WalkerDefer::getDeferRemoves()
+{
+    DeferRemovesVector removes{};
+
+    for (const auto &it : mProgramStructure)
+    {
+        if (it.second.mType == ElemType::Defer)
+        {
+            const SemNodeDefer *const node = it.second.mDefer;
+            removes.emplace_back(node->getPos());
+        }
+    }
+
+    return removes;
 }
 
 void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos)
@@ -117,7 +134,9 @@ void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t el
     {
         if (it->first == elem.mAstLevel)
         {
-            mDeferFires.emplace_back(std::make_pair(elemCharacterPos, it->second->getDeferredText()));
+            constexpr uint32_t scopeEndOffset = 2U;
+            const uint32_t newPos = elemCharacterPos - scopeEndOffset;
+            mDeferFires.emplace_back(std::make_pair(newPos, it->second->getDeferredText()));
             it = mActiveDefers.erase(it);
         }
         else
@@ -134,7 +153,9 @@ void WalkerDefer::checkReturnDefers(const ProgramElem &elem, const uint32_t elem
     {
         if (it->first < elem.mAstLevel)
         {
-            mDeferFires.emplace_back(std::make_pair(elemCharacterPos, it->second->getDeferredText()));
+            constexpr uint32_t returnOffset = 1U;
+            const uint32_t elemCharacterPosWithOffset = elemCharacterPos - returnOffset;
+            mDeferFires.emplace_back(std::make_pair(elemCharacterPosWithOffset, it->second->getDeferredText()));
         }
 
         it++;
@@ -150,7 +171,9 @@ void WalkerDefer::checkBreakContinueDefers(const uint32_t elemCharacterPos)
     {
         if (it->first > currentLoopAstLevel)
         {
-            mDeferFires.emplace_back(std::make_pair(elemCharacterPos, it->second->getDeferredText()));
+            constexpr uint32_t breakContinueOffset = 1U;
+            const uint32_t elemCharacterPosWithOffset = elemCharacterPos - breakContinueOffset;
+            mDeferFires.emplace_back(std::make_pair(elemCharacterPosWithOffset, it->second->getDeferredText()));
         }
 
         it++;

@@ -21,9 +21,12 @@ public:
     void peek(SemNodeBreak &node, const uint32_t astLevel) override;
     void peek(SemNodeContinue &node, const uint32_t astLevel) override;
 
+    // TODO: return modpoints
     using DeferFiresVector = std::vector<std::pair<uint32_t, std::string>>;
-
     DeferFiresVector getDeferFires();
+
+    using DeferRemovesVector = std::vector<uint32_t>;
+    DeferRemovesVector getDeferRemoves();
 
 private:
     enum class ElemType

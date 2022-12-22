@@ -34,7 +34,9 @@ public:
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
     void handleDeferCallStart(const uint32_t stringIndex);
     void handleDeferCall(const uint32_t stringIndex);
-    void handleReturn(const uint32_t stringIndex, const bool returnValueAvailable);
+    void handleReturn(const uint32_t tokenStartStringIndex,
+                      const uint32_t stringIndex,
+                      const bool returnValueAvailable);
 
     void handleCompoundStatementStart(const uint32_t stringIndex);
     void handleCompoundStatementEnd(const uint32_t stringIndex);
@@ -43,8 +45,8 @@ public:
 
     void handleLoopStart(const uint32_t stringIndex);
     void handleLoopEnd(const uint32_t stringIndex);
-    void handleBreak(const uint32_t stringIndex);
-    void handleContinue(const uint32_t stringIndex);
+    void handleBreak(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
+    void handleContinue(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
 
 private:
     SemNodeTranslationUnit mTranslationUnit;

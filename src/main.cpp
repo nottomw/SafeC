@@ -17,6 +17,8 @@ int main(int argc, char **argv)
         ("file,f", po::value<std::vector<std::string>>(), "SafeC file(s) to be transpiled") //
         ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options");
 
+    // TODO: add option to switch parser to C99/GNU/... (?)
+
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);

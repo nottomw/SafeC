@@ -96,6 +96,44 @@ void Parser::parseFile(const bfs::path &path)
             .arg(it.first)
             .arg(it.second);
     }
+
+    const auto deferRemoves = walkerDefer.getDeferRemoves();
+    for (const auto &it : deferRemoves)
+    {
+        log("\t'defer' remove at: %") //
+            .arg(it);
+    }
+
+    log("\n\n--- file dump ---");
+
+    boost::iostreams::mapped_file_source mappedFile{path};
+    const char *const fileSource = mappedFile.data();
+
+    for (uint32_t i = 0U; i < mappedFile.size(); ++i)
+    {
+        log("%", {logger::NewLine::No}) //
+            .arg(fileSource[i]);
+
+        for (const auto &it : deferFires)
+        {
+            if (it.first == i)
+            {
+                log("%").arg(it.second);
+            }
+        }
+
+        for (const auto &it : deferRemoves)
+        {
+            if (it == i)
+            {
+                // searching for end of "defer ...;" statement
+                while (fileSource[i] != ';')
+                {
+                    i++;
+                }
+            }
+        }
+    }
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)

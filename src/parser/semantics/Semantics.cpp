@@ -99,6 +99,7 @@ void Semantics::handlePostfixExpression( //
 {
 }
 
+// TODO: could be reworked to use "token start" from lexer
 void Semantics::handleDeferCallStart( //
     [[maybe_unused]] const uint32_t stringIndex)
 {
@@ -130,6 +131,7 @@ void Semantics::handleDeferCall( //
 }
 
 void Semantics::handleReturn( //
+    [[maybe_unused]] const uint32_t tokenStartStringIndex,
     [[maybe_unused]] const uint32_t stringIndex,
     [[maybe_unused]] const bool returnValueAvailable)
 {
@@ -139,7 +141,7 @@ void Semantics::handleReturn( //
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
-    currentScopeSnap->attach(std::make_shared<SemNodeReturn>(stringIndex));
+    currentScopeSnap->attach(std::make_shared<SemNodeReturn>(tokenStartStringIndex));
 }
 
 void Semantics::handleCompoundStatementStart( //
@@ -219,7 +221,9 @@ void Semantics::handleLoopEnd( //
     gSemState.mScopeStack.pop_back();
 }
 
-void Semantics::handleBreak(const uint32_t stringIndex)
+void Semantics::handleBreak( //
+    const uint32_t tokenStartStringIndex,
+    const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "break", Color::LightYellow);
 
@@ -227,10 +231,12 @@ void Semantics::handleBreak(const uint32_t stringIndex)
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
-    currentScopeSnap->attach(std::make_shared<SemNodeBreak>(stringIndex));
+    currentScopeSnap->attach(std::make_shared<SemNodeBreak>(tokenStartStringIndex));
 }
 
-void Semantics::handleContinue(const uint32_t stringIndex)
+void Semantics::handleContinue( //
+    const uint32_t tokenStartStringIndex,
+    const uint32_t stringIndex)
 {
     syntaxReport(stringIndex, "continue", Color::LightYellow);
 
@@ -238,7 +244,7 @@ void Semantics::handleContinue(const uint32_t stringIndex)
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
 
-    currentScopeSnap->attach(std::make_shared<SemNodeContinue>(stringIndex));
+    currentScopeSnap->attach(std::make_shared<SemNodeContinue>(tokenStartStringIndex));
 }
 
 } // namespace safec
