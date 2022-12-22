@@ -42,12 +42,7 @@ void Parser::parse(const std::string &path)
 
     if (bfs::is_directory(filePathBoost) == true)
     {
-        // TODO: fun: multiple processes for multiple files (?)
-        log("parser: got directory");
-        for (auto &entry : boost::make_iterator_range(bfs::directory_iterator(filePathBoost), {}))
-        {
-            parseFile(entry);
-        }
+        throw std::runtime_error("got directory to transpile - file required");
     }
     else if (bfs::is_regular_file(filePathBoost) == true)
     {
@@ -88,8 +83,6 @@ void Parser::parseFile(const bfs::path &path)
     SemNodeWalker walker;
     mSemantics.walk(walker, walkerDefer);
 
-    log("Defer fire analysis: ", Color::Yellow);
-
     const auto deferFires = walkerDefer.getDeferFires();
     const auto deferRemoves = walkerDefer.getDeferRemoves();
     assert(deferFires.size() >= deferRemoves.size());
@@ -116,9 +109,10 @@ void Parser::parseFile(const bfs::path &path)
         {
             if (it.first == i)
             {
-                const std::string_view removedStr(&fileSource[i], it.second + 1U);
+                const uint32_t deferStatementLen = it.second + 1U;
+                const std::string_view removedStr(&fileSource[i], deferStatementLen);
                 log("/* defer removed: % chars, '%' */", {logger::NewLine::No}) //
-                    .arg(it.second)
+                    .arg(deferStatementLen)
                     .arg(removedStr);
 
                 // move past the to-be deleted defer
