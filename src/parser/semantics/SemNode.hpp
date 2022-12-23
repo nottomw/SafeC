@@ -86,6 +86,12 @@ class SemNodeFunction final : public SemNodeScope
 {
 public:
     SemNodeFunction(const uint32_t start);
+
+    void setIsVoidReturnType(const bool voidRet);
+    bool getIsVoidReturnType() const;
+
+private:
+    bool mVoidRet;
 };
 
 // Semantic node with a single position info.

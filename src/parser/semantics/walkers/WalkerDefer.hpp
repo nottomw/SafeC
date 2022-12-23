@@ -3,6 +3,7 @@
 #include "SemNodeWalker.hpp"
 #include "WalkerStrategy.hpp"
 
+#include <cassert>
 #include <map>
 #include <vector>
 
@@ -50,19 +51,33 @@ private:
         ProgramElem(const ElemType type, const AstLevel ast)
             : mType{type}
             , mAstLevel{ast}
+            , mDeferNode{nullptr}
+            , mFunctionNode{nullptr}
         {
         }
 
         ProgramElem(const ElemType type, const AstLevel ast, const SemNodeDefer *const deferNode)
             : mType{type}
             , mAstLevel{ast}
-            , mDefer{deferNode}
+            , mDeferNode{deferNode}
+            , mFunctionNode{nullptr}
         {
+            assert(type == ElemType::Defer);
+        }
+
+        ProgramElem(const ElemType type, const AstLevel ast, const SemNodeFunction *const fnNode)
+            : mType{type}
+            , mAstLevel{ast}
+            , mDeferNode{nullptr}
+            , mFunctionNode{fnNode}
+        {
+            assert(type == ElemType::ScopeEnd);
         }
 
         ElemType mType;
         AstLevel mAstLevel;
-        const SemNodeDefer *mDefer;
+        const SemNodeDefer *mDeferNode;
+        const SemNodeFunction *mFunctionNode;
     };
 
     void checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);

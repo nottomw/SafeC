@@ -488,7 +488,8 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator { sem.handleFunctionStart(lex_current_char); } compound_statement
+        | VOID declarator { sem.handleFunctionStart(lex_current_char, true); } compound_statement { sem.handleFunctionEnd(lex_current_char); }
+        | declaration_specifiers declarator { sem.handleFunctionStart(lex_current_char, false); } compound_statement
 	{ sem.handleFunctionEnd(lex_current_char); }
 	| declarator declaration_list compound_statement
 	| declarator compound_statement

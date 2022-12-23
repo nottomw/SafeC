@@ -30,7 +30,11 @@ void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    peekDefault<SemNodeScope>(node, astLevel);
+    log("% (%) { %, % }", Color::LightCyan) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.getIsVoidReturnType() ? "void return" : "non-void return")
+        .arg(node.getStart())
+        .arg(node.getEnd());
 }
 
 void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)

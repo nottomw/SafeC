@@ -20,7 +20,7 @@ void WalkerDefer::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerDefer::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel});
+    mProgramStructure.emplace(node.getEnd(), ProgramElem{ElemType::ScopeEnd, astLevel, &node});
 }
 
 void WalkerDefer::peek(SemNodeLoop &node, const uint32_t astLevel)
@@ -61,21 +61,12 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
             case ElemType::Defer:
                 {
                     const AstLevel deferActiveAtLevel = elem.mAstLevel - 1;
-                    mActiveDefers.emplace_back(std::make_pair(deferActiveAtLevel, elem.mDefer));
+                    mActiveDefers.emplace_back(std::make_pair(deferActiveAtLevel, elem.mDeferNode));
                     continue;
                 }
                 break;
 
             case ElemType::ScopeEnd:
-                // TODO: if there is a 'return' right before scope end the defer should not be fired
-                // right now it will generate this strange code:
-                //      /* deferred call here */
-                //      return X;
-                //      /* deferred call here */
-                // If the SemNodeFunction is supposed to return value (would have to be added to Semantics)
-                // then we could just look for the last return in SemNodeFunction and remove the defer from
-                // active defers.
-
                 checkScopeEndDefers(elem, elemCharacterPos);
                 break;
 
@@ -126,7 +117,7 @@ WalkerDefer::DeferRemovesVector WalkerDefer::getDeferRemoves()
     {
         if (it.second.mType == ElemType::Defer)
         {
-            const SemNodeDefer *const node = it.second.mDefer;
+            const SemNodeDefer *const node = it.second.mDeferNode;
             constexpr uint32_t deferOffset = 1U;
             const uint32_t newPos = node->getPos() - deferOffset;
             removes.emplace_back(newPos, node->getDeferredStatementLen());
@@ -143,9 +134,19 @@ void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t el
     {
         if (it->first == elem.mAstLevel)
         {
-            constexpr uint32_t scopeEndOffset = 2U;
-            const uint32_t newPos = elemCharacterPos - scopeEndOffset;
-            mDeferFires.emplace_back(std::make_pair(newPos, it->second->getDeferredText()));
+            // scope end - if this is actually function end, and the function is
+            // non-void (returns some value), then we do not fire the defer call
+            // but still erase the defer - the last "defer" call should happen on the last
+            // return.
+
+            if ((elem.mFunctionNode == nullptr) || //
+                (elem.mFunctionNode->getIsVoidReturnType() == true))
+            {
+                constexpr uint32_t scopeEndOffset = 2U;
+                const uint32_t newPos = elemCharacterPos - scopeEndOffset;
+                mDeferFires.emplace_back(std::make_pair(newPos, it->second->getDeferredText()));
+            }
+
             it = mActiveDefers.erase(it);
         }
         else

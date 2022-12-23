@@ -57,8 +57,19 @@ uint32_t SemNodeScope::getEnd() const
 
 SemNodeFunction::SemNodeFunction(const uint32_t start) //
     : SemNodeScope{start}                              //
+    , mVoidRet{false}
 {
     mType = Type::Function;
+}
+
+void SemNodeFunction::setIsVoidReturnType(const bool voidRet)
+{
+    mVoidRet = voidRet;
+}
+
+bool SemNodeFunction::getIsVoidReturnType() const
+{
+    return mVoidRet;
 }
 
 SemNodePositional::SemNodePositional(const uint32_t pos) //

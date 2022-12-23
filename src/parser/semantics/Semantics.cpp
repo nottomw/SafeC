@@ -166,12 +166,22 @@ void Semantics::handleCompoundStatementEnd( //
 }
 
 void Semantics::handleFunctionStart( //
-    [[maybe_unused]] const uint32_t stringIndex)
+    const uint32_t stringIndex,
+    const bool voidReturnType)
 {
-    syntaxReport(stringIndex, "function start", Color::LightPurple);
+    if (voidReturnType == true)
+    {
+        syntaxReport(stringIndex, "function start (void ret)", Color::LightPurple);
+    }
+    else
+    {
+        syntaxReport(stringIndex, "function start", Color::LightPurple);
+    }
 
     auto functionNode = std::make_shared<SemNodeFunction>(stringIndex);
     mTranslationUnit.attach(functionNode);
+
+    functionNode->setIsVoidReturnType(voidReturnType);
 
     // Hacky: function start is matched with compound statement end.
 

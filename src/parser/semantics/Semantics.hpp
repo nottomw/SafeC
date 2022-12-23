@@ -39,7 +39,7 @@ public:
 
     void handleCompoundStatementStart(const uint32_t stringIndex);
     void handleCompoundStatementEnd(const uint32_t stringIndex);
-    void handleFunctionStart(const uint32_t stringIndex);
+    void handleFunctionStart(const uint32_t stringIndex, const bool voidReturnType);
     void handleFunctionEnd(const uint32_t stringIndex);
 
     void handleLoopStart(const uint32_t stringIndex);
