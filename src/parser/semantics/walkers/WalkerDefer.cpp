@@ -67,6 +67,12 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
                 break;
 
             case ElemType::ScopeEnd:
+                // TODO: if there is a 'return' right before scope end the defer should not be fired
+                // right now it will generate this strange code:
+                //      /* deferred call here */
+                //      return X;
+                //      /* deferred call here */
+
                 checkScopeEndDefers(elem, elemCharacterPos);
                 break;
 
@@ -104,7 +110,7 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
         }
     }
 
-    // TODO: defer on the same char should be in reverse order
+    reverseOrderOfSamePosDeferFire();
 
     return mDeferFires;
 }
@@ -177,6 +183,52 @@ void WalkerDefer::checkBreakContinueDefers(const uint32_t elemCharacterPos)
         }
 
         it++;
+    }
+}
+
+void WalkerDefer::reverseOrderOfSamePosDeferFire()
+{
+    // reverse defers fire order on the same index/file position, so the deferred calls behave consistently
+    // e.g.:
+    //      defer call1(); defer call2(); defer call3();
+    // will result in:
+    //      call3(); call2(); call1();
+
+    // this probably can be done in a nicer way, but going with this for now...
+
+    std::vector<std::vector<uint32_t>> sameLineDefers;
+
+    for (uint32_t i = 1U; i < mDeferFires.size(); ++i)
+    {
+        if (mDeferFires[i - 1].first == mDeferFires[i].first)
+        {
+            std::vector<uint32_t> defersAtThisFilePosition;
+            defersAtThisFilePosition.push_back(i - 1);
+            defersAtThisFilePosition.push_back(i);
+            i++;
+
+            while ((i < mDeferFires.size()) && //
+                   (mDeferFires[i - 1].first == mDeferFires[i].first))
+            {
+                defersAtThisFilePosition.push_back(i);
+                i++;
+            }
+
+            sameLineDefers.push_back(std::move(defersAtThisFilePosition));
+        }
+    }
+
+    for (auto &it : sameLineDefers)
+    {
+        uint32_t forwardIndex = 0U;
+        uint32_t backwardIndex = it.size() - 1U;
+        while (forwardIndex < backwardIndex)
+        {
+            std::swap(mDeferFires[it[forwardIndex]], mDeferFires[it[backwardIndex]]);
+
+            forwardIndex++;
+            backwardIndex--;
+        }
     }
 }
 

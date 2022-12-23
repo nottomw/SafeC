@@ -22,7 +22,8 @@ public:
     void peek(SemNodeContinue &node, const uint32_t astLevel) override;
 
     // TODO: return modpoints
-    using DeferFiresVector = std::vector<std::pair<uint32_t, std::string>>;
+    using DeferFirePair = std::pair<uint32_t, std::string>;
+    using DeferFiresVector = std::vector<DeferFirePair>;
     DeferFiresVector getDeferFires();
 
     // pair: defer index, defer statement length
@@ -67,6 +68,8 @@ private:
     void checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
     void checkReturnDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
     void checkBreakContinueDefers(const uint32_t elemCharacterPos);
+
+    void reverseOrderOfSamePosDeferFire();
 
     std::multimap<AstLevel, ProgramElem> mProgramStructure;
     std::vector<AstLevel> mLoopStack;

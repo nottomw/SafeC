@@ -150,6 +150,23 @@ int test_function_5(const int arg)
     return 10;
 }
 
+void test_function_6(void)
+{
+    printf("------> TEST 6: double defer, should appear in reverse order\n");
+    {
+        defer printf("deferred call odd 1\n");
+        defer printf("deferred call odd 2\n");
+        defer printf("deferred call odd 3\n");
+    }
+
+    {
+        defer printf("deferred call even 1\n");
+        defer printf("deferred call even 2\n");
+        defer printf("deferred call even 3\n");
+        defer printf("deferred call even 4\n");
+    }
+}
+
 int main(void)
 {
     test_function_1(0);
@@ -166,6 +183,8 @@ int main(void)
     (void)test_function_5(0);
     (void)test_function_5(2);
     (void)test_function_5(7);
+
+    test_function_6();
 
     return 0;
 }

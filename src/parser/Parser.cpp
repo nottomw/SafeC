@@ -141,7 +141,8 @@ void Parser::dumpFileWithModifications(const boost::filesystem::path &path)
         {
             if (it.first == i)
             {
-                fileOutputStream << it.second;
+                // adding newline after defer fire
+                fileOutputStream << it.second << '\n';
             }
         }
 

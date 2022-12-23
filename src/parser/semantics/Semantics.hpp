@@ -47,9 +47,9 @@ public:
     void handleBreak(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
     void handleContinue(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
 
-    // TODO: make sure that for each break/continue/return the indentation (column) is also
-    // saved so then it can be used to generate C code.
-    // TODO: verify if tabs/spaces used.
+    // TODO: handle indentation
+    // make sure that for each break/continue/return the indentation (column) is also
+    // saved so then it can be used to generate C code (verify if tabs/spaces used)
 
 private:
     SemNodeTranslationUnit mTranslationUnit;
