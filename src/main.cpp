@@ -13,6 +13,7 @@ namespace po = boost::program_options;
 namespace bfs = boost::filesystem;
 
 // TODO: maybe use std::filesystem instead of boost::filesystem
+// TODO: some proper functional/unit tests
 
 int main(int argc, char **argv)
 {
@@ -21,8 +22,10 @@ int main(int argc, char **argv)
         ("help,h", "print help")                                                            //
         ("file,f", po::value<std::vector<std::string>>(), "SafeC file(s) to be transpiled") //
         ("output,o", po::value<std::string>(), "C output files directory")                  //
-        ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options");
+        ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options { defer, ... }");
 
+    // TODO: add option to print AST
+    // TODO: add option to echo lexed/parsed file
     // TODO: add option to switch parser to C99/GNU/other
 
     po::variables_map vm;

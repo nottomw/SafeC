@@ -2,6 +2,7 @@
 
 #include "SemNodeWalker.hpp"
 #include "WalkerStrategy.hpp"
+#include "parser/ModPoint.hpp"
 
 #include <cassert>
 #include <map>
@@ -22,7 +23,6 @@ public:
     void peek(SemNodeBreak &node, const uint32_t astLevel) override;
     void peek(SemNodeContinue &node, const uint32_t astLevel) override;
 
-    // TODO: return modpoints
     using DeferFirePair = std::pair<uint32_t, std::string>;
     using DeferFiresVector = std::vector<DeferFirePair>;
     DeferFiresVector getDeferFires();
@@ -30,6 +30,8 @@ public:
     // pair: defer index, defer statement length
     using DeferRemovesVector = std::vector<std::pair<uint32_t, uint32_t>>;
     DeferRemovesVector getDeferRemoves();
+
+    ModPointsVector getModPoints();
 
 private:
     enum class ElemType
@@ -92,6 +94,8 @@ private:
     std::vector<AstDeferNodePair> mActiveDefers;
 
     DeferFiresVector mDeferFires;
+
+    ModPointsVector mModPoints;
 };
 
 } // namespace safec

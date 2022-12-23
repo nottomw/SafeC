@@ -127,6 +127,13 @@ WalkerDefer::DeferRemovesVector WalkerDefer::getDeferRemoves()
     return removes;
 }
 
+ModPointsVector WalkerDefer::getModPoints()
+{
+    // TODO: IMPLEMENT: return modpoints
+
+    return mModPoints;
+}
+
 void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos)
 {
     auto it = mActiveDefers.begin();
