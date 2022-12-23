@@ -5,6 +5,7 @@
 #include "semantics/walkers/SemNodeWalker.hpp"
 #include "semantics/walkers/WalkerDefer.hpp"
 
+#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -22,13 +23,14 @@ extern "C"
     extern int lex_current_char;
 }
 
+namespace bfs = boost::filesystem;
+
 namespace safec
 {
 
-namespace bfs = ::boost::filesystem;
-
 Parser::Parser(Semantics &sem) //
     : mSemantics{sem}
+    , mCurrentlyParsedFile{}
 {
 }
 
@@ -58,6 +60,8 @@ void Parser::parseFile(const bfs::path &path)
 {
     assert(bfs::is_regular_file(path) == true);
 
+    mCurrentlyParsedFile = path;
+
     yyin = fopen(path.c_str(), "r");
     assert(yyin != nullptr);
 
@@ -75,51 +79,6 @@ void Parser::parseFile(const bfs::path &path)
     log("Current AST:");
     mSemantics.display();
     log("\n\n", {logger::NewLine::No});
-
-    // TODO: fun: multiple walkers can run in parallel
-
-    // Try to identify defer call points.
-    WalkerDefer walkerDefer;
-    SemNodeWalker walker;
-    mSemantics.walk(walker, walkerDefer);
-
-    const auto deferFires = walkerDefer.getDeferFires();
-    const auto deferRemoves = walkerDefer.getDeferRemoves();
-    assert(deferFires.size() >= deferRemoves.size());
-
-    log("\n\n--- file dump ---");
-
-    boost::iostreams::mapped_file_source mappedFile{path};
-    const char *const fileSource = mappedFile.data();
-
-    for (uint32_t i = 0U; i < mappedFile.size(); ++i)
-    {
-        log("%", {logger::NewLine::No}) //
-            .arg(fileSource[i]);
-
-        for (const auto &it : deferFires)
-        {
-            if (it.first == i)
-            {
-                log("%").arg(it.second);
-            }
-        }
-
-        for (const auto &it : deferRemoves)
-        {
-            if (it.first == i)
-            {
-                const uint32_t deferStatementLen = it.second + 1U;
-                const std::string_view removedStr(&fileSource[i], deferStatementLen);
-                log("/* defer removed: % chars, '%' */", {logger::NewLine::No}) //
-                    .arg(deferStatementLen)
-                    .arg(removedStr);
-
-                // move past the to-be deleted defer
-                i += it.second;
-            }
-        }
-    }
 }
 
 void Parser::addModPoint(ModPoint &&modPoint)
@@ -139,6 +98,54 @@ void Parser::addModPoint(ModPoint &&modPoint)
     }
 
     mModPoints.emplace_back(std::move(modPoint));
+}
+
+void Parser::dumpFileWithModifications(const boost::filesystem::path &path)
+{
+    assert(path.has_filename() == true);
+    assert(path.is_absolute() == true);
+
+    // TODO: fun: multiple walkers can run in parallel
+
+    // Try to identify defer call points.
+    WalkerDefer walkerDefer;
+    SemNodeWalker walker;
+    mSemantics.walk(walker, walkerDefer);
+
+    const auto deferFires = walkerDefer.getDeferFires();
+    const auto deferRemoves = walkerDefer.getDeferRemoves();
+    assert(deferFires.size() >= deferRemoves.size());
+
+    boost::iostreams::mapped_file_source mappedFile{mCurrentlyParsedFile};
+    const char *const fileSource = mappedFile.data();
+
+    bfs::ofstream fileOutputStream{path, std::ios_base::trunc};
+
+    for (uint32_t i = 0U; i < mappedFile.size(); ++i)
+    {
+        fileOutputStream << fileSource[i];
+
+        for (const auto &it : deferFires)
+        {
+            if (it.first == i)
+            {
+                fileOutputStream << it.second;
+            }
+        }
+
+        for (const auto &it : deferRemoves)
+        {
+            if (it.first == i)
+            {
+                const uint32_t deferStatementLen = it.second + 1U;
+                const std::string_view removedStr(&fileSource[i], deferStatementLen);
+                fileOutputStream << "/* defer removed: " << deferStatementLen << " chars, '" << removedStr << "' */";
+
+                // move past the to-be deleted defer
+                i += it.second;
+            }
+        }
+    }
 }
 
 } // namespace safec

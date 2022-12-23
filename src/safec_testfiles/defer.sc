@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 void mutex_lock()
 {
@@ -10,7 +11,23 @@ void mutex_unlock()
     printf("mutex unlock\n");
 }
 
-void test_function(int arg)
+int file_open()
+{
+    static int fd = 0;
+    int fd_ret = fd;
+
+    printf("file open: %d\n", fd);
+    fd++;
+
+    return fd_ret;
+}
+
+void file_close(int fd)
+{
+    printf("file close: %d\n", fd);
+}
+
+void test_function_1(int arg)
 {
     mutex_lock();
     defer mutex_unlock();
@@ -23,7 +40,7 @@ void test_function(int arg)
     printf("end of function...\n");
 }
 
-void test_function_file(int arg)
+void test_function_2(int arg)
 {
     int fp = file_open();
     defer file_close(fp);
@@ -36,28 +53,29 @@ void test_function_file(int arg)
     printf("end of function...\n");
 }
 
-void test_function_break_continue(int a, int b)
+void test_function_3(int a, int b)
 {
     int i = 0;
-    for(i = 0; i < 10; ++i)
+    for (i = 0; i < 10; ++i)
     {
         defer printf("deferred loop print at i = %d\n", i);
-        if (i == 5)
+        if (i == a)
         {
             continue;
         }
 
-        if (i == 8)
+        if (i == b)
         {
             break;
         }
     }
 
-    for(i = 0; i < 10; ++i)
-        defer printf("%d\n", i);
-    
+    // invalid construct - maybe should fail on safec parsing step
+    //    for (i = 0; i < 10; ++i)
+    //        defer printf("%d\n", i);
+
     i = 0;
-    while(i == 0)
+    while (i == 0)
     {
         defer printf("while loop end\n");
         printf("in while loop\n");
@@ -73,12 +91,13 @@ void test_function_break_continue(int a, int b)
         defer printf("do..while loop end\n");
         printf("in do..while loop\n");
         i = 1;
-    } while(i == 0);
+    } while (i == 0);
 }
 
-void test_function_nested_defer(void)
+void test_function_4(void)
 {
     int a = 5;
+    (void)a;
     {
         int *a = malloc(sizeof(int));
         defer free(a);
@@ -91,8 +110,10 @@ void test_function_nested_defer(void)
     }
 }
 
-int test_defer_with_rv(const int arg)
+int test_function_5(const int arg)
 {
+    defer printf("multiple returns - depending on arg: %d\n", arg);
+
     if (arg == 0)
     {
         return 0;
@@ -107,18 +128,20 @@ int test_defer_with_rv(const int arg)
 
 int main(void)
 {
-    {
-        mutex_lock();
-        defer mutex_unlock();
-        defer printf("second defer in scope\n");
+    test_function_1(0);
+    test_function_1(1);
 
-        printf("this is guarded by mutex...\n");
-    }
+    test_function_2(0);
+    test_function_2(1);
 
-    printf("this is not guarded by mutex...\n");
+    test_function_3(3, 6);
+    test_function_3(6, 3);
 
-    test_function(1);
-    test_function(0);
+    test_function_4();
+
+    test_function_5(0);
+    test_function_5(2);
+    test_function_5(7);
 
     return 0;
 }

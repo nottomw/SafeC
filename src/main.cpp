@@ -1,3 +1,4 @@
+#include "generator/Generator.hpp"
 #include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
 #include "parser/semantics/SemanticsFactory.hpp"
@@ -10,6 +11,8 @@
 
 namespace po = boost::program_options;
 namespace bfs = boost::filesystem;
+
+// TODO: maybe use std::filesystem instead of boost::filesystem
 
 int main(int argc, char **argv)
 {
@@ -38,7 +41,8 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    const auto outputDirectory = bfs::path(vm["output"].as<std::string>());
+    const auto outputDirectory = bfs::absolute(vm["output"].as<std::string>());
+
     if (bfs::is_directory(outputDirectory) == false)
     {
         safec::log("provided 'output' parameter does not point to a directory");
@@ -59,15 +63,20 @@ int main(int argc, char **argv)
     {
         safec::Parser parser{safec::SemanticsFactory::get()};
 
-        safec::log("Parsing files:");
         auto &filesToParse = vm["file"].as<std::vector<std::string>>();
         for (const auto &it : filesToParse)
         {
-            safec::log("\t--> %").arg(it);
+            safec::log("Parsing file: '%'").arg(it);
 
             parser.parse(it);
 
-            // TODO: generate output file in outputDirectory
+            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
+            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
+
+            safec::log("Generating C file: '%'").arg(outputFileFullPath.c_str());
+
+            safec::Generator generator{parser};
+            generator.generate(outputFileFullPath);
         }
     }
 

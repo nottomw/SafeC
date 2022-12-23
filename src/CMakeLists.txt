@@ -6,6 +6,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/Deps.cmake)
 
 add_subdirectory(logger)
 add_subdirectory(parser)
+add_subdirectory(generator)
 
 add_executable(SafeCTranspiler
     main.cpp
@@ -15,4 +16,13 @@ target_link_libraries(SafeCTranspiler
     PUBLIC
         CONAN_PKG::boost
         safec::parser
+        safec::generator
+)
+
+
+# make sure IDE indexes also the test files
+file(GLOB SAFEC_TEST_FILES ${PROJECT_SOURCE_DIR}/safec_testfiles/*.sc)
+add_custom_target(SafeCTestSources
+    SOURCES
+        ${SAFEC_TEST_FILES}
 )
