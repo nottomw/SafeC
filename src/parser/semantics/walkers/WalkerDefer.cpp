@@ -72,6 +72,9 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
                 //      /* deferred call here */
                 //      return X;
                 //      /* deferred call here */
+                // If the SemNodeFunction is supposed to return value (would have to be added to Semantics)
+                // then we could just look for the last return in SemNodeFunction and remove the defer from
+                // active defers.
 
                 checkScopeEndDefers(elem, elemCharacterPos);
                 break;
