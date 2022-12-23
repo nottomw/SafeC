@@ -93,25 +93,6 @@ void Parser::parseFile(const bfs::path &path)
     log("\n\n", {logger::NewLine::No});
 }
 
-void Parser::addModPoint(ModPoint &&modPoint)
-{
-    log("Adding mod point: ", {logger::NewLine::No});
-
-    if (modPoint.getModType() == ModPoint::ModType::CallDeferred)
-    {
-        const auto functionName = std::any_cast<ModPoint::DataCallDeferred>(modPoint.getData()).functionName;
-        log("\tCALL_DEFERRED\n"    //
-            "\t ~ file index: %\n" //
-            "\t ~ mod type: %\n"   //
-            "\t ~ function name: %")
-            .arg(modPoint.getIndex())
-            .arg(static_cast<uint32_t>(modPoint.getModType()))
-            .arg(functionName);
-    }
-
-    mModPoints.emplace_back(std::move(modPoint));
-}
-
 void Parser::dumpFileWithModifications(const boost::filesystem::path &path)
 {
     assert(path.has_filename() == true);
