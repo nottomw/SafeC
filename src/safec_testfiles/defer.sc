@@ -31,9 +31,6 @@ void test_function_1(int arg)
 {
     printf("------> TEST 1: test function with simple defer\n");
 
-    // TODO: printf("str1" " str2"); fails to compile, needs to be handled (C99?)
-    // TODO: printf(DEFINED_TOKEN "string"); fails to compile, needs to be handled (C99/preprocessor)
-
     mutex_lock();
     defer mutex_unlock();
 

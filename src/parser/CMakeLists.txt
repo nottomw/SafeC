@@ -16,4 +16,5 @@ target_link_libraries(parser
         safec::logger
         safec::semantics
         safec::parser_generated
+        safec::utils
 )

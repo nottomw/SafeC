@@ -4,6 +4,7 @@
 #include "semantics/Semantics.hpp"
 #include "semantics/walkers/SemNodeWalker.hpp"
 #include "semantics/walkers/WalkerDefer.hpp"
+#include "utils/Utils.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -62,15 +63,26 @@ void Parser::parseFile(const bfs::path &path)
 
     mCurrentlyParsedFile = path;
 
-    yyin = fopen(path.c_str(), "r");
-    assert(yyin != nullptr);
+    // TODO: handle preprocessor stuff
+    // currently cannot use e.g.:
+    //      #define TEST "asdf"
+    //      printf(TEST);
+    // not detected by grammar as a valid case
 
-    mSemantics.newTranslationUnit(path);
+    // TODO: handle string literal concat
+    // printf("one" "two"); will raise an error in current grammar
 
-    const int32_t parseRes = yyparse();
-    assert(parseRes == 0);
+    {
+        yyin = fopen(path.c_str(), "r");
+        assert(yyin != nullptr);
 
-    fclose(yyin);
+        utils::DeferredCall defer{[] { fclose(yyin); }};
+
+        mSemantics.newTranslationUnit(path);
+
+        const int32_t parseRes = yyparse();
+        assert(parseRes == 0);
+    }
 
     log("\nParsing done, characters in file %: %\n") //
         .arg(path.c_str())

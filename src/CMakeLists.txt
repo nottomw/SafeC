@@ -7,6 +7,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/Deps.cmake)
 add_subdirectory(logger)
 add_subdirectory(parser)
 add_subdirectory(generator)
+add_subdirectory(utils)
 
 add_executable(SafeCTranspiler
     main.cpp
