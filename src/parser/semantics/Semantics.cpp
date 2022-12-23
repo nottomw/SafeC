@@ -70,6 +70,10 @@ std::string deferGetText(const char *const str, const uint32_t len)
 
 } // namespace
 
+// TODO: handle indentation
+// make sure that for each break/continue/return/scope end the indentation (column) is also
+// saved so then it can be used to generate C code (verify if tabs/spaces used)
+
 Semantics::Semantics() //
     : mTranslationUnit{}
 {
