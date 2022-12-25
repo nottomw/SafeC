@@ -107,6 +107,7 @@ ModPointsVector WalkerDefer::getModPoints()
 
     reverseOrderOfSamePosDeferFire();
 
+    // add removes of fired defers
     for (const auto &it : mProgramStructure)
     {
         if (it.second.mType == ElemType::Defer)
@@ -198,11 +199,9 @@ void WalkerDefer::reverseOrderOfSamePosDeferFire()
 
     for (uint32_t i = 1U; i < mModPoints.size(); ++i)
     {
-        if (mModPoints[i].getModType() != ModType::TextInsert)
-        {
-            // assuming all text inserts done before text removes
-            continue;
-        }
+        // assuming all text inserts done before text removes
+        assert((mModPoints[i].getModType() == ModType::TextInsert) &&
+               (mModPoints[i - 1].getModType() == ModType::TextInsert));
 
         if (mModPoints[i - 1].getStart() == mModPoints[i].getStart())
         {
@@ -211,10 +210,12 @@ void WalkerDefer::reverseOrderOfSamePosDeferFire()
             defersAtThisFilePosition.push_back(i);
             i++;
 
-            while ((i < mModPoints.size()) &&                             //
-                   (mModPoints[i].getModType() == ModType::TextInsert) && //
+            while ((i < mModPoints.size()) && //
                    (mModPoints[i - 1].getStart() == mModPoints[i].getStart()))
             {
+                assert((mModPoints[i].getModType() == ModType::TextInsert) &&
+                       (mModPoints[i - 1].getModType() == ModType::TextInsert));
+
                 defersAtThisFilePosition.push_back(i);
                 i++;
             }

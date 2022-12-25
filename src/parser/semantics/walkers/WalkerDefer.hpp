@@ -77,12 +77,10 @@ private:
     void checkScopeEndDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
     void checkReturnDefers(const ProgramElem &elem, const uint32_t elemCharacterPos);
     void checkBreakContinueDefers(const uint32_t elemCharacterPos);
-
     void reverseOrderOfSamePosDeferFire();
 
     std::multimap<AstLevel, ProgramElem> mProgramStructure;
     std::vector<AstLevel> mLoopStack;
-
     std::vector<AstDeferNodePair> mActiveDefers;
 
     ModPointsVector mModPoints;
