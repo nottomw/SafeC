@@ -78,6 +78,7 @@ void Parser::parseFile(const bfs::path &path)
 
         utils::DeferredCall defer{[] { fclose(yyin); }};
 
+        // TODO: add class TranslationUnitFile, will be helpful when implementing preprocessor support
         mSemantics.newTranslationUnit(path);
 
         const int32_t parseRes = yyparse();
@@ -105,38 +106,42 @@ void Parser::dumpFileWithModifications(const boost::filesystem::path &path)
     SemNodeWalker walker;
     mSemantics.walk(walker, walkerDefer);
 
-    const auto deferFires = walkerDefer.getDeferFires();
-    const auto deferRemoves = walkerDefer.getDeferRemoves();
-    assert(deferFires.size() >= deferRemoves.size());
+    const auto modPoints = walkerDefer.getModPoints();
 
     boost::iostreams::mapped_file_source mappedFile{mCurrentlyParsedFile};
     const char *const fileSource = mappedFile.data();
-
     bfs::ofstream fileOutputStream{path, std::ios_base::trunc};
 
     for (uint32_t i = 0U; i < mappedFile.size(); ++i)
     {
         fileOutputStream << fileSource[i];
 
-        for (const auto &it : deferFires)
+        for (const auto &it : modPoints)
         {
-            if (it.first == i)
+            if (it.getStart() == i)
             {
-                // adding newline after defer fire
-                fileOutputStream << it.second << '\n';
-            }
-        }
+                if (it.getModType() == ModType::TextInsert)
+                {
+                    // adding newline after defer fire
+                    fileOutputStream << it.getText() << '\n';
+                }
+                else if (it.getModType() == ModType::TextRemove)
+                {
+                    const uint32_t deferStatementLen = it.getSize() + 1U;
+                    const std::string_view removedStr(&fileSource[i], deferStatementLen);
+                    fileOutputStream << "/* defer removed: " //
+                                     << deferStatementLen    //
+                                     << " chars, '"          //
+                                     << removedStr           //
+                                     << "' */";
 
-        for (const auto &it : deferRemoves)
-        {
-            if (it.first == i)
-            {
-                const uint32_t deferStatementLen = it.second + 1U;
-                const std::string_view removedStr(&fileSource[i], deferStatementLen);
-                fileOutputStream << "/* defer removed: " << deferStatementLen << " chars, '" << removedStr << "' */";
-
-                // move past the to-be deleted defer
-                i += it.second;
+                    // move past the to-be deleted defer
+                    i += it.getSize();
+                }
+                else
+                {
+                    TODO();
+                }
             }
         }
     }

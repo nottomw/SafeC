@@ -3,6 +3,8 @@
 #include <cassert>
 #include <functional>
 
+#define TODO(void) assert(nullptr == "not implemented yet");
+
 namespace safec
 {
 

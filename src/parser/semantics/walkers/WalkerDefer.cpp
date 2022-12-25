@@ -1,5 +1,6 @@
 #include "WalkerDefer.hpp"
 
+#include "ModPoint.hpp"
 #include "logger/Logger.hpp"
 #include "semantics/SemNode.hpp"
 
@@ -49,7 +50,7 @@ void WalkerDefer::peek(SemNodeContinue &node, const uint32_t astLevel)
     mProgramStructure.emplace(node.getPos(), ProgramElem{ElemType::Continue, astLevel});
 }
 
-WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
+ModPointsVector WalkerDefer::getModPoints()
 {
     for (const auto &it : mProgramStructure)
     {
@@ -106,13 +107,6 @@ WalkerDefer::DeferFiresVector WalkerDefer::getDeferFires()
 
     reverseOrderOfSamePosDeferFire();
 
-    return mDeferFires;
-}
-
-WalkerDefer::DeferRemovesVector WalkerDefer::getDeferRemoves()
-{
-    DeferRemovesVector removes{};
-
     for (const auto &it : mProgramStructure)
     {
         if (it.second.mType == ElemType::Defer)
@@ -120,16 +114,9 @@ WalkerDefer::DeferRemovesVector WalkerDefer::getDeferRemoves()
             const SemNodeDefer *const node = it.second.mDeferNode;
             constexpr uint32_t deferOffset = 1U;
             const uint32_t newPos = node->getPos() - deferOffset;
-            removes.emplace_back(newPos, node->getDeferredStatementLen());
+            mModPoints.emplace_back(ModType::TextRemove, newPos, node->getDeferredStatementLen());
         }
     }
-
-    return removes;
-}
-
-ModPointsVector WalkerDefer::getModPoints()
-{
-    // TODO: IMPLEMENT: return modpoints
 
     return mModPoints;
 }
@@ -151,7 +138,7 @@ void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t el
             {
                 constexpr uint32_t scopeEndOffset = 2U;
                 const uint32_t newPos = elemCharacterPos - scopeEndOffset;
-                mDeferFires.emplace_back(std::make_pair(newPos, it->second->getDeferredText()));
+                mModPoints.emplace_back(ModType::TextInsert, newPos, it->second->getDeferredText());
             }
 
             it = mActiveDefers.erase(it);
@@ -172,7 +159,7 @@ void WalkerDefer::checkReturnDefers(const ProgramElem &elem, const uint32_t elem
         {
             constexpr uint32_t returnOffset = 1U;
             const uint32_t elemCharacterPosWithOffset = elemCharacterPos - returnOffset;
-            mDeferFires.emplace_back(std::make_pair(elemCharacterPosWithOffset, it->second->getDeferredText()));
+            mModPoints.emplace_back(ModType::TextInsert, elemCharacterPosWithOffset, it->second->getDeferredText());
         }
 
         it++;
@@ -190,7 +177,7 @@ void WalkerDefer::checkBreakContinueDefers(const uint32_t elemCharacterPos)
         {
             constexpr uint32_t breakContinueOffset = 1U;
             const uint32_t elemCharacterPosWithOffset = elemCharacterPos - breakContinueOffset;
-            mDeferFires.emplace_back(std::make_pair(elemCharacterPosWithOffset, it->second->getDeferredText()));
+            mModPoints.emplace_back(ModType::TextInsert, elemCharacterPosWithOffset, it->second->getDeferredText());
         }
 
         it++;
@@ -209,17 +196,24 @@ void WalkerDefer::reverseOrderOfSamePosDeferFire()
 
     std::vector<std::vector<uint32_t>> sameLineDefers;
 
-    for (uint32_t i = 1U; i < mDeferFires.size(); ++i)
+    for (uint32_t i = 1U; i < mModPoints.size(); ++i)
     {
-        if (mDeferFires[i - 1].first == mDeferFires[i].first)
+        if (mModPoints[i].getModType() != ModType::TextInsert)
+        {
+            // assuming all text inserts done before text removes
+            continue;
+        }
+
+        if (mModPoints[i - 1].getStart() == mModPoints[i].getStart())
         {
             std::vector<uint32_t> defersAtThisFilePosition;
             defersAtThisFilePosition.push_back(i - 1);
             defersAtThisFilePosition.push_back(i);
             i++;
 
-            while ((i < mDeferFires.size()) && //
-                   (mDeferFires[i - 1].first == mDeferFires[i].first))
+            while ((i < mModPoints.size()) &&                             //
+                   (mModPoints[i].getModType() == ModType::TextInsert) && //
+                   (mModPoints[i - 1].getStart() == mModPoints[i].getStart()))
             {
                 defersAtThisFilePosition.push_back(i);
                 i++;
@@ -235,7 +229,7 @@ void WalkerDefer::reverseOrderOfSamePosDeferFire()
         uint32_t backwardIndex = it.size() - 1U;
         while (forwardIndex < backwardIndex)
         {
-            std::swap(mDeferFires[it[forwardIndex]], mDeferFires[it[backwardIndex]]);
+            std::swap(mModPoints[it[forwardIndex]], mModPoints[it[backwardIndex]]);
 
             forwardIndex++;
             backwardIndex--;

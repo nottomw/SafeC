@@ -23,14 +23,6 @@ public:
     void peek(SemNodeBreak &node, const uint32_t astLevel) override;
     void peek(SemNodeContinue &node, const uint32_t astLevel) override;
 
-    using DeferFirePair = std::pair<uint32_t, std::string>;
-    using DeferFiresVector = std::vector<DeferFirePair>;
-    DeferFiresVector getDeferFires();
-
-    // pair: defer index, defer statement length
-    using DeferRemovesVector = std::vector<std::pair<uint32_t, uint32_t>>;
-    DeferRemovesVector getDeferRemoves();
-
     ModPointsVector getModPoints();
 
 private:
@@ -92,8 +84,6 @@ private:
     std::vector<AstLevel> mLoopStack;
 
     std::vector<AstDeferNodePair> mActiveDefers;
-
-    DeferFiresVector mDeferFires;
 
     ModPointsVector mModPoints;
 };

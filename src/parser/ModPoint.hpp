@@ -12,58 +12,71 @@ class ModPoint;
 
 using ModPointsVector = std::vector<ModPoint>;
 
+enum class ModType
+{
+    TextInsert, // start + text
+    TextRemove, // start + size
+    TextReplace // start + text
+};
+
 class ModPoint
 {
 public:
-    enum class ModType
-    {
-        TextInsert,
-        TextRemove,
-        TextReplace
-    };
+    // TODO: add proper constructors for ModType
 
-    ModPoint( //
-        const ModType mod,
-        const uint32_t rangeStart,
-        const uint32_t rangeEnd,
-        std::string optionalTextToInsert)
+    ModPoint(const ModType mod, const uint32_t rangeStart, std::string textToInsert)
         : mMod{mod}
-        , mRangeStart{rangeStart}
-        , mRangeEnd{rangeEnd}
-        , mOptionalTextToInsert{optionalTextToInsert}
+        , mStart{rangeStart}
+        , mSize{0U}
+        , mTextToInsert{textToInsert}
     {
         if ((mMod == ModType::TextInsert) || //
             (mMod == ModType::TextReplace))
         {
-            assert(mOptionalTextToInsert.empty() == false);
+            assert(mTextToInsert.empty() == false);
         }
     }
+
+    ModPoint(const ModType mod, const uint32_t rangeStart, const uint32_t size)
+        : mMod{mod}
+        , mStart{rangeStart}
+        , mSize{size}
+        , mTextToInsert{}
+    {
+        assert(mMod == ModType::TextRemove);
+    }
+
+    ModPoint(const ModPoint &other) = default;
+    ModPoint(ModPoint &&other) = default;
+
+    ModPoint &operator=(const ModPoint &other) = default;
+    ModPoint &operator=(ModPoint &&other) = default;
 
     ModType getModType() const
     {
         return mMod;
     }
 
-    uint32_t getRangeStart() const
+    uint32_t getStart() const
     {
-        return mRangeStart;
+        return mStart;
     }
 
-    uint32_t getRangeEnd() const
+    uint32_t getSize() const
     {
-        return mRangeEnd;
+        return mSize;
     }
 
-    std::string getOptionalTextToInsert() const
+    std::string getText() const
     {
-        return mOptionalTextToInsert;
+        return mTextToInsert;
     }
 
 private:
-    const ModType mMod;
-    const uint32_t mRangeStart;
-    const uint32_t mRangeEnd;
-    const std::string mOptionalTextToInsert;
+    ModType mMod;
+    uint32_t mStart;
+    uint32_t mSize;
+    std::string mTextToInsert;
 };
 
 } // namespace safec
