@@ -22,8 +22,6 @@ enum class ModType
 class ModPoint
 {
 public:
-    // TODO: add proper constructors for ModType
-
     ModPoint(const ModType mod, const uint32_t rangeStart, std::string textToInsert)
         : mMod{mod}
         , mStart{rangeStart}

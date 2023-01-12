@@ -233,6 +233,8 @@ void Semantics::handleBreak( //
 {
     syntaxReport(stringIndex, "break", Color::LightYellow);
 
+    // TODO: handle break when not in loop (switch..case)
+
     auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
