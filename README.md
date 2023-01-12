@@ -12,17 +12,13 @@ Safer version of C89 language - transpiles to C89.
 ### Main features
 1. `defer`
 2. References
-3. Pointer ownership indication (and enforcement)
-4. NULL - optional automatic checks before dereference whenever possible
-5. Ranged arrays - automatic checks
-6. Integer overflow checks
-7. Type-safe defines
-8. Fixed width types (`uint32_t`, `int32_t`, ...) and `bool`
-9. `static_assert`
-10. Templates/generics - type safe defines (?)
-11. `pragma once`
-12. Changes for confusing syntax: `volatile`, `static`
-13. Allow `for(int i = 0; ...)`
+3. NULL - optional automatic checks before dereference whenever possible
+4. Ranged arrays - automatic checks
+5. Type-safe defines / templates / generics 
+6. Fixed width types (`uint32_t`, `int32_t`, ...) and `bool`
+7. `static_assert`
+9. `pragma once`
+9. Changes for confusing syntax: `volatile`, `static`
 ...TBC
 
 ### Build
