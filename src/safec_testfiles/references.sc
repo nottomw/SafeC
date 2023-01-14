@@ -19,13 +19,14 @@ int fun2(struct SomeStruct &s)
 int main(void)
 {
     struct SomeStruct *s = malloc(sizeof(struct SomeStruct));
+    struct SomeStruct &sRef = *s;
+    int x = fun2(*s);
+
     assert(s != NULL);
 
-    struct SomeStruct &sRef = *s;
     sRef.a = 5;
     sRef.b = 'A';
 
-    int x = fun2(*s);
     printf("x = %d\n", x);
 
     fun(x);
