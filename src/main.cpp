@@ -12,6 +12,9 @@
 namespace po = boost::program_options;
 namespace bfs = boost::filesystem;
 
+// TODO: approach shift needed -> create whole AST nodes, transform AST
+//       in each walker, then generate output .c file. Not maintainable in current form.
+
 // TODO: maybe use std::filesystem instead of boost::filesystem
 // TODO: some proper functional/unit tests
 
