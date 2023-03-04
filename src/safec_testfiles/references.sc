@@ -64,6 +64,8 @@ int main(void)
         // add(sum, 5, 10); // should be allowed- create tmps for 5 & 10
         const int addOne = 5;
         int addTwo = 5;
+
+        // should change to `add(&sum, &addOne, &addTwo)`
         add(sum, addOne, addTwo);
 
         printf("adding %d + %d = %d\n", addOne, addTwo, sum);
