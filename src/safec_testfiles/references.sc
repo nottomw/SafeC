@@ -27,6 +27,11 @@ int fun2(struct SomeStruct &structReference)
     return structReference.a;
 }
 
+void add(int &result, const int &a, const int &b)
+{
+    result = a + b;
+}
+
 int main(void)
 {
     struct SomeStruct *structPtr = malloc(sizeof(struct SomeStruct));
@@ -53,6 +58,16 @@ int main(void)
 
     // TODO: reference assignment should fail
     // i.e. int &x = a; x = b;
+
+    {
+        int sum = 0;
+        // add(sum, 5, 10); // should be allowed- create tmps for 5 & 10
+        const int addOne = 5;
+        int addTwo = 5;
+        add(sum, addOne, addTwo);
+
+        printf("adding %d + %d = %d\n", addOne, addTwo, sum);
+    }
 
     return 0;
 }
