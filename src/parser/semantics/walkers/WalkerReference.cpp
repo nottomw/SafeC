@@ -29,6 +29,8 @@ namespace safec
 //          - fun(5, someVar, someVar2)     -> fun(5, &someVar, &someVar2)
 //          - fun(5, someVar, 7)            -> temporary for '7'
 //          - fun(5, 6, 7)                  -> error (ref non-const)
+//      5) reference to pointer
+//          - fun(int *&param)  -> fun(int **const param)
 
 void WalkerReference::peek(SemNode &node, const uint32_t astLevel)
 {
