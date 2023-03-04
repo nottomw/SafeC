@@ -259,7 +259,7 @@ void Semantics::handleFunctionStart( //
 
     gSemState.mScopeStack.push_back(functionNode);
 
-    // Add any outstanding nodes, waiting for their scope.
+    // Add any outstanding nodes waiting for their scope.
     auto currentScope = gSemState.mScopeStack.back();
     auto currentScopeSnap = currentScope.lock();
     assert(currentScopeSnap);
