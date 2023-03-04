@@ -133,4 +133,22 @@ SemNodeContinue::SemNodeContinue(const uint32_t pos) //
     mType = Type::Continue;
 }
 
+SemNodeIdentifier::SemNodeIdentifier(const uint32_t pos, const std::string &name)
+    : SemNodePositional{pos}
+    , mName{name}
+{
+    mType = Type::Undefined;
+}
+
+std::string SemNodeIdentifier::getName() const
+{
+    return mName;
+}
+
+SemNodeReference::SemNodeReference(const uint32_t pos, const std::string &name)
+    : SemNodeIdentifier(pos, name)
+{
+    mType = Type::Reference;
+}
+
 } // namespace safec

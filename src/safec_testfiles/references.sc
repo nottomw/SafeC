@@ -13,6 +13,11 @@ struct SomeStruct{
 
 int fun2(struct SomeStruct &s)
 {
+    {
+        struct SomeStruct &secondRef = s;
+        printf("address of s: %p, address of secondRef: %p\n", &s, &secondRef);
+    }
+
     return s.a;
 }
 

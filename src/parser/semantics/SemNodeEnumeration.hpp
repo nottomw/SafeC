@@ -13,5 +13,6 @@
         selector(Defer) \
         selector(Return) \
         selector(Break) \
-        selector(Continue)
+        selector(Continue) \
+        selector(Reference)
 // clang-format on

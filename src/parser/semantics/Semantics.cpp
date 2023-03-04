@@ -32,6 +32,9 @@ struct SemanticsState
 {
     SemanticsState() //
         : mScopeStack{}
+        , mLastSeenIdentifier{}
+        , mLastSeenIdentifierPos{0}
+        , mState{SState::Idle}
     {
     }
 
@@ -42,6 +45,8 @@ struct SemanticsState
     uint32_t mLastSeenIdentifierPos;
 
     SState mState;
+
+    std::vector<std::shared_ptr<SemNode>> mNodesToBeAddedToNextSeenScope;
 };
 
 SemanticsState gSemState;
@@ -115,18 +120,48 @@ void Semantics::handleIdentifier(const uint32_t stringIndex, const char *const i
 
     if (gSemState.mState == SState::WaitingForIdentifierReference)
     {
+        gSemState.mState = SState::Idle;
+
+        // TODO: reset the state in any other case where this is not
+        // actually a reference.
+
         std::string syntaxReportStr = "reference: '";
         syntaxReportStr += gSemState.mLastSeenIdentifier;
         syntaxReportStr += "'";
 
         syntaxReport(stringIndex, syntaxReportStr, Color::LightBlue);
 
-        gSemState.mState = SState::Idle;
+        // TODO: is there a possibility that the scope stack is not
+        // empty and the reference should not be added to a newly created
+        // scope?
+
+        auto nodeRef = std::make_shared<SemNodeReference>(stringIndex, gSemState.mLastSeenIdentifier);
+
+        if (gSemState.mScopeStack.empty() == true)
+        {
+            // There is no scope created yet - probably parser is dealing with
+            // a newly created function - the reference should be added to next
+            // seen scope.
+
+            gSemState.mNodesToBeAddedToNextSeenScope.push_back(nodeRef);
+        }
+        else
+        {
+            auto currentScope = gSemState.mScopeStack.back();
+            auto currentScopeSnap = currentScope.lock();
+            assert(currentScopeSnap);
+
+            currentScopeSnap->attach(nodeRef);
+        }
     }
 }
 
 void Semantics::handleReference([[maybe_unused]] const uint32_t stringIndex)
 {
+    // Parser encountered what might be a reference - switch the internal
+    // state so when parser moves on and finds an identifier, a SemNodeReference
+    // is created.
+
     gSemState.mState = SState::WaitingForIdentifierReference;
 }
 
@@ -223,6 +258,18 @@ void Semantics::handleFunctionStart( //
     // Hacky: function start is matched with compound statement end.
 
     gSemState.mScopeStack.push_back(functionNode);
+
+    // Add any outstanding nodes, waiting for their scope.
+    auto currentScope = gSemState.mScopeStack.back();
+    auto currentScopeSnap = currentScope.lock();
+    assert(currentScopeSnap);
+
+    for (auto &it : gSemState.mNodesToBeAddedToNextSeenScope)
+    {
+        currentScopeSnap->attach(it);
+    }
+
+    gSemState.mNodesToBeAddedToNextSeenScope.clear();
 }
 
 void Semantics::handleFunctionEnd( //

@@ -16,10 +16,10 @@ class SemNodeWalker;
 
 // clang-format off
 #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
-#define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)                                                                          \
-    case Type::x: {                                                                                                    \
-        return #x;                                                                                                     \
-    }                                                                                                                  \
+#define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)   \
+    case Type::x: {                             \
+        return #x;                              \
+    }                                           \
     break;
 // clang-format on
 
@@ -144,6 +144,23 @@ class SemNodeContinue : public SemNodePositional
 {
 public:
     SemNodeContinue(const uint32_t pos);
+};
+
+class SemNodeIdentifier : public SemNodePositional
+{
+public:
+    SemNodeIdentifier(const uint32_t pos, const std::string &name);
+
+    std::string getName() const;
+
+private:
+    std::string mName;
+};
+
+class SemNodeReference : public SemNodeIdentifier
+{
+public:
+    SemNodeReference(const uint32_t pos, const std::string &name);
 };
 
 } // namespace safec
