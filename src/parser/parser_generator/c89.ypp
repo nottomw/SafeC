@@ -317,11 +317,11 @@ type_qualifier
 declarator
     : pointer direct_declarator
     | direct_declarator
-    | reference { pr("reference"); } direct_declarator
+    | reference { sem.handleReference(lex_current_char); } direct_declarator
     ;
 
 direct_declarator
-    : IDENTIFIER
+    : IDENTIFIER { sem.handleIdentifier(lex_current_char, $1); }
     | '(' declarator ')'
     | direct_declarator '[' constant_expression ']'
     | direct_declarator '[' ']'

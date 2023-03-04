@@ -47,6 +47,9 @@ public:
     void handleBreak(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
     void handleContinue(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
 
+    void handleIdentifier(const uint32_t stringIndex, const char *const identifierName);
+    void handleReference(const uint32_t stringIndex);
+
 private:
     SemNodeTranslationUnit mTranslationUnit;
     boost::iostreams::mapped_file_source mSemanticsSourceFile;

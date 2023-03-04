@@ -22,6 +22,12 @@ namespace bfs = ::boost::filesystem;
 namespace
 {
 
+enum class SState
+{
+    Idle,
+    WaitingForIdentifierReference
+};
+
 struct SemanticsState
 {
     SemanticsState() //
@@ -31,11 +37,16 @@ struct SemanticsState
 
     using SemNodeScopePtr = std::weak_ptr<SemNodeScope>;
     std::vector<SemNodeScopePtr> mScopeStack;
+
+    std::string mLastSeenIdentifier;
+    uint32_t mLastSeenIdentifierPos;
+
+    SState mState;
 };
 
 SemanticsState gSemState;
 
-void syntaxReport(const uint32_t stringIndex, const char *const name, const Color color = Color::LightGreen)
+void syntaxReport(const uint32_t stringIndex, const std::string &name, const Color color = Color::LightGreen)
 {
     log("@ % at % @", {color, logger::NewLine::No}).arg(name).arg(stringIndex);
 }
@@ -95,6 +106,28 @@ void Semantics::newTranslationUnit(const bfs::path &path)
 void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
 {
     walker.walk(mTranslationUnit, strategy);
+}
+
+void Semantics::handleIdentifier(const uint32_t stringIndex, const char *const identifierName)
+{
+    gSemState.mLastSeenIdentifier = std::string(identifierName);
+    gSemState.mLastSeenIdentifierPos = stringIndex;
+
+    if (gSemState.mState == SState::WaitingForIdentifierReference)
+    {
+        std::string syntaxReportStr = "reference: '";
+        syntaxReportStr += gSemState.mLastSeenIdentifier;
+        syntaxReportStr += "'";
+
+        syntaxReport(stringIndex, syntaxReportStr, Color::LightBlue);
+
+        gSemState.mState = SState::Idle;
+    }
+}
+
+void Semantics::handleReference([[maybe_unused]] const uint32_t stringIndex)
+{
+    gSemState.mState = SState::WaitingForIdentifierReference;
 }
 
 void Semantics::handlePostfixExpression( //
