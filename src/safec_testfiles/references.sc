@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <assert.h>
 
-void fun(int &x)
+void fun(int &intReference)
 {
-    x = 125;
+    intReference = 125;
 }
 
 struct SomeStruct{
@@ -11,23 +11,28 @@ struct SomeStruct{
     char b;
 };
 
-int fun2(struct SomeStruct &s)
+int fun2(struct SomeStruct &structReference)
 {
     {
-        struct SomeStruct &secondRef = s;
-        printf("address of s: %p, address of secondRef: %p\n", &s, &secondRef);
+        struct SomeStruct &secondRef = structReference;
+        printf("address of structReference: %p, address of secondRef: %p\n",
+            &structReference,
+            &secondRef);
     }
 
-    return s.a;
+    return structReference.a;
 }
 
 int main(void)
 {
-    struct SomeStruct *s = malloc(sizeof(struct SomeStruct));
-    struct SomeStruct &sRef = *s;
-    int x = fun2(*s);
+    struct SomeStruct *structPtr = malloc(sizeof(struct SomeStruct));
+    struct SomeStruct &sRef = *structPtr;
+    int x = 0;
 
-    assert(s != NULL);
+    assert(structPtr != NULL);
+
+    // calling reference function parameter
+    x = fun2(*structPtr);
 
     sRef.a = 5;
     sRef.b = 'A';
