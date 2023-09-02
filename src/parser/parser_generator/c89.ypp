@@ -238,17 +238,29 @@ storage_class_specifier
 
 type_specifier
     : VOID
+    { pr("type"); }
     | CHAR
+    { pr("type"); }
     | SHORT
+    { pr("type"); }
     | INT
+    { pr("type"); }
     | LONG
+    { pr("type"); }
     | FLOAT
+    { pr("type"); }
     | DOUBLE
+    { pr("type"); }
     | SIGNED
+    { pr("type"); }
     | UNSIGNED
+    { pr("type"); }
     | struct_or_union_specifier
+    { pr("type (struct/union)"); }
     | enum_specifier
+    { pr("type (enum)"); }
     | TYPE_NAME
+    { pr("type"); }
     ;
 
 struct_or_union_specifier
@@ -318,6 +330,11 @@ declarator
 
 direct_declarator
     : IDENTIFIER
+    {
+        std::string s = "direct_declarator: ";
+        s += $1;
+        pr(s.c_str());
+    }
     | '(' declarator ')'
     | direct_declarator '[' constant_expression ']'
     | direct_declarator '[' ']'
@@ -407,6 +424,9 @@ statement
     | expression_statement
     | selection_statement
     | iteration_statement
+    {
+        handle(SyntaxChunkType::kLoop);
+    }
     | jump_statement
     ;
 
@@ -466,13 +486,16 @@ translation_unit
 
 external_declaration
     : function_definition
+    {
+        handle(SyntaxChunkType::kFunction);
+    }
     | declaration
     ;
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement
-    | VOID declarator compound_statement
-    | declaration_specifiers declarator compound_statement
+    | VOID declarator { pr("function start (void return) 2"); } compound_statement
+    | declaration_specifiers declarator { pr("function start 3"); } compound_statement
     | declarator declaration_list compound_statement
     | declarator compound_statement
     ;

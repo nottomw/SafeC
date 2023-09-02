@@ -8,6 +8,8 @@
 #include <cassert>
 #include <iostream>
 
+// TODO: typedefs not supported at all, parser does not recognize
+
 extern "C"
 {
     extern int lex_current_char;
@@ -115,8 +117,7 @@ void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
 
 void Semantics::handle( //
     const SyntaxChunkType type,
-    const uint32_t stringIndex,
-    const bool shouldCount)
+    const uint32_t stringIndex)
 {
     static uint32_t lastStringIndex = 0;
 
@@ -127,10 +128,7 @@ void Semantics::handle( //
         .arg(lastStringIndex)
         .arg(stringIndex);
 
-    if (shouldCount)
-    {
-        lastStringIndex = stringIndex;
-    }
+    lastStringIndex = stringIndex;
 
     // TODO: actually do something with syntax chunk - create node etc
 }

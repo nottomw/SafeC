@@ -32,7 +32,7 @@ public:
     void newTranslationUnit(const boost::filesystem::path &path);
     void walk(SemNodeWalker &walker, WalkerStrategy &strategy);
 
-    void handle(const SyntaxChunkType type, const uint32_t stringIndex, const bool shouldCount = true);
+    void handle(const SyntaxChunkType type, const uint32_t stringIndex);
 
     void handlePostfixExpression(const uint32_t stringIndex, const bool containsArguments);
     void handleDeferCall(const uint32_t tokenStartStringIndex, const uint32_t stringIndex);
