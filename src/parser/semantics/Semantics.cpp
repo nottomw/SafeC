@@ -112,7 +112,7 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kStructOrUnionDecl:
-            mState.getChunks().clear(); // TODO: handle struct decl
+            mState.getChunks().clear(); // TODO: handle struct declaration
             mState.mState = SState::WaitingForStructType;
             break;
 
@@ -136,6 +136,8 @@ void Semantics::handleFunctionHeader( //
     // assumptions:
     //  - no other chunks stashed apart from ret type, params and pointers
     //  - chunks for function params are in order: type, name, type, name, ... (except when pointers used)
+
+    // TODO: need to fetch struct name function returns struct or has a struct param
 
     auto &chunks = mState.getChunks();
 
