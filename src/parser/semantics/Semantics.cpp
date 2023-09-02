@@ -8,7 +8,7 @@
 #include <cassert>
 #include <iostream>
 
-// TODO: typedefs not supported at all, current parser does not recognize
+// TODO: typedefs not supported at all, current parser does not recognize the type
 
 // TODO: handle indentation
 // make sure that for each break/continue/return/scope end the indentation (column) is also

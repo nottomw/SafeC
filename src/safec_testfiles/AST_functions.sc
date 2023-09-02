@@ -17,7 +17,6 @@ volatile int *const constPointerRetFun(void)
 	return NULL;
 }
 
-
 void FUNCTION_WITH_NO_RETURN(void)
 {
 }
