@@ -72,6 +72,8 @@ private:
     friend LogHelper log(const char *const, logger::Properties &&);
 };
 
+// TODO: add option to color only parts of string?
+
 // example: log("text % % %").arg(5).arg(3.14).arg("text");
 LogHelper log(const char *const formatString, logger::Properties &&props = logger::Properties{});
 
