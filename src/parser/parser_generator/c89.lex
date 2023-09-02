@@ -135,28 +135,35 @@ int yywrap(void)
 void comment(void)
 {
  	char c, c1;
+    int comment_length = 0;
  
  loop:
  	while ((c = input()) != '*' && c != 0)
 	{
+        comment_length += 1;
  		putchar(c);
 	}
 
 	if (c != 0)
 	{
+        comment_length += 1;
 		putchar(c);
 	}
  
  	if ((c1 = input()) != '/' && c != 0)
  	{
+        comment_length -= 1;
  		unput(c1);
  		goto loop;
  	}
  
  	if (c != 0)
 	{
+        comment_length += 1;
  		putchar(c1);
 	}
+
+    lex_current_char += comment_length;
 }
 
 void count(void)
