@@ -57,19 +57,40 @@ uint32_t SemNodeScope::getEnd() const
 
 SemNodeFunction::SemNodeFunction(const uint32_t start) //
     : SemNodeScope{start}                              //
-    , mVoidRet{false}
+    , mReturnType{}
+    , mParams{}
 {
     mType = Type::Function;
 }
 
-void SemNodeFunction::setIsVoidReturnType(const bool voidRet)
+std::string SemNodeFunction::getName() const
 {
-    mVoidRet = voidRet;
+    return mName;
 }
 
-bool SemNodeFunction::getIsVoidReturnType() const
+std::string SemNodeFunction::getReturn() const
 {
-    return mVoidRet;
+    return mReturnType;
+}
+
+std::vector<SemNodeFunction::Param> SemNodeFunction::getParams() const
+{
+    return mParams;
+}
+
+void SemNodeFunction::setName(const std::string &name)
+{
+    mName = name;
+}
+
+void SemNodeFunction::setReturn(const std::string &type)
+{
+    mReturnType = type;
+}
+
+void SemNodeFunction::addParam(const std::string &type, const std::string &name)
+{
+    mParams.emplace_back(Param{type, name});
 }
 
 SemNodePositional::SemNodePositional(const uint32_t pos) //

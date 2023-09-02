@@ -12,6 +12,7 @@
     break;
 
 #define SYNTAXCHUNKTYPE_ENUM(entry) \
+    entry(kUnknown) \
     entry(kFunctionHeader) \
     entry(kFunction) \
     entry(kLoop) \
@@ -19,7 +20,8 @@
     entry(kStructOrUnionDecl) \
     entry(kEnumDecl) \
     entry(kType) \
-    entry(kDirectDecl)
+    entry(kDirectDecl) \
+    entry(kPointerDecl)
 
 // clang-format on
 

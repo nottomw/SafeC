@@ -35,9 +35,9 @@ auto &sem = safec::SemanticsFactory::get();
     safec::log("@ % at % @", { color, safec::logger::NewLine::No }).arg(str).arg(lex_current_char);
 }
 
-[[maybe_unused]] static void handle(const SyntaxChunkType type)
+[[maybe_unused]] static void handle(const SyntaxChunkType type, const std::string &additional = "")
 {
-    sem.handle(type, lex_current_char);
+    sem.handle(type, lex_current_char, additional);
 }
 
 %}
@@ -238,40 +238,49 @@ storage_class_specifier
 
 type_specifier
     : VOID
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "void"); }
     | CHAR
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "char"); }
     | SHORT
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "short"); }
     | INT
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "int"); }
     | LONG
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "long"); }
     | FLOAT
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "float"); }
     | DOUBLE
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "double"); }
     | SIGNED
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "signed"); }
     | UNSIGNED
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "unsigned"); }
     | struct_or_union_specifier
-    { pr("type (struct/union)"); }
+    { handle(SyntaxChunkType::kType, "struct/union"); }
     | enum_specifier
-    { pr("type (enum)"); }
+    { handle(SyntaxChunkType::kType, "enum"); }
     | TYPE_NAME
-    { pr("type"); }
+    { handle(SyntaxChunkType::kType, "typename?"); }
     ;
 
 struct_or_union_specifier
     : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+    {
+        handle(SyntaxChunkType::kStructOrUnionDecl);
+    }
     | struct_or_union '{' struct_declaration_list '}'
     | struct_or_union IDENTIFIER
     ;
 
 struct_or_union
     : STRUCT
+    {
+        pr("struct");
+    }
     | UNION
+    {
+        pr("union");
+    }
     ;
 
 struct_declaration_list
@@ -324,6 +333,9 @@ type_qualifier
 
 declarator
     : pointer direct_declarator
+    {
+        handle(SyntaxChunkType::kPointerDecl);
+    }
     | direct_declarator
     | reference direct_declarator
     ;
@@ -331,9 +343,7 @@ declarator
 direct_declarator
     : IDENTIFIER
     {
-        std::string s = "direct_declarator: ";
-        s += $1;
-        pr(s.c_str());
+        handle(SyntaxChunkType::kDirectDecl, $1);
     }
     | '(' declarator ')'
     | direct_declarator '[' constant_expression ']'
@@ -494,8 +504,8 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement
-    | VOID declarator { pr("function start (void return) 2"); } compound_statement
-    | declaration_specifiers declarator { pr("function start 3"); } compound_statement
+    | VOID declarator { pr("function start (void return or voidptr)"); handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement
+    | declaration_specifiers declarator { pr("function start 3"); handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement
     | declarator declaration_list compound_statement
     | declarator compound_statement
     ;

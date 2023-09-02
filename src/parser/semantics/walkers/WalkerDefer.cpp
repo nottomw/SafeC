@@ -134,13 +134,14 @@ void WalkerDefer::checkScopeEndDefers(const ProgramElem &elem, const uint32_t el
             // but still erase the defer - the last "defer" call should happen on the last
             // return.
 
-            if ((elem.mFunctionNode == nullptr) || //
-                (elem.mFunctionNode->getIsVoidReturnType() == true))
-            {
-                constexpr uint32_t scopeEndOffset = 2U;
-                const uint32_t newPos = elemCharacterPos - scopeEndOffset;
-                mModPoints.emplace_back(ModType::TextInsert, newPos, it->second->getDeferredText());
-            }
+            // TODO: for now commented out, changes related to AST
+            //            if ((elem.mFunctionNode == nullptr) || //
+            //                (elem.mFunctionNode->getIsVoidReturnType() == true))
+            //            {
+            //                constexpr uint32_t scopeEndOffset = 2U;
+            //                const uint32_t newPos = elemCharacterPos - scopeEndOffset;
+            //                mModPoints.emplace_back(ModType::TextInsert, newPos, it->second->getDeferredText());
+            //            }
 
             it = mActiveDefers.erase(it);
         }

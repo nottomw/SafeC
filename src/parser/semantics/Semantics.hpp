@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SemNode.hpp"
+#include "SemanticsState.hpp"
 #include "SyntaxChunkTypes.hpp"
 
 #include <boost/iostreams/device/mapped_file.hpp>
@@ -32,11 +33,19 @@ public:
     void newTranslationUnit(const boost::filesystem::path &path);
     void walk(SemNodeWalker &walker, WalkerStrategy &strategy);
 
-    void handle(const SyntaxChunkType type, const uint32_t stringIndex);
+    void handle( //
+        const SyntaxChunkType type,
+        const uint32_t stringIndex,
+        const std::string &additional = "");
+
+    void handleFunctionHeader(const uint32_t stringIndex, const bool isVoidRetType);
+    void handleFunctionEnd(const uint32_t stringIndex);
 
 private:
     SemNodeTranslationUnit mTranslationUnit;
     boost::iostreams::mapped_file_source mSemanticsSourceFile;
+
+    SemanticsState mState;
 };
 
 } // namespace safec

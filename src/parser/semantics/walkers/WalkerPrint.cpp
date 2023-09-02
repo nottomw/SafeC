@@ -30,9 +30,23 @@ void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    log("% (%) { %, % }", Color::LightCyan) //
+    std::string paramsListStr = " args:";
+    const auto params = node.getParams();
+    for (auto &it : params)
+    {
+        paramsListStr += " ";
+        paramsListStr += it.mType;
+        paramsListStr += " ";
+        paramsListStr += it.mName;
+    }
+
+    paramsListStr += " ";
+
+    log("% (% % (%)) { %, % }", Color::LightCyan) //
         .arg(getPrefix(node, astLevel))
-        .arg(node.getIsVoidReturnType() ? "void return" : "non-void return")
+        .arg(node.getReturn())
+        .arg(node.getName())
+        .arg(paramsListStr)
         .arg(node.getStart())
         .arg(node.getEnd());
 }

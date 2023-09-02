@@ -85,13 +85,34 @@ protected:
 class SemNodeFunction final : public SemNodeScope
 {
 public:
+    struct Param
+    {
+        Param() = default;
+
+        Param(const std::string &type, const std::string &name)
+            : mType{type}
+            , mName{name}
+        {
+        }
+
+        std::string mType;
+        std::string mName;
+    };
+
     SemNodeFunction(const uint32_t start);
 
-    void setIsVoidReturnType(const bool voidRet);
-    bool getIsVoidReturnType() const;
+    void setName(const std::string &name);
+    void setReturn(const std::string &type);
+    void addParam(const std::string &type, const std::string &name);
+
+    std::string getName() const;
+    std::string getReturn() const;
+    std::vector<Param> getParams() const;
 
 private:
-    bool mVoidRet;
+    std::string mReturnType;
+    std::vector<Param> mParams;
+    std::string mName;
 };
 
 // Semantic node with a single position info.
