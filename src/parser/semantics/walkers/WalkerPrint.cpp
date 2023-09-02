@@ -30,14 +30,15 @@ void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    std::string paramsListStr = " args:";
+    std::string paramsListStr = " args: ";
     const auto params = node.getParams();
     for (auto &it : params)
     {
-        paramsListStr += " ";
+        paramsListStr += "[";
         paramsListStr += it.mType;
         paramsListStr += " ";
         paramsListStr += it.mName;
+        paramsListStr += "]";
     }
 
     paramsListStr += " ";

@@ -116,10 +116,9 @@ void Semantics::handle( //
             mState.mState = SState::WaitingForStructType;
             break;
 
-        case SyntaxChunkType::kPointerDecl:
-            // TODO: handle pointer return from function
-            //            log("###adding pointer", Color::Red);
-            //            mState.addChunk({type, stringIndex});
+        case SyntaxChunkType::kPointer:
+            log("###adding pointer", Color::Red);
+            mState.addChunk({type, stringIndex});
             break;
 
         default:
@@ -130,13 +129,13 @@ void Semantics::handle( //
 
 void Semantics::handleFunctionHeader( //
     const uint32_t stringIndex,
-    const bool isVoidRetType)
+    const bool isVoidOrVoidPtrRetType)
 {
     auto funNode = std::make_shared<SemNodeFunction>(stringIndex);
 
     // assumptions:
-    //  - no other chunks stashed apart from ret type and params
-    //  - chunks for function params are in order: type, name, type, name, ...
+    //  - no other chunks stashed apart from ret type, params and pointers
+    //  - chunks for function params are in order: type, name, type, name, ... (except when pointers used)
 
     auto &chunks = mState.getChunks();
 
@@ -150,17 +149,33 @@ void Semantics::handleFunctionHeader( //
 
     auto chunksIt = chunks.begin();
 
-    if (isVoidRetType)
+    // Maybe could be handled nicer?
+    uint32_t retTypePointerCount = 0U;
+    while (chunksIt->mType == SyntaxChunkType::kPointer)
     {
-        funNode->setReturn("void");
+        retTypePointerCount += 1;
+        chunksIt++;
+    }
+
+    std::string retTypeStr;
+    if (isVoidOrVoidPtrRetType)
+    {
+        retTypeStr = "void";
     }
     else
     {
-        funNode->setReturn(chunksIt->mAdditional);
+        retTypeStr = chunksIt->mAdditional;
+        // Move function return type out of the way
+        chunksIt++;
     }
 
-    // Move function return type out of the way
-    chunksIt++;
+    // handle pointers
+    for (uint32_t i = 0; i < retTypePointerCount; i++)
+    {
+        retTypeStr += "*";
+    }
+
+    funNode->setReturn(retTypeStr);
 
     // now chunksIt should point to function name
     assert(chunksIt->mType == SyntaxChunkType::kDirectDecl);
@@ -171,43 +186,52 @@ void Semantics::handleFunctionHeader( //
 
     log("\n");
 
-    uint32_t chunksCounter = 1U;
-    bool alreadyConsumed = false;
-    for (/* nothing */; chunksIt != chunks.end(); chunksIt++)
+    while (chunksIt != chunks.end())
     {
-        if (alreadyConsumed)
-        {
-            alreadyConsumed = false;
-            continue;
-        }
-
-        const bool shouldBeArgName = ((chunksCounter % 2) == 0);
-
-        if (shouldBeArgName)
-        {
-            assert(chunksIt->mType == SyntaxChunkType::kDirectDecl);
-        }
-        else
-        {
-            assert(chunksIt->mType == SyntaxChunkType::kType);
-        }
-
         // +1 should be param name if type is not void
-        if (chunksIt->mAdditional != "void")
+        auto chunksItParamName = chunksIt + 1;
+
+        // If there is no following chunk we're sure this is not a pointer
+        const bool notAVoidPointer = (chunksItParamName == chunks.end());
+
+        // count pointers next to parsed argument
+        uint32_t paramPointerCount = 0U;
+        if (notAVoidPointer == false)
         {
-            auto chunksItParamName = chunksIt + 1;
-            alreadyConsumed = true; // move param name out of the way
+            while (chunksItParamName->mType == SyntaxChunkType::kPointer)
+            {
+                paramPointerCount++;
+                chunksItParamName++;
+            }
+        }
+
+        const bool paramIsVoid = (chunksIt->mAdditional == "void") && (paramPointerCount == 0U);
+
+        if (paramIsVoid == false)
+        {
+            // normal situation where we have a proper type (not void nor void pointer)
+
+            std::string paramType = chunksIt->mAdditional;
+            const std::string paramName = chunksItParamName->mAdditional;
+
+            for (uint32_t i = 0; i < paramPointerCount; i++)
+            {
+                paramType += "*";
+            }
 
             log("\nadding function param: % %") //
-                .arg(chunksIt->mAdditional)
-                .arg(chunksItParamName->mAdditional);
+                .arg(paramType)
+                .arg(paramName);
 
-            funNode->addParam(chunksIt->mAdditional, chunksItParamName->mAdditional);
+            funNode->addParam(paramType, paramName);
+            chunksItParamName++; // param name consumed
         }
         else
         {
             log("\nno params");
         }
+
+        chunksIt = chunksItParamName;
     }
 
     // chunks consumed

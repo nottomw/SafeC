@@ -333,9 +333,6 @@ type_qualifier
 
 declarator
     : pointer direct_declarator
-    {
-        handle(SyntaxChunkType::kPointerDecl);
-    }
     | direct_declarator
     | reference direct_declarator
     ;
@@ -355,8 +352,14 @@ direct_declarator
 
 pointer
     : '*'
+    {
+        handle(SyntaxChunkType::kPointer);
+    }
     | '*' type_qualifier_list
     | '*' pointer
+    {
+        handle(SyntaxChunkType::kPointer);
+    }
     | '*' type_qualifier_list pointer
     ;
 
@@ -496,16 +499,13 @@ translation_unit
 
 external_declaration
     : function_definition
-    {
-        handle(SyntaxChunkType::kFunction);
-    }
     | declaration
     ;
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement
-    | VOID declarator { pr("function start (void return or voidptr)"); handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement
-    | declaration_specifiers declarator { pr("function start 3"); handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement
+    | VOID declarator { pr("function start (void return or voidptr)"); handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement { handle(SyntaxChunkType::kFunction); }
+    | declaration_specifiers declarator { pr("function start 3"); handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement { handle(SyntaxChunkType::kFunction); }
     | declarator declaration_list compound_statement
     | declarator compound_statement
     ;
