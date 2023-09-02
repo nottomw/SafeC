@@ -44,23 +44,18 @@ void FUNCTION_WITH_POINTER_PARAMS(int *intPtr, double **doublePtr, char ***charP
 {
 }
 
-// void printer(char *str, int arg)
-// {
-// 	printf(str, arg);
-// }
+int FUNCTION_WITH_LOOP(int a)
+{
+    int i = 0;
+    for (i = 0; i < a; i++)
+    {
+        printer("num: %d\n", i);
+    }
+}
 
-// int testfun(int a)
-// {
-// 	int i = 0;
-// 	for (i = 0; i < a; i++)
-// 	{
-// 		printer("num: %d\n", i);
-// 	}
-// }
+int main(int argc, char** argv)
+{
+    testfun(argc);
 
-// int main(int argc, char** argv)
-// {
-// 	testfun(argc);
-
-// 	return 0;
-// }
+    return 0;
+}

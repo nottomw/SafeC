@@ -66,16 +66,12 @@ void Semantics::handle( //
     const uint32_t stringIndex,
     const std::string &additional)
 {
-    static uint32_t lastStringIndex = 0;
-
-    const auto typeStr = syntaxChunkTypeToStr(type);
-
-    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
-        .arg(typeStr)
-        .arg(lastStringIndex)
-        .arg(stringIndex);
-
-    lastStringIndex = stringIndex;
+    // Uncomment to print all incoming chunks...
+    //    const auto typeStr = syntaxChunkTypeToStr(type);
+    //    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
+    //        .arg(typeStr)
+    //        .arg(lastStringIndex)
+    //        .arg(stringIndex);
 
     switch (type)
     {
@@ -118,7 +114,7 @@ void Semantics::handle( //
             break;
 
         default:
-            log("type not handled: %").arg(static_cast<uint32_t>(type));
+            log("type not handled: %", {Color::Red}).arg(static_cast<uint32_t>(type));
             break;
     }
 }
@@ -176,8 +172,6 @@ void Semantics::handleFunctionHeader( //
     // move function name out of the way
     chunksIt++;
 
-    log("\n");
-
     while (chunksIt != chunks.end())
     {
         // +1 should be param name if type is not void
@@ -211,16 +205,8 @@ void Semantics::handleFunctionHeader( //
                 paramType += "*";
             }
 
-            log("\nadding function param: % %") //
-                .arg(paramType)
-                .arg(paramName);
-
             funNode->addParam(paramType, paramName);
             chunksItParamName++; // param name consumed
-        }
-        else
-        {
-            log("\nno params");
         }
 
         chunksIt = chunksItParamName;

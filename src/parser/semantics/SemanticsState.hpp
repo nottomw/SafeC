@@ -85,7 +85,7 @@ public:
             .arg(mStagedNodes.size());
         for (const auto &it : mSyntaxChunks)
         {
-            log("\t -> chunk type: %, pos: %, additional: '%'", {Color::Green}) //
+            log("---\t-> chunk type: %, pos: %, additional: '%'", {Color::Green}) //
                 .arg(syntaxChunkTypeToStr(it.mType))
                 .arg(it.mPos)
                 .arg(it.mAdditional);
