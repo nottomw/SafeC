@@ -72,6 +72,10 @@ void Parser::parseFile(const bfs::path &path)
     // TODO: handle string literal concat
     // printf("one" "two"); will raise an error in current grammar
 
+    // TODO: handle defer use in preprocessor
+    // should be able to do things like:
+    //      #define LOCK_GUARD(lock) acquire(lock); defer release(lock);
+
     {
         yyin = fopen(path.c_str(), "r");
         assert(yyin != nullptr);
