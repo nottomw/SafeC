@@ -80,17 +80,16 @@ public:
 
     void printChunks() const
     {
-        log("--- SYNTAX CHUNKS (chunks count: %, staged nodes count: %):", {Color::Green}) //
+        log("\n--- SYNTAX CHUNKS (chunks count: %, staged nodes count: %):", {Color::Green}) //
             .arg(mSyntaxChunks.size())
             .arg(mStagedNodes.size());
         for (const auto &it : mSyntaxChunks)
         {
-            log("\tchunk type: %, pos: %, additional: '%'") //
+            log("\t -> chunk type: %, pos: %, additional: '%'", {Color::Green}) //
                 .arg(syntaxChunkTypeToStr(it.mType))
                 .arg(it.mPos)
                 .arg(it.mAdditional);
         }
-        log("------", {Color::Green});
     }
 
 private:
