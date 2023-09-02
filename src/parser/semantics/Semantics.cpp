@@ -113,6 +113,28 @@ void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
     walker.walk(mTranslationUnit, strategy);
 }
 
+void Semantics::handle( //
+    const SyntaxChunkType type,
+    const uint32_t stringIndex,
+    const bool shouldCount)
+{
+    static uint32_t lastStringIndex = 0;
+
+    const auto typeStr = syntaxChunkTypeToStr(type);
+
+    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
+        .arg(typeStr)
+        .arg(lastStringIndex)
+        .arg(stringIndex);
+
+    if (shouldCount)
+    {
+        lastStringIndex = stringIndex;
+    }
+
+    // TODO: actually do something with syntax chunk - create node etc
+}
+
 void Semantics::handleIdentifier(const uint32_t stringIndex, const char *const identifierName)
 {
     gSemState.mLastSeenIdentifier = std::string(identifierName);
