@@ -56,6 +56,7 @@ public:
     LogHelper &arg(const char a);
     LogHelper &arg(const int32_t a);
     LogHelper &arg(const uint32_t a);
+    LogHelper &arg(const size_t a);
     LogHelper &arg(const char *const a);
     LogHelper &arg(const std::string_view a);
 

@@ -98,6 +98,11 @@ LogHelper &LogHelper::arg(const uint32_t a)
     return arg(argStr);
 }
 
+LogHelper &LogHelper::arg(const size_t a)
+{
+    return arg(std::to_string(a));
+}
+
 LogHelper &LogHelper::arg(const char *const a)
 {
     return arg(std::string(a));
