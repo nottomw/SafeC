@@ -12,7 +12,7 @@ add_library(safec::semantics ALIAS semantics)
 target_link_libraries(semantics
     PUBLIC
         safec::walkers
-        safec::logger 
+        safec::logger
         CONAN_PKG::boost
 )
 

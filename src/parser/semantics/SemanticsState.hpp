@@ -1,12 +1,14 @@
 #pragma once
 
-#include <vector>
-#include <string>
-#include <memory>
-
 #include "SyntaxChunkTypes.hpp"
+#include "logger/Logger.hpp"
 
-namespace safec {
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace safec
+{
 
 class SemNode;
 
@@ -44,7 +46,6 @@ struct SyntaxChunkInfo
     std::string mAdditional;
 };
 
-
 class SemanticsState
 {
 public:
@@ -67,7 +68,7 @@ public:
         return mSyntaxChunks;
     }
 
-    StagedNodesType getStagedNodes() const
+    StagedNodesType &getStagedNodes()
     {
         return mStagedNodes;
     }
@@ -77,9 +78,24 @@ public:
         mStagedNodes.push_back(node);
     }
 
+    void printChunks() const
+    {
+        log("--- SYNTAX CHUNKS (chunks count: %, staged nodes count: %):", {Color::Green}) //
+            .arg(mSyntaxChunks.size())
+            .arg(mStagedNodes.size());
+        for (const auto &it : mSyntaxChunks)
+        {
+            log("\tchunk type: %, pos: %, additional: '%'") //
+                .arg(syntaxChunkTypeToStr(it.mType))
+                .arg(it.mPos)
+                .arg(it.mAdditional);
+        }
+        log("------", {Color::Green});
+    }
+
 private:
     std::vector<SyntaxChunkInfo> mSyntaxChunks;
     StagedNodesType mStagedNodes;
 };
 
-}
+} // namespace safec

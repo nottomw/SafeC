@@ -1,6 +1,5 @@
 #pragma once
 
-
 // clang-format off
 
 // TODO: duplicate with SEMNODE_TYPE_SELECTOR_VALUE, move to common header

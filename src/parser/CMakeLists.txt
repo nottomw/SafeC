@@ -12,8 +12,8 @@ add_library(safec::parser ALIAS parser)
 target_link_libraries(parser
     PUBLIC
         CONAN_PKG::boost
-    PRIVATE
         safec::logger
+    PRIVATE
         safec::semantics
         safec::parser_generated
         safec::utils

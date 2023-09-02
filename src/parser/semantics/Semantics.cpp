@@ -85,18 +85,15 @@ void Semantics::handle( //
                 {
                     // struct consumed - reset state
                     mState.mState = SState::Idle;
-                    log("###NOT adding type - struct decl", Color::Red);
                 }
                 else
                 {
-                    log("###adding type", Color::Red);
                     mState.addChunk({type, stringIndex, additional});
                 }
             }
             break;
 
         case SyntaxChunkType::kDirectDecl:
-            log("###adding decl", Color::Red);
             mState.addChunk({type, stringIndex, additional});
             break;
 
@@ -117,7 +114,6 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kPointer:
-            log("###adding pointer", Color::Red);
             mState.addChunk({type, stringIndex});
             break;
 
@@ -141,13 +137,7 @@ void Semantics::handleFunctionHeader( //
 
     auto &chunks = mState.getChunks();
 
-    log("\nALL CHUNKS IN handleFunctionHeader:");
-    for (auto &it : chunks)
-    {
-        log("CHUNK: additional: %, type: %") //
-            .arg(it.mAdditional)
-            .arg(syntaxChunkTypeToStr(it.mType));
-    }
+    mState.printChunks();
 
     auto chunksIt = chunks.begin();
 
@@ -247,7 +237,7 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
     // TODO: for now clearing all chunks found in function body
     mState.getChunks().clear();
 
-    auto stagedNodes = mState.getStagedNodes();
+    auto &stagedNodes = mState.getStagedNodes();
     auto lastNode = stagedNodes.back();
     stagedNodes.pop_back();
 
