@@ -77,13 +77,7 @@ postfix_expression
     : primary_expression
     | postfix_expression '[' expression ']'
     | postfix_expression '(' ')'
-    {
-        sem.handlePostfixExpression(lex_current_char, false);
-    }
     | postfix_expression '(' argument_expression_list ')'
-    {
-        sem.handlePostfixExpression(lex_current_char, true);
-    }
     | postfix_expression '.' IDENTIFIER
     | postfix_expression PTR_OP IDENTIFIER
     | postfix_expression INC_OP
@@ -99,13 +93,10 @@ unary_expression
     : postfix_expression
     | INC_OP unary_expression
     | DEC_OP unary_expression
-    | unary_operator { pr("unary operator", safec::Color::LightCyan); } cast_expression
+    | unary_operator cast_expression
     | SIZEOF unary_expression
     | SIZEOF '(' type_name ')'
     | SAFEC_DEFER expression
-    {
-        sem.handleDeferCall(lex_keyword_start_index, lex_current_char);
-    }
     ;
 
 unary_operator
@@ -322,11 +313,11 @@ type_qualifier
 declarator
     : pointer direct_declarator
     | direct_declarator
-    | reference { sem.handleReference(lex_current_char); } direct_declarator
+    | reference direct_declarator
     ;
 
 direct_declarator
-    : IDENTIFIER { sem.handleIdentifier(lex_current_char, $1); }
+    : IDENTIFIER
     | '(' declarator ')'
     | direct_declarator '[' constant_expression ']'
     | direct_declarator '[' ']'
@@ -412,7 +403,7 @@ initializer_list
 
 statement
     : labeled_statement
-    | { sem.handleCompoundStatementStart(lex_current_char); } compound_statement
+    | compound_statement
     | expression_statement
     | selection_statement
     | iteration_statement
@@ -428,17 +419,8 @@ labeled_statement
 compound_statement
     : '{' '}'
     | '{' statement_list '}'
-    {
-        sem.handleCompoundStatementEnd(lex_current_char);
-    }
     | '{' declaration_list '}'
-    {
-        sem.handleCompoundStatementEnd(lex_current_char);
-    }
     | '{' declaration_list statement_list '}'
-    {
-        sem.handleCompoundStatementEnd(lex_current_char);
-    }
     ;
 
 declaration_list
@@ -463,30 +445,18 @@ selection_statement
     ;
 
 iteration_statement
-    : WHILE '(' expression ')' { sem.handleLoopStart(lex_current_char); } statement { sem.handleLoopEnd(lex_current_char); }
-    | DO { sem.handleLoopStart(lex_current_char); } statement WHILE '(' expression ')' ';' { sem.handleLoopEnd(lex_current_char); }
-    | FOR '(' expression_statement expression_statement ')' { sem.handleLoopStart(lex_current_char); } statement { sem.handleLoopEnd(lex_current_char); }
-    | FOR '(' expression_statement expression_statement expression ')' { sem.handleLoopStart(lex_current_char); } statement { sem.handleLoopEnd(lex_current_char); }
+    : WHILE '(' expression ')' statement
+    | DO statement WHILE '(' expression ')' ';'
+    | FOR '(' expression_statement expression_statement ')' statement
+    | FOR '(' expression_statement expression_statement expression ')' statement
     ;
 
 jump_statement
     : GOTO IDENTIFIER ';'
     | CONTINUE ';'
-    {
-        sem.handleContinue(lex_keyword_start_index, lex_current_char);
-    }
     | BREAK ';'
-    {
-        sem.handleBreak(lex_keyword_start_index, lex_current_char);
-    }
     | RETURN ';'
-    {
-        sem.handleReturn(lex_keyword_start_index, lex_current_char, false);
-    }
     | RETURN expression ';'
-    {
-        sem.handleReturn(lex_keyword_start_index, lex_current_char, true);
-    }
     ;
 
 translation_unit
@@ -501,9 +471,8 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement
-    | VOID declarator { sem.handleFunctionStart(lex_current_char, true); } compound_statement { sem.handleFunctionEnd(lex_current_char); }
-    | declaration_specifiers declarator { sem.handleFunctionStart(lex_current_char, false); } compound_statement
-    { sem.handleFunctionEnd(lex_current_char); }
+    | VOID declarator compound_statement
+    | declaration_specifiers declarator compound_statement
     | declarator declaration_list compound_statement
     | declarator compound_statement
     ;
