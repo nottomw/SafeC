@@ -207,9 +207,6 @@ constant_expression
 declaration
     : declaration_specifiers ';'
     | declaration_specifiers init_declarator_list ';'
-    {
-        handle(SyntaxChunkType::kDeclaration);
-    }
     ;
 
 declaration_specifiers
@@ -228,7 +225,15 @@ init_declarator_list
 
 init_declarator
     : declarator
+    {
+        pr("init declarator no assignment");
+        handle(SyntaxChunkType::kInitDeclaration);
+    }
     | declarator '=' initializer
+    {
+        pr("init declarator with assignment");
+        handle(SyntaxChunkType::kInitDeclaration);
+    }
     ;
 
 storage_class_specifier

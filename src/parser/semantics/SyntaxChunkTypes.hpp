@@ -21,7 +21,7 @@
     entry(kType) \
     entry(kDirectDecl) \
     entry(kPointer) \
-    entry(kDeclaration)
+    entry(kInitDeclaration)
 
 // clang-format on
 

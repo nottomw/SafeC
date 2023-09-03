@@ -115,8 +115,8 @@ void Semantics::handle( //
             mState.addChunk({type, stringIndex});
             break;
 
-        case SyntaxChunkType::kDeclaration:
-            handleDeclaration(stringIndex);
+        case SyntaxChunkType::kInitDeclaration:
+            handleInitDeclaration(stringIndex);
             break;
 
         default:
@@ -253,10 +253,10 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
     mTranslationUnit.attach(lastNode);
 }
 
-void Semantics::handleDeclaration(const uint32_t stringIndex)
+void Semantics::handleInitDeclaration(const uint32_t stringIndex)
 {
-    log("\nCHUNKS IN HANDLE DECLARATION:", {Color::LightPurple, logger::NewLine::No});
-    mState.printChunks();
+    //    log("\nCHUNKS IN HANDLE DECLARATION:", {Color::LightPurple, logger::NewLine::No});
+    //    mState.printChunks();
 
     auto &chunks = mState.getChunks();
 
@@ -287,10 +287,6 @@ void Semantics::handleDeclaration(const uint32_t stringIndex)
 
         auto &chunkIdentifier = chunks[chunkIndex];
         assert(chunkIdentifier.mType == SyntaxChunkType::kDirectDecl);
-
-        log("Creating declaration with type: % name: %", {Color::LightYellow})
-            .arg(chunkTypeStr)
-            .arg(chunkIdentifier.mAdditional);
 
         auto declNode = std::make_shared<SemNodeDeclaration>( //
             stringIndex,
