@@ -115,6 +115,10 @@ void Semantics::handle( //
             mState.addChunk({type, stringIndex});
             break;
 
+        case SyntaxChunkType::kConstant:
+            mState.addChunk({type, stringIndex, additional});
+            break;
+
         case SyntaxChunkType::kInitDeclaration:
             handleInitDeclaration(stringIndex);
             break;
@@ -255,8 +259,8 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 
 void Semantics::handleInitDeclaration(const uint32_t stringIndex)
 {
-    //    log("\nCHUNKS IN HANDLE DECLARATION:", {Color::LightPurple, logger::NewLine::No});
-    //    mState.printChunks();
+    log("\nCHUNKS IN HANDLE DECLARATION:", {Color::LightPurple, logger::NewLine::No});
+    mState.printChunks();
 
     auto &chunks = mState.getChunks();
 
@@ -288,10 +292,22 @@ void Semantics::handleInitDeclaration(const uint32_t stringIndex)
         auto &chunkIdentifier = chunks[chunkIndex];
         assert(chunkIdentifier.mType == SyntaxChunkType::kDirectDecl);
 
+        chunkIndex++; // move direct decl out of the way
+
         auto declNode = std::make_shared<SemNodeDeclaration>( //
             stringIndex,
             chunkTypeStr,
             chunkIdentifier.mAdditional);
+
+        // TODO: kConstant should become a SemNodeConstant in expression
+        // Is there a right-hand side?
+        if (chunksCount > chunkIndex)
+        {
+            if (chunks[chunkIndex].mType == SyntaxChunkType::kConstant)
+            {
+                declNode->setRhs(chunks[chunkIndex].mAdditional);
+            }
+        }
 
         auto &stagedNodes = mState.getStagedNodes();
 

@@ -71,10 +71,7 @@ primary_expression
     : IDENTIFIER
     | CONSTANT
     {
-        std::string str = "constant: '";
-        str += $1;
-        str += "'";
-        pr(str.c_str());
+        handle(SyntaxChunkType::kConstant, $1);
     }
     | STRING_LITERAL
     | '(' expression ')'
