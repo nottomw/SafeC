@@ -29,10 +29,12 @@ void yyerror(const char *str)
 auto &sem = safec::SemanticsFactory::get();
 
 [[maybe_unused]] static void pr(
-    const char* const str,
+    const std::string& str,
     safec::Color color = safec::Color::Yellow)
 {
-    safec::log("@ % at % @", { color, safec::logger::NewLine::No }).arg(str).arg(lex_current_char);
+    safec::log("@ % at % @", { color, safec::logger::NewLine::No })
+        .arg(str)
+        .arg(lex_current_char);
 }
 
 [[maybe_unused]] static void handle(const SyntaxChunkType type, const std::string &additional = "")
@@ -69,6 +71,12 @@ auto &sem = safec::SemanticsFactory::get();
 
 primary_expression
     : IDENTIFIER
+    {
+        std::string str = "identifier: '";
+        str += $1;
+        str += "'";
+        pr(str);
+    }
     | CONSTANT
     {
         handle(SyntaxChunkType::kConstant, $1);
@@ -105,7 +113,13 @@ unary_expression
 
 unary_operator
     : '&'
+    {
+        pr("unary operator &");
+    }
     | '*'
+    {
+        pr("unary operator *");
+    }
     | '+'
     | '-'
     | '~'
