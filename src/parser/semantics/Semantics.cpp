@@ -260,24 +260,41 @@ void Semantics::handleDeclaration(const uint32_t stringIndex)
 
     auto &chunks = mState.getChunks();
 
+    const auto chunksCount = chunks.size();
+
     // should have at least two chunks now - type and name
-    if (chunks.size() == 2)
+    if (chunksCount >= 2)
     {
-        // int x;
+        // int var;
+        // int var = otherVar;
+        // int *var;
+        // int *var = &otherVar;
 
         auto &chunkType = chunks[0];
-        auto &chunkIdentifier = chunks[1];
-
         assert(chunkType.mType == SyntaxChunkType::kType);
+        std::string chunkTypeStr = chunkType.mAdditional;
+
+        uint32_t chunkIndex = 1;
+        if (chunksCount > 2)
+        {
+            // at this point we might receive a pointer
+            while (chunks[chunkIndex].mType == SyntaxChunkType::kPointer)
+            {
+                chunkTypeStr += "*";
+                chunkIndex++;
+            }
+        }
+
+        auto &chunkIdentifier = chunks[chunkIndex];
         assert(chunkIdentifier.mType == SyntaxChunkType::kDirectDecl);
 
         log("Creating declaration with type: % name: %", {Color::LightYellow})
-            .arg(chunkType.mAdditional)
+            .arg(chunkTypeStr)
             .arg(chunkIdentifier.mAdditional);
 
         auto declNode = std::make_shared<SemNodeDeclaration>( //
             stringIndex,
-            chunkType.mAdditional,
+            chunkTypeStr,
             chunkIdentifier.mAdditional);
 
         auto &stagedNodes = mState.getStagedNodes();
@@ -294,10 +311,8 @@ void Semantics::handleDeclaration(const uint32_t stringIndex)
             firstStagedNode->attach(declNode);
         }
 
-        chunks.clear();
+        chunks.clear(); // remove all processed chunks
     }
-
-    chunks.clear(); // for now always clear
 }
 
 } // namespace safec
