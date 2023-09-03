@@ -20,7 +20,8 @@
     entry(kEnumDecl) \
     entry(kType) \
     entry(kDirectDecl) \
-    entry(kPointer)
+    entry(kPointer) \
+    entry(kDeclaration)
 
 // clang-format on
 

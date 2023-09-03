@@ -67,11 +67,13 @@ void Semantics::handle( //
     const std::string &additional)
 {
     // Uncomment to print all incoming chunks...
-    //    const auto typeStr = syntaxChunkTypeToStr(type);
-    //    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
-    //        .arg(typeStr)
-    //        .arg(lastStringIndex)
-    //        .arg(stringIndex);
+    static uint32_t lastStringIndex = stringIndex;
+    const auto typeStr = syntaxChunkTypeToStr(type);
+    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
+        .arg(typeStr)
+        .arg(lastStringIndex)
+        .arg(stringIndex);
+    lastStringIndex = stringIndex;
 
     switch (type)
     {
@@ -111,6 +113,10 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kPointer:
             mState.addChunk({type, stringIndex});
+            break;
+
+        case SyntaxChunkType::kDeclaration:
+            handleDeclaration(stringIndex);
             break;
 
         default:
@@ -237,7 +243,61 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 
     semNodeConvert<SemNodeFunction>(lastNode)->setEnd(stringIndex);
 
+    for (auto &stagedNode : stagedNodes)
+    {
+        lastNode->attach(stagedNode);
+    }
+
+    stagedNodes.clear();
+
     mTranslationUnit.attach(lastNode);
+}
+
+void Semantics::handleDeclaration(const uint32_t stringIndex)
+{
+    log("\nCHUNKS IN HANDLE DECLARATION:", {Color::LightPurple, logger::NewLine::No});
+    mState.printChunks();
+
+    auto &chunks = mState.getChunks();
+
+    // should have at least two chunks now - type and name
+    if (chunks.size() == 2)
+    {
+        // int x;
+
+        auto &chunkType = chunks[0];
+        auto &chunkIdentifier = chunks[1];
+
+        assert(chunkType.mType == SyntaxChunkType::kType);
+        assert(chunkIdentifier.mType == SyntaxChunkType::kDirectDecl);
+
+        log("Creating declaration with type: % name: %", {Color::LightYellow})
+            .arg(chunkType.mAdditional)
+            .arg(chunkIdentifier.mAdditional);
+
+        auto declNode = std::make_shared<SemNodeDeclaration>( //
+            stringIndex,
+            chunkType.mAdditional,
+            chunkIdentifier.mAdditional);
+
+        auto &stagedNodes = mState.getStagedNodes();
+
+        if (stagedNodes.size() == 0)
+        {
+            // If there are no staged nodes, attach the declaration to translation unit
+            mTranslationUnit.attach(declNode);
+        }
+        else
+        {
+            // If there are staged nodes, attach the declaration to the first staged node
+            auto &firstStagedNode = stagedNodes[0];
+            firstStagedNode->attach(declNode);
+        }
+
+        chunks.clear();
+    }
+
+    chunks.clear(); // for now always clear
 }
 
 } // namespace safec

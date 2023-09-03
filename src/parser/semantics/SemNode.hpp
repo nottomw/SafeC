@@ -184,4 +184,28 @@ public:
     SemNodeReference(const uint32_t pos, const std::string &name);
 };
 
+class SemNodeDeclaration : public SemNodePositional
+{
+public:
+    SemNodeDeclaration( //
+        const uint32_t pos,
+        const std::string &lhsType,
+        const std::string &lhsIdentifier);
+
+    // TODO: right-hand side might be an expression (= (other_var + 1234))
+    // TODO: rhs might be a deref or addr (= *rhs or = &rhs) - unary expression
+    // TODO: rhs might be a literal
+    void setRhs(const std::string &rhsIdentifier);
+
+    std::string getLhsType() const;
+    std::string getLhsIdentifier() const;
+    std::string getRhsIdentifier() const;
+
+private:
+    std::string mLhsType;
+    std::string mLhsIdentifier;
+
+    std::string mRhsIdentifier;
+};
+
 } // namespace safec

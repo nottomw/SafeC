@@ -14,5 +14,6 @@
         selector(Return) \
         selector(Break) \
         selector(Continue) \
-        selector(Reference)
+        selector(Reference) \
+        selector(Declaration)
 // clang-format on

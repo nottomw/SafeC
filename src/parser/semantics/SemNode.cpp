@@ -172,4 +172,36 @@ SemNodeReference::SemNodeReference(const uint32_t pos, const std::string &name)
     mType = Type::Reference;
 }
 
+SemNodeDeclaration::SemNodeDeclaration( //
+    const uint32_t pos,
+    const std::string &lhsType,
+    const std::string &lhsIdentifier)
+    : SemNodePositional{pos}
+    , mLhsType{lhsType}
+    , mLhsIdentifier{lhsIdentifier}
+    , mRhsIdentifier{}
+{
+    mType = Type::Declaration;
+}
+
+void SemNodeDeclaration::setRhs(const std::string &rhsIdentifier)
+{
+    mRhsIdentifier = rhsIdentifier;
+}
+
+std::string SemNodeDeclaration::getLhsType() const
+{
+    return mLhsType;
+}
+
+std::string SemNodeDeclaration::getLhsIdentifier() const
+{
+    return mLhsIdentifier;
+}
+
+std::string SemNodeDeclaration::getRhsIdentifier() const
+{
+    return mRhsIdentifier;
+}
+
 } // namespace safec

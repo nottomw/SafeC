@@ -91,6 +91,27 @@ void WalkerPrint::peek(SemNodeReference &node, const uint32_t astLevel)
         .arg(node.getPos());
 }
 
+void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
+{
+    if (node.getRhsIdentifier().empty())
+    {
+        log("% '% %' { % }", Color::Green) //
+            .arg(getPrefix(node, astLevel))
+            .arg(node.getLhsType())
+            .arg(node.getLhsIdentifier())
+            .arg(node.getPos());
+    }
+    else
+    {
+        log("% '% % = %' { % }", Color::Green) //
+            .arg(getPrefix(node, astLevel))
+            .arg(node.getLhsType())
+            .arg(node.getLhsIdentifier())
+            .arg(node.getRhsIdentifier())
+            .arg(node.getPos());
+    }
+}
+
 std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
 {
     std::string prefix{};

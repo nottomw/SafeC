@@ -38,14 +38,15 @@ public:
         const uint32_t stringIndex,
         const std::string &additional = "");
 
-    void handleFunctionHeader(const uint32_t stringIndex, const bool isVoidRetType);
-    void handleFunctionEnd(const uint32_t stringIndex);
-
 private:
     SemNodeTranslationUnit mTranslationUnit;
     boost::iostreams::mapped_file_source mSemanticsSourceFile;
 
     SemanticsState mState;
+
+    void handleFunctionHeader(const uint32_t stringIndex, const bool isVoidRetType);
+    void handleFunctionEnd(const uint32_t stringIndex);
+    void handleDeclaration(const uint32_t stringIndex);
 };
 
 } // namespace safec

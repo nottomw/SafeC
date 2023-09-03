@@ -207,6 +207,9 @@ constant_expression
 declaration
     : declaration_specifiers ';'
     | declaration_specifiers init_declarator_list ';'
+    {
+        handle(SyntaxChunkType::kDeclaration);
+    }
     ;
 
 declaration_specifiers
@@ -490,6 +493,9 @@ jump_statement
     | BREAK ';'
     | RETURN ';'
     | RETURN expression ';'
+    {
+        pr("return expression");
+    }
     ;
 
 translation_unit
