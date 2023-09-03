@@ -62,6 +62,7 @@ auto &sem = safec::SemanticsFactory::get();
 }
 
 %type<tokenStrValue> IDENTIFIER
+%type<tokenStrValue> CONSTANT
 
 %start translation_unit
 %%
@@ -69,6 +70,12 @@ auto &sem = safec::SemanticsFactory::get();
 primary_expression
     : IDENTIFIER
     | CONSTANT
+    {
+        std::string str = "constant: '";
+        str += $1;
+        str += "'";
+        pr(str.c_str());
+    }
     | STRING_LITERAL
     | '(' expression ')'
     ;
