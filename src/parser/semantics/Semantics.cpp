@@ -75,6 +75,10 @@ void Semantics::handle( //
         .arg(stringIndex);
     lastStringIndex = stringIndex;
 
+    // TODO: this is actually another shift-reduce step, where shift chunks are
+    // stashed and reduce should consume all shifted chunks. Could be used when
+    // creating nodes to mark start-stop positions precisely.
+
     switch (type)
     {
         case SyntaxChunkType::kType:
