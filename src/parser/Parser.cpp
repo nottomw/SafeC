@@ -100,55 +100,56 @@ void Parser::parseFile(const bfs::path &path)
 
 void Parser::dumpFileWithModifications(const boost::filesystem::path &path)
 {
-    assert(path.has_filename() == true);
-    assert(path.is_absolute() == true);
+    (void)path;
+    //    assert(path.has_filename() == true);
+    //    assert(path.is_absolute() == true);
 
-    // TODO: fun: multiple walkers can run in parallel
+    //    // TODO: fun: multiple walkers can run in parallel
 
-    // Try to identify defer call points.
-    WalkerDefer walkerDefer;
-    SemNodeWalker walker;
-    mSemantics.walk(walker, walkerDefer);
+    //    // Try to identify defer call points.
+    //    WalkerDefer walkerDefer;
+    //    SemNodeWalker walker;
+    //    mSemantics.walk(walker, walkerDefer);
 
-    const auto modPoints = walkerDefer.getModPoints();
+    //    const auto modPoints = walkerDefer.getModPoints();
 
-    boost::iostreams::mapped_file_source mappedFile{mCurrentlyParsedFile};
-    const char *const fileSource = mappedFile.data();
-    bfs::ofstream fileOutputStream{path, std::ios_base::trunc};
+    //    boost::iostreams::mapped_file_source mappedFile{mCurrentlyParsedFile};
+    //    const char *const fileSource = mappedFile.data();
+    //    bfs::ofstream fileOutputStream{path, std::ios_base::trunc};
 
-    for (uint32_t i = 0U; i < mappedFile.size(); ++i)
-    {
-        fileOutputStream << fileSource[i];
+    //    for (uint32_t i = 0U; i < mappedFile.size(); ++i)
+    //    {
+    //        fileOutputStream << fileSource[i];
 
-        for (const auto &it : modPoints)
-        {
-            if (it.getStart() == i)
-            {
-                if (it.getModType() == ModType::TextInsert)
-                {
-                    // adding newline after defer fire
-                    fileOutputStream << it.getText() << '\n';
-                }
-                else if (it.getModType() == ModType::TextRemove)
-                {
-                    const uint32_t deferStatementLen = it.getSize() + 1U;
-                    const std::string_view removedStr(&fileSource[i], deferStatementLen);
-                    fileOutputStream << "/* defer removed: " //
-                                     << deferStatementLen    //
-                                     << " chars, '"          //
-                                     << removedStr           //
-                                     << "' */";
+    //        for (const auto &it : modPoints)
+    //        {
+    //            if (it.getStart() == i)
+    //            {
+    //                if (it.getModType() == ModType::TextInsert)
+    //                {
+    //                    // adding newline after defer fire
+    //                    fileOutputStream << it.getText() << '\n';
+    //                }
+    //                else if (it.getModType() == ModType::TextRemove)
+    //                {
+    //                    const uint32_t deferStatementLen = it.getSize() + 1U;
+    //                    const std::string_view removedStr(&fileSource[i], deferStatementLen);
+    //                    fileOutputStream << "/* defer removed: " //
+    //                                     << deferStatementLen    //
+    //                                     << " chars, '"          //
+    //                                     << removedStr           //
+    //                                     << "' */";
 
-                    // move past the to-be deleted defer
-                    i += it.getSize();
-                }
-                else
-                {
-                    TODO();
-                }
-            }
-        }
-    }
+    //                    // move past the to-be deleted defer
+    //                    i += it.getSize();
+    //                }
+    //                else
+    //                {
+    //                    TODO();
+    //                }
+    //            }
+    //        }
+    //    }
 }
 
 } // namespace safec

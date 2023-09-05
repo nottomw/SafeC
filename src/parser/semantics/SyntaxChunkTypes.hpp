@@ -14,8 +14,6 @@
     entry(kUnknown) \
     entry(kFunctionHeader) \
     entry(kFunction) \
-    entry(kLoop) \
-    entry(kCondition) \
     entry(kStructOrUnionDecl) \
     entry(kEnumDecl) \
     entry(kType) \
@@ -25,7 +23,15 @@
     entry(kIdentifier) \
     entry(kInitDeclaration) \
     entry(kAssignment) \
-    entry(kAssignmentOperator)
+    entry(kAssignmentOperator) \
+    entry(kConditionHeader) \
+    entry(kConditionExpression) \
+    entry(kCondition) \
+    entry(kForLoopHeader) \
+    entry(kForLoopConditions) \
+    entry(kForLoop) \
+    entry(kRelationalExpression) \
+    entry(kPostfixExpression)
 
 // clang-format on
 

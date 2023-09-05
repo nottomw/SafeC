@@ -39,7 +39,7 @@ public:
         const std::string &additional = "");
 
 private:
-    SemNodeTranslationUnit mTranslationUnit;
+    std::shared_ptr<SemNodeTranslationUnit> mTranslationUnit;
     boost::iostreams::mapped_file_source mSemanticsSourceFile;
 
     SemanticsState mState;
@@ -48,8 +48,11 @@ private:
     void handleFunctionEnd(const uint32_t stringIndex);
     void handleInitDeclaration(const uint32_t stringIndex);
     void handleAssignment(const uint32_t stringIndex);
+    void handleRelationalExpression(const uint32_t stringIndex, const std::string &op);
+    void handlePostfixExpression(const uint32_t stringIndex, const std::string &op);
+    void handleForLoopConditions();
 
-    void stageNode(std::shared_ptr<SemNode> node);
+    void addNodeIntoCurrentScope(std::shared_ptr<SemNode> node);
 };
 
 } // namespace safec

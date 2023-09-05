@@ -15,10 +15,11 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition)
     varWithNoValue = 123; // assignment
     // varWithNoValue += 123; // unary op assignment
 
-    //for (i = 0; i < a; i++) // kConstant - fails now
-    //{
-    //    printer("num: %d\n", i);
-    //}
+    for (i = 0; i < a; i++) // kConstant - fails now
+    //for (; i < a; i++) // TODO: handle empty statements
+    {
+        printer("num: %d\n", i);
+    }
 
     //for (i = SOME_INIT_VAL; i < a; i++)
     //{

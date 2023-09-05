@@ -65,7 +65,10 @@ void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
-    peekDefault<SemNodeScope>(node, astLevel);
+    log("% % { % }", Color::LightCyan) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.toStr())
+        .arg(node.getPos());
 }
 
 void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
@@ -110,6 +113,35 @@ void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
             .arg(node.getRhsIdentifier())
             .arg(node.getPos());
     }
+}
+
+void WalkerPrint::peek(SemNodeAssignment &node, const uint32_t astLevel)
+{
+    log("% '% % %' { % }", Color::Yellow) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.getLhs())
+        .arg(node.getOperator())
+        .arg(node.getPos())
+        .arg(node.getRhs());
+}
+
+void WalkerPrint::peek(SemNodeRelationalExpression &node, const uint32_t astLevel)
+{
+    log("% '% % %' { % }", Color::LightCyan) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.getLhs())
+        .arg(node.getOperator())
+        .arg(node.getPos())
+        .arg(node.getRhs());
+}
+
+void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)
+{
+    log("% '% %' { % }", Color::LightYellow) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.getLhs())
+        .arg(node.getOperator())
+        .arg(node.getPos());
 }
 
 std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)

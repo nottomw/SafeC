@@ -24,6 +24,10 @@ public:
     void peek(SemNodeReference &node, const uint32_t astLevel) override;
     void peek(SemNodeDeclaration &node, const uint32_t astLevel) override;
 
+    void peek(SemNodeAssignment &node, const uint32_t astLevel) override;
+    void peek(SemNodeRelationalExpression &node, const uint32_t astLevel) override;
+    void peek(SemNodePostfixExpression &node, const uint32_t astLevel) override;
+
 private:
     std::string getPrefix(SemNode &node, const uint32_t astLevel);
 };

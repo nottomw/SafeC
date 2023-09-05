@@ -73,13 +73,13 @@ int main(int argc, char **argv)
 
             parser.parse(it);
 
-            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
-            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
+            //            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
+            //            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
 
-            safec::log("Generating C file: '%'").arg(outputFileFullPath.c_str());
+            //            safec::log("Generating C file: '%'").arg(outputFileFullPath.c_str());
 
-            safec::Generator generator{parser};
-            generator.generate(outputFileFullPath);
+            //            safec::Generator generator{parser};
+            //            generator.generate(outputFileFullPath);
         }
     }
 

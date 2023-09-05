@@ -51,6 +51,16 @@ public:
     Type getType() const;
     void attach(std::shared_ptr<SemNode> node);
 
+    std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()
+    {
+        return mRelatedNodes; // TODO: hack for now...
+    }
+
+    virtual std::string toStr() const
+    {
+        return "";
+    }
+
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
@@ -149,12 +159,6 @@ public:
     SemNodeReturn(const uint32_t index);
 };
 
-class SemNodeLoop : public SemNodeScope
-{
-public:
-    SemNodeLoop(const uint32_t start);
-};
-
 class SemNodeBreak : public SemNodePositional
 {
 public:
@@ -200,6 +204,11 @@ public:
     std::string getLhsIdentifier() const;
     std::string getRhsIdentifier() const;
 
+    std::string toStr() const override
+    {
+        return mLhsType + " " + mLhsIdentifier + " = " + mRhsIdentifier;
+    }
+
 private:
     std::string mLhsType;
     std::string mLhsIdentifier;
@@ -221,10 +230,81 @@ public:
     std::string getLhs() const;
     std::string getRhs() const;
 
+    std::string toStr() const override
+    {
+        return mLhs + " " + mOperator + " " + mRhs;
+    }
+
 private:
     std::string mOperator;
     std::string mLhs;
     std::string mRhs;
+};
+
+class SemNodeRelationalExpression : public SemNodePositional
+{
+public:
+    SemNodeRelationalExpression( //
+        const uint32_t pos,
+        const std::string &op,
+        const std::string &lhs,
+        const std::string &rhs);
+
+    std::string getOperator() const;
+    std::string getLhs() const;
+    std::string getRhs() const;
+
+    std::string toStr() const override
+    {
+        return mLhs + " " + mOperator + " " + mRhs;
+    }
+
+private:
+    std::string mOperator;
+    std::string mLhs;
+    std::string mRhs;
+};
+
+class SemNodePostfixExpression : public SemNodePositional
+{
+public:
+    SemNodePostfixExpression( //
+        const uint32_t pos,
+        const std::string &op,
+        const std::string &lhs);
+
+    std::string getOperator() const;
+    std::string getLhs() const;
+
+    std::string toStr() const override
+    {
+        return mLhs + " " + mOperator;
+    }
+
+private:
+    std::string mOperator;
+    std::string mLhs;
+};
+
+class SemNodeLoop : public SemNodePositional
+{
+public:
+    SemNodeLoop(const uint32_t pos);
+
+    void setIteratorInit(std::shared_ptr<SemNode> node);
+    void setIteratorCondition(std::shared_ptr<SemNode> node);
+    void setIteratorChange(std::shared_ptr<SemNode> node);
+
+    std::shared_ptr<SemNode> getIteratorInit() const;
+    std::shared_ptr<SemNode> getIteratorCondition() const;
+    std::shared_ptr<SemNode> getIteratorChange() const;
+
+    std::string toStr() const override;
+
+private:
+    std::shared_ptr<SemNode> mIteratorInit;
+    std::shared_ptr<SemNode> mIteratorCondition;
+    std::shared_ptr<SemNode> mIteratorChange;
 };
 
 } // namespace safec

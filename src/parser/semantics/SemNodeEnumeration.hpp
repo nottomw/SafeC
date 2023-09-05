@@ -15,5 +15,8 @@
         selector(Break) \
         selector(Continue) \
         selector(Reference) \
-        selector(Declaration)
+        selector(Declaration) \
+        selector(Assignment) \
+        selector(RelationalExpression) \
+        selector(PostfixExpression)
 // clang-format on

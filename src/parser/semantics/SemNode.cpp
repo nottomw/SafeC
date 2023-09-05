@@ -136,12 +136,6 @@ SemNodeReturn::SemNodeReturn(const uint32_t index) //
     mType = Type::Return;
 }
 
-SemNodeLoop::SemNodeLoop(const uint32_t start) //
-    : SemNodeScope{start}
-{
-    mType = Type::Loop;
-}
-
 SemNodeBreak::SemNodeBreak(const uint32_t pos) //
     : SemNodePositional{pos}
 {
@@ -214,6 +208,7 @@ SemNodeAssignment::SemNodeAssignment( //
     , mLhs{lhs}
     , mRhs{rhs}
 {
+    mType = Type::Assignment;
 }
 
 std::string SemNodeAssignment::getOperator() const
@@ -229,6 +224,100 @@ std::string SemNodeAssignment::getLhs() const
 std::string SemNodeAssignment::getRhs() const
 {
     return mRhs;
+}
+
+SemNodeRelationalExpression::SemNodeRelationalExpression( //
+    const uint32_t pos,
+    const std::string &op,
+    const std::string &lhs,
+    const std::string &rhs)
+    : SemNodePositional{pos}
+    , mOperator{op}
+    , mLhs{lhs}
+    , mRhs{rhs}
+{
+    mType = Type::RelationalExpression;
+}
+
+std::string SemNodeRelationalExpression::getOperator() const
+{
+    return mOperator;
+}
+
+std::string SemNodeRelationalExpression::getLhs() const
+{
+    return mLhs;
+}
+
+std::string SemNodeRelationalExpression::getRhs() const
+{
+    return mRhs;
+}
+
+SemNodePostfixExpression::SemNodePostfixExpression( //
+    const uint32_t pos,
+    const std::string &op,
+    const std::string &lhs)
+    : SemNodePositional{pos}
+    , mOperator{op}
+    , mLhs{lhs}
+{
+    mType = Type::PostfixExpression;
+}
+
+std::string SemNodePostfixExpression::getOperator() const
+{
+    return mOperator;
+}
+
+std::string SemNodePostfixExpression::getLhs() const
+{
+    return mLhs;
+}
+
+SemNodeLoop::SemNodeLoop(const uint32_t pos)
+    : SemNodePositional{pos}
+{
+    mType = Type::Loop;
+}
+
+void SemNodeLoop::setIteratorInit(std::shared_ptr<SemNode> node)
+{
+    mIteratorInit = node;
+}
+
+void SemNodeLoop::setIteratorCondition(std::shared_ptr<SemNode> node)
+{
+    mIteratorCondition = node;
+}
+
+void SemNodeLoop::setIteratorChange(std::shared_ptr<SemNode> node)
+{
+    mIteratorChange = node;
+}
+
+std::shared_ptr<SemNode> SemNodeLoop::getIteratorInit() const
+{
+    return mIteratorInit;
+}
+
+std::shared_ptr<SemNode> SemNodeLoop::getIteratorCondition() const
+{
+    return mIteratorCondition;
+}
+
+std::shared_ptr<SemNode> SemNodeLoop::getIteratorChange() const
+{
+    return mIteratorChange;
+}
+
+std::string SemNodeLoop::toStr() const
+{
+    return "(" + mIteratorInit->toStr() + //
+           ", " +                         //
+           mIteratorCondition->toStr() +  //
+           ", "                           //
+           + mIteratorChange->toStr() + ")";
 }
 
 } // namespace safec

@@ -39,26 +39,27 @@ std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::shared_ptr<SemNode> &w)
 } // namespace
 
 Semantics::Semantics() //
-    : mTranslationUnit{}
+    : mTranslationUnit{std::make_shared<SemNodeTranslationUnit>()}
 {
+    mState.addScope(mTranslationUnit);
 }
 
 void Semantics::display()
 {
     WalkerPrint printer;
     SemNodeWalker walker;
-    walker.walk(mTranslationUnit, printer);
+    walker.walk(*mTranslationUnit, printer);
 }
 
 void Semantics::newTranslationUnit(const bfs::path &path)
 {
-    mTranslationUnit.reset();
+    mTranslationUnit->reset();
     mSemanticsSourceFile = bio::mapped_file_source{path};
 }
 
 void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
 {
-    walker.walk(mTranslationUnit, strategy);
+    walker.walk(*mTranslationUnit, strategy);
 }
 
 void Semantics::handle( //
@@ -66,17 +67,18 @@ void Semantics::handle( //
     const uint32_t stringIndex,
     const std::string &additional)
 {
-    log("\n");
+    [[maybe_unused]] static uint32_t lastShiftedIndex = stringIndex;
 
-    // Uncomment to print all incoming chunks...
-    static uint32_t lastShiftedIndex = stringIndex;
-    const auto typeStr = syntaxChunkTypeToStr(type);
-    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
-        .arg(typeStr)
-        .arg(lastShiftedIndex)
-        .arg(stringIndex);
+    //    log("\n");
 
-    mState.printChunks();
+    //    // Uncomment to print all incoming chunks...
+    //    const auto typeStr = syntaxChunkTypeToStr(type);
+    //    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
+    //        .arg(typeStr)
+    //        .arg(lastShiftedIndex)
+    //        .arg(stringIndex);
+
+    //    mState.printChunks();
 
     auto reduced = [&] { lastShiftedIndex = stringIndex; };
 
@@ -146,6 +148,44 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kIdentifier:
             mState.addChunk({type, stringIndex, additional});
+            break;
+
+        case SyntaxChunkType::kConditionHeader:
+            break;
+
+        case SyntaxChunkType::kConditionExpression:
+            mState.getChunks().clear(); // TODO: condition now removed
+            break;
+
+        case SyntaxChunkType::kCondition:
+            break;
+
+        case SyntaxChunkType::kForLoopHeader:
+            {
+                auto node = std::make_shared<SemNodeLoop>(stringIndex);
+                addNodeIntoCurrentScope(node);
+                mState.addScope(node);
+            }
+            break;
+
+        case SyntaxChunkType::kForLoopConditions:
+            handleForLoopConditions();
+            break;
+
+        case SyntaxChunkType::kForLoop:
+            {
+                mState.removeScope();
+            }
+            break;
+
+        case SyntaxChunkType::kRelationalExpression:
+            reduced();
+            handleRelationalExpression(stringIndex, additional);
+            break;
+
+        case SyntaxChunkType::kPostfixExpression:
+            reduced();
+            handlePostfixExpression(stringIndex, additional);
             break;
 
         default:
@@ -248,7 +288,8 @@ void Semantics::handleFunctionHeader( //
     // chunks consumed
     chunks.clear();
 
-    mState.stageNode(funNode);
+    addNodeIntoCurrentScope(funNode);
+    mState.addScope(funNode);
 }
 
 void Semantics::handleFunctionEnd(const uint32_t stringIndex)
@@ -256,11 +297,9 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
     // TODO: for now clearing all chunks found in function body
     mState.getChunks().clear();
 
-    auto &stagedNodes = mState.getStagedNodes();
-    auto lastNode = stagedNodes.back();
-    stagedNodes.pop_back();
+    auto functionNode = mState.getCurrentScope();
 
-    const auto nodeType = lastNode->getType();
+    const auto nodeType = functionNode->getType();
     if (nodeType != SemNode::Type::Function)
     {
         log("EXPECTED FUNCTION, GOT TYPE: %") //
@@ -268,16 +307,9 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
         return;
     }
 
-    semNodeConvert<SemNodeFunction>(lastNode)->setEnd(stringIndex);
+    semNodeConvert<SemNodeFunction>(functionNode)->setEnd(stringIndex);
 
-    for (auto &stagedNode : stagedNodes)
-    {
-        lastNode->attach(stagedNode);
-    }
-
-    stagedNodes.clear();
-
-    mTranslationUnit.attach(lastNode);
+    mState.removeScope();
 }
 
 void Semantics::handleInitDeclaration(const uint32_t stringIndex)
@@ -329,7 +361,7 @@ void Semantics::handleInitDeclaration(const uint32_t stringIndex)
             }
         }
 
-        stageNode(declNode);
+        addNodeIntoCurrentScope(declNode);
 
         chunks.clear(); // remove all processed chunks
     }
@@ -357,30 +389,90 @@ void Semantics::handleAssignment(const uint32_t stringIndex)
         auto nodeAsign = std::make_shared<SemNodeAssignment>(
             stringIndex, chunkOperator.mAdditional, chunkLhs.mAdditional, chunkRhs.mAdditional);
 
-        stageNode(nodeAsign);
+        addNodeIntoCurrentScope(nodeAsign);
     }
 
     mState.getChunks().clear(); // all chunks consumed
 }
 
-void Semantics::stageNode(std::shared_ptr<SemNode> node)
+void Semantics::handleRelationalExpression( //
+    const uint32_t stringIndex,
+    const std::string &op)
+{
+    auto &chunks = mState.getChunks();
+
+    // At least two chunks should be available - lhs, rhs
+    assert(chunks.size() >= 2);
+
+    // easiest case for now...
+    if (chunks.size() == 2)
+    {
+        auto &chunkLhs = chunks[0];
+        auto &chunkRhs = chunks[1];
+
+        auto node = std::make_shared<SemNodeRelationalExpression>( //
+            stringIndex,
+            op,
+            chunkLhs.mAdditional,
+            chunkRhs.mAdditional);
+
+        addNodeIntoCurrentScope(node);
+    }
+
+    mState.getChunks().clear();
+}
+
+void Semantics::handlePostfixExpression( //
+    const uint32_t stringIndex,
+    const std::string &op)
+{
+    auto &chunks = mState.getChunks();
+
+    // at least LHS should be available
+    assert(chunks.size() >= 1);
+
+    if (chunks.size() == 1)
+    {
+        auto &chunkLhs = chunks[0];
+        auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, chunkLhs.mAdditional);
+        addNodeIntoCurrentScope(node);
+    }
+
+    mState.getChunks().clear();
+}
+
+void Semantics::handleForLoopConditions()
+{
+    auto currentScope = mState.getCurrentScope();
+    auto &currentScopeNodes = currentScope->getAttachedNodes();
+
+    // this is hackish - the for(1; 2; 3) 1,2 and 3 statements are
+    // now attached as nodes to the loop node, now they will be taken
+    // out of the attached loop nodes and put into the loop itself
+
+    // should have three nodes already attached: for(1; 2; 3)
+    assert(currentScopeNodes.size() == 3);
+    assert(currentScope->getType() == SemNode::Type::Loop);
+
+    auto nodeInit = currentScopeNodes[0];
+    auto nodeCond = currentScopeNodes[1];
+    auto nodeChange = currentScopeNodes[2];
+
+    // Current scope must be a loop here
+    semNodeConvert<SemNodeLoop>(currentScope)->setIteratorInit(nodeInit);
+    semNodeConvert<SemNodeLoop>(currentScope)->setIteratorCondition(nodeCond);
+    semNodeConvert<SemNodeLoop>(currentScope)->setIteratorChange(nodeChange);
+
+    currentScopeNodes.clear();
+}
+
+void Semantics::addNodeIntoCurrentScope(std::shared_ptr<SemNode> node)
 {
     // TODO: extremely simple staging for now, requires handling of other
     // scopes, like plain {}, loops, conditions, ...
 
-    auto &stagedNodes = mState.getStagedNodes();
-
-    if (stagedNodes.size() == 0)
-    {
-        // If there are no staged nodes, attach the node to translation unit
-        mTranslationUnit.attach(node);
-    }
-    else
-    {
-        // If there are staged nodes, attach the node to the first staged node
-        auto &firstStagedNode = stagedNodes[0];
-        firstStagedNode->attach(node);
-    }
+    auto currentScopeNode = mState.getCurrentScope();
+    currentScopeNode->attach(node);
 }
 
 } // namespace safec
