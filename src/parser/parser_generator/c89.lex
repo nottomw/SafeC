@@ -62,16 +62,16 @@ int check_type(void);
 "while"			{ count(); return(WHILE); }
 "defer"			{ lex_keyword_start_index = lex_current_char; count(); return(SAFEC_DEFER); }
 
-{L}({L}|{D})*		{ count(); yylval.tokenStrValue = yytext; return(check_type()); }
+{L}({L}|{D})*		{ count(); yylval.tokenStrValue = strdup(yytext); return(check_type()); }
 
-0[xX]{H}+{IS}?          { count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
-0{D}+{IS}?              { count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
-{D}+{IS}?               { count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
-L?'(\\.|[^\\'])+'       { count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
+0[xX]{H}+{IS}?          { count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
+0{D}+{IS}?              { count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
+{D}+{IS}?               { count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
+L?'(\\.|[^\\'])+'       { count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
 
-{D}+{E}{FS}?            { count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
-{D}*"."{D}+({E})?{FS}?	{ count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
-{D}+"."{D}*({E})?{FS}?	{ count(); yylval.tokenStrValue = yytext; return(CONSTANT); }
+{D}+{E}{FS}?            { count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
+{D}*"."{D}+({E})?{FS}?	{ count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
+{D}+"."{D}*({E})?{FS}?	{ count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
 
 L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 

@@ -66,14 +66,19 @@ void Semantics::handle( //
     const uint32_t stringIndex,
     const std::string &additional)
 {
+    log("\n");
+
     // Uncomment to print all incoming chunks...
-    static uint32_t lastStringIndex = stringIndex;
+    static uint32_t lastShiftedIndex = stringIndex;
     const auto typeStr = syntaxChunkTypeToStr(type);
     log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
         .arg(typeStr)
-        .arg(lastStringIndex)
+        .arg(lastShiftedIndex)
         .arg(stringIndex);
-    lastStringIndex = stringIndex;
+
+    mState.printChunks();
+
+    auto reduced = [&] { lastShiftedIndex = stringIndex; };
 
     // TODO: this is actually another shift-reduce step, where shift chunks are
     // stashed and reduce should consume all shifted chunks. Could be used when
@@ -101,12 +106,14 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kFunctionHeader:
             {
+                reduced();
                 const bool isVoidRetType = (additional == "void");
                 handleFunctionHeader(stringIndex, isVoidRetType);
             }
             break;
 
         case SyntaxChunkType::kFunction:
+            reduced();
             handleFunctionEnd(stringIndex);
             break;
 
@@ -124,7 +131,21 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kInitDeclaration:
+            reduced();
             handleInitDeclaration(stringIndex);
+            break;
+
+        case SyntaxChunkType::kAssignment:
+            reduced();
+            handleAssignment(stringIndex);
+            break;
+
+        case SyntaxChunkType::kAssignmentOperator:
+            mState.addChunk({type, stringIndex, additional});
+            break;
+
+        case SyntaxChunkType::kIdentifier:
+            mState.addChunk({type, stringIndex, additional});
             break;
 
         default:
@@ -146,8 +167,6 @@ void Semantics::handleFunctionHeader( //
     // TODO: need to fetch struct name function returns struct or has a struct param
 
     auto &chunks = mState.getChunks();
-
-    mState.printChunks();
 
     auto chunksIt = chunks.begin();
 
@@ -263,9 +282,6 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 
 void Semantics::handleInitDeclaration(const uint32_t stringIndex)
 {
-    log("\nCHUNKS IN HANDLE DECLARATION:", {Color::LightPurple, logger::NewLine::No});
-    mState.printChunks();
-
     auto &chunks = mState.getChunks();
 
     const auto chunksCount = chunks.size();
@@ -313,21 +329,57 @@ void Semantics::handleInitDeclaration(const uint32_t stringIndex)
             }
         }
 
-        auto &stagedNodes = mState.getStagedNodes();
-
-        if (stagedNodes.size() == 0)
-        {
-            // If there are no staged nodes, attach the declaration to translation unit
-            mTranslationUnit.attach(declNode);
-        }
-        else
-        {
-            // If there are staged nodes, attach the declaration to the first staged node
-            auto &firstStagedNode = stagedNodes[0];
-            firstStagedNode->attach(declNode);
-        }
+        stageNode(declNode);
 
         chunks.clear(); // remove all processed chunks
+    }
+}
+
+void Semantics::handleAssignment(const uint32_t stringIndex)
+{
+    auto &chunks = mState.getChunks();
+
+    // At least three chunks should be available - lhs, operator, rhs
+    assert(chunks.size() >= 3);
+
+    // easiest case for now...
+    if (chunks.size() == 3)
+    {
+        auto &chunkLhs = chunks[0];
+        auto &chunkOperator = chunks[1];
+        auto &chunkRhs = chunks[2];
+
+        assert(chunkLhs.mType = SyntaxChunkType::kIdentifier);
+        assert(chunkOperator.mType = SyntaxChunkType::kIdentifier);
+        assert((chunkRhs.mType == SyntaxChunkType::kIdentifier) || //
+               (chunkRhs.mType == SyntaxChunkType::kConstant));
+
+        auto nodeAsign = std::make_shared<SemNodeAssignment>(
+            stringIndex, chunkOperator.mAdditional, chunkLhs.mAdditional, chunkRhs.mAdditional);
+
+        stageNode(nodeAsign);
+    }
+
+    mState.getChunks().clear(); // all chunks consumed
+}
+
+void Semantics::stageNode(std::shared_ptr<SemNode> node)
+{
+    // TODO: extremely simple staging for now, requires handling of other
+    // scopes, like plain {}, loops, conditions, ...
+
+    auto &stagedNodes = mState.getStagedNodes();
+
+    if (stagedNodes.size() == 0)
+    {
+        // If there are no staged nodes, attach the node to translation unit
+        mTranslationUnit.attach(node);
+    }
+    else
+    {
+        // If there are staged nodes, attach the node to the first staged node
+        auto &firstStagedNode = stagedNodes[0];
+        firstStagedNode->attach(node);
     }
 }
 

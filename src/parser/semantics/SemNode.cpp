@@ -204,4 +204,31 @@ std::string SemNodeDeclaration::getRhsIdentifier() const
     return mRhsIdentifier;
 }
 
+SemNodeAssignment::SemNodeAssignment( //
+    const uint32_t pos,
+    const std::string &op,
+    const std::string &lhs,
+    const std::string &rhs)
+    : SemNodePositional{pos}
+    , mOperator{op}
+    , mLhs{lhs}
+    , mRhs{rhs}
+{
+}
+
+std::string SemNodeAssignment::getOperator() const
+{
+    return mOperator;
+}
+
+std::string SemNodeAssignment::getLhs() const
+{
+    return mLhs;
+}
+
+std::string SemNodeAssignment::getRhs() const
+{
+    return mRhs;
+}
+
 } // namespace safec

@@ -192,8 +192,7 @@ public:
         const std::string &lhsType,
         const std::string &lhsIdentifier);
 
-    // TODO: right-hand side might be an expression (= (other_var + 1234))
-    // TODO: rhs might be a deref or addr (= *rhs or = &rhs) - unary expression
+    // TODO: right-hand side might be an (unary)expression (= (other_var + 1234))
     // TODO: rhs might be a literal
     void setRhs(const std::string &rhsIdentifier);
 
@@ -206,6 +205,26 @@ private:
     std::string mLhsIdentifier;
 
     std::string mRhsIdentifier;
+};
+
+class SemNodeAssignment : public SemNodePositional
+{
+public:
+    // TODO: rhs can be an expression
+    SemNodeAssignment( //
+        const uint32_t pos,
+        const std::string &op,
+        const std::string &lhs,
+        const std::string &rhs);
+
+    std::string getOperator() const;
+    std::string getLhs() const;
+    std::string getRhs() const;
+
+private:
+    std::string mOperator;
+    std::string mLhs;
+    std::string mRhs;
 };
 
 } // namespace safec

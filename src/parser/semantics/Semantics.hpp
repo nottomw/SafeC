@@ -47,6 +47,9 @@ private:
     void handleFunctionHeader(const uint32_t stringIndex, const bool isVoidRetType);
     void handleFunctionEnd(const uint32_t stringIndex);
     void handleInitDeclaration(const uint32_t stringIndex);
+    void handleAssignment(const uint32_t stringIndex);
+
+    void stageNode(std::shared_ptr<SemNode> node);
 };
 
 } // namespace safec

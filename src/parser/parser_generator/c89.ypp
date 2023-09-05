@@ -28,6 +28,8 @@ void yyerror(const char *str)
 
 auto &sem = safec::SemanticsFactory::get();
 
+// TODO: free() all lexer strduped parameters
+
 [[maybe_unused]] static void pr(
     const std::string& str,
     safec::Color color = safec::Color::Yellow)
@@ -72,14 +74,13 @@ auto &sem = safec::SemanticsFactory::get();
 primary_expression
     : IDENTIFIER
     {
-        std::string str = "identifier: '";
-        str += $1;
-        str += "'";
-        pr(str);
+        handle(SyntaxChunkType::kIdentifier, $1);
+        free($1);
     }
     | CONSTANT
     {
         handle(SyntaxChunkType::kConstant, $1);
+        free($1);
     }
     | STRING_LITERAL
     | '(' expression ')'
@@ -197,20 +198,23 @@ conditional_expression
 assignment_expression
     : conditional_expression
     | unary_expression assignment_operator assignment_expression
+    {
+        handle(SyntaxChunkType::kAssignment);
+    }
     ;
 
 assignment_operator
-    : '='
-    | MUL_ASSIGN
-    | DIV_ASSIGN
-    | MOD_ASSIGN
-    | ADD_ASSIGN
-    | SUB_ASSIGN
-    | LEFT_ASSIGN
-    | RIGHT_ASSIGN
-    | AND_ASSIGN
-    | XOR_ASSIGN
-    | OR_ASSIGN
+    : '='           { handle(SyntaxChunkType::kAssignmentOperator, "="); }
+    | MUL_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "*="); }
+    | DIV_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "/="); }
+    | MOD_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "%="); }
+    | ADD_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "+="); }
+    | SUB_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "-="); }
+    | LEFT_ASSIGN   { handle(SyntaxChunkType::kAssignmentOperator, "<<="); }
+    | RIGHT_ASSIGN  { handle(SyntaxChunkType::kAssignmentOperator, ">>="); }
+    | AND_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "&="); }
+    | XOR_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "^="); }
+    | OR_ASSIGN     { handle(SyntaxChunkType::kAssignmentOperator, "|="); }
     ;
 
 expression
@@ -499,6 +503,9 @@ expression_statement
 
 selection_statement
     : IF '(' expression ')' statement
+    {
+        pr("###IF STATEMENT###");
+    }
     | IF '(' expression ')' statement ELSE statement
     | SWITCH '(' expression ')' statement
     ;

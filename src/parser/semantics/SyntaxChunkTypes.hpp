@@ -22,7 +22,10 @@
     entry(kDirectDecl) \
     entry(kPointer) \
     entry(kConstant) \
-    entry(kInitDeclaration)
+    entry(kIdentifier) \
+    entry(kInitDeclaration) \
+    entry(kAssignment) \
+    entry(kAssignmentOperator)
 
 // clang-format on
 
