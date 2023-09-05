@@ -61,6 +61,9 @@ public:
         return "";
     }
 
+    // TODO: toUnderlyingType() could be useful - convert
+    // SemNode into the actual type determined by mType
+
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
