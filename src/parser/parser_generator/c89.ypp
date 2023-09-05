@@ -92,7 +92,13 @@ postfix_expression
     : primary_expression
     | postfix_expression '[' expression ']'
     | postfix_expression '(' ')'
+    {
+        handle(SyntaxChunkType::kPostfixExpression, "()");
+    }
     | postfix_expression '(' argument_expression_list ')'
+    {
+        handle(SyntaxChunkType::kPostfixExpression, "(...)");
+    }
     | postfix_expression '.' IDENTIFIER
     | postfix_expression PTR_OP IDENTIFIER
     | postfix_expression INC_OP
@@ -505,8 +511,7 @@ statement_list
 expression_statement
     : ';'
     {
-    // TODO: needed especially for loops
-        pr("empty statement");
+        handle(SyntaxChunkType::kEmptyStatement);
     }
     | expression ';'
     ;

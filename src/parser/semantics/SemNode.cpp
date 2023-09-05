@@ -320,4 +320,10 @@ std::string SemNodeLoop::toStr() const
            + mIteratorChange->toStr() + ")";
 }
 
+SemNodeEmptyStatement::SemNodeEmptyStatement(const uint32_t pos)
+    : SemNodePositional{pos}
+{
+    mType = Type::EmptyStatement;
+}
+
 } // namespace safec

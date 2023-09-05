@@ -188,6 +188,13 @@ void Semantics::handle( //
             handlePostfixExpression(stringIndex, additional);
             break;
 
+        case SyntaxChunkType::kEmptyStatement:
+            {
+                auto node = std::make_shared<SemNodeEmptyStatement>(stringIndex);
+                addNodeIntoCurrentScope(node);
+            }
+            break;
+
         default:
             log("type not handled: %", {Color::Red}).arg(static_cast<uint32_t>(type));
             break;
@@ -418,6 +425,10 @@ void Semantics::handleRelationalExpression( //
 
         addNodeIntoCurrentScope(node);
     }
+    else
+    {
+        assert(false);
+    }
 
     mState.getChunks().clear();
 }
@@ -426,6 +437,13 @@ void Semantics::handlePostfixExpression( //
     const uint32_t stringIndex,
     const std::string &op)
 {
+    // TODO: ignore for now function calls
+    if (op == "()" || op == "(...)")
+    {
+        mState.getChunks().clear();
+        return;
+    }
+
     auto &chunks = mState.getChunks();
 
     // at least LHS should be available

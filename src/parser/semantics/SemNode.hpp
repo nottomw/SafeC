@@ -307,4 +307,15 @@ private:
     std::shared_ptr<SemNode> mIteratorChange;
 };
 
+class SemNodeEmptyStatement : public SemNodePositional
+{
+public:
+    SemNodeEmptyStatement(const uint32_t pos);
+
+    std::string toStr() const override
+    {
+        return "empty statement";
+    }
+};
+
 } // namespace safec

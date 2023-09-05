@@ -15,11 +15,19 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition)
     varWithNoValue = 123; // assignment
     // varWithNoValue += 123; // unary op assignment
 
-    for (i = 0; i < a; i++) // kConstant - fails now
-    //for (; i < a; i++) // TODO: handle empty statements
+    for (i = 0; i < a; i++)
     {
+        int varInsideLoop = i;
+        varInsideLoop = i; // reassignment
         printer("num: %d\n", i);
     }
+
+    for (; i < a; i++) // empty statement
+    {
+        i = 2;
+        // nothing
+    }
+
 
     //for (i = SOME_INIT_VAL; i < a; i++)
     //{

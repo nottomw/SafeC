@@ -18,5 +18,6 @@
         selector(Declaration) \
         selector(Assignment) \
         selector(RelationalExpression) \
-        selector(PostfixExpression)
+        selector(PostfixExpression) \
+        selector(EmptyStatement)
 // clang-format on
