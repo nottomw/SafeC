@@ -67,7 +67,7 @@ void Semantics::handle( //
     const uint32_t stringIndex,
     const std::string &additional)
 {
-    // TODO: this is actually another shift-reduce step, where shift chunks are
+    // this is actually another shift-reduce step, where shift chunks are
     // stashed and reduce should consume all shifted chunks. Could be used when
     // creating nodes to mark start-stop positions precisely.
 
