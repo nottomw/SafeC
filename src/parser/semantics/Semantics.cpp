@@ -195,203 +195,34 @@ void Semantics::handleFunctionHeader( //
     const uint32_t stringIndex,
     const bool isVoidOrVoidPtrRetType)
 {
-    auto funNode = std::make_shared<SemNodeFunction>(stringIndex);
-
-    // assumptions:
-    //  - no other chunks stashed apart from ret type, params and pointers
-    //  - chunks for function params are in order: type, name, type, name, ... (except when pointers used)
-
-    // TODO: need to fetch struct name function returns struct or has a struct param
-
-    assert(mState.getChunks().size() == 0);
-
-    // at this point the first direct decl in staged nodes should be the function name,
-    // and the following direct decls should be the parameters
-    auto &stagedNodes = mState.getStagedNodes();
-    assert(stagedNodes.size() >= 1);
-
-    log("\nSTAGED NODES: (%)\n", Color::Red).arg(stagedNodes.size());
-    for (auto &it : stagedNodes)
-    {
-        log("staged node: %").arg(it->toStr());
-    }
-
-    //    funNode->setReturn(retTypeStr);
-
-    addNodeIntoCurrentScope(funNode);
-    mState.addScope(funNode);
 }
 
 void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 {
-    // TODO: for now clearing all chunks found in function body
-    mState.getChunks().clear();
-
-    auto functionNode = mState.getCurrentScope();
-
-    const auto nodeType = functionNode->getType();
-    assert(nodeType == SemNode::Type::Function);
-
-    semNodeConvert<SemNodeFunction>(functionNode)->setEnd(stringIndex);
-
-    mState.removeScope();
 }
 
 void Semantics::handleInitDeclaration(const uint32_t stringIndex)
 {
-    auto &chunks = mState.getChunks();
-
-    const auto chunksCount = chunks.size();
-
-    // RHS could be also already packed into a node
-
-    if (chunksCount == 0)
-    {
-        // No rhs
-        return;
-    }
-    else
-    {
-        assert(chunks[0].mType == SyntaxChunkType::kAssignmentOperator);
-    }
-
-    chunks.clear(); // remove all processed chunks
 }
 
 void Semantics::handleAssignment(const uint32_t stringIndex)
 {
-    auto &chunks = mState.getChunks();
-
-    // At least three chunks should be available - lhs, operator, rhs
-    assert(chunks.size() >= 3);
-
-    // easiest case for now...
-    if (chunks.size() == 3)
-    {
-        auto &chunkLhs = chunks[0];
-        auto &chunkOperator = chunks[1];
-        auto &chunkRhs = chunks[2];
-
-        assert(chunkLhs.mType = SyntaxChunkType::kIdentifier);
-        assert(chunkOperator.mType = SyntaxChunkType::kIdentifier);
-        assert((chunkRhs.mType == SyntaxChunkType::kIdentifier) || //
-               (chunkRhs.mType == SyntaxChunkType::kConstant));
-
-        auto nodeAsign = std::make_shared<SemNodeAssignment>(
-            stringIndex, chunkOperator.mAdditional, chunkLhs.mAdditional, chunkRhs.mAdditional);
-
-        mState.stageNode(nodeAsign);
-    }
-
-    mState.getChunks().clear(); // all chunks consumed
 }
 
 void Semantics::handleRelationalExpression( //
     const uint32_t stringIndex,
     const std::string &op)
 {
-    auto &chunks = mState.getChunks();
-
-    // At least two chunks should be available - lhs, rhs
-    assert(chunks.size() >= 2);
-
-    // easiest case for now...
-    if (chunks.size() == 2)
-    {
-        auto &chunkLhs = chunks[0];
-        auto &chunkRhs = chunks[1];
-
-        auto node = std::make_shared<SemNodeRelationalExpression>( //
-            stringIndex,
-            op,
-            chunkLhs.mAdditional,
-            chunkRhs.mAdditional);
-
-        mState.stageNode(node);
-    }
-    else
-    {
-        assert(false);
-    }
-
-    mState.getChunks().clear();
 }
 
 void Semantics::handlePostfixExpression( //
     const uint32_t stringIndex,
     const std::string &op)
 {
-    auto &chunks = mState.getChunks();
-
-    // handle function call
-    if (op == "()" || op == "(...)")
-    {
-        log("FUNCTION CALL CHUNKS:", Color::Red);
-        mState.printChunks();
-
-        if (op == "()")
-        {
-            // function call with no args
-            // should just get an identifier (or some expression, TODO)
-            auto &functionName = chunks.back();
-            auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, functionName.mAdditional);
-            mState.stageNode(node);
-        }
-        else
-        {
-            // function call with args
-        }
-
-        mState.getChunks().clear();
-        return;
-    }
-
-    // Handle ++ etc
-    // at least LHS should be available
-    assert(chunks.size() >= 1);
-
-    if (chunks.size() == 1)
-    {
-        auto &chunkLhs = chunks[0];
-        auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, chunkLhs.mAdditional);
-        mState.stageNode(node);
-    }
-
-    mState.getChunks().clear();
 }
 
 void Semantics::handleForLoopConditions()
 {
-    auto currentScope = mState.getCurrentScope();
-    auto &currentScopeNodes = currentScope->getAttachedNodes();
-
-    // this is hackish - the for(1; 2; 3) 1,2 and 3 statements are
-    // now attached as nodes to the loop node, now they will be taken
-    // out of the attached loop nodes and put into the loop itself
-
-    // should have three nodes already attached: for(1; 2; 3)
-    assert(currentScopeNodes.size() == 3);
-    assert(currentScope->getType() == SemNode::Type::Loop);
-
-    auto nodeInit = currentScopeNodes[0];
-    auto nodeCond = currentScopeNodes[1];
-    auto nodeChange = currentScopeNodes[2];
-
-    // Current scope must be a loop here
-    semNodeConvert<SemNodeLoop>(currentScope)->setIteratorInit(nodeInit);
-    semNodeConvert<SemNodeLoop>(currentScope)->setIteratorCondition(nodeCond);
-    semNodeConvert<SemNodeLoop>(currentScope)->setIteratorChange(nodeChange);
-
-    currentScopeNodes.clear();
-}
-
-void Semantics::addNodeIntoCurrentScope(std::shared_ptr<SemNode> node)
-{
-    // TODO: extremely simple staging for now, requires handling of other
-    // scopes, like plain {}, loops, conditions, ...
-
-    auto currentScopeNode = mState.getCurrentScope();
-    currentScopeNode->attach(node);
 }
 
 } // namespace safec

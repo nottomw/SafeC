@@ -55,6 +55,17 @@ uint32_t SemNodeScope::getEnd() const
     return mEndIndex;
 }
 
+SemNodePositional::SemNodePositional(const uint32_t pos) //
+    : mPos{pos}
+{
+    mType = Type::Undefined;
+}
+
+uint32_t SemNodePositional::getPos() const
+{
+    return mPos;
+}
+
 SemNodeFunction::SemNodeFunction(const uint32_t start) //
     : SemNodeScope{start}                              //
     , mReturnType{}
@@ -93,43 +104,6 @@ void SemNodeFunction::addParam(const std::string &type, const std::string &name)
     mParams.emplace_back(Param{type, name});
 }
 
-SemNodePositional::SemNodePositional(const uint32_t pos) //
-    : mPos{pos}
-{
-    mType = Type::Undefined;
-}
-
-uint32_t SemNodePositional::getPos() const
-{
-    return mPos;
-}
-
-SemNodeDefer::SemNodeDefer(const uint32_t index) //
-    : SemNodePositional{index}
-{
-    mType = Type::Defer;
-}
-
-void SemNodeDefer::setDeferredText(std::string &&deferredText)
-{
-    mDeferredText = std::move(deferredText);
-}
-
-std::string SemNodeDefer::getDeferredText() const
-{
-    return mDeferredText;
-}
-
-void SemNodeDefer::setDeferredStatementLen(const uint32_t len)
-{
-    mDeferredStatementLen = len;
-}
-
-uint32_t SemNodeDefer::getDeferredStatementLen() const
-{
-    return mDeferredStatementLen;
-}
-
 SemNodeReturn::SemNodeReturn(const uint32_t index) //
     : SemNodePositional{index}
 {
@@ -152,7 +126,7 @@ SemNodeIdentifier::SemNodeIdentifier(const uint32_t pos, const std::string &name
     : SemNodePositional{pos}
     , mName{name}
 {
-    mType = Type::Undefined;
+    mType = Type::Identifier;
 }
 
 std::string SemNodeIdentifier::getName() const
@@ -160,10 +134,16 @@ std::string SemNodeIdentifier::getName() const
     return mName;
 }
 
-SemNodeReference::SemNodeReference(const uint32_t pos, const std::string &name)
-    : SemNodeIdentifier(pos, name)
+SemNodeConstant::SemNodeConstant(const uint32_t pos, const std::string &name)
+    : SemNodePositional{pos}
+    , mName{name}
 {
-    mType = Type::Reference;
+    mType = Type::Constant;
+}
+
+std::string SemNodeConstant::getName() const
+{
+    return mName;
 }
 
 SemNodeDeclaration::SemNodeDeclaration( //
@@ -173,14 +153,8 @@ SemNodeDeclaration::SemNodeDeclaration( //
     : SemNodePositional{pos}
     , mLhsType{lhsType}
     , mLhsIdentifier{lhsIdentifier}
-    , mRhs{}
 {
     mType = Type::Declaration;
-}
-
-void SemNodeDeclaration::setRhs(std::shared_ptr<SemNode> rhsIdentifier)
-{
-    mRhs = rhsIdentifier;
 }
 
 std::string SemNodeDeclaration::getLhsType() const
@@ -191,67 +165,6 @@ std::string SemNodeDeclaration::getLhsType() const
 std::string SemNodeDeclaration::getLhsIdentifier() const
 {
     return mLhsIdentifier;
-}
-
-std::shared_ptr<SemNode> SemNodeDeclaration::getRhs() const
-{
-    return mRhs;
-}
-
-SemNodeAssignment::SemNodeAssignment( //
-    const uint32_t pos,
-    const std::string &op,
-    const std::string &lhs,
-    const std::string &rhs)
-    : SemNodePositional{pos}
-    , mOperator{op}
-    , mLhs{lhs}
-    , mRhs{rhs}
-{
-    mType = Type::Assignment;
-}
-
-std::string SemNodeAssignment::getOperator() const
-{
-    return mOperator;
-}
-
-std::string SemNodeAssignment::getLhs() const
-{
-    return mLhs;
-}
-
-std::string SemNodeAssignment::getRhs() const
-{
-    return mRhs;
-}
-
-SemNodeRelationalExpression::SemNodeRelationalExpression( //
-    const uint32_t pos,
-    const std::string &op,
-    const std::string &lhs,
-    const std::string &rhs)
-    : SemNodePositional{pos}
-    , mOperator{op}
-    , mLhs{lhs}
-    , mRhs{rhs}
-{
-    mType = Type::RelationalExpression;
-}
-
-std::string SemNodeRelationalExpression::getOperator() const
-{
-    return mOperator;
-}
-
-std::string SemNodeRelationalExpression::getLhs() const
-{
-    return mLhs;
-}
-
-std::string SemNodeRelationalExpression::getRhs() const
-{
-    return mRhs;
 }
 
 SemNodePostfixExpression::SemNodePostfixExpression( //
@@ -326,8 +239,12 @@ SemNodeEmptyStatement::SemNodeEmptyStatement(const uint32_t pos)
     mType = Type::EmptyStatement;
 }
 
-SemNodeBinaryOp::SemNodeBinaryOp(const uint32_t pos, std::shared_ptr<SemNode> lhs)
+SemNodeBinaryOp::SemNodeBinaryOp( //
+    const uint32_t pos,
+    const std::string &op,
+    std::shared_ptr<SemNode> lhs)
     : SemNodePositional{pos}
+    , mOp{op}
     , mLhs{lhs}
 {
     mType = Type::BinaryOp;

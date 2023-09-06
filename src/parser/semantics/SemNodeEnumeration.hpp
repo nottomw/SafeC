@@ -10,15 +10,13 @@
         selector(Loop) \
         selector(Scope) \
         selector(Function) \
-        selector(Defer) \
         selector(Return) \
         selector(Break) \
         selector(Continue) \
-        selector(Reference) \
         selector(Declaration) \
-        selector(Assignment) \
-        selector(RelationalExpression) \
         selector(PostfixExpression) \
         selector(EmptyStatement) \
-        selector(BinaryOp)
+        selector(BinaryOp) \
+        selector(Identifier) \
+        selector(Constant)
 // clang-format on

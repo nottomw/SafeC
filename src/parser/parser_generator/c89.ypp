@@ -28,8 +28,6 @@ void yyerror(const char *str)
 
 auto &sem = safec::SemanticsFactory::get();
 
-// TODO: free() all lexer strduped parameters
-
 [[maybe_unused]] static void pr(
     const std::string& str,
     safec::Color color = safec::Color::Yellow)

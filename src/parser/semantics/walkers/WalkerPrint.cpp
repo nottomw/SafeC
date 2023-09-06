@@ -56,13 +56,6 @@ void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
         .arg(node.getEnd());
 }
 
-void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
-{
-    log("% { % }", Color::LightGreen) //
-        .arg(getPrefix(node, astLevel))
-        .arg(node.getPos());
-}
-
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
     log("% % { % }", Color::LightCyan) //
@@ -86,53 +79,12 @@ void WalkerPrint::peek(SemNodeContinue &node, const uint32_t astLevel)
     peekDefault<SemNodePositional>(node, astLevel);
 }
 
-void WalkerPrint::peek(SemNodeReference &node, const uint32_t astLevel)
-{
-    log("% '%' { % }", Color::LightPurple) //
-        .arg(getPrefix(node, astLevel))
-        .arg(node.getName())
-        .arg(node.getPos());
-}
-
 void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
 {
-    if (!node.getRhs())
-    {
-        log("% '% %' { % }", Color::Green) //
-            .arg(getPrefix(node, astLevel))
-            .arg(node.getLhsType())
-            .arg(node.getLhsIdentifier())
-            .arg(node.getPos());
-    }
-    else
-    {
-        log("% '% % = %' { % }", Color::Green) //
-            .arg(getPrefix(node, astLevel))
-            .arg(node.getLhsType())
-            .arg(node.getLhsIdentifier())
-            .arg(node.getRhs()->toStr())
-            .arg(node.getPos());
-    }
-}
-
-void WalkerPrint::peek(SemNodeAssignment &node, const uint32_t astLevel)
-{
-    log("% '% % %' { % }", Color::Yellow) //
+    log("% '%' { % }", Color::Green) //
         .arg(getPrefix(node, astLevel))
-        .arg(node.getLhs())
-        .arg(node.getOperator())
-        .arg(node.getPos())
-        .arg(node.getRhs());
-}
-
-void WalkerPrint::peek(SemNodeRelationalExpression &node, const uint32_t astLevel)
-{
-    log("% '% % %' { % }", Color::LightCyan) //
-        .arg(getPrefix(node, astLevel))
-        .arg(node.getLhs())
-        .arg(node.getOperator())
-        .arg(node.getPos())
-        .arg(node.getRhs());
+        .arg(node.toStr())
+        .arg(node.getPos());
 }
 
 void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)

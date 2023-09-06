@@ -51,8 +51,6 @@ private:
     void handleRelationalExpression(const uint32_t stringIndex, const std::string &op);
     void handlePostfixExpression(const uint32_t stringIndex, const std::string &op);
     void handleForLoopConditions();
-
-    void addNodeIntoCurrentScope(std::shared_ptr<SemNode> node);
 };
 
 } // namespace safec

@@ -3,7 +3,6 @@
 #include "logger/Logger.hpp"
 #include "semantics/Semantics.hpp"
 #include "semantics/walkers/SemNodeWalker.hpp"
-#include "semantics/walkers/WalkerDefer.hpp"
 #include "utils/Utils.hpp"
 
 #include <boost/filesystem/fstream.hpp>
