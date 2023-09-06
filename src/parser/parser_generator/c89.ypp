@@ -538,6 +538,10 @@ expression_statement
         handle(SyntaxChunkType::kEmptyStatement);
     }
     | expression ';'
+    {
+        pr("simple expr");
+        // TODO: handle, used in couple of other handled places
+    }
     ;
 
 selection_statement_if
