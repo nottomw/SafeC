@@ -67,6 +67,7 @@ auto &sem = safec::SemanticsFactory::get();
 
 %type<tokenStrValue> IDENTIFIER
 %type<tokenStrValue> CONSTANT
+%type<tokenStrValue> STRING_LITERAL
 
 %start translation_unit
 %%
@@ -74,15 +75,22 @@ auto &sem = safec::SemanticsFactory::get();
 primary_expression
     : IDENTIFIER
     {
+        pr("identifier");
         handle(SyntaxChunkType::kIdentifier, $1);
         free($1);
     }
     | CONSTANT
     {
+        pr("constant");
         handle(SyntaxChunkType::kConstant, $1);
         free($1);
     }
     | STRING_LITERAL
+    {
+        pr("string literal");
+        handle(SyntaxChunkType::kConstant, $1);
+        free($1);
+    }
     | '(' expression ')'
     ;
 
@@ -91,16 +99,19 @@ postfix_expression
     | postfix_expression '[' expression ']'
     | postfix_expression '(' ')'
     {
+        pr("postfix()");
         handle(SyntaxChunkType::kPostfixExpression, "()");
     }
     | postfix_expression '(' argument_expression_list ')'
     {
+        pr("postfix(...)");
         handle(SyntaxChunkType::kPostfixExpression, "(...)");
     }
     | postfix_expression '.' IDENTIFIER
     | postfix_expression PTR_OP IDENTIFIER
     | postfix_expression INC_OP
     {
+        pr("postfix++");
         handle(SyntaxChunkType::kPostfixExpression, "++");
     }
     | postfix_expression DEC_OP
@@ -124,11 +135,11 @@ unary_expression
 unary_operator
     : '&'
     {
-        pr("unary operator &");
+        pr("unary &");
     }
     | '*'
     {
-        pr("unary operator *");
+        pr("unary *");
     }
     | '+'
     | '-'
@@ -164,6 +175,7 @@ relational_expression
     : shift_expression
     | relational_expression '<' shift_expression
     {
+        pr("relational <");
         handle(SyntaxChunkType::kRelationalExpression, "<");
     }
     | relational_expression '>' shift_expression
@@ -174,7 +186,13 @@ relational_expression
 equality_expression
     : relational_expression
     | equality_expression EQ_OP relational_expression
+    {
+        handle(SyntaxChunkType::kRelationalExpression, "==");
+    }
     | equality_expression NE_OP relational_expression
+    {
+        handle(SyntaxChunkType::kRelationalExpression, "!=");
+    }
     ;
 
 and_expression
@@ -211,22 +229,23 @@ assignment_expression
     : conditional_expression
     | unary_expression assignment_operator assignment_expression
     {
+        pr("asgn expr");
         handle(SyntaxChunkType::kAssignment);
     }
     ;
 
 assignment_operator
-    : '='           { handle(SyntaxChunkType::kAssignmentOperator, "="); }
-    | MUL_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "*="); }
-    | DIV_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "/="); }
-    | MOD_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "%="); }
-    | ADD_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "+="); }
-    | SUB_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "-="); }
-    | LEFT_ASSIGN   { handle(SyntaxChunkType::kAssignmentOperator, "<<="); }
-    | RIGHT_ASSIGN  { handle(SyntaxChunkType::kAssignmentOperator, ">>="); }
-    | AND_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "&="); }
-    | XOR_ASSIGN    { handle(SyntaxChunkType::kAssignmentOperator, "^="); }
-    | OR_ASSIGN     { handle(SyntaxChunkType::kAssignmentOperator, "|="); }
+    : '='           { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "="); }
+    | MUL_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "*="); }
+    | DIV_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "/="); }
+    | MOD_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "%="); }
+    | ADD_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "+="); }
+    | SUB_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "-="); }
+    | LEFT_ASSIGN   { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "<<="); }
+    | RIGHT_ASSIGN  { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, ">>="); }
+    | AND_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "&="); }
+    | XOR_ASSIGN    { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "^="); }
+    | OR_ASSIGN     { pr("asgn op"); handle(SyntaxChunkType::kAssignmentOperator, "|="); }
     ;
 
 expression
@@ -260,13 +279,13 @@ init_declarator_list
 init_declarator
     : declarator
     {
-        pr("init declarator no assignment");
-        handle(SyntaxChunkType::kInitDeclaration);
+        pr("init decl (no asgn)");
+        handle(SyntaxChunkType::kInitDeclaration, "noasgn");
     }
     | declarator '=' { pr("asgn"); handle(SyntaxChunkType::kAssignmentOperator, "="); } initializer
     {
-        pr("init declarator with assignment");
-        handle(SyntaxChunkType::kInitDeclaration);
+        pr("init decl (with asgn)");
+        handle(SyntaxChunkType::kInitDeclaration, "asgn");
     }
     ;
 
@@ -280,34 +299,35 @@ storage_class_specifier
 
 type_specifier
     : VOID
-    { handle(SyntaxChunkType::kType, "void"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "void"); }
     | CHAR
-    { handle(SyntaxChunkType::kType, "char"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "char"); }
     | SHORT
-    { handle(SyntaxChunkType::kType, "short"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "short"); }
     | INT
-    { handle(SyntaxChunkType::kType, "int"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "int"); }
     | LONG
-    { handle(SyntaxChunkType::kType, "long"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "long"); }
     | FLOAT
-    { handle(SyntaxChunkType::kType, "float"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "float"); }
     | DOUBLE
-    { handle(SyntaxChunkType::kType, "double"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "double"); }
     | SIGNED
-    { handle(SyntaxChunkType::kType, "signed"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "signed"); }
     | UNSIGNED
-    { handle(SyntaxChunkType::kType, "unsigned"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "unsigned"); }
     | struct_or_union_specifier
-    { handle(SyntaxChunkType::kType, "struct/union"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "struct/union"); }
     | enum_specifier
-    { handle(SyntaxChunkType::kType, "enum"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "enum"); }
     | TYPE_NAME
-    { handle(SyntaxChunkType::kType, "typename?"); }
+    { pr("type"); handle(SyntaxChunkType::kType, "typename?"); }
     ;
 
 struct_or_union_specifier
     : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
     {
+        pr("struct or union");
         handle(SyntaxChunkType::kStructOrUnionDecl);
     }
     | struct_or_union '{' struct_declaration_list '}'
@@ -397,11 +417,13 @@ direct_declarator
 pointer
     : '*'
     {
+        pr("ptr");
         handle(SyntaxChunkType::kPointer);
     }
     | '*' type_qualifier_list
     | '*' pointer
     {
+        pr("ptr ptr");
         handle(SyntaxChunkType::kPointer);
     }
     | '*' type_qualifier_list pointer
@@ -510,18 +532,19 @@ statement_list
 expression_statement
     : ';'
     {
+        pr("empty stmt");
         handle(SyntaxChunkType::kEmptyStatement);
     }
     | expression ';'
     ;
 
 selection_statement_if
-    : IF { handle(SyntaxChunkType::kConditionHeader); } '(' expression ')' { handle(SyntaxChunkType::kConditionExpression); } statement { handle(SyntaxChunkType::kCondition); }
+    : IF { pr("if"); handle(SyntaxChunkType::kConditionHeader); } '(' expression ')' { pr("if cond"); handle(SyntaxChunkType::kConditionExpression); } statement { pr("if scope"); handle(SyntaxChunkType::kCondition); }
     ;
 
 selection_statement
     : selection_statement_if
-    | selection_statement_if ELSE { pr("scope: else"); } statement { handle(SyntaxChunkType::kCondition); }
+    | selection_statement_if ELSE { pr("else"); } statement { pr("else scope"); handle(SyntaxChunkType::kCondition); }
     | SWITCH '(' expression ')' statement
     ;
 
@@ -546,7 +569,8 @@ jump_statement
     | RETURN ';'
     | RETURN expression ';'
     {
-        pr("return expression");
+        pr("return");
+        handle(SyntaxChunkType::kReturn);
     }
     ;
 
@@ -562,8 +586,8 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement
-    | VOID declarator { handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement { handle(SyntaxChunkType::kFunction); }
-    | declaration_specifiers declarator { handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement { handle(SyntaxChunkType::kFunction); pr("nonvoid function"); }
+    | VOID declarator { pr("fun header (void)"); handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement { pr("fun body"); handle(SyntaxChunkType::kFunction); }
+    | declaration_specifiers declarator { pr("fun header (nonvoid)"); handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement { pr("fun body"); handle(SyntaxChunkType::kFunction); }
     | declarator declaration_list compound_statement
     | declarator compound_statement
     ;

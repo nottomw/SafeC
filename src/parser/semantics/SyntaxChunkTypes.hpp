@@ -32,7 +32,8 @@
     entry(kForLoop) \
     entry(kRelationalExpression) \
     entry(kPostfixExpression) \
-    entry(kEmptyStatement)
+    entry(kEmptyStatement) \
+    entry(kReturn)
 
 // clang-format on
 

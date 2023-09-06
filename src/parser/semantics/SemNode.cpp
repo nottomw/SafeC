@@ -104,8 +104,9 @@ void SemNodeFunction::addParam(const std::string &type, const std::string &name)
     mParams.emplace_back(Param{type, name});
 }
 
-SemNodeReturn::SemNodeReturn(const uint32_t index) //
+SemNodeReturn::SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs) //
     : SemNodePositional{index}
+    , mRhs{rhs}
 {
     mType = Type::Return;
 }
@@ -170,7 +171,7 @@ std::string SemNodeDeclaration::getLhsIdentifier() const
 SemNodePostfixExpression::SemNodePostfixExpression( //
     const uint32_t pos,
     const std::string &op,
-    const std::string &lhs)
+    std::shared_ptr<SemNode> lhs)
     : SemNodePositional{pos}
     , mOperator{op}
     , mLhs{lhs}
@@ -183,9 +184,14 @@ std::string SemNodePostfixExpression::getOperator() const
     return mOperator;
 }
 
-std::string SemNodePostfixExpression::getLhs() const
+std::shared_ptr<SemNode> SemNodePostfixExpression::getLhs() const
 {
     return mLhs;
+}
+
+void SemNodePostfixExpression::addArg(std::shared_ptr<SemNode> arg)
+{
+    mArgs.push_back(arg);
 }
 
 SemNodeLoop::SemNodeLoop(const uint32_t pos)
@@ -226,11 +232,22 @@ std::shared_ptr<SemNode> SemNodeLoop::getIteratorChange() const
 
 std::string SemNodeLoop::toStr() const
 {
-    return "(" + mIteratorInit->toStr() + //
-           ", " +                         //
-           mIteratorCondition->toStr() +  //
-           ", "                           //
-           + mIteratorChange->toStr() + ")";
+    std::string itInit = "empty";
+    std::string itCond = "empty";
+    std::string itChange = "empty";
+
+    if (mIteratorInit)
+        itInit = mIteratorInit->toStr();
+    if (mIteratorCondition)
+        itCond = mIteratorCondition->toStr();
+    if (mIteratorChange)
+        itChange = mIteratorChange->toStr();
+
+    return "(" + itInit + //
+           ", " +         //
+           itCond +       //
+           ", "           //
+           + itChange + ")";
 }
 
 SemNodeEmptyStatement::SemNodeEmptyStatement(const uint32_t pos)
@@ -263,6 +280,13 @@ std::shared_ptr<SemNode> SemNodeBinaryOp::getLhs() const
 std::shared_ptr<SemNode> SemNodeBinaryOp::getRhs() const
 {
     return mRhs;
+}
+
+SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)
+    : SemNodeScope{pos}
+    , mCond{cond}
+{
+    mType = Type::If;
 }
 
 } // namespace safec

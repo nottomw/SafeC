@@ -18,5 +18,6 @@
         selector(EmptyStatement) \
         selector(BinaryOp) \
         selector(Identifier) \
-        selector(Constant)
+        selector(Constant) \
+        selector(If)
 // clang-format on

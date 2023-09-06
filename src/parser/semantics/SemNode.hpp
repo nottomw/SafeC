@@ -134,6 +134,20 @@ public:
     std::string getReturn() const;
     std::vector<Param> getParams() const;
 
+    std::string toStr() const override
+    {
+        std::string str = mReturnType + " " + mName + " (";
+        for (auto &it : mParams)
+        {
+            str += it.mType;
+            str += " ";
+            str += it.mName;
+            str += ", ";
+        }
+        str += " )";
+        return str;
+    }
+
 private:
     std::string mReturnType;
     std::vector<Param> mParams;
@@ -143,7 +157,19 @@ private:
 class SemNodeReturn final : public SemNodePositional
 {
 public:
-    SemNodeReturn(const uint32_t index);
+    SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs);
+
+    std::string toStr() const override
+    {
+        std::string rhs;
+        if (mRhs)
+            rhs = mRhs->toStr();
+
+        return rhs;
+    }
+
+private:
+    std::shared_ptr<SemNode> mRhs;
 };
 
 class SemNodeBreak : public SemNodePositional
@@ -165,6 +191,11 @@ public:
 
     std::string getName() const;
 
+    std::string toStr() const override
+    {
+        return mName;
+    }
+
 private:
     std::string mName;
 };
@@ -175,6 +206,11 @@ public:
     SemNodeConstant(const uint32_t pos, const std::string &name);
 
     std::string getName() const;
+
+    std::string toStr() const override
+    {
+        return mName;
+    }
 
 private:
     std::string mName;
@@ -207,19 +243,40 @@ public:
     SemNodePostfixExpression( //
         const uint32_t pos,
         const std::string &op,
-        const std::string &lhs);
+        std::shared_ptr<SemNode> lhs);
 
     std::string getOperator() const;
-    std::string getLhs() const;
+    std::shared_ptr<SemNode> getLhs() const;
+
+    void addArg(std::shared_ptr<SemNode> arg);
 
     std::string toStr() const override
     {
-        return mLhs + " " + mOperator;
+        std::string lhs = "empty";
+        if (mLhs)
+            lhs = mLhs->toStr();
+
+        lhs += " (";
+
+        if (mOperator == "(...)")
+        {
+            for (auto &args : mArgs)
+            {
+                lhs += args->toStr();
+                lhs += ", ";
+            }
+        }
+
+        lhs += ")";
+
+        return lhs;
     }
 
 private:
     std::string mOperator;
-    std::string mLhs;
+    std::shared_ptr<SemNode> mLhs;
+
+    std::vector<std::shared_ptr<SemNode>> mArgs;
 };
 
 class SemNodeLoop : public SemNodePositional
@@ -250,7 +307,7 @@ public:
 
     std::string toStr() const override
     {
-        return "empty statement";
+        return "empty stmt";
     }
 };
 
@@ -269,11 +326,39 @@ public:
     std::shared_ptr<SemNode> getLhs() const;
     std::shared_ptr<SemNode> getRhs() const;
 
+    std::string toStr() const override
+    {
+        std::string lhs = "empty";
+        std::string rhs = "empty";
+        if (mLhs)
+            lhs = mLhs->toStr();
+        if (mRhs)
+            rhs = mRhs->toStr();
+        return lhs + " " + mOp + " " + rhs;
+    }
+
 private:
     std::string mOp;
 
     std::shared_ptr<SemNode> mLhs;
     std::shared_ptr<SemNode> mRhs;
+};
+
+class SemNodeIf : public SemNodeScope
+{
+public:
+    SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond);
+
+    std::string toStr() const override
+    {
+        std::string cond = "empty";
+        if (mCond)
+            cond = mCond->toStr();
+        return cond;
+    }
+
+private:
+    std::shared_ptr<SemNode> mCond;
 };
 
 } // namespace safec

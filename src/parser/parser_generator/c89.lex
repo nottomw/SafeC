@@ -73,7 +73,7 @@ L?'(\\.|[^\\'])+'       { count(); yylval.tokenStrValue = strdup(yytext); return
 {D}*"."{D}+({E})?{FS}?	{ count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
 {D}+"."{D}*({E})?{FS}?	{ count(); yylval.tokenStrValue = strdup(yytext); return(CONSTANT); }
 
-L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
+L?\"(\\.|[^\\"])*\"     { count(); yylval.tokenStrValue = strdup(yytext); return(STRING_LITERAL); }
 
 "..."			{ count(); return(ELLIPSIS); }
 ">>="			{ count(); return(RIGHT_ASSIGN); }

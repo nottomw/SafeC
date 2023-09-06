@@ -46,11 +46,17 @@ private:
 
     void handleFunctionHeader(const uint32_t stringIndex, const bool isVoidRetType);
     void handleFunctionEnd(const uint32_t stringIndex);
-    void handleInitDeclaration(const uint32_t stringIndex);
+    void handleInitDeclaration(const uint32_t stringIndex, const bool withAssignment);
     void handleAssignment(const uint32_t stringIndex);
     void handleRelationalExpression(const uint32_t stringIndex, const std::string &op);
     void handlePostfixExpression(const uint32_t stringIndex, const std::string &op);
     void handleForLoopConditions();
+    void handleConditionExpression(const uint32_t stringIndex);
+
+    void addNodeToAst(std::shared_ptr<SemNode> node);
+
+    uint32_t countPointersInChunks(const uint32_t index);
+    void stagedNodesPrint(const std::string &str = "");
 };
 
 } // namespace safec

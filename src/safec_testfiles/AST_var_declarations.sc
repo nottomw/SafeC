@@ -1,8 +1,19 @@
 #include <stdio.h>
 
+int globalDeclarationNoAssignment;
 int globalDeclaration = 5;
 
-int FUNCTION_WITH_DECLARATIONS(const int paramCondition)
+void FUNCTION_NO_RETURN_NO_PARAMS(void)
+{
+    // nothing
+}
+
+void** FUNCTION_WITH_VOIDPTR_RETURN_NO_PARAMS(void)
+{
+    // nothing
+}
+
+int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **bar)
 {
     int varWithNoValue;
     int varWithAssignmentFromOtherIdentifier = varWithNoValue;
@@ -31,13 +42,16 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition)
     for (i = SOME_INIT_VAL; i < a; i++)
     {
         printer("num: %d\n", i); // plain call
+        // i = i++; // TODO
     }
 
     // if (paramCondition == 42) // kConstant - fails now
     if (paramCondition == SOME_TEST_VAL)
     {
-        // int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // expression in function params
-        int resFromCalledFun = calledFunction(paramCondition); // TODO
+        int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // expression in function params
+        int resFromCalledFun = calledFunction(paramCondition, foo + bar);
+        int resFromCalledFun = calledFunction(paramCondition, foo);
+        int resFromAnother = someFunctionWithNoParams();
         resFromCalledFun = calledFunctionSecond(paramCondition);
         if (resFromCalledFun != 0)
         {

@@ -68,9 +68,10 @@ public:
         return mSyntaxChunks;
     }
 
-    void printChunks() const
+    void printChunks(const std::string &str = "") const
     {
-        log("\n--- SYNTAX CHUNKS (chunks count: %):", {Color::Green}) //
+        log("\n--- SYNTAX CHUNKS [ % ] (chunks count: %):", {Color::Green}) //
+            .arg(str)
             .arg(mSyntaxChunks.size());
         for (const auto &it : mSyntaxChunks)
         {
