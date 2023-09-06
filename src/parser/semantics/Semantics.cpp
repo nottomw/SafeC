@@ -305,6 +305,7 @@ void Semantics::handleInitDeclaration( //
 
         auto finalRhs = rhs;
 
+        // TODO: this is sketchy, can there be more unary ops staged?
         auto possibleUnaryOp = stagedNodes.back();
         if (possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
         {
