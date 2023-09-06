@@ -9,5 +9,6 @@ set(SANITIZERS_FLAGS -fsanitize=address -fsanitize=undefined)
 set(DEBUG_FLAGS -ggdb -O0 ${SANITIZERS_FLAGS})
 
 add_compile_options(-Wall -Wextra -Werror -pedantic ${DEBUG_FLAGS})
+add_compile_options(-Wno-unused-parameter) # for now...
 
 add_link_options(${SANITIZERS_FLAGS})

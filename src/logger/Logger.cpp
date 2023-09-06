@@ -165,6 +165,8 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
         {
             std::cout << '\n';
         }
+
+        fflush(stdout);
     }
     else
     {
