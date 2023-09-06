@@ -254,8 +254,6 @@ void Semantics::handleFunctionHeader( //
 {
     auto &stagedNodes = mState.getStagedNodes();
 
-    stagedNodesPrint("FUNCTION HEADER");
-
     // first node is the function name & return type
     auto declNode = semNodeConvert<SemNodeDeclaration>(stagedNodes[0]);
 
@@ -351,8 +349,6 @@ void Semantics::handlePostfixExpression( //
     {
         auto &stagedNodes = mState.getStagedNodes();
         assert(stagedNodes.size() > 0);
-
-        stagedNodesPrint("POSTFIX (...)");
 
         if (stagedNodes[0]->getType() == SemNode::Type::BinaryOp)
         {
