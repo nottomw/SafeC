@@ -13,7 +13,7 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition)
     // const int valueDeclarationWithOperandsOnRhs = (i + 123); // TODO - rhs expression
 
     varWithNoValue = 123; // assignment
-    // varWithNoValue += 123; // unary op assignment
+    varWithNoValue += 123; // unary op assignment
 
     for (i = 0; i < a; i++)
     {
@@ -28,17 +28,17 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition)
         // nothing
     }
 
-
-    //for (i = SOME_INIT_VAL; i < a; i++)
-    //{
-    //    printer("num: %d\n", i);
-    //}
+    for (i = SOME_INIT_VAL; i < a; i++)
+    {
+        printer("num: %d\n", i); // plain call
+    }
 
     // if (paramCondition == 42) // kConstant - fails now
     if (paramCondition == SOME_TEST_VAL)
     {
-        // int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // kConstant - fails now
-        int resFromCalledFun = calledFunction(paramCondition);
+        // int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // expression in function params
+        int resFromCalledFun = calledFunction(paramCondition); // TODO
+        resFromCalledFun = calledFunctionSecond(paramCondition);
         if (resFromCalledFun != 0)
         {
             return resFromCalledFun;

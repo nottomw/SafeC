@@ -96,7 +96,7 @@ void WalkerPrint::peek(SemNodeReference &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
 {
-    if (node.getRhsIdentifier().empty())
+    if (!node.getRhs())
     {
         log("% '% %' { % }", Color::Green) //
             .arg(getPrefix(node, astLevel))
@@ -110,7 +110,7 @@ void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
             .arg(getPrefix(node, astLevel))
             .arg(node.getLhsType())
             .arg(node.getLhsIdentifier())
-            .arg(node.getRhsIdentifier())
+            .arg(node.getRhs()->toStr())
             .arg(node.getPos());
     }
 }

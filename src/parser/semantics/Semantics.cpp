@@ -67,21 +67,6 @@ void Semantics::handle( //
     const uint32_t stringIndex,
     const std::string &additional)
 {
-    [[maybe_unused]] static uint32_t lastShiftedIndex = stringIndex;
-
-    //    log("\n");
-
-    //    // Uncomment to print all incoming chunks...
-    //    const auto typeStr = syntaxChunkTypeToStr(type);
-    //    log("[ % at % -- % ]", {Color::LightCyan, logger::NewLine::No}) //
-    //        .arg(typeStr)
-    //        .arg(lastShiftedIndex)
-    //        .arg(stringIndex);
-
-    //    mState.printChunks();
-
-    auto reduced = [&] { lastShiftedIndex = stringIndex; };
-
     // TODO: this is actually another shift-reduce step, where shift chunks are
     // stashed and reduce should consume all shifted chunks. Could be used when
     // creating nodes to mark start-stop positions precisely.
@@ -103,19 +88,28 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kDirectDecl:
-            mState.addChunk({type, stringIndex, additional});
+            {
+                auto &chunks = mState.getChunks();
+
+                // should have only type on stack
+                assert(chunks.size() == 1);
+                assert(chunks[0].mType == SyntaxChunkType::kType);
+
+                auto node = std::make_shared<SemNodeDeclaration>(stringIndex, chunks[0].mAdditional, additional);
+                mState.stageNode(node);
+
+                chunks.clear();
+            }
             break;
 
         case SyntaxChunkType::kFunctionHeader:
             {
-                reduced();
                 const bool isVoidRetType = (additional == "void");
                 handleFunctionHeader(stringIndex, isVoidRetType);
             }
             break;
 
         case SyntaxChunkType::kFunction:
-            reduced();
             handleFunctionEnd(stringIndex);
             break;
 
@@ -133,12 +127,10 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kInitDeclaration:
-            reduced();
             handleInitDeclaration(stringIndex);
             break;
 
         case SyntaxChunkType::kAssignment:
-            reduced();
             handleAssignment(stringIndex);
             break;
 
@@ -163,7 +155,7 @@ void Semantics::handle( //
         case SyntaxChunkType::kForLoopHeader:
             {
                 auto node = std::make_shared<SemNodeLoop>(stringIndex);
-                addNodeIntoCurrentScope(node);
+                mState.stageNode(node);
                 mState.addScope(node);
             }
             break;
@@ -179,19 +171,17 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kRelationalExpression:
-            reduced();
             handleRelationalExpression(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kPostfixExpression:
-            reduced();
             handlePostfixExpression(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kEmptyStatement:
             {
                 auto node = std::make_shared<SemNodeEmptyStatement>(stringIndex);
-                addNodeIntoCurrentScope(node);
+                mState.stageNode(node);
             }
             break;
 
@@ -213,87 +203,20 @@ void Semantics::handleFunctionHeader( //
 
     // TODO: need to fetch struct name function returns struct or has a struct param
 
-    auto &chunks = mState.getChunks();
+    assert(mState.getChunks().size() == 0);
 
-    auto chunksIt = chunks.begin();
+    // at this point the first direct decl in staged nodes should be the function name,
+    // and the following direct decls should be the parameters
+    auto &stagedNodes = mState.getStagedNodes();
+    assert(stagedNodes.size() >= 1);
 
-    // Maybe could be handled nicer?
-    uint32_t retTypePointerCount = 0U;
-    while (chunksIt->mType == SyntaxChunkType::kPointer)
+    log("\nSTAGED NODES: (%)\n", Color::Red).arg(stagedNodes.size());
+    for (auto &it : stagedNodes)
     {
-        retTypePointerCount += 1;
-        chunksIt++;
+        log("staged node: %").arg(it->toStr());
     }
 
-    std::string retTypeStr;
-    if (isVoidOrVoidPtrRetType)
-    {
-        retTypeStr = "void";
-    }
-    else
-    {
-        retTypeStr = chunksIt->mAdditional;
-        // Move function return type out of the way
-        chunksIt++;
-    }
-
-    // handle pointers
-    for (uint32_t i = 0; i < retTypePointerCount; i++)
-    {
-        retTypeStr += "*";
-    }
-
-    funNode->setReturn(retTypeStr);
-
-    // now chunksIt should point to function name
-    assert(chunksIt->mType == SyntaxChunkType::kDirectDecl);
-    funNode->setName(chunksIt->mAdditional);
-
-    // move function name out of the way
-    chunksIt++;
-
-    while (chunksIt != chunks.end())
-    {
-        // +1 should be param name if type is not void
-        auto chunksItParamName = chunksIt + 1;
-
-        // If there is no following chunk we're sure this is not a pointer
-        const bool notAVoidPointer = (chunksItParamName == chunks.end());
-
-        // count pointers next to parsed argument
-        uint32_t paramPointerCount = 0U;
-        if (notAVoidPointer == false)
-        {
-            while (chunksItParamName->mType == SyntaxChunkType::kPointer)
-            {
-                paramPointerCount++;
-                chunksItParamName++;
-            }
-        }
-
-        const bool paramIsVoid = (chunksIt->mAdditional == "void") && (paramPointerCount == 0U);
-
-        if (paramIsVoid == false)
-        {
-            // normal situation where we have a proper type (not void nor void pointer)
-
-            std::string paramType = chunksIt->mAdditional;
-            const std::string paramName = chunksItParamName->mAdditional;
-
-            for (uint32_t i = 0; i < paramPointerCount; i++)
-            {
-                paramType += "*";
-            }
-
-            funNode->addParam(paramType, paramName);
-            chunksItParamName++; // param name consumed
-        }
-
-        chunksIt = chunksItParamName;
-    }
-
-    // chunks consumed
-    chunks.clear();
+    //    funNode->setReturn(retTypeStr);
 
     addNodeIntoCurrentScope(funNode);
     mState.addScope(funNode);
@@ -307,12 +230,7 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
     auto functionNode = mState.getCurrentScope();
 
     const auto nodeType = functionNode->getType();
-    if (nodeType != SemNode::Type::Function)
-    {
-        log("EXPECTED FUNCTION, GOT TYPE: %") //
-            .arg(SemNode::TypeInfo::toStr(nodeType));
-        return;
-    }
+    assert(nodeType == SemNode::Type::Function);
 
     semNodeConvert<SemNodeFunction>(functionNode)->setEnd(stringIndex);
 
@@ -325,53 +243,19 @@ void Semantics::handleInitDeclaration(const uint32_t stringIndex)
 
     const auto chunksCount = chunks.size();
 
-    // should have at least two chunks now - type and name
-    if (chunksCount >= 2)
+    // RHS could be also already packed into a node
+
+    if (chunksCount == 0)
     {
-        // int var;
-        // int var = otherVar;
-        // int *var;
-        // int *var = &otherVar;
-
-        auto &chunkType = chunks[0];
-        assert(chunkType.mType == SyntaxChunkType::kType);
-        std::string chunkTypeStr = chunkType.mAdditional;
-
-        uint32_t chunkIndex = 1;
-        if (chunksCount > 2)
-        {
-            // at this point we might receive a pointer
-            while (chunks[chunkIndex].mType == SyntaxChunkType::kPointer)
-            {
-                chunkTypeStr += "*";
-                chunkIndex++;
-            }
-        }
-
-        auto &chunkIdentifier = chunks[chunkIndex];
-        assert(chunkIdentifier.mType == SyntaxChunkType::kDirectDecl);
-
-        chunkIndex++; // move direct decl out of the way
-
-        auto declNode = std::make_shared<SemNodeDeclaration>( //
-            stringIndex,
-            chunkTypeStr,
-            chunkIdentifier.mAdditional);
-
-        // TODO: kConstant should become a SemNodeConstant in expression
-        // Is there a right-hand side?
-        if (chunksCount > chunkIndex)
-        {
-            if (chunks[chunkIndex].mType == SyntaxChunkType::kConstant)
-            {
-                declNode->setRhs(chunks[chunkIndex].mAdditional);
-            }
-        }
-
-        addNodeIntoCurrentScope(declNode);
-
-        chunks.clear(); // remove all processed chunks
+        // No rhs
+        return;
     }
+    else
+    {
+        assert(chunks[0].mType == SyntaxChunkType::kAssignmentOperator);
+    }
+
+    chunks.clear(); // remove all processed chunks
 }
 
 void Semantics::handleAssignment(const uint32_t stringIndex)
@@ -396,7 +280,7 @@ void Semantics::handleAssignment(const uint32_t stringIndex)
         auto nodeAsign = std::make_shared<SemNodeAssignment>(
             stringIndex, chunkOperator.mAdditional, chunkLhs.mAdditional, chunkRhs.mAdditional);
 
-        addNodeIntoCurrentScope(nodeAsign);
+        mState.stageNode(nodeAsign);
     }
 
     mState.getChunks().clear(); // all chunks consumed
@@ -423,7 +307,7 @@ void Semantics::handleRelationalExpression( //
             chunkLhs.mAdditional,
             chunkRhs.mAdditional);
 
-        addNodeIntoCurrentScope(node);
+        mState.stageNode(node);
     }
     else
     {
@@ -437,15 +321,32 @@ void Semantics::handlePostfixExpression( //
     const uint32_t stringIndex,
     const std::string &op)
 {
-    // TODO: ignore for now function calls
+    auto &chunks = mState.getChunks();
+
+    // handle function call
     if (op == "()" || op == "(...)")
     {
+        log("FUNCTION CALL CHUNKS:", Color::Red);
+        mState.printChunks();
+
+        if (op == "()")
+        {
+            // function call with no args
+            // should just get an identifier (or some expression, TODO)
+            auto &functionName = chunks.back();
+            auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, functionName.mAdditional);
+            mState.stageNode(node);
+        }
+        else
+        {
+            // function call with args
+        }
+
         mState.getChunks().clear();
         return;
     }
 
-    auto &chunks = mState.getChunks();
-
+    // Handle ++ etc
     // at least LHS should be available
     assert(chunks.size() >= 1);
 
@@ -453,7 +354,7 @@ void Semantics::handlePostfixExpression( //
     {
         auto &chunkLhs = chunks[0];
         auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, chunkLhs.mAdditional);
-        addNodeIntoCurrentScope(node);
+        mState.stageNode(node);
     }
 
     mState.getChunks().clear();

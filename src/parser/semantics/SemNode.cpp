@@ -173,14 +173,14 @@ SemNodeDeclaration::SemNodeDeclaration( //
     : SemNodePositional{pos}
     , mLhsType{lhsType}
     , mLhsIdentifier{lhsIdentifier}
-    , mRhsIdentifier{}
+    , mRhs{}
 {
     mType = Type::Declaration;
 }
 
-void SemNodeDeclaration::setRhs(const std::string &rhsIdentifier)
+void SemNodeDeclaration::setRhs(std::shared_ptr<SemNode> rhsIdentifier)
 {
-    mRhsIdentifier = rhsIdentifier;
+    mRhs = rhsIdentifier;
 }
 
 std::string SemNodeDeclaration::getLhsType() const
@@ -193,9 +193,9 @@ std::string SemNodeDeclaration::getLhsIdentifier() const
     return mLhsIdentifier;
 }
 
-std::string SemNodeDeclaration::getRhsIdentifier() const
+std::shared_ptr<SemNode> SemNodeDeclaration::getRhs() const
 {
-    return mRhsIdentifier;
+    return mRhs;
 }
 
 SemNodeAssignment::SemNodeAssignment( //
@@ -324,6 +324,28 @@ SemNodeEmptyStatement::SemNodeEmptyStatement(const uint32_t pos)
     : SemNodePositional{pos}
 {
     mType = Type::EmptyStatement;
+}
+
+SemNodeBinaryOp::SemNodeBinaryOp(const uint32_t pos, std::shared_ptr<SemNode> lhs)
+    : SemNodePositional{pos}
+    , mLhs{lhs}
+{
+    mType = Type::BinaryOp;
+}
+
+void SemNodeBinaryOp::setRhs(std::shared_ptr<SemNode> rhs)
+{
+    mRhs = rhs;
+}
+
+std::shared_ptr<SemNode> SemNodeBinaryOp::getLhs() const
+{
+    return mLhs;
+}
+
+std::shared_ptr<SemNode> SemNodeBinaryOp::getRhs() const
+{
+    return mRhs;
 }
 
 } // namespace safec

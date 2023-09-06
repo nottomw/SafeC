@@ -19,5 +19,6 @@
         selector(Assignment) \
         selector(RelationalExpression) \
         selector(PostfixExpression) \
-        selector(EmptyStatement)
+        selector(EmptyStatement) \
+        selector(BinaryOp)
 // clang-format on

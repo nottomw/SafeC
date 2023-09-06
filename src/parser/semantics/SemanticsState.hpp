@@ -81,9 +81,22 @@ public:
         }
     }
 
-    std::shared_ptr<SemNode> getCurrentScope() const
+    std::shared_ptr<SemNode> getCurrentScope()
     {
+        assert(mScope.size() > 0);
         return mScope.back();
+    }
+
+    void addStagedNodesToCurrentScope()
+    {
+        auto currentScope = getCurrentScope();
+
+        for (auto &it : mStagedNodes)
+        {
+            currentScope->attach(it);
+        }
+
+        mStagedNodes.clear();
     }
 
     void addScope(std::shared_ptr<SemNode> node)
@@ -93,12 +106,25 @@ public:
 
     void removeScope()
     {
+        addStagedNodesToCurrentScope();
         mScope.pop_back();
+    }
+
+    void stageNode(std::shared_ptr<SemNode> node)
+    {
+        mStagedNodes.push_back(node);
+    }
+
+    std::vector<std::shared_ptr<SemNode>> &getStagedNodes()
+    {
+        return mStagedNodes;
     }
 
 private:
     std::vector<SyntaxChunkInfo> mSyntaxChunks;
     std::vector<std::shared_ptr<SemNode>> mScope;
+
+    std::vector<std::shared_ptr<SemNode>> mStagedNodes;
 };
 
 } // namespace safec

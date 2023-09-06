@@ -265,7 +265,7 @@ init_declarator
         pr("init declarator no assignment");
         handle(SyntaxChunkType::kInitDeclaration);
     }
-    | declarator '=' initializer
+    | declarator '=' { pr("asgn"); handle(SyntaxChunkType::kAssignmentOperator, "="); } initializer
     {
         pr("init declarator with assignment");
         handle(SyntaxChunkType::kInitDeclaration);
@@ -384,6 +384,7 @@ declarator
 direct_declarator
     : IDENTIFIER
     {
+        pr("direct decl");
         handle(SyntaxChunkType::kDirectDecl, $1);
         free($1);
     }

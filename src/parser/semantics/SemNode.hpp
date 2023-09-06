@@ -199,24 +199,22 @@ public:
         const std::string &lhsType,
         const std::string &lhsIdentifier);
 
-    // TODO: right-hand side might be an (unary)expression (= (other_var + 1234))
-    // TODO: rhs might be a literal
-    void setRhs(const std::string &rhsIdentifier);
+    void setRhs(std::shared_ptr<SemNode> rhs);
 
     std::string getLhsType() const;
     std::string getLhsIdentifier() const;
-    std::string getRhsIdentifier() const;
+    std::shared_ptr<SemNode> getRhs() const;
 
     std::string toStr() const override
     {
-        return mLhsType + " " + mLhsIdentifier + " = " + mRhsIdentifier;
+        return mLhsType + " " + mLhsIdentifier + " = " + mRhs->toStr();
     }
 
 private:
     std::string mLhsType;
     std::string mLhsIdentifier;
 
-    std::string mRhsIdentifier;
+    std::shared_ptr<SemNode> mRhs;
 };
 
 class SemNodeAssignment : public SemNodePositional
@@ -319,6 +317,21 @@ public:
     {
         return "empty statement";
     }
+};
+
+class SemNodeBinaryOp : public SemNodePositional
+{
+public:
+    SemNodeBinaryOp(const uint32_t pos, std::shared_ptr<SemNode> lhs);
+
+    void setRhs(std::shared_ptr<SemNode> rhs);
+
+    std::shared_ptr<SemNode> getLhs() const;
+    std::shared_ptr<SemNode> getRhs() const;
+
+private:
+    std::shared_ptr<SemNode> mLhs;
+    std::shared_ptr<SemNode> mRhs;
 };
 
 } // namespace safec
