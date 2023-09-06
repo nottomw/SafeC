@@ -48,8 +48,8 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     // if (paramCondition == 42) // kConstant - fails now
     if (paramCondition == SOME_TEST_VAL)
     {
-        int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // expression in function params
-        int resFromCalledFun = calledFunction(paramCondition, foo + bar);
+        int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // TODO: expression in function params
+        int resFromCalledFunWithSumInArg = calledFunction(paramCondition, foo + bar); // TODO: expression in function params
         int resFromCalledFun = calledFunction(paramCondition, foo);
         int resFromAnother = someFunctionWithNoParams();
         resFromCalledFun = calledFunctionSecond(paramCondition);
@@ -58,6 +58,8 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
             return resFromCalledFun;
         }
     }
+
+    ++i; // prefix expr?
 
     return 124;
 }

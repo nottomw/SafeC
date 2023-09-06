@@ -33,7 +33,8 @@
     entry(kRelationalExpression) \
     entry(kPostfixExpression) \
     entry(kEmptyStatement) \
-    entry(kReturn)
+    entry(kReturn) \
+    entry(kUnaryOp)
 
 // clang-format on
 

@@ -242,6 +242,13 @@ void Semantics::handle( //
             }
             break;
 
+        case SyntaxChunkType::kUnaryOp:
+            {
+                auto node = std::make_shared<SemNodeUnaryOp>(stringIndex, additional);
+                mState.stageNode(node);
+            }
+            break;
+
         default:
             log("type not handled: %", {Color::Red}).arg(static_cast<uint32_t>(type));
             break;
@@ -289,13 +296,26 @@ void Semantics::handleInitDeclaration( //
 {
     auto &stagedNodes = mState.getStagedNodes();
 
+    stagedNodesPrint("HANDLE INIT DECLARATION");
+
     if (withAssignment)
     {
         auto rhs = stagedNodes.back();
         stagedNodes.pop_back();
+
+        auto finalRhs = rhs;
+
+        auto possibleUnaryOp = stagedNodes.back();
+        if (possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
+        {
+            semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
+            finalRhs = possibleUnaryOp;
+            stagedNodes.pop_back();
+        }
+
         auto binaryOp = semNodeConvert<SemNodeBinaryOp>(stagedNodes.back());
         stagedNodes.pop_back();
-        binaryOp->setRhs(rhs);
+        binaryOp->setRhs(finalRhs);
 
         addNodeToAst(binaryOp);
     }

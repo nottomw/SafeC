@@ -19,5 +19,6 @@
         selector(BinaryOp) \
         selector(Identifier) \
         selector(Constant) \
-        selector(If)
+        selector(If) \
+        selector(UnaryOp)
 // clang-format on

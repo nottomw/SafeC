@@ -361,4 +361,24 @@ private:
     std::shared_ptr<SemNode> mCond;
 };
 
+class SemNodeUnaryOp : public SemNodePositional
+{
+public:
+    SemNodeUnaryOp(const uint32_t pos, const std::string &op);
+
+    void setRhs(std::shared_ptr<SemNode> rhs);
+
+    std::string toStr() const override
+    {
+        std::string str = mOp + " ";
+        if (mRhs)
+            str += mRhs->toStr();
+        return str;
+    }
+
+private:
+    std::string mOp;
+    std::shared_ptr<SemNode> mRhs;
+};
+
 } // namespace safec

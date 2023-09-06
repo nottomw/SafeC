@@ -289,4 +289,17 @@ SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)
     mType = Type::If;
 }
 
+SemNodeUnaryOp::SemNodeUnaryOp(const uint32_t pos, const std::string &op)
+    : SemNodePositional{pos}
+    , mOp{op}
+    , mRhs{}
+{
+    mType = Type::UnaryOp;
+}
+
+void SemNodeUnaryOp::setRhs(std::shared_ptr<SemNode> rhs)
+{
+    mRhs = rhs;
+}
+
 } // namespace safec

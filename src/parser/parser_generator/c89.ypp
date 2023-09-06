@@ -136,12 +136,12 @@ unary_operator
     : '&'
     {
         pr("unary &");
-        // TODO: not handled yet
+        handle(SyntaxChunkType::kUnaryOp, "&");
     }
     | '*'
     {
         pr("unary *");
-        // TODO: not handled yet
+        handle(SyntaxChunkType::kUnaryOp, "*");
     }
     | '+'
     | '-'
