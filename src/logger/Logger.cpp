@@ -7,50 +7,28 @@
 namespace safec
 {
 
-#define LOGGER_TERM_COLOR_NC "\033[0m"
-#define LOGGER_TERM_COLOR_YELLOW "\033[00;33m"
-#define LOGGER_TERM_COLOR_RED "\033[00;31m"
-#define LOGGER_TERM_COLOR_GREEN "\033[00;32m"
-#define LOGGER_TERM_COLOR_LRED "\033[01;31m"
-#define LOGGER_TERM_COLOR_LGREEN "\033[01;32m"
-#define LOGGER_TERM_COLOR_LYELLOW "\033[01;33m"
-#define LOGGER_TERM_COLOR_LBLUE "\033[01;34m"
-#define LOGGER_TERM_COLOR_LPURPLE "\033[01;35m"
-#define LOGGER_TERM_COLOR_LCYAN "\033[01;36m"
-#define LOGGER_TERM_COLOR_MAGENTA "\033[01;35m"
+// move to some utils?
+#define STRINGIFY(x) #x
+
+// clang-format off
+#define COLORS_ENUMERATE_IN_SWITCH_CASE(color_name, color_value) \
+        case Color::color_name: \
+            return "\033[" STRINGIFY(color_value) "m"; \
+            break;
+// clang-format on
 
 static constexpr const char *colorToTermColor(Color c)
 {
     switch (c)
     {
-        case Color::NoColor:
-            return LOGGER_TERM_COLOR_NC;
-        case Color::Yellow:
-            return LOGGER_TERM_COLOR_YELLOW;
-        case Color::Red:
-            return LOGGER_TERM_COLOR_RED;
-        case Color::Green:
-            return LOGGER_TERM_COLOR_GREEN;
-        case Color::LightRed:
-            return LOGGER_TERM_COLOR_LRED;
-        case Color::LightGreen:
-            return LOGGER_TERM_COLOR_LGREEN;
-        case Color::LightYellow:
-            return LOGGER_TERM_COLOR_LYELLOW;
-        case Color::LightBlue:
-            return LOGGER_TERM_COLOR_LBLUE;
-        case Color::LightPurple:
-            return LOGGER_TERM_COLOR_LPURPLE;
-        case Color::LightCyan:
-            return LOGGER_TERM_COLOR_LCYAN;
-        case Color::Magenta:
-            return LOGGER_TERM_COLOR_MAGENTA;
+        COLORS_ENUMERATE(COLORS_ENUMERATE_IN_SWITCH_CASE);
+
         default:
             break;
     }
 
     assert(nullptr == "invalid logger color");
-    return LOGGER_TERM_COLOR_NC;
+    return "";
 }
 
 LogHelper::LogHelper(const char *const formatString, logger::Properties &&props)
@@ -117,14 +95,22 @@ void LogHelper::logIfAllArgsProvided()
 {
     if (mArgsLeft == 0U)
     {
+        const char *const bgColor =                      //
+            (mProperties.getColorBg() == Color::NoColor) //
+                ? ("")
+                : (colorToTermColor(mProperties.getColorBg()));
+
         std::cout << colorToTermColor(mProperties.getColor()) //
+                  << bgColor                                  //
                   << mFormatString                            //
                   << colorToTermColor(Color::NoColor);
 
-        if (mProperties.getNewLine() == logger::NewLine::Yes)
+        if (mProperties.getNewLine() == NewLine::Yes)
         {
             std::cout << '\n';
         }
+
+        fflush(stdout);
     }
 }
 
@@ -157,11 +143,17 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
 
     if (argsLeft == 0U)
     {
+        const char *const bgColor =                //
+            (props.getColorBg() == Color::NoColor) //
+                ? ("")
+                : (colorToTermColor(props.getColorBg()));
+
         std::cout << colorToTermColor(props.getColor()) //
+                  << bgColor                            //
                   << formatString                       //
                   << colorToTermColor(Color::NoColor);  //
 
-        if (props.getNewLine() == logger::NewLine::Yes)
+        if (props.getNewLine() == NewLine::Yes)
         {
             std::cout << '\n';
         }
@@ -183,16 +175,35 @@ LogHelper log(const char *const formatString, logger::Properties &&props)
 logger::Properties::Properties(const Color color, const NewLine nl)
     : mNewLine{nl}
     , mColor{color}
+    , mBgColor{Color::NoColor}
+{
+}
+
+logger::Properties::Properties( //
+    const Color color,
+    const Color bgColor,
+    const NewLine nl)
+    : mNewLine{nl}
+    , mColor{color}
+    , mBgColor{bgColor}
 {
 }
 
 logger::Properties::Properties(const NewLine nl)
     : mNewLine{nl}
     , mColor{Color::NoColor}
+    , mBgColor{Color::NoColor}
 {
 }
 
-logger::NewLine logger::Properties::getNewLine() const
+logger::Properties::Properties()
+    : mNewLine{NewLine::Yes}
+    , mColor{Color::NoColor}
+    , mBgColor{Color::NoColor}
+{
+}
+
+NewLine logger::Properties::getNewLine() const
 {
     return mNewLine;
 }
@@ -200,6 +211,11 @@ logger::NewLine logger::Properties::getNewLine() const
 Color logger::Properties::getColor() const
 {
     return mColor;
+}
+
+Color logger::Properties::getColorBg() const
+{
+    return mBgColor;
 }
 
 } // namespace safec

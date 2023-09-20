@@ -25,9 +25,9 @@ namespace
 
 [[maybe_unused]] void syntaxReport(const uint32_t stringIndex,
                                    const std::string &name,
-                                   const Color color = Color::LightGreen)
+                                   const Color color = Color::Green)
 {
-    log("@ % at % @", {color, logger::NewLine::No}).arg(name).arg(stringIndex);
+    log("@ % at % @", {color, NewLine::No}).arg(name).arg(stringIndex);
 }
 
 template <typename TUnderlyingSemNode>

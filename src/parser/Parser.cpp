@@ -94,7 +94,7 @@ void Parser::parseFile(const bfs::path &path)
 
     log("Current AST:");
     mSemantics.display();
-    log("\n\n", {logger::NewLine::No});
+    log("\n\n", {NewLine::No});
 }
 
 void Parser::dumpFileWithModifications(const boost::filesystem::path &path)

@@ -24,7 +24,7 @@ void WalkerPrint::peek(SemNodePositional &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 {
-    log("% { %, % }", Color::LightYellow) //
+    log("% { %, % }", Color::Yellow) //
         .arg(getPrefix(node, astLevel))
         .arg(node.getStart())
         .arg(node.getEnd());
@@ -32,7 +32,7 @@ void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    log("% (%) { % -- % }", Color::LightCyan) //
+    log("% (%) { % -- % }", {Color::Black, Color::BgYellow}) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getStart())
@@ -41,7 +41,7 @@ void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
-    log("% % { % -- % }", Color::LightCyan) //
+    log("% % { % -- % }", {Color::Black, Color::BgGreen}) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getStart())
@@ -84,7 +84,7 @@ void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)
 {
-    log("% '%' { % }", Color::LightYellow) //
+    log("% '%' { % }", Color::Yellow) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getPos());
@@ -92,7 +92,7 @@ void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeBinaryOp &node, const uint32_t astLevel)
 {
-    log("% '%' { % }", Color::LightYellow) //
+    log("% '%' { % }", Color::Yellow) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getPos());
@@ -108,7 +108,7 @@ void WalkerPrint::peek(SemNodeIdentifier &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeIf &node, const uint32_t astLevel)
 {
-    log("% '%' { % -- % }", Color::Green) //
+    log("% '%' { % -- % }", {Color::Black, Color::BgMagenta}) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getStart())
