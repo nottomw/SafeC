@@ -8,7 +8,7 @@ void FUNCTION_NO_RETURN_NO_PARAMS(void)
     // nothing
 }
 
-void** FUNCTION_WITH_VOIDPTR_RETURN_NO_PARAMS(void)
+void **FUNCTION_WITH_VOIDPTR_RETURN_NO_PARAMS(void)
 {
     // nothing
 }
@@ -58,7 +58,7 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     const int valueDeclarationWithOperandsOnRhs = (i + 123);
     int valueDeclWithBinaryOpsRhs = i + 555 + 666;
 
-    varWithNoValue = 123; // assignment
+    varWithNoValue = 123;  // assignment
     varWithNoValue += 123; // unary op assignment
 
     for (i = 0; i < a; i++)
@@ -103,4 +103,9 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     ++i;
 
     return 124;
+}
+
+void FUNCTION_WITH_MULTIPLE_SAME_TYPE_VARS(void)
+{
+    // int a, b, c; // TODO: handle
 }

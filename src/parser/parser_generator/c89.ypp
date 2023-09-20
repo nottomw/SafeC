@@ -97,6 +97,10 @@ primary_expression
 postfix_expression
     : primary_expression
     | postfix_expression '[' expression ']'
+    {
+        pr("postfix[]");
+        handle(SyntaxChunkType::kPostfixExpression, "[]");
+    }
     | postfix_expression '(' ')'
     {
         pr("postfix()");
@@ -427,6 +431,10 @@ direct_declarator
     | '(' declarator ')'
     | direct_declarator '[' constant_expression ']'
     | direct_declarator '[' ']'
+    {
+        pr("direct decl array");
+        handle(SyntaxChunkType::kArrayDecl);
+    }
     | direct_declarator '(' parameter_type_list ')'
     | direct_declarator '(' identifier_list ')'
     | direct_declarator '(' ')'
@@ -507,6 +515,10 @@ direct_abstract_declarator
 initializer
     : assignment_expression
     | '{' initializer_list '}'
+    {
+        pr("brace init end");
+        handle(SyntaxChunkType::kInitializerList);
+    }
     | '{' initializer_list ',' '}'
     ;
 
@@ -578,7 +590,7 @@ for_keyword
     ;
 
 iteration_statement
-    : WHILE '(' expression ')' statement
+    : WHILE { pr("while hdr"); handle(SyntaxChunkType::kWhileLoopHeader); } '(' expression ')' { pr("while cond"); handle(SyntaxChunkType::kWhileLoopConditions); } statement { pr("while body"); handle(SyntaxChunkType::kWhileLoop); }
     | DO statement WHILE '(' expression ')' ';'
     | for_keyword '(' expression_statement expression_statement ')' { handle(SyntaxChunkType::kForLoopConditions); } statement { pr("for loop body"); handle(SyntaxChunkType::kForLoop); }
     | for_keyword '(' expression_statement expression_statement expression ')' { handle(SyntaxChunkType::kForLoopConditions); } statement { pr("for loop body"); handle(SyntaxChunkType::kForLoop); }
@@ -587,8 +599,20 @@ iteration_statement
 jump_statement
     : GOTO IDENTIFIER ';'
     | CONTINUE ';'
+    {
+        pr("continue");
+        handle(SyntaxChunkType::kJumpStatement, "continue");
+    }
     | BREAK ';'
+    {
+        pr("break");
+        handle(SyntaxChunkType::kJumpStatement, "break");
+    }
     | RETURN ';'
+    {
+        pr("return (empty)");
+        handle(SyntaxChunkType::kReturn, "no-value");
+    }
     | RETURN expression ';'
     {
         pr("return");

@@ -11,8 +11,7 @@
         selector(Scope) \
         selector(Function) \
         selector(Return) \
-        selector(Break) \
-        selector(Continue) \
+        selector(JumpStatement) \
         selector(Declaration) \
         selector(PostfixExpression) \
         selector(EmptyStatement) \
@@ -20,5 +19,6 @@
         selector(Identifier) \
         selector(Constant) \
         selector(If) \
-        selector(UnaryOp)
+        selector(UnaryOp) \
+        selector(InitializerList)
 // clang-format on

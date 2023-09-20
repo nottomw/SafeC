@@ -56,8 +56,9 @@ void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
 {
-    log("% '%' { % }",
-        Color::Magenta, //
+    log("% '%' { % }", //
+        Color::White,
+        Color::BgBlack,
         getPrefix(node, astLevel),
         node.toStr(),
         node.getPos());
@@ -72,14 +73,14 @@ void WalkerPrint::peek(SemNodeUnaryOp &node, const uint32_t astLevel)
         node.getPos());
 }
 
-void WalkerPrint::peek(SemNodeBreak &node, const uint32_t astLevel)
+void WalkerPrint::peek(SemNodeJumpStatement &node, const uint32_t astLevel)
 {
-    peekDefault<SemNodePositional>(node, astLevel);
-}
-
-void WalkerPrint::peek(SemNodeContinue &node, const uint32_t astLevel)
-{
-    peekDefault<SemNodePositional>(node, astLevel);
+    log("% '%' { % }", //
+        Color::White,
+        Color::BgBlack,
+        getPrefix(node, astLevel),
+        node.toStr(),
+        node.getPos());
 }
 
 void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)

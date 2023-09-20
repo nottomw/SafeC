@@ -53,8 +53,14 @@ private:
     void handleForLoopConditions();
     void handleConditionExpression(const uint32_t stringIndex);
     void handleBinaryOp(const uint32_t stringIndex, const std::string &op);
+    void handleReturn(const uint32_t stringIndex, const std::string &additional);
+    void handleJumpStatement(const uint32_t stringIndex, const std::string &stmtName);
+    void handleWhileLoopConditions();
+    void handleDirectDecl(const uint32_t stringIndex, const std::string &additional);
 
     void addNodeToAst(std::shared_ptr<SemNode> node);
+
+    void foldUnaryOps(const size_t start);
 
     uint32_t countPointersInChunks(const uint32_t index);
     void stagedNodesPrint(const std::string &str = "");

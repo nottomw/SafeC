@@ -88,51 +88,7 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kDirectDecl:
-            {
-                auto &chunks = mState.getChunks();
-                const auto chunksSize = chunks.size();
-
-                if (chunksSize == 0)
-                {
-                    std::string typeStr = "void";
-
-                    const uint32_t ptrCount = countPointersInChunks(0);
-                    for (uint32_t i = 0; i < ptrCount; ++i)
-                    {
-                        typeStr += "*";
-                    }
-
-                    // void decl - probably a function
-                    auto node = std::make_shared<SemNodeDeclaration>(stringIndex, "void", additional);
-                    mState.stageNode(node);
-                }
-                else
-                {
-                    // should have only type on stack, maybe with pointers
-                    assert(chunksSize >= 1);
-                    assert((chunks[0].mType == SyntaxChunkType::kType) || //
-                           (chunks[0].mType == SyntaxChunkType::kPointer));
-
-                    uint32_t pointerCountStartIndex = 1;
-                    std::string typeStr = chunks[0].mAdditional;
-                    if (chunks[0].mType == SyntaxChunkType::kPointer)
-                    {
-                        pointerCountStartIndex = 0;
-                        typeStr = "void";
-                    }
-
-                    const uint32_t ptrCount = countPointersInChunks(pointerCountStartIndex);
-                    for (uint32_t i = 0; i < ptrCount; ++i)
-                    {
-                        typeStr += "*";
-                    }
-
-                    auto node = std::make_shared<SemNodeDeclaration>(stringIndex, typeStr, additional);
-                    mState.stageNode(node);
-                }
-
-                chunks.clear();
-            }
+            handleDirectDecl(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kFunctionHeader:
@@ -211,7 +167,7 @@ void Semantics::handle( //
         case SyntaxChunkType::kForLoopHeader:
             {
                 mState.mState = SState::InForLoopContext;
-                auto node = std::make_shared<SemNodeLoop>(stringIndex);
+                auto node = std::make_shared<SemNodeLoop>(stringIndex, "for");
                 addNodeToAst(node);
                 mState.addScope(node);
             }
@@ -250,38 +206,7 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kReturn:
-            {
-                auto &stagedNodes = mState.getStagedNodes();
-                assert(stagedNodes.empty() == false);
-
-                auto rhs = stagedNodes.back();
-                stagedNodes.pop_back();
-
-                auto finalRhs = rhs;
-
-                if (stagedNodes.empty() == false)
-                {
-                    auto possibleUnaryOp = stagedNodes.back();
-                    while (possibleUnaryOp && possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
-                    {
-                        // TODO: how far back should this while() reach?
-                        semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
-                        finalRhs = possibleUnaryOp;
-                        stagedNodes.pop_back();
-                        rhs = finalRhs;
-
-                        if (stagedNodes.empty() == true)
-                        {
-                            break;
-                        }
-
-                        possibleUnaryOp = stagedNodes.back();
-                    }
-                }
-
-                auto node = std::make_shared<SemNodeReturn>(stringIndex, finalRhs);
-                addNodeToAst(node);
-            }
+            handleReturn(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kUnaryOp:
@@ -325,6 +250,89 @@ void Semantics::handle( //
         case SyntaxChunkType::kBinaryOp:
             {
                 handleBinaryOp(stringIndex, additional);
+            }
+            break;
+
+        case SyntaxChunkType::kJumpStatement:
+            handleJumpStatement(stringIndex, additional);
+            break;
+
+        case SyntaxChunkType::kWhileLoopHeader:
+            {
+                auto node = std::make_shared<SemNodeLoop>(stringIndex, "while");
+                addNodeToAst(node);
+                mState.addScope(node);
+            }
+            break;
+
+        case SyntaxChunkType::kWhileLoopConditions:
+            handleWhileLoopConditions();
+            break;
+
+        case SyntaxChunkType::kWhileLoop:
+            {
+                auto currentScope = mState.getCurrentScope();
+                auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
+                scopeNode->setEnd(stringIndex);
+
+                mState.removeScope();
+            }
+            break;
+
+        case SyntaxChunkType::kArrayDecl:
+            {
+                auto &stagedNodes = mState.getStagedNodes();
+                assert(stagedNodes.size() >= 1);
+
+                auto &node = stagedNodes.back();
+                assert(node->getType() == SemNode::Type::Declaration);
+                auto nodeDecl = semNodeConvert<SemNodeDeclaration>(node);
+                nodeDecl->appendToType("[]");
+            }
+            break;
+
+        case SyntaxChunkType::kInitializerList:
+            {
+                // braced init list
+                auto nodeInitList = std::make_shared<SemNodeInitializerList>(stringIndex);
+
+                auto &stagedNodes = mState.getStagedNodes();
+                assert(stagedNodes.size() > 1);
+
+                assert(stagedNodes[0]->getType() == SemNode::Type::BinaryOp);
+                auto binOpNode = semNodeConvert<SemNodeBinaryOp>(stagedNodes[0]);
+
+                // first staged node should be the declaration
+                // all following nodes should be identifiers - contents
+                // of the initializer list
+
+                // fold any unary operators in init list
+                const size_t stagedNodeLastIdx = stagedNodes.size() - 1;
+                for (size_t i = stagedNodeLastIdx; i > 0 /* skip first */; i--)
+                {
+                    auto node = stagedNodes[i];
+                    if (node->getType() == SemNode::Type::UnaryOp)
+                    {
+                        auto nodeUnaryOp = semNodeConvert<SemNodeUnaryOp>(node);
+
+                        const bool nextNodeInRange = ((i + 1) < stagedNodeLastIdx);
+                        if (nextNodeInRange)
+                        {
+                            auto nodeFollowing = stagedNodes[i + 1];
+                            nodeUnaryOp->setRhs(nodeFollowing);
+                            stagedNodes.erase(stagedNodes.begin() + i + 1);
+                        }
+                    }
+                }
+
+                for (size_t i = 1 /* skip first */; i < stagedNodes.size(); i++)
+                {
+                    auto node = stagedNodes[i];
+                    nodeInitList->addEntry(node);
+                }
+                stagedNodes.erase(stagedNodes.begin() + 1, stagedNodes.end());
+
+                mState.stageNode(nodeInitList);
             }
             break;
 
@@ -386,34 +394,17 @@ void Semantics::handleInitDeclaration( //
 
     if (withAssignment)
     {
+        if (stagedNodes.size() > 2)
+        {
+            foldUnaryOps(stagedNodes.size() - 1);
+        }
+
         auto rhs = stagedNodes.back();
         stagedNodes.pop_back();
 
-        auto finalRhs = rhs;
-
-        if (stagedNodes.empty() == false)
-        {
-
-            auto possibleUnaryOp = stagedNodes.back();
-            while (possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
-            {
-                // TODO: how far back should this while() reach?
-                semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
-                finalRhs = possibleUnaryOp;
-                stagedNodes.pop_back();
-                rhs = finalRhs;
-                if (stagedNodes.empty() == true)
-                {
-                    break;
-                }
-
-                possibleUnaryOp = stagedNodes.back();
-            }
-        }
-
         auto binaryOp = semNodeConvert<SemNodeBinaryOp>(stagedNodes.back());
         stagedNodes.pop_back();
-        binaryOp->setRhs(finalRhs);
+        binaryOp->setRhs(rhs);
 
         addNodeToAst(binaryOp);
     }
@@ -430,8 +421,16 @@ void Semantics::handleAssignment(const uint32_t stringIndex)
 {
     auto &stagedNodes = mState.getStagedNodes();
 
+    // If we have more that 2 staged nodes, probably
+    // unary operator was used...
+    if (stagedNodes.size() > 2)
+    {
+        foldUnaryOps(stagedNodes.size() - 1);
+    }
+
     auto rhs = stagedNodes.back();
     stagedNodes.pop_back();
+
     auto binaryOp = semNodeConvert<SemNodeBinaryOp>(stagedNodes.back());
     stagedNodes.pop_back();
     binaryOp->setRhs(rhs);
@@ -499,6 +498,21 @@ void Semantics::handlePostfixExpression( //
             mState.stageNode(node);
         }
     }
+    else if (op == "[]")
+    {
+        // should have index & array at least
+        assert(stagedNodes.size() >= 2);
+
+        auto indexExprNode = stagedNodes.back();
+        stagedNodes.pop_back();
+
+        auto lhs = stagedNodes.back();
+        stagedNodes.pop_back();
+
+        auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, lhs);
+        node->addArg(indexExprNode);
+        mState.stageNode(node);
+    }
     else
     {
         auto lhs = stagedNodes.back();
@@ -539,6 +553,67 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     mState.addScope(nodeIf);
 }
 
+void Semantics::handleWhileLoopConditions()
+{
+    auto &stagedNodes = mState.getStagedNodes();
+
+    assert(stagedNodes.size() >= 1);
+
+    auto itCond = stagedNodes.back();
+    stagedNodes.pop_back();
+
+    auto currentScope = mState.getCurrentScope(); // the loop
+    auto loopNode = semNodeConvert<SemNodeLoop>(currentScope);
+    loopNode->setIteratorCondition(itCond);
+}
+
+void Semantics::handleDirectDecl(const uint32_t stringIndex, const std::string &additional)
+{
+    auto &chunks = mState.getChunks();
+    const auto chunksSize = chunks.size();
+
+    if (chunksSize == 0)
+    {
+        std::string typeStr = "void";
+
+        const uint32_t ptrCount = countPointersInChunks(0);
+        for (uint32_t i = 0; i < ptrCount; ++i)
+        {
+            typeStr += "*";
+        }
+
+        // void decl - probably a function
+        auto node = std::make_shared<SemNodeDeclaration>(stringIndex, "void", additional);
+        mState.stageNode(node);
+    }
+    else
+    {
+        // should have only type on stack, maybe with pointers
+        assert(chunksSize >= 1);
+        assert((chunks[0].mType == SyntaxChunkType::kType) || //
+               (chunks[0].mType == SyntaxChunkType::kPointer));
+
+        uint32_t pointerCountStartIndex = 1;
+        std::string typeStr = chunks[0].mAdditional;
+        if (chunks[0].mType == SyntaxChunkType::kPointer)
+        {
+            pointerCountStartIndex = 0;
+            typeStr = "void";
+        }
+
+        const uint32_t ptrCount = countPointersInChunks(pointerCountStartIndex);
+        for (uint32_t i = 0; i < ptrCount; ++i)
+        {
+            typeStr += "*";
+        }
+
+        auto node = std::make_shared<SemNodeDeclaration>(stringIndex, typeStr, additional);
+        mState.stageNode(node);
+    }
+
+    chunks.clear();
+}
+
 void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op)
 {
     auto &stagedNodes = mState.getStagedNodes();
@@ -558,9 +633,78 @@ void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op
     mState.stageNode(node);
 }
 
+void Semantics::handleReturn(const uint32_t stringIndex, const std::string &additional)
+{
+    if (additional == "no-value")
+    {
+        auto node = std::make_shared<SemNodeReturn>(stringIndex);
+        addNodeToAst(node);
+    }
+    else
+    {
+        auto &stagedNodes = mState.getStagedNodes();
+        assert(stagedNodes.empty() == false);
+
+        auto rhs = stagedNodes.back();
+        stagedNodes.pop_back();
+
+        auto finalRhs = rhs;
+
+        if (stagedNodes.size() > 0)
+        {
+            auto possibleUnaryOp = stagedNodes.back();
+            while (possibleUnaryOp && possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
+            {
+                // TODO: how far back should this while() reach?
+                semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
+                finalRhs = possibleUnaryOp;
+                stagedNodes.pop_back();
+                rhs = finalRhs;
+
+                if (stagedNodes.empty() == true)
+                {
+                    break;
+                }
+
+                possibleUnaryOp = stagedNodes.back();
+            }
+        }
+
+        auto node = std::make_shared<SemNodeReturn>(stringIndex, finalRhs);
+        addNodeToAst(node);
+    }
+}
+
+void Semantics::handleJumpStatement( //
+    const uint32_t stringIndex,
+    const std::string &stmtName)
+{
+    auto node = std::make_shared<SemNodeJumpStatement>(stringIndex, stmtName);
+    addNodeToAst(node);
+}
+
 void Semantics::addNodeToAst(std::shared_ptr<SemNode> node)
 {
     mState.getCurrentScope()->attach(node);
+}
+
+void Semantics::foldUnaryOps(const size_t start)
+{
+    auto &stagedNodes = mState.getStagedNodes();
+
+    for (size_t i = start; i > 0; i--)
+    {
+        auto node = stagedNodes[i];
+        if (node->getType() == SemNode::Type::UnaryOp)
+        {
+            const bool nextNodeInRange = ((i + 1) < stagedNodes.size());
+            assert(nextNodeInRange);
+
+            auto unaryOpNode = semNodeConvert<SemNodeUnaryOp>(node);
+            unaryOpNode->setRhs(stagedNodes[i + 1]);
+            stagedNodes.erase(stagedNodes.begin() + i + 1);
+        }
+    }
 }
 
 uint32_t Semantics::countPointersInChunks(const uint32_t index)
@@ -591,7 +735,7 @@ void Semantics::stagedNodesPrint(const std::string &str)
     auto &stagedNodes = mState.getStagedNodes();
     for (auto &it : stagedNodes)
     {
-        log("staged node: %", Color::Green, it->toStr());
+        log("\tstaged node: [ % ] %", Color::Green, SemNode::TypeInfo::toStr(it->getType()), it->toStr());
     }
 }
 

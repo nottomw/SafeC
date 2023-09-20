@@ -157,6 +157,7 @@ private:
 class SemNodeReturn final : public SemNodePositional
 {
 public:
+    SemNodeReturn(const uint32_t index);
     SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs);
 
     std::string toStr() const override
@@ -170,18 +171,6 @@ public:
 
 private:
     std::shared_ptr<SemNode> mRhs;
-};
-
-class SemNodeBreak : public SemNodePositional
-{
-public:
-    SemNodeBreak(const uint32_t pos);
-};
-
-class SemNodeContinue : public SemNodePositional
-{
-public:
-    SemNodeContinue(const uint32_t pos);
 };
 
 class SemNodeIdentifier : public SemNodePositional
@@ -227,6 +216,8 @@ public:
     std::string getLhsType() const;
     std::string getLhsIdentifier() const;
 
+    void appendToType(const std::string &str);
+
     std::string toStr() const override
     {
         return mLhsType + " " + mLhsIdentifier;
@@ -266,6 +257,19 @@ public:
                 lhs += ", ";
             }
         }
+        else if (mOperator == "[]")
+        {
+            lhs += "[";
+
+            // can this be even multiple args?
+            for (auto &args : mArgs)
+            {
+                lhs += args->toStr();
+                lhs += ", ";
+            }
+
+            lhs += "]";
+        }
         else
         {
             lhs += mOperator;
@@ -286,7 +290,7 @@ private:
 class SemNodeLoop : public SemNodeScope
 {
 public:
-    SemNodeLoop(const uint32_t pos);
+    SemNodeLoop(const uint32_t pos, const std::string &loopName);
 
     void setIteratorInit(std::shared_ptr<SemNode> node);
     void setIteratorCondition(std::shared_ptr<SemNode> node);
@@ -299,6 +303,7 @@ public:
     std::string toStr() const override;
 
 private:
+    std::string mLoopName;
     std::shared_ptr<SemNode> mIteratorInit;
     std::shared_ptr<SemNode> mIteratorCondition;
     std::shared_ptr<SemNode> mIteratorChange;
@@ -383,6 +388,33 @@ public:
 private:
     std::string mOp;
     std::shared_ptr<SemNode> mRhs;
+};
+
+class SemNodeJumpStatement : public SemNodePositional
+{
+public:
+    SemNodeJumpStatement(const uint32_t pos, const std::string &name);
+
+    std::string toStr() const override
+    {
+        return mName;
+    }
+
+private:
+    std::string mName;
+};
+
+class SemNodeInitializerList : public SemNodePositional
+{
+public:
+    SemNodeInitializerList(const uint32_t pos);
+
+    void addEntry(std::shared_ptr<SemNode> node);
+
+    std::string toStr() const override;
+
+private:
+    std::vector<std::shared_ptr<SemNode>> mEntries;
 };
 
 } // namespace safec

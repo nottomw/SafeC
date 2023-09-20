@@ -30,14 +30,19 @@
     entry(kForLoopHeader) \
     entry(kForLoopConditions) \
     entry(kForLoop) \
+    entry(kWhileLoopHeader) \
+    entry(kWhileLoopConditions) \
+    entry(kWhileLoop) \
     entry(kRelationalExpression) \
     entry(kPostfixExpression) \
     entry(kEmptyStatement) \
     entry(kReturn) \
     entry(kUnaryOp) \
     entry(kBinaryOp) \
-    entry(kSimpleExpr) // needed?
-
+    entry(kSimpleExpr) /* needed? */ \
+    entry(kJumpStatement) \
+    entry(kArrayDecl) \
+    entry(kInitializerList)
 // clang-format on
 
 enum class SyntaxChunkType : uint32_t

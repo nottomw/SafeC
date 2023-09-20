@@ -104,23 +104,16 @@ void SemNodeFunction::addParam(const std::string &type, const std::string &name)
     mParams.emplace_back(Param{type, name});
 }
 
+SemNodeReturn::SemNodeReturn(const uint32_t index)
+    : SemNodeReturn{index, {}}
+{
+}
+
 SemNodeReturn::SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs) //
     : SemNodePositional{index}
     , mRhs{rhs}
 {
     mType = Type::Return;
-}
-
-SemNodeBreak::SemNodeBreak(const uint32_t pos) //
-    : SemNodePositional{pos}
-{
-    mType = Type::Break;
-}
-
-SemNodeContinue::SemNodeContinue(const uint32_t pos) //
-    : SemNodePositional{pos}
-{
-    mType = Type::Continue;
 }
 
 SemNodeIdentifier::SemNodeIdentifier(const uint32_t pos, const std::string &name)
@@ -168,6 +161,11 @@ std::string SemNodeDeclaration::getLhsIdentifier() const
     return mLhsIdentifier;
 }
 
+void SemNodeDeclaration::appendToType(const std::string &str)
+{
+    mLhsType += str;
+}
+
 SemNodePostfixExpression::SemNodePostfixExpression( //
     const uint32_t pos,
     const std::string &op,
@@ -194,8 +192,11 @@ void SemNodePostfixExpression::addArg(std::shared_ptr<SemNode> arg)
     mArgs.push_back(arg);
 }
 
-SemNodeLoop::SemNodeLoop(const uint32_t pos)
+SemNodeLoop::SemNodeLoop( //
+    const uint32_t pos,
+    const std::string &loopName)
     : SemNodeScope{pos}
+    , mLoopName{loopName}
 {
     mType = Type::Loop;
 }
@@ -243,10 +244,10 @@ std::string SemNodeLoop::toStr() const
     if (mIteratorChange)
         itChange = mIteratorChange->toStr();
 
-    return "(" + itInit + //
-           ", " +         //
-           itCond +       //
-           ", "           //
+    return mLoopName + "(" + itInit + //
+           ", " +                     //
+           itCond +                   //
+           ", "                       //
            + itChange + ")";
 }
 
@@ -300,6 +301,41 @@ SemNodeUnaryOp::SemNodeUnaryOp(const uint32_t pos, const std::string &op)
 void SemNodeUnaryOp::setRhs(std::shared_ptr<SemNode> rhs)
 {
     mRhs = rhs;
+}
+
+SemNodeJumpStatement::SemNodeJumpStatement( //
+    const uint32_t pos,
+    const std::string &name)
+    : SemNodePositional{pos}
+    , mName{name}
+{
+    mType = Type::JumpStatement;
+}
+
+SemNodeInitializerList::SemNodeInitializerList(const uint32_t pos)
+    : SemNodePositional{pos}
+{
+    mType = Type::InitializerList;
+}
+
+void SemNodeInitializerList::addEntry(std::shared_ptr<SemNode> node)
+{
+    mEntries.push_back(node);
+}
+
+std::string SemNodeInitializerList::toStr() const
+{
+    std::string str;
+    str += "{ ";
+
+    for (auto &it : mEntries)
+    {
+        str += it->toStr();
+        str += ", ";
+    }
+
+    str += " }";
+    return str;
 }
 
 } // namespace safec
