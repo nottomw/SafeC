@@ -384,8 +384,6 @@ void Semantics::handleInitDeclaration( //
 {
     auto &stagedNodes = mState.getStagedNodes();
 
-    stagedNodesPrint("HANDLE INIT DECLARATION");
-
     if (withAssignment)
     {
         auto rhs = stagedNodes.back();
