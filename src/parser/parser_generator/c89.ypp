@@ -344,9 +344,13 @@ struct_or_union_specifier
     {
         pr("struct or union");
         handle(SyntaxChunkType::kStructOrUnionDecl);
+        free($2);
     }
     | struct_or_union '{' struct_declaration_list '}'
     | struct_or_union IDENTIFIER
+    {
+        free($2);
+    }
     ;
 
 struct_or_union
