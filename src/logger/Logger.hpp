@@ -126,6 +126,7 @@ void log(const char *const fmt, //
             {
                 // double percent, needs to be escaped
                 output += '%';
+                idx += 1;
             }
             else
             {
