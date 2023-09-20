@@ -88,13 +88,13 @@ void Parser::parseFile(const bfs::path &path)
         assert(parseRes == 0);
     }
 
-    log("\nParsing done, characters in file %: %\n") //
-        .arg(path.c_str())
-        .arg(lex_current_char);
+    log("\nParsing done, characters in file %: %\n", //
+        path.c_str(),
+        lex_current_char);
 
     log("Current AST:");
     mSemantics.display();
-    log("\n\n", {NewLine::No});
+    log("\n\n", NewLine::No);
 }
 
 void Parser::dumpFileWithModifications(const boost::filesystem::path &path)

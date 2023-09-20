@@ -6,7 +6,7 @@ add_library(logger
 
 target_include_directories(logger
     PUBLIC
-        ${PROJECT_SOURCE_DIR} # TODO: has to be changed...
+        ${PROJECT_SOURCE_DIR}
 )
 
 add_library(safec::logger ALIAS logger)

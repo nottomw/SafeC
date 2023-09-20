@@ -71,15 +71,17 @@ public:
 
     void printChunks(const std::string &str = "") const
     {
-        log("\n--- SYNTAX CHUNKS [ % ] (chunks count: %):", {Color::Green}) //
-            .arg(str)
-            .arg(mSyntaxChunks.size());
+        log("\n--- SYNTAX CHUNKS [ % ] (chunks count: %):",
+            Color::Green, //
+            str,
+            mSyntaxChunks.size());
         for (const auto &it : mSyntaxChunks)
         {
-            log("---\t-> chunk type: %, pos: %, additional: '%'", {Color::Green}) //
-                .arg(syntaxChunkTypeToStr(it.mType))
-                .arg(it.mPos)
-                .arg(it.mAdditional);
+            log("---\t-> chunk type: %, pos: %, additional: '%'",
+                Color::Green, //
+                syntaxChunkTypeToStr(it.mType),
+                it.mPos,
+                it.mAdditional);
         }
     }
 

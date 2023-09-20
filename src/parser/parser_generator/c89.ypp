@@ -32,9 +32,9 @@ auto &sem = safec::SemanticsFactory::get();
     const std::string& str,
     safec::Color color = safec::Color::Yellow)
 {
-    safec::log("@ % at % @", { color, safec::NewLine::No })
-        .arg(str)
-        .arg(lex_current_char);
+    safec::log("@ % at % @", color, safec::NewLine::No,
+        str,
+        lex_current_char);
 }
 
 [[maybe_unused]] static void handle(

@@ -1,7 +1,11 @@
 #pragma once
 
+#include <cassert>
 #include <cstdint>
+#include <cstring>
+#include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace safec
@@ -45,54 +49,134 @@ enum class NewLine
 namespace logger
 {
 
-class Properties
+namespace internal
 {
-public:
-    Properties(const Color color, const NewLine nl = NewLine::Yes);
-    Properties(const Color color, const Color bgColor, const NewLine nl = NewLine::Yes);
-    Properties(const NewLine nl);
-    Properties();
 
-    NewLine getNewLine() const;
-    Color getColor() const;
-    Color getColorBg() const;
+void print(const std::string &str, Color color, Color bgColor, NewLine nl);
 
-private:
-    const NewLine mNewLine;
-    const Color mColor;
-    const Color mBgColor;
-};
+template <typename T>
+using trait_normalize = std::remove_cv_t<std::remove_reference_t<T>>;
+
+template <typename T,
+          typename std::enable_if<                                     //
+              !std::is_arithmetic<trait_normalize<T>>::value &&        //
+              !std::is_same<trait_normalize<T>, std::string>::value && //
+              !std::is_same<trait_normalize<T>, char>::value>::type * = nullptr>
+std::string toStr(const T &arg)
+{
+    // not an arithmetic, not a string, try to construct std::string directly
+    return std::string{arg};
+}
+
+template <typename T,
+          typename std::enable_if< //
+              std::is_same<trait_normalize<T>, char>::value>::type * = nullptr>
+std::string toStr(const char &arg)
+{
+    return std::string(1, arg);
+}
+
+template <typename T,
+          typename std::enable_if< //
+              std::is_same<trait_normalize<T>, std::string>::value>::type * = nullptr>
+std::string toStr(const T &arg)
+{
+    // plain std::string
+    return arg;
+}
+
+template <typename T,
+          typename std::enable_if< //
+              std::is_arithmetic<trait_normalize<T>>::value>::type * = nullptr>
+std::string toStr(T arg)
+{
+    // number
+    return std::to_string(arg);
+}
+
+} // namespace internal
 
 } // namespace logger
 
-class LogHelper
+// generic log function
+template <typename... Ts>
+void log(const char *const fmt, //
+         Color color,
+         Color bgColor,
+         NewLine nl,
+         Ts... args)
 {
-public:
-    LogHelper(const char *const formatString, logger::Properties &&props);
+    assert(fmt != nullptr);
 
-    LogHelper &arg(const std::string &a);
-    LogHelper &arg(const char a);
-    LogHelper &arg(const int32_t a);
-    LogHelper &arg(const uint32_t a);
-    LogHelper &arg(const size_t a);
-    LogHelper &arg(const char *const a);
-    LogHelper &arg(const std::string_view a);
+    std::string output;
+    std::vector<std::string> argsStr;
 
-private:
-    static constexpr char mFormatChar = '%';
-    uint32_t mArgsLeft{0U};
-    std::string mFormatString;
-    logger::Properties mProperties;
-    std::vector<size_t> mArgsOffsets;
+    const size_t fmtLen = strlen(fmt);
 
-    void logIfAllArgsProvided();
+    // stringify all arguments...
+    (argsStr.push_back(logger::internal::toStr(args)), ...);
 
-    friend LogHelper log(const char *const, logger::Properties &&);
-};
+    size_t argsUsed = 0;
+    for (size_t idx = 0; idx < fmtLen; idx++)
+    {
+        if (fmt[idx] == '%')
+        {
+            const bool plusOneInRange = ((idx + 1) < fmtLen);
+            if (plusOneInRange && (fmt[idx + 1U] == '%'))
+            {
+                // double percent, needs to be escaped
+                output += '%';
+            }
+            else
+            {
+                const bool argsInRange = (argsUsed < argsStr.size());
+                assert(argsInRange);
 
-// TODO: add option to color only parts of string?
+                output += argsStr[argsUsed];
+                argsUsed += 1;
+            }
+        }
+        else
+        {
+            output += fmt[idx];
+        }
+    }
 
-// example: log("text % % %").arg(5).arg(3.14).arg("text");
-LogHelper log(const char *const formatString, logger::Properties &&props = logger::Properties{});
+    assert(argsUsed == argsStr.size());
+
+    logger::internal::print(output, color, bgColor, nl);
+}
+
+// fallback log functions...
+
+template <typename... Ts>
+void log(const char *const fmt, Ts... args)
+{
+    log(fmt, Color::NoColor, Color::NoColor, NewLine::Yes, args...);
+}
+
+template <typename... Ts>
+void log(const char *const fmt, Color color, NewLine nl, Ts... args)
+{
+    log(fmt, color, Color::NoColor, nl, args...);
+}
+
+template <typename... Ts>
+void log(const char *const fmt, Color color, Ts... args)
+{
+    log(fmt, color, Color::NoColor, NewLine::Yes, args...);
+}
+
+template <typename... Ts>
+void log(const char *const fmt, Color color, Color bgColor, Ts... args)
+{
+    log(fmt, color, bgColor, NewLine::Yes, args...);
+}
+
+template <typename... Ts>
+void log(const char *const fmt, NewLine nl, Ts... args)
+{
+    log(fmt, Color::NoColor, Color::NoColor, nl, args...);
+}
 
 } // namespace safec

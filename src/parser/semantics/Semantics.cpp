@@ -27,7 +27,7 @@ namespace
                                    const std::string &name,
                                    const Color color = Color::Green)
 {
-    log("@ % at % @", {color, NewLine::No}).arg(name).arg(stringIndex);
+    log("@ % at % @", color, NewLine::No, name, stringIndex);
 }
 
 template <typename TUnderlyingSemNode>
@@ -329,7 +329,7 @@ void Semantics::handle( //
             break;
 
         default:
-            log("type not handled: %", {Color::Red}).arg(static_cast<uint32_t>(type));
+            log("type not handled: %", Color::Red, static_cast<uint32_t>(type));
             break;
     }
 }
@@ -587,11 +587,11 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
 
 void Semantics::stagedNodesPrint(const std::string &str)
 {
-    log("\nSTAGED NODES [ % ], staged nodes:", Color::Green).arg(str);
+    log("\nSTAGED NODES [ % ], staged nodes:", Color::Green, str);
     auto &stagedNodes = mState.getStagedNodes();
     for (auto &it : stagedNodes)
     {
-        log("staged node: %", Color::Green).arg(it->toStr());
+        log("staged node: %", Color::Green, it->toStr());
     }
 }
 

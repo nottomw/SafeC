@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         auto &disabledFeatures = vm["disable"].as<std::vector<std::string>>();
         for (const auto &it : disabledFeatures)
         {
-            safec::log("\t--> %").arg(it);
+            safec::log("\t--> %", it);
         }
     }
 
@@ -69,14 +69,14 @@ int main(int argc, char **argv)
         auto &filesToParse = vm["file"].as<std::vector<std::string>>();
         for (const auto &it : filesToParse)
         {
-            safec::log("Parsing file: '%'").arg(it);
+            safec::log("Parsing file: '%'", it);
 
             parser.parse(it);
 
             //            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
             //            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
 
-            //            safec::log("Generating C file: '%'").arg(outputFileFullPath.c_str());
+            //            safec::log("Generating C file: '%'", outputFileFullPath.c_str());
 
             //            safec::Generator generator{parser};
             //            generator.generate(outputFileFullPath);
