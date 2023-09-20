@@ -52,6 +52,7 @@ private:
     void handlePostfixExpression(const uint32_t stringIndex, const std::string &op);
     void handleForLoopConditions();
     void handleConditionExpression(const uint32_t stringIndex);
+    void handleBinaryOp(const uint32_t stringIndex, const std::string &op);
 
     void addNodeToAst(std::shared_ptr<SemNode> node);
 

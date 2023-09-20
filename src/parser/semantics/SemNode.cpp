@@ -195,7 +195,7 @@ void SemNodePostfixExpression::addArg(std::shared_ptr<SemNode> arg)
 }
 
 SemNodeLoop::SemNodeLoop(const uint32_t pos)
-    : SemNodePositional{pos}
+    : SemNodeScope{pos}
 {
     mType = Type::Loop;
 }

@@ -13,6 +13,39 @@ void** FUNCTION_WITH_VOIDPTR_RETURN_NO_PARAMS(void)
     // nothing
 }
 
+int FUNCTION_RETURNING_CONSTANT(void)
+{
+    return 123;
+}
+
+int FUNCTION_RETURNING_CONSTANT_EXPRESSION(void)
+{
+    return 123 + 456;
+}
+
+int FUNCTION_RETURNING_DEREF(void)
+{
+    int *ptr = &globalDeclaration;
+    return *ptr;
+}
+
+int FUNCTION_RETURNING_DOUBLE_DEREF(void)
+{
+    int *ptr = &globalDeclaration;
+    int *ptrptr = &ptr;
+    return **ptrptr;
+}
+
+int FUNCTION_RETURNING_PREINCREMENT(void)
+{
+    return ++globalDeclaration;
+}
+
+int FUNCTION_RETURNING_POSTINCREMENT(void)
+{
+    return globalDeclaration++;
+}
+
 int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **bar)
 {
     int varWithNoValue;
@@ -20,8 +53,10 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     int i = 0;
     int *ptrAssignment = &varWithNoValue;
     int **ptrAssignmentSecond = &ptrAssignment;
+    int doubleDerefUnaryOp = **ptrAssignmentSecond;
 
-    // const int valueDeclarationWithOperandsOnRhs = (i + 123); // TODO - rhs expression
+    const int valueDeclarationWithOperandsOnRhs = (i + 123);
+    int valueDeclWithBinaryOpsRhs = i + 555 + 666;
 
     varWithNoValue = 123; // assignment
     varWithNoValue += 123; // unary op assignment
@@ -36,30 +71,36 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     for (; i < a; i++) // empty statement
     {
         i = 2;
-        // nothing
     }
 
     for (i = SOME_INIT_VAL; i < a; i++)
     {
         printer("num: %d\n", i); // plain call
-        // i = i++; // TODO
+        i = i++;
     }
 
-    // if (paramCondition == 42) // kConstant - fails now
+    if (paramCondition == 42)
+    {
+        printer("if with constant\n");
+    }
+
     if (paramCondition == SOME_TEST_VAL)
     {
-        int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666); // TODO: expression in function params
-        int resFromCalledFunWithSumInArg = calledFunction(paramCondition, foo + bar); // TODO: expression in function params
+        int resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666);
+        int resFromCalledFunWithSumInArg = calledFunction(paramCondition, foo + bar);
         int resFromCalledFun = calledFunction(paramCondition, foo);
         int resFromAnother = someFunctionWithNoParams();
         resFromCalledFun = calledFunctionSecond(paramCondition);
+
+        resFromCalledFunWithExprInFun = calledFunction(paramCondition + 666 + 777);
+
         if (resFromCalledFun != 0)
         {
             return resFromCalledFun;
         }
     }
 
-    ++i; // prefix expr?
+    ++i;
 
     return 124;
 }

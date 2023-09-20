@@ -194,12 +194,16 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kCondition:
             {
+                auto currentScope = mState.getCurrentScope();
+                auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
+                scopeNode->setEnd(stringIndex);
                 mState.removeScope();
             }
             break;
 
         case SyntaxChunkType::kForLoopHeader:
             {
+                mState.mState = SState::InForLoopContext;
                 auto node = std::make_shared<SemNodeLoop>(stringIndex);
                 addNodeToAst(node);
                 mState.addScope(node);
@@ -207,11 +211,18 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kForLoopConditions:
-            handleForLoopConditions();
+            {
+                mState.mState = SState::Idle;
+                handleForLoopConditions();
+            }
             break;
 
         case SyntaxChunkType::kForLoop:
             {
+                auto currentScope = mState.getCurrentScope();
+                auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
+                scopeNode->setEnd(stringIndex);
+
                 mState.removeScope();
             }
             break;
@@ -234,10 +245,34 @@ void Semantics::handle( //
         case SyntaxChunkType::kReturn:
             {
                 auto &stagedNodes = mState.getStagedNodes();
+                assert(stagedNodes.empty() == false);
+
                 auto rhs = stagedNodes.back();
                 stagedNodes.pop_back();
 
-                auto node = std::make_shared<SemNodeReturn>(stringIndex, rhs);
+                auto finalRhs = rhs;
+
+                if (stagedNodes.empty() == false)
+                {
+                    auto possibleUnaryOp = stagedNodes.back();
+                    while (possibleUnaryOp && possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
+                    {
+                        // TODO: how far back should this while() reach?
+                        semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
+                        finalRhs = possibleUnaryOp;
+                        stagedNodes.pop_back();
+                        rhs = finalRhs;
+
+                        if (stagedNodes.empty() == true)
+                        {
+                            break;
+                        }
+
+                        possibleUnaryOp = stagedNodes.back();
+                    }
+                }
+
+                auto node = std::make_shared<SemNodeReturn>(stringIndex, finalRhs);
                 addNodeToAst(node);
             }
             break;
@@ -245,7 +280,44 @@ void Semantics::handle( //
         case SyntaxChunkType::kUnaryOp:
             {
                 auto node = std::make_shared<SemNodeUnaryOp>(stringIndex, additional);
-                mState.stageNode(node);
+
+                if (additional == "++")
+                {
+                    // ++prefix;
+                    auto &stagedNodes = mState.getStagedNodes();
+                    assert(stagedNodes.size() >= 1);
+                    auto rhs = stagedNodes.back();
+                    stagedNodes.pop_back();
+                    node->setRhs(rhs);
+                    //                    addNodeToAst(node);
+                    mState.stageNode(node);
+                }
+                else
+                {
+                    mState.stageNode(node);
+                }
+            }
+            break;
+
+        case SyntaxChunkType::kSimpleExpr:
+            {
+                if (mState.mState != SState::InForLoopContext)
+                {
+                    // flush staged nodes
+                    auto &stagedNodes = mState.getStagedNodes();
+                    for (auto &it : stagedNodes)
+                    {
+                        addNodeToAst(it);
+                    }
+
+                    stagedNodes.clear();
+                }
+            }
+            break;
+
+        case SyntaxChunkType::kBinaryOp:
+            {
+                handleBinaryOp(stringIndex, additional);
             }
             break;
 
@@ -287,6 +359,10 @@ void Semantics::handleFunctionHeader( //
 
 void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 {
+    auto currentScope = mState.getCurrentScope();
+    auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
+    scopeNode->setEnd(stringIndex);
+
     mState.removeScope();
 }
 
@@ -305,13 +381,24 @@ void Semantics::handleInitDeclaration( //
 
         auto finalRhs = rhs;
 
-        // TODO: this is sketchy, can there be more unary ops staged?
-        auto possibleUnaryOp = stagedNodes.back();
-        if (possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
+        if (stagedNodes.empty() == false)
         {
-            semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
-            finalRhs = possibleUnaryOp;
-            stagedNodes.pop_back();
+
+            auto possibleUnaryOp = stagedNodes.back();
+            while (possibleUnaryOp->getType() == SemNode::Type::UnaryOp)
+            {
+                // TODO: how far back should this while() reach?
+                semNodeConvert<SemNodeUnaryOp>(possibleUnaryOp)->setRhs(rhs);
+                finalRhs = possibleUnaryOp;
+                stagedNodes.pop_back();
+                rhs = finalRhs;
+                if (stagedNodes.empty() == true)
+                {
+                    break;
+                }
+
+                possibleUnaryOp = stagedNodes.back();
+            }
         }
 
         auto binaryOp = semNodeConvert<SemNodeBinaryOp>(stagedNodes.back());
@@ -442,6 +529,25 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     mState.addScope(nodeIf);
 }
 
+void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op)
+{
+    auto &stagedNodes = mState.getStagedNodes();
+
+    // since this is a binary op we should have
+    // at least two staged nodes already
+    assert(stagedNodes.size() >= 2);
+
+    auto rhs = stagedNodes.back();
+    stagedNodes.pop_back();
+    auto lhs = stagedNodes.back();
+    stagedNodes.pop_back();
+
+    auto node = std::make_shared<SemNodeBinaryOp>(stringIndex, op, lhs);
+    node->setRhs(rhs);
+
+    mState.stageNode(node);
+}
+
 void Semantics::addNodeToAst(std::shared_ptr<SemNode> node)
 {
     mState.getCurrentScope()->attach(node);
@@ -471,11 +577,11 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
 
 void Semantics::stagedNodesPrint(const std::string &str)
 {
-    log("\nSTAGED NODES [ % ], staged nodes:", Color::Red).arg(str);
+    log("\nSTAGED NODES [ % ], staged nodes:", Color::Green).arg(str);
     auto &stagedNodes = mState.getStagedNodes();
     for (auto &it : stagedNodes)
     {
-        log("staged node: %", Color::Red).arg(it->toStr());
+        log("staged node: %", Color::Green).arg(it->toStr());
     }
 }
 

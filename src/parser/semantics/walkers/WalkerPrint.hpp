@@ -26,6 +26,7 @@ public:
     void peek(SemNodeIdentifier &node, const uint32_t astLevel) override;
     void peek(SemNodeIf &node, const uint32_t astLevel) override;
     void peek(SemNodeReturn &node, const uint32_t astLevel) override;
+    void peek(SemNodeUnaryOp &node, const uint32_t astLevel) override;
 
 private:
     std::string getPrefix(SemNode &node, const uint32_t astLevel);

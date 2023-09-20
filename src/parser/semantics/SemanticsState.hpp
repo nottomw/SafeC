@@ -15,7 +15,8 @@ class SemNode;
 enum class SState
 {
     Idle,
-    WaitingForStructType
+    WaitingForStructType,
+    InForLoopContext,
 };
 
 struct SyntaxChunkInfo

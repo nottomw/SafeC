@@ -266,6 +266,10 @@ public:
                 lhs += ", ";
             }
         }
+        else
+        {
+            lhs += mOperator;
+        }
 
         lhs += ")";
 
@@ -279,7 +283,7 @@ private:
     std::vector<std::shared_ptr<SemNode>> mArgs;
 };
 
-class SemNodeLoop : public SemNodePositional
+class SemNodeLoop : public SemNodeScope
 {
 public:
     SemNodeLoop(const uint32_t pos);

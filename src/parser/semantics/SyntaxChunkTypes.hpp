@@ -34,7 +34,9 @@
     entry(kPostfixExpression) \
     entry(kEmptyStatement) \
     entry(kReturn) \
-    entry(kUnaryOp)
+    entry(kUnaryOp) \
+    entry(kBinaryOp) \
+    entry(kSimpleExpr) // needed?
 
 // clang-format on
 

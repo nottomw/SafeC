@@ -8,6 +8,8 @@
 namespace safec
 {
 
+// TODO: add a printer with graphical tree display? image generation?
+
 void WalkerPrint::peek(SemNode &node, const uint32_t astLevel)
 {
     log("%", Color::Magenta).arg(getPrefix(node, astLevel));
@@ -39,15 +41,24 @@ void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
-    log("% % { % }", Color::LightCyan) //
+    log("% % { % -- % }", Color::LightCyan) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
-        .arg(node.getPos());
+        .arg(node.getStart())
+        .arg(node.getEnd());
 }
 
 void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
 {
     log("% '%' { % }", Color::Magenta) //
+        .arg(getPrefix(node, astLevel))
+        .arg(node.toStr())
+        .arg(node.getPos());
+}
+
+void WalkerPrint::peek(SemNodeUnaryOp &node, const uint32_t astLevel)
+{
+    log("% '%' { % }", Color::Red) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getPos());
