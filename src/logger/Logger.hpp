@@ -73,6 +73,7 @@ template <typename T,
               std::is_same<trait_normalize<T>, char>::value>::type * = nullptr>
 std::string toStr(const char &arg)
 {
+    // char
     return std::string(1, arg);
 }
 
