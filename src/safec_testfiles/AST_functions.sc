@@ -35,8 +35,10 @@ void FUNCTION_WITH_NO_RETURN_VOID_PTR_ARG(void *voidPtrArg)
 {
 }
 
+
 void ***FUNCTION_WITH_VOIDPTR3_RETURN_VOID_PTR_ARG(void ***voidPtr3Arg, void *voidPtr1Arg)
 {
+    return voidPtr3Arg;
 }
 
 void FUNCTION_WITH_POINTER_PARAMS(int *intPtr, double **doublePtr, char ***charPtr)

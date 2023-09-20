@@ -110,11 +110,18 @@ void Semantics::handle( //
                 {
                     // should have only type on stack, maybe with pointers
                     assert(chunksSize >= 1);
-                    assert(chunks[0].mType == SyntaxChunkType::kType);
+                    assert((chunks[0].mType == SyntaxChunkType::kType) || //
+                           (chunks[0].mType == SyntaxChunkType::kPointer));
 
+                    uint32_t pointerCountStartIndex = 1;
                     std::string typeStr = chunks[0].mAdditional;
+                    if (chunks[0].mType == SyntaxChunkType::kPointer)
+                    {
+                        pointerCountStartIndex = 0;
+                        typeStr = "void";
+                    }
 
-                    const uint32_t ptrCount = countPointersInChunks(1);
+                    const uint32_t ptrCount = countPointersInChunks(pointerCountStartIndex);
                     for (uint32_t i = 0; i < ptrCount; ++i)
                     {
                         typeStr += "*";
@@ -352,6 +359,11 @@ void Semantics::handleFunctionHeader( //
     }
 
     stagedNodes.clear(); // all staged nodes should be consumed now
+
+    // clear all chunks when using ...function(void) the "void" is added
+    // as chunk type "kType"
+    auto &chunks = mState.getChunks();
+    chunks.clear();
 
     addNodeToAst(node);
     mState.addScope(node);
