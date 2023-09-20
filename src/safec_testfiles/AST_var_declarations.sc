@@ -96,7 +96,7 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
 
         if (resFromCalledFun != 0)
         {
-            return resFromCalledFun;
+            return FUNCTION_RETURNING_PREINCREMENT();
         }
     }
 
