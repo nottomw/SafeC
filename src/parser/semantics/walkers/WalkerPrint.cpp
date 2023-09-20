@@ -92,7 +92,7 @@ void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeBinaryOp &node, const uint32_t astLevel)
 {
-    log("% '%' { % }", Color::Yellow) //
+    log("% '%' { % }", Color::Cyan) //
         .arg(getPrefix(node, astLevel))
         .arg(node.toStr())
         .arg(node.getPos());
