@@ -105,6 +105,18 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     return 124;
 }
 
+void FUNCTION_WITH_EMPTY_STATEMENTS(const int someArg)
+{
+    ; // empty
+
+    if (someArg == 999)
+    {
+        ; // empty
+    }
+
+    ; // empty
+}
+
 void FUNCTION_WITH_MULTIPLE_SAME_TYPE_VARS(void)
 {
     // int a, b, c; // TODO: handle

@@ -549,6 +549,17 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     stagedNodes.pop_back();
 
     auto nodeIf = std::make_shared<SemNodeIf>(stringIndex, condNode);
+
+    // all staged nodes should be now placed into AST, since
+    // we now encountered condition expression the previously
+    // staged nodes will not be used for anything but should be
+    // placed in "upper" scope
+    for (auto &it : stagedNodes)
+    {
+        addNodeToAst(it);
+    }
+    stagedNodes.clear();
+
     addNodeToAst(nodeIf);
     mState.addScope(nodeIf);
 }

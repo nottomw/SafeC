@@ -36,7 +36,7 @@ void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
     log("% (%) { % -- % }",
         Color::Black,
-        Color::BgYellow, //
+        Color::BgCyan, //
         getPrefix(node, astLevel),
         node.toStr(),
         node.getStart(),
