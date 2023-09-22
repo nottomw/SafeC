@@ -20,5 +20,6 @@
         selector(Constant) \
         selector(If) \
         selector(UnaryOp) \
-        selector(InitializerList)
+        selector(InitializerList) \
+        selector(Group)
 // clang-format on

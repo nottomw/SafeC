@@ -66,6 +66,11 @@ uint32_t SemNodePositional::getPos() const
     return mPos;
 }
 
+SemNodeGroup::SemNodeGroup()
+{
+    mType = Type::Group;
+}
+
 SemNodeFunction::SemNodeFunction(const uint32_t start) //
     : SemNodeScope{start}                              //
     , mReturnType{}
@@ -231,24 +236,27 @@ SemNodeLoop::SemNodeLoop( //
     , mLoopName{loopName}
 {
     mType = Type::Loop;
+
+    mLoopStatementsGroup = std::make_shared<SemNodeGroup>();
+    attach(mLoopStatementsGroup);
 }
 
 void SemNodeLoop::setIteratorInit(std::shared_ptr<SemNode> node)
 {
     mIteratorInit = node;
-    attach(node);
+    mLoopStatementsGroup->attach(node);
 }
 
 void SemNodeLoop::setIteratorCondition(std::shared_ptr<SemNode> node)
 {
     mIteratorCondition = node;
-    attach(node);
+    mLoopStatementsGroup->attach(node);
 }
 
 void SemNodeLoop::setIteratorChange(std::shared_ptr<SemNode> node)
 {
     mIteratorChange = node;
-    attach(node);
+    mLoopStatementsGroup->attach(node);
 }
 
 std::shared_ptr<SemNode> SemNodeLoop::getIteratorInit() const
@@ -331,6 +339,11 @@ SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)
     , mCond{cond}
 {
     mType = Type::If;
+
+    auto group = std::make_shared<SemNodeGroup>();
+    group->attach(cond);
+
+    attach(group);
 }
 
 std::string SemNodeIf::toStr() const

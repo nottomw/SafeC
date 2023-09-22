@@ -108,6 +108,14 @@ private:
     uint32_t mPos;
 };
 
+class SemNodeGroup : public SemNode
+{
+public:
+    SemNodeGroup();
+
+private:
+};
+
 class SemNodeFunction final : public SemNodeScope
 {
 public:
@@ -245,10 +253,16 @@ public:
     std::shared_ptr<SemNode> getIteratorCondition() const;
     std::shared_ptr<SemNode> getIteratorChange() const;
 
+    std::string getName() const
+    {
+        return mLoopName;
+    }
+
     std::string toStr() const override;
 
 private:
     std::string mLoopName;
+    std::shared_ptr<SemNodeGroup> mLoopStatementsGroup;
     std::shared_ptr<SemNode> mIteratorInit;
     std::shared_ptr<SemNode> mIteratorCondition;
     std::shared_ptr<SemNode> mIteratorChange;
