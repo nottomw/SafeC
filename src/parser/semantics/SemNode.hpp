@@ -51,9 +51,9 @@ public:
     Type getType() const;
     void attach(std::shared_ptr<SemNode> node);
 
-    std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()
+    virtual std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()
     {
-        return mRelatedNodes; // TODO: hack for now...
+        return mRelatedNodes;
     }
 
     virtual std::string toStr() const
@@ -63,6 +63,7 @@ public:
 
     // TODO: toUnderlyingType() could be useful - convert
     // SemNode into the actual type determined by mType
+    // currently semantics uses semNodeConvert<> instead
 
 protected:
     Type mType;
