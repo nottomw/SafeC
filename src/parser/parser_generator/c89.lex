@@ -14,6 +14,8 @@ IS			(u|U|l|L)*
 #include <assert.h>
 #include "SafecParser.yacc.hpp"
 
+#include "config/ConfigLex.hpp"
+
 int column = 0;
 int lex_current_char = 0;
 int lex_keyword_start_index = 0;
@@ -187,8 +189,11 @@ void count(void)
 
 	lex_current_char += i;
 
+if (ConfigGetDisplayParserInfo() == true)
+{
 	// display the token
 	ECHO;
+    }
 }
 
 int check_type(void)

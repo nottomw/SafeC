@@ -23,10 +23,11 @@ public:
     Parser &operator=(const Parser &) = delete;
     Parser &operator=(Parser &&) = delete;
 
-    void parse(const std::string &path);
+    size_t parse(const std::string &path);
+    void displayAst() const;
 
 private:
-    void parseFile(const boost::filesystem::path &path);
+    size_t parseFile(const boost::filesystem::path &path);
     void dumpFileWithModifications(const boost::filesystem::path &path);
 
     Semantics &mSemantics;

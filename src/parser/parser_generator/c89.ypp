@@ -7,6 +7,7 @@
 #include <string>
 #include "semantics/SemanticsFactory.hpp"
 #include "logger/Logger.hpp"
+#include "config/Config.hpp"
 
 extern char yytext[];
 
@@ -32,9 +33,12 @@ auto &sem = safec::SemanticsFactory::get();
     const std::string& str,
     safec::Color color = safec::Color::Yellow)
 {
-    safec::log("@ % at % @", color, safec::NewLine::No,
-        str,
-        lex_current_char);
+    if (safec::Config::getInstance().getDisplayParserInfo() == true)
+    {
+        safec::log("@ % at % @", color, safec::NewLine::No,
+            str,
+            lex_current_char);
+    }
 }
 
 [[maybe_unused]] static void handle(

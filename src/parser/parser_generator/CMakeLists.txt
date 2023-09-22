@@ -32,6 +32,7 @@ target_include_directories(parser_generated
 target_link_libraries(parser_generated
     PUBLIC
         safec::logger
+        safec::config
         CONAN_PKG::boost
 )
 

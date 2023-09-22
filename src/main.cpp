@@ -82,8 +82,14 @@ int main(int argc, char **argv)
         auto &filesToParse = vm["file"].as<std::vector<std::string>>();
         for (const auto &it : filesToParse)
         {
-            safec::log("Parsing file: '%'", it);
-            parser.parse(it);
+            safec::log("Parsing file: '%'...", it);
+            const size_t charCount = parser.parse(it);
+            safec::log("Parsing done, characters count %\n", charCount);
+
+            if (safec::Config::getInstance().getDisplayAst() == true)
+            {
+                parser.displayAst();
+            }
 
             //            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
             //            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();

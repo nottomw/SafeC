@@ -34,8 +34,10 @@ Parser::Parser(Semantics &sem) //
 {
 }
 
-void Parser::parse(const std::string &path)
+size_t Parser::parse(const std::string &path)
 {
+    size_t charCount = 0;
+
     const bfs::path filePathBoost{path};
     if (bfs::exists(filePathBoost) == false)
     {
@@ -48,15 +50,24 @@ void Parser::parse(const std::string &path)
     }
     else if (bfs::is_regular_file(filePathBoost) == true)
     {
-        parseFile(filePathBoost);
+        charCount = parseFile(filePathBoost);
     }
     else
     {
         throw std::runtime_error{"invalid path?"};
     }
+
+    return charCount;
 }
 
-void Parser::parseFile(const bfs::path &path)
+void Parser::displayAst() const
+{
+    log("Current AST:");
+    mSemantics.display();
+    log("\n\n", NewLine::No);
+}
+
+size_t Parser::parseFile(const bfs::path &path)
 {
     assert(bfs::is_regular_file(path) == true);
 
@@ -88,13 +99,9 @@ void Parser::parseFile(const bfs::path &path)
         assert(parseRes == 0);
     }
 
-    log("\nParsing done, characters in file %: %\n", //
-        path.c_str(),
-        lex_current_char);
+    const size_t parsedCharsCount = lex_current_char;
 
-    log("Current AST:");
-    mSemantics.display();
-    log("\n\n", NewLine::No);
+    return parsedCharsCount;
 }
 
 void Parser::dumpFileWithModifications(const boost::filesystem::path &path)
