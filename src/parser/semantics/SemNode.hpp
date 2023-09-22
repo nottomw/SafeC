@@ -134,19 +134,7 @@ public:
     std::string getReturn() const;
     std::vector<Param> getParams() const;
 
-    std::string toStr() const override
-    {
-        std::string str = mReturnType + " " + mName + " (";
-        for (auto &it : mParams)
-        {
-            str += it.mType;
-            str += " ";
-            str += it.mName;
-            str += ", ";
-        }
-        str += " )";
-        return str;
-    }
+    std::string toStr() const override;
 
 private:
     std::string mReturnType;
@@ -160,14 +148,7 @@ public:
     SemNodeReturn(const uint32_t index);
     SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs);
 
-    std::string toStr() const override
-    {
-        std::string rhs;
-        if (mRhs)
-            rhs = mRhs->toStr();
-
-        return rhs;
-    }
+    std::string toStr() const override;
 
 private:
     std::shared_ptr<SemNode> mRhs;
@@ -241,44 +222,7 @@ public:
 
     void addArg(std::shared_ptr<SemNode> arg);
 
-    std::string toStr() const override
-    {
-        std::string lhs = "empty";
-        if (mLhs)
-            lhs = mLhs->toStr();
-
-        lhs += " (";
-
-        if (mOperator == "(...)")
-        {
-            for (auto &args : mArgs)
-            {
-                lhs += args->toStr();
-                lhs += ", ";
-            }
-        }
-        else if (mOperator == "[]")
-        {
-            lhs += "[";
-
-            // can this be even multiple args?
-            for (auto &args : mArgs)
-            {
-                lhs += args->toStr();
-                lhs += ", ";
-            }
-
-            lhs += "]";
-        }
-        else
-        {
-            lhs += mOperator;
-        }
-
-        lhs += ")";
-
-        return lhs;
-    }
+    std::string toStr() const override;
 
 private:
     std::string mOperator;
@@ -335,16 +279,7 @@ public:
     std::shared_ptr<SemNode> getLhs() const;
     std::shared_ptr<SemNode> getRhs() const;
 
-    std::string toStr() const override
-    {
-        std::string lhs = "empty";
-        std::string rhs = "empty";
-        if (mLhs)
-            lhs = mLhs->toStr();
-        if (mRhs)
-            rhs = mRhs->toStr();
-        return lhs + " " + mOp + " " + rhs;
-    }
+    std::string toStr() const override;
 
 private:
     std::string mOp;
@@ -358,13 +293,7 @@ class SemNodeIf : public SemNodeScope
 public:
     SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond);
 
-    std::string toStr() const override
-    {
-        std::string cond = "empty";
-        if (mCond)
-            cond = mCond->toStr();
-        return cond;
-    }
+    std::string toStr() const override;
 
 private:
     std::shared_ptr<SemNode> mCond;
@@ -377,13 +306,7 @@ public:
 
     void setRhs(std::shared_ptr<SemNode> rhs);
 
-    std::string toStr() const override
-    {
-        std::string str = mOp + " ";
-        if (mRhs)
-            str += mRhs->toStr();
-        return str;
-    }
+    std::string toStr() const override;
 
 private:
     std::string mOp;

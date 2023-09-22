@@ -104,6 +104,20 @@ void SemNodeFunction::addParam(const std::string &type, const std::string &name)
     mParams.emplace_back(Param{type, name});
 }
 
+std::string SemNodeFunction::toStr() const
+{
+    std::string str = mReturnType + " " + mName + " (";
+    for (auto &it : mParams)
+    {
+        str += it.mType;
+        str += " ";
+        str += it.mName;
+        str += ", ";
+    }
+    str += " )";
+    return str;
+}
+
 SemNodeReturn::SemNodeReturn(const uint32_t index)
     : SemNodeReturn{index, {}}
 {
@@ -114,6 +128,15 @@ SemNodeReturn::SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs)
     , mRhs{rhs}
 {
     mType = Type::Return;
+}
+
+std::string SemNodeReturn::toStr() const
+{
+    std::string rhs;
+    if (mRhs)
+        rhs = mRhs->toStr();
+
+    return rhs;
 }
 
 SemNodeIdentifier::SemNodeIdentifier(const uint32_t pos, const std::string &name)
@@ -190,6 +213,45 @@ std::shared_ptr<SemNode> SemNodePostfixExpression::getLhs() const
 void SemNodePostfixExpression::addArg(std::shared_ptr<SemNode> arg)
 {
     mArgs.push_back(arg);
+}
+
+std::string SemNodePostfixExpression::toStr() const
+{
+    std::string lhs = "empty";
+    if (mLhs)
+        lhs = mLhs->toStr();
+
+    lhs += " (";
+
+    if (mOperator == "(...)")
+    {
+        for (auto &args : mArgs)
+        {
+            lhs += args->toStr();
+            lhs += ", ";
+        }
+    }
+    else if (mOperator == "[]")
+    {
+        lhs += "[";
+
+        // can this be even multiple args?
+        for (auto &args : mArgs)
+        {
+            lhs += args->toStr();
+            lhs += ", ";
+        }
+
+        lhs += "]";
+    }
+    else
+    {
+        lhs += mOperator;
+    }
+
+    lhs += ")";
+
+    return lhs;
 }
 
 SemNodeLoop::SemNodeLoop( //
@@ -283,11 +345,30 @@ std::shared_ptr<SemNode> SemNodeBinaryOp::getRhs() const
     return mRhs;
 }
 
+std::string SemNodeBinaryOp::toStr() const
+{
+    std::string lhs = "empty";
+    std::string rhs = "empty";
+    if (mLhs)
+        lhs = mLhs->toStr();
+    if (mRhs)
+        rhs = mRhs->toStr();
+    return lhs + " " + mOp + " " + rhs;
+}
+
 SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)
     : SemNodeScope{pos}
     , mCond{cond}
 {
     mType = Type::If;
+}
+
+std::string SemNodeIf::toStr() const
+{
+    std::string cond = "empty";
+    if (mCond)
+        cond = mCond->toStr();
+    return cond;
 }
 
 SemNodeUnaryOp::SemNodeUnaryOp(const uint32_t pos, const std::string &op)
@@ -301,6 +382,14 @@ SemNodeUnaryOp::SemNodeUnaryOp(const uint32_t pos, const std::string &op)
 void SemNodeUnaryOp::setRhs(std::shared_ptr<SemNode> rhs)
 {
     mRhs = rhs;
+}
+
+std::string SemNodeUnaryOp::toStr() const
+{
+    std::string str = mOp + " ";
+    if (mRhs)
+        str += mRhs->toStr();
+    return str;
 }
 
 SemNodeJumpStatement::SemNodeJumpStatement( //

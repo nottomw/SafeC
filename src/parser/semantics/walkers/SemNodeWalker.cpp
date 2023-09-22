@@ -14,8 +14,8 @@ void SemNodeWalker::walk(SemNode &node, WalkerStrategy &strategy)
 
 void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const uint32_t level)
 {
-// Create switch..case for each SemNode type.
-// clang-format off
+    // Create switch..case for each SemNode type.
+    // clang-format off
     #define SEMNODE_TYPE_SELECTOR_TYPED_PEEK_CALL(x) \
         case SemNode::Type::x: \
         { \
@@ -30,10 +30,13 @@ void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const u
     {
         SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_TYPED_PEEK_CALL)
 
-    default:
-        throw std::runtime_error("invalid SemNode type");
-        break;
+        default:
+            throw std::runtime_error("invalid SemNode type");
+            break;
     }
+
+    // TODO: walker need to be able to handle the new AST,
+    // this means i.e. in BinaryOp have to traverse into rhs and lhs
 
     for (const auto &it : node.mRelatedNodes)
     {
