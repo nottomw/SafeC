@@ -105,8 +105,14 @@ int FUNCTION_WITH_DECLARATIONS(const int paramCondition, float *foo, double **ba
     return 124;
 }
 
-void FUNCTION_WITH_EMPTY_STATEMENTS(const int someArg)
+int gSomeGlobal;
+int gSomeGlobalInitialized = 123;
+
+void FUNCTION_WITH_EMPTY_STATEMENTS_AND_GLOBAL_SET(const int someArg)
 {
+    ; // empty
+    gSomeGlobal = someArg;
+    gSomeGlobalInitialized = someArg + 500;
     ; // empty
 
     if (someArg == 999)
