@@ -328,11 +328,14 @@ SemNodeBinaryOp::SemNodeBinaryOp( //
     , mLhs{lhs}
 {
     mType = Type::BinaryOp;
+
+    attach(lhs);
 }
 
 void SemNodeBinaryOp::setRhs(std::shared_ptr<SemNode> rhs)
 {
     mRhs = rhs;
+    attach(rhs);
 }
 
 std::shared_ptr<SemNode> SemNodeBinaryOp::getLhs() const
@@ -347,13 +350,7 @@ std::shared_ptr<SemNode> SemNodeBinaryOp::getRhs() const
 
 std::string SemNodeBinaryOp::toStr() const
 {
-    std::string lhs = "empty";
-    std::string rhs = "empty";
-    if (mLhs)
-        lhs = mLhs->toStr();
-    if (mRhs)
-        rhs = mRhs->toStr();
-    return lhs + " " + mOp + " " + rhs;
+    return mOp;
 }
 
 SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)

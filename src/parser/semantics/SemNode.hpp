@@ -51,7 +51,7 @@ public:
     Type getType() const;
     void attach(std::shared_ptr<SemNode> node);
 
-    virtual std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()
+    std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()
     {
         return mRelatedNodes;
     }
