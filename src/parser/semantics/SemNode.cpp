@@ -198,6 +198,8 @@ SemNodePostfixExpression::SemNodePostfixExpression( //
     , mLhs{lhs}
 {
     mType = Type::PostfixExpression;
+
+    attach(lhs);
 }
 
 std::string SemNodePostfixExpression::getOperator() const
@@ -213,45 +215,48 @@ std::shared_ptr<SemNode> SemNodePostfixExpression::getLhs() const
 void SemNodePostfixExpression::addArg(std::shared_ptr<SemNode> arg)
 {
     mArgs.push_back(arg);
+
+    mLhs->attach(arg);
 }
 
 std::string SemNodePostfixExpression::toStr() const
 {
-    std::string lhs = "empty";
-    if (mLhs)
-        lhs = mLhs->toStr();
+    //    std::string lhs = "empty";
+    //    if (mLhs)
+    //        lhs = mLhs->toStr();
 
-    lhs += " (";
+    //    lhs += " (";
 
-    if (mOperator == "(...)")
-    {
-        for (auto &args : mArgs)
-        {
-            lhs += args->toStr();
-            lhs += ", ";
-        }
-    }
-    else if (mOperator == "[]")
-    {
-        lhs += "[";
+    //    if (mOperator == "(...)")
+    //    {
+    //        for (auto &args : mArgs)
+    //        {
+    //            lhs += args->toStr();
+    //            lhs += ", ";
+    //        }
+    //    }
+    //    else if (mOperator == "[]")
+    //    {
+    //        lhs += "[";
 
-        // can this be even multiple args?
-        for (auto &args : mArgs)
-        {
-            lhs += args->toStr();
-            lhs += ", ";
-        }
+    //        // can this be even multiple args?
+    //        for (auto &args : mArgs)
+    //        {
+    //            lhs += args->toStr();
+    //            lhs += ", ";
+    //        }
 
-        lhs += "]";
-    }
-    else
-    {
-        lhs += mOperator;
-    }
+    //        lhs += "]";
+    //    }
+    //    else
+    //    {
+    //        lhs += mOperator;
+    //    }
 
-    lhs += ")";
+    //    lhs += ")";
 
-    return lhs;
+    //    return lhs;
+    return mOperator;
 }
 
 SemNodeLoop::SemNodeLoop( //
@@ -405,6 +410,13 @@ SemNodeInitializerList::SemNodeInitializerList(const uint32_t pos)
 void SemNodeInitializerList::addEntry(std::shared_ptr<SemNode> node)
 {
     mEntries.push_back(node);
+
+    attach(node);
+}
+
+std::vector<std::shared_ptr<SemNode>> &SemNodeInitializerList::getEntries()
+{
+    return mEntries;
 }
 
 std::string SemNodeInitializerList::toStr() const

@@ -335,6 +335,8 @@ public:
 
     void addEntry(std::shared_ptr<SemNode> node);
 
+    std::vector<std::shared_ptr<SemNode>> &getEntries();
+
     std::string toStr() const override;
 
 private:
