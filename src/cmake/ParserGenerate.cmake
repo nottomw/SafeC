@@ -28,7 +28,7 @@ function(safec_parser_generate)
     endif()
 
     add_custom_target(${ARG_TARGET}_lexer_generate
-        COMMAND flex -d -o "${ARG_LEX_OUTPUT}" "${ARG_LEX_INPUT}"
+        COMMAND flex -o "${ARG_LEX_OUTPUT}" "${ARG_LEX_INPUT}"
         BYPRODUCTS "${ARG_LEX_OUTPUT}"
         COMMENT "Generating C89 lexer..."
     )
