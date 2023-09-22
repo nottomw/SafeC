@@ -379,14 +379,12 @@ SemNodeUnaryOp::SemNodeUnaryOp(const uint32_t pos, const std::string &op)
 void SemNodeUnaryOp::setRhs(std::shared_ptr<SemNode> rhs)
 {
     mRhs = rhs;
+    attach(rhs);
 }
 
 std::string SemNodeUnaryOp::toStr() const
 {
-    std::string str = mOp + " ";
-    if (mRhs)
-        str += mRhs->toStr();
-    return str;
+    return mOp;
 }
 
 SemNodeJumpStatement::SemNodeJumpStatement( //
