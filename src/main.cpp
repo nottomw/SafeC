@@ -1,3 +1,4 @@
+#include "config/Config.hpp"
 #include "generator/Generator.hpp"
 #include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
@@ -18,11 +19,13 @@ namespace bfs = boost::filesystem;
 int main(int argc, char **argv)
 {
     po::options_description desc("All SafeC transpiler options:");
-    desc.add_options()                                                                      //
-        ("help,h", "print help")                                                            //
-        ("file,f", po::value<std::vector<std::string>>(), "SafeC file(s) to be transpiled") //
-        ("output,o", po::value<std::string>(), "C output files directory")                  //
-        ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options { defer, ... }");
+    desc.add_options()                                                                               //
+        ("help,h", "print help")                                                                     //
+        ("file,f", po::value<std::vector<std::string>>(), "SafeC file(s) to be transpiled")          //
+        ("output,o", po::value<std::string>(), "C output files directory")                           //
+        ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options { defer, ... }") //
+        ("astdump,a", "dump AST")                                                                    //
+        ("parserdump,p", "dump parser info");
 
     // TODO: add option to print AST
     // TODO: add option to echo lexed/parsed file
@@ -42,6 +45,16 @@ int main(int argc, char **argv)
     {
         safec::log("missing output file(s) directory");
         return -1;
+    }
+
+    if (vm.count("astdump") != 0)
+    {
+        safec::Config::getInstance().setDisplayAst(true);
+    }
+
+    if (vm.count("parserdump") != 0)
+    {
+        safec::Config::getInstance().setDisplayParserInfo(true);
     }
 
     const auto outputDirectory = bfs::absolute(vm["output"].as<std::string>());
@@ -70,7 +83,6 @@ int main(int argc, char **argv)
         for (const auto &it : filesToParse)
         {
             safec::log("Parsing file: '%'", it);
-
             parser.parse(it);
 
             //            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");

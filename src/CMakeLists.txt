@@ -8,6 +8,7 @@ add_subdirectory(logger)
 add_subdirectory(parser)
 add_subdirectory(generator)
 add_subdirectory(utils)
+add_subdirectory(config)
 
 add_executable(SafeCTranspiler
     main.cpp
@@ -18,6 +19,7 @@ target_link_libraries(SafeCTranspiler
         CONAN_PKG::boost
         safec::parser
         safec::generator
+        safec::config
 )
 
 
