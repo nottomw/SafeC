@@ -221,41 +221,6 @@ void SemNodePostfixExpression::addArg(std::shared_ptr<SemNode> arg)
 
 std::string SemNodePostfixExpression::toStr() const
 {
-    //    std::string lhs = "empty";
-    //    if (mLhs)
-    //        lhs = mLhs->toStr();
-
-    //    lhs += " (";
-
-    //    if (mOperator == "(...)")
-    //    {
-    //        for (auto &args : mArgs)
-    //        {
-    //            lhs += args->toStr();
-    //            lhs += ", ";
-    //        }
-    //    }
-    //    else if (mOperator == "[]")
-    //    {
-    //        lhs += "[";
-
-    //        // can this be even multiple args?
-    //        for (auto &args : mArgs)
-    //        {
-    //            lhs += args->toStr();
-    //            lhs += ", ";
-    //        }
-
-    //        lhs += "]";
-    //    }
-    //    else
-    //    {
-    //        lhs += mOperator;
-    //    }
-
-    //    lhs += ")";
-
-    //    return lhs;
     return mOperator;
 }
 
@@ -271,16 +236,19 @@ SemNodeLoop::SemNodeLoop( //
 void SemNodeLoop::setIteratorInit(std::shared_ptr<SemNode> node)
 {
     mIteratorInit = node;
+    attach(node);
 }
 
 void SemNodeLoop::setIteratorCondition(std::shared_ptr<SemNode> node)
 {
     mIteratorCondition = node;
+    attach(node);
 }
 
 void SemNodeLoop::setIteratorChange(std::shared_ptr<SemNode> node)
 {
     mIteratorChange = node;
+    attach(node);
 }
 
 std::shared_ptr<SemNode> SemNodeLoop::getIteratorInit() const

@@ -45,11 +45,10 @@ void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
-    log("% % { % -- % }",
+    log("% { % -- % }",
         Color::Black,
         Color::BgGreen, //
         getPrefix(node, astLevel),
-        node.toStr(),
         node.getStart(),
         node.getEnd());
 }
