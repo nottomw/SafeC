@@ -1,5 +1,7 @@
 ## Safe C - safe(r) version of C language.
 
+![safec](https://github.com/nottomw/safec/actions/workflows/safec.yml/badge.svg)
+
 Safer version of C89 language - transpiles to C89.
 
 ### About

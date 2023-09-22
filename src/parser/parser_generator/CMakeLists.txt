@@ -9,6 +9,8 @@ set(SAFEC_PARSER_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/c89.ypp)
 
 include(${PROJECT_SOURCE_DIR}/cmake/ParserGenerate.cmake)
 
+file(MAKE_DIRECTORY ${SAFEC_PARSER_LEXER_GENPATH})
+
 safec_parser_generate(
     TARGET safec
     LEX_INPUT ${SAFEC_LEXER_SOURCE_PATH}
