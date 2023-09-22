@@ -25,7 +25,8 @@ int main(int argc, char **argv)
         ("output,o", po::value<std::string>(), "C output files directory")                           //
         ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options { defer, ... }") //
         ("astdump,a", "dump AST")                                                                    //
-        ("parserdump,p", "dump parser info");
+        ("parserdump,p", "dump parser info")                                                         //
+        ("debug", "debug mode - display all possible info");
 
     // TODO: add option to print AST
     // TODO: add option to echo lexed/parsed file
@@ -57,8 +58,13 @@ int main(int argc, char **argv)
         safec::Config::getInstance().setDisplayParserInfo(true);
     }
 
-    const auto outputDirectory = bfs::absolute(vm["output"].as<std::string>());
+    if (vm.count("debug") != 0)
+    {
+        safec::Config::getInstance().setDisplayAst(true);
+        safec::Config::getInstance().setDisplayParserInfo(true);
+    }
 
+    const auto outputDirectory = bfs::absolute(vm["output"].as<std::string>());
     if (bfs::is_directory(outputDirectory) == false)
     {
         safec::log("provided 'output' parameter does not point to a directory");
