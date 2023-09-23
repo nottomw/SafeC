@@ -134,7 +134,10 @@ SemNodeReturn::SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs)
 {
     mType = Type::Return;
 
-    attach(rhs);
+    if (rhs)
+    {
+        attach(rhs);
+    }
 }
 
 std::string SemNodeReturn::toStr() const
