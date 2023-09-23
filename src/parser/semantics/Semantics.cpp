@@ -23,13 +23,6 @@ namespace bfs = ::boost::filesystem;
 namespace
 {
 
-[[maybe_unused]] void syntaxReport(const uint32_t stringIndex,
-                                   const std::string &name,
-                                   const Color color = Color::Green)
-{
-    log("@ % at % @", color, NewLine::No, name, stringIndex);
-}
-
 template <typename TUnderlyingSemNode>
 std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::shared_ptr<SemNode> &w)
 {
