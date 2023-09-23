@@ -133,15 +133,13 @@ SemNodeReturn::SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs)
     , mRhs{rhs}
 {
     mType = Type::Return;
+
+    attach(rhs);
 }
 
 std::string SemNodeReturn::toStr() const
 {
-    std::string rhs;
-    if (mRhs)
-        rhs = mRhs->toStr();
-
-    return rhs;
+    return "";
 }
 
 SemNodeIdentifier::SemNodeIdentifier(const uint32_t pos, const std::string &name)
