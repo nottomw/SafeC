@@ -144,6 +144,7 @@ unary_expression
     | SAFEC_DEFER expression
     {
         pr("defer", safec::Color::Green);
+        handle(SyntaxChunkType::kDefer);
     }
     ;
 

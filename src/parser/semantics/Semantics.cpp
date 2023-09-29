@@ -628,7 +628,13 @@ void Semantics::handleInitializerList(const uint32_t stringIndex)
 void Semantics::handleDefer(const uint32_t stringIndex)
 {
     auto &stagedNodes = mState.getStagedNodes();
-    assert(stagedNodes.size() > 1);
+    assert(stagedNodes.size() >= 1);
+
+    auto lastNode = stagedNodes.back();
+    stagedNodes.pop_back();
+
+    auto deferNode = std::make_shared<SemNodeDefer>(stringIndex, lastNode);
+    mState.stageNode(deferNode);
 }
 
 void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op)
@@ -746,7 +752,7 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
     return ptrCount;
 }
 
-void Semantics::stagedNodesPrint(const std::string &str)
+void Semantics::printStagedNodes(const std::string &str)
 {
     log("\nSTAGED NODES [ % ], staged nodes:", Color::Green, str);
     auto &stagedNodes = mState.getStagedNodes();

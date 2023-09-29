@@ -65,7 +65,7 @@ private:
     void foldUnaryOps(const size_t start);
 
     uint32_t countPointersInChunks(const uint32_t index);
-    void stagedNodesPrint(const std::string &str = "");
+    void printStagedNodes(const std::string &str = "");
 };
 
 } // namespace safec

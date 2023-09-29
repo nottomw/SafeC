@@ -92,6 +92,15 @@ void WalkerPrint::peek(SemNodeConstant &node, const uint32_t astLevel)
         node.getPos());
 }
 
+void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
+{
+    log("% { % }",
+        Color::White, //
+        Color::BgBlue,
+        getPrefix(node, astLevel),
+        node.getPos());
+}
+
 void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
 {
     log("% '%' { % }",

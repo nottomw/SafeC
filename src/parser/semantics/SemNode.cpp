@@ -422,4 +422,5 @@ SemNodeDefer::SemNodeDefer( //
     , mDeferredNode{deferred}
 {
     mType = SemNode::Type::Defer;
+    attach(deferred);
 }
