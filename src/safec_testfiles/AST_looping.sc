@@ -52,7 +52,7 @@ void TEST_LOOP_FOR_CONTINUE(void)
 void TEST_LOOP_WHILE(void)
 {
     int i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         i += 1;
     }
@@ -61,7 +61,7 @@ void TEST_LOOP_WHILE(void)
 void TEST_LOOP_WHILE_BREAK(void)
 {
     int i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         i += 1;
         if (i == 2)
@@ -74,7 +74,7 @@ void TEST_LOOP_WHILE_BREAK(void)
 void TEST_LOOP_WHILE_RETURN(void)
 {
     int i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         i += 1;
         if (i == 3)
@@ -87,7 +87,7 @@ void TEST_LOOP_WHILE_RETURN(void)
 void TEST_LOOP_WHILE_CONTINUE(void)
 {
     int i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         i += 1;
         if (i == 4)
@@ -96,4 +96,15 @@ void TEST_LOOP_WHILE_CONTINUE(void)
         }
         printf("i = %d\n", i);
     }
+}
+
+void TEST_LOOP_NO_SCOPE(void)
+{
+    int i = 666;
+    for (i = 0; i < 5; ++i)
+        printf("%d\n", i);
+
+    i = 0;
+    while (i < 5)
+        printf("%d\n", i++);
 }
