@@ -43,7 +43,9 @@
     entry(kJumpStatement) \
     entry(kArrayDecl) \
     entry(kInitializerList) \
-    entry(kDefer)
+    entry(kDefer) \
+    entry(kSimpleScopeStart) \
+    entry(kSimpleScopeEnd)
 // clang-format on
 
 enum class SyntaxChunkType : uint32_t

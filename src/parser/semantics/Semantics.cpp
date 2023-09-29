@@ -292,6 +292,24 @@ void Semantics::handle( //
             handleDefer(stringIndex);
             break;
 
+        case SyntaxChunkType::kSimpleScopeStart:
+            {
+                auto scopeNode = std::make_shared<SemNodeScope>(stringIndex);
+                addNodeToAst(scopeNode);
+                mState.addScope(scopeNode);
+            }
+            break;
+
+        case SyntaxChunkType::kSimpleScopeEnd:
+            {
+                auto currentScope = mState.getCurrentScope();
+                auto currentScopeTyped = semNodeConvert<SemNodeScope>(currentScope);
+                currentScopeTyped->setEnd(stringIndex);
+
+                mState.removeScope();
+            }
+            break;
+
         default:
             log("type not handled: %", Color::Red, static_cast<uint32_t>(type));
             break;
@@ -335,11 +353,24 @@ void Semantics::handleFunctionHeader( //
 
 void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 {
-    auto currentScope = mState.getCurrentScope();
-    auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
-    scopeNode->setEnd(stringIndex);
+    // the current scope is SemFunction, but there is an additional
+    // SemNodeScope attached to it - to not clutter the AST too much
+    // the redundant SemNodeScope's nodes will be transferred into
+    // SemNodeFunction
 
-    mState.removeScope();
+    auto currentScopeFun = mState.getCurrentScope();
+    assert(currentScopeFun->getType() == SemNode::Type::Function);
+    auto funScopeNode = semNodeConvert<SemNodeFunction>(currentScopeFun);
+    funScopeNode->setEnd(stringIndex);
+
+    auto &functionAttachedNodes = funScopeNode->getAttachedNodes();
+    assert(functionAttachedNodes.size() == 1); // just a single SemNodeScope
+
+    auto nodeScope = functionAttachedNodes.back();
+    assert(nodeScope->getType() == SemNode::Type::Scope);
+    functionAttachedNodes.pop_back();
+
+    funScopeNode->devourAttachedNodesFrom(semNodeConvert<SemNodeScope>(nodeScope));
 }
 
 void Semantics::handleInitDeclaration( //

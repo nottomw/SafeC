@@ -143,6 +143,8 @@ public:
     std::string getReturn() const;
     std::vector<Param> getParams() const;
 
+    void devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node);
+
     std::string toStr() const override;
 
 private:

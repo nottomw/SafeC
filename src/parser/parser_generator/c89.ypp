@@ -550,11 +550,31 @@ labeled_statement
     | DEFAULT ':' statement
     ;
 
+compound_statement_scope_start
+    : '{'
+    {
+        pr("compound scope start");
+        handle(SyntaxChunkType::kSimpleScopeStart);
+    }
+    ;
+
 compound_statement
     : '{' '}'
-    | '{' statement_list '}'
-    | '{' declaration_list '}'
-    | '{' declaration_list statement_list '}'
+    | compound_statement_scope_start statement_list '}'
+    {
+        pr("stmt scope");
+        handle(SyntaxChunkType::kSimpleScopeEnd);
+    }
+    | compound_statement_scope_start declaration_list '}'
+    {
+        pr("decl scope");
+        handle(SyntaxChunkType::kSimpleScopeEnd);
+    }
+    | compound_statement_scope_start declaration_list statement_list '}'
+    {
+        pr("stmt and decl scope");
+        handle(SyntaxChunkType::kSimpleScopeEnd);
+    }
     ;
 
 declaration_list
