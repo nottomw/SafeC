@@ -150,6 +150,8 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kCondition:
             {
+                removeRedundantScopeFromCurrentScope();
+
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
@@ -175,6 +177,8 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kForLoop:
             {
+                removeRedundantScopeFromCurrentScope();
+
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
@@ -264,6 +268,8 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kWhileLoop:
             {
+                removeRedundantScopeFromCurrentScope();
+
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
@@ -353,24 +359,14 @@ void Semantics::handleFunctionHeader( //
 
 void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 {
-    // the current scope is SemFunction, but there is an additional
-    // SemNodeScope attached to it - to not clutter the AST too much
-    // the redundant SemNodeScope's nodes will be transferred into
-    // SemNodeFunction
+    removeRedundantScopeFromCurrentScope();
 
     auto currentScopeFun = mState.getCurrentScope();
     assert(currentScopeFun->getType() == SemNode::Type::Function);
     auto funScopeNode = semNodeConvert<SemNodeFunction>(currentScopeFun);
     funScopeNode->setEnd(stringIndex);
 
-    auto &functionAttachedNodes = funScopeNode->getAttachedNodes();
-    assert(functionAttachedNodes.size() == 1); // just a single SemNodeScope
-
-    auto nodeScope = functionAttachedNodes.back();
-    assert(nodeScope->getType() == SemNode::Type::Scope);
-    functionAttachedNodes.pop_back();
-
-    funScopeNode->devourAttachedNodesFrom(semNodeConvert<SemNodeScope>(nodeScope));
+    mState.removeScope();
 }
 
 void Semantics::handleInitDeclaration( //
@@ -781,6 +777,50 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
     chunks.erase(chunks.begin() + index, chunks.begin() + index + ptrCount);
 
     return ptrCount;
+}
+
+void Semantics::removeRedundantScopeFromCurrentScope()
+{
+    auto currentScope = mState.getCurrentScope();
+    const bool isSpecialScope =                                 //
+        (currentScope->getType() == SemNode::Type::Function) || //
+        (currentScope->getType() == SemNode::Type::Loop) ||     //
+        (currentScope->getType() == SemNode::Type::If);
+    assert(isSpecialScope);
+
+    const bool isFunction = //
+        (currentScope->getType() == SemNode::Type::Function);
+
+    auto specialCurrentScopeNode = semNodeConvert<SemNodeScope>(currentScope);
+    auto &attachedNodes = specialCurrentScopeNode->getAttachedNodes();
+
+    // special cases:
+    // - empty function - no additional scope - do nothing
+    // - if without scope (if(...) ...) - no additional scope - do nothing
+    // - loop without scope - no additional scope - do nothing
+
+    // loop & condition will have a single node or two nodes - one for
+    // group - cond/loop statements (always) and one for scope (sometimes)
+    const bool singleScopeAttached =                    //
+        (!isFunction && (attachedNodes.size() <= 2)) || //
+        (isFunction && (attachedNodes.size() <= 1));
+    assert(singleScopeAttached);
+
+    const bool functionWithRedundantScope = //
+        isFunction && (attachedNodes.size() == 1);
+    const bool specialWithRedundantScope = //
+        !isFunction && (attachedNodes.size() == 2);
+
+    if (functionWithRedundantScope || specialWithRedundantScope)
+    {
+        auto lastAttachedNode = attachedNodes.back();
+        if (lastAttachedNode->getType() == SemNode::Type::Scope)
+        {
+            attachedNodes.pop_back();                         // remove the redundant scope
+            specialCurrentScopeNode->devourAttachedNodesFrom( //
+                semNodeConvert<SemNodeScope>(lastAttachedNode));
+        }
+    }
 }
 
 void Semantics::printStagedNodes(const std::string &str)

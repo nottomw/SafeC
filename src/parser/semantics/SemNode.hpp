@@ -91,6 +91,8 @@ public:
     uint32_t getStart() const;
     uint32_t getEnd() const;
 
+    void devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node);
+
 protected:
     uint32_t mStartIndex;
     uint32_t mEndIndex;
@@ -142,8 +144,6 @@ public:
     std::string getName() const;
     std::string getReturn() const;
     std::vector<Param> getParams() const;
-
-    void devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node);
 
     std::string toStr() const override;
 

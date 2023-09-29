@@ -54,6 +54,18 @@ uint32_t SemNodeScope::getEnd() const
     return mEndIndex;
 }
 
+void SemNodeScope::devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node)
+{
+    auto &attachedNodesToBeDevoured = node->getAttachedNodes();
+    while (attachedNodesToBeDevoured.size() > 0)
+    {
+        auto itNode = attachedNodesToBeDevoured.back();
+        attachedNodesToBeDevoured.pop_back();
+
+        attach(itNode);
+    }
+}
+
 SemNodePositional::SemNodePositional(const uint32_t pos) //
     : mPos{pos}
 {
@@ -106,18 +118,6 @@ void SemNodeFunction::setReturn(const std::string &type)
 void SemNodeFunction::addParam(const std::string &type, const std::string &name)
 {
     mParams.emplace_back(Param{type, name});
-}
-
-void SemNodeFunction::devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node)
-{
-    auto &attachedNodesToBeDevoured = node->getAttachedNodes();
-    while (attachedNodesToBeDevoured.size() > 0)
-    {
-        auto itNode = attachedNodesToBeDevoured.back();
-        attachedNodesToBeDevoured.pop_back();
-
-        attach(itNode);
-    }
 }
 
 std::string SemNodeFunction::toStr() const
