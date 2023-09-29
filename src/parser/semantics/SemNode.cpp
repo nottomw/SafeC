@@ -1,7 +1,6 @@
 #include "SemNode.hpp"
 
-namespace safec
-{
+using namespace safec;
 
 SemNode::SemNode() //
     : mType{Type::Undefined}
@@ -424,5 +423,3 @@ SemNodeDefer::SemNodeDefer( //
 {
     mType = SemNode::Type::Defer;
 }
-
-} // namespace safec
