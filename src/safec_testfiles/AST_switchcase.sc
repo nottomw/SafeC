@@ -102,3 +102,17 @@ void SWITCH_CASE_FALLTHROUGH_BODY(int param)
         break;
     }
 }
+
+void SWITCH_CASE_FALLTHROUGH_NO_BREAKS(int param)
+{
+    switch(param)
+    {
+        case 1:
+        case 2:
+        case 3:
+        default:
+            ;
+    }
+}
+
+// TODO: switch..case with no breaks, no default
