@@ -23,5 +23,6 @@
         selector(InitializerList) \
         selector(Group) \
         selector(Defer) \
-        selector(SwitchCase)
+        selector(SwitchCase) \
+        selector(SwitchCaseLabel)
 // clang-format on

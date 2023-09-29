@@ -144,26 +144,25 @@ void DEFER_MULTIPLE(void)
     defer printf("1\n");
 }
 
-// TODO: handle switch..case in parser
-//void DEFER_SWITCH_CASE(int param)
-//{
-//    defer printf("last\n");
+void DEFER_SWITCH_CASE(int param)
+{
+    defer printf("last\n");
 
-//    switch(param)
-//    {
-//        case 0:
-//            printf("0\n");
-//        break;
+    switch(param)
+    {
+        case 0:
+            printf("0\n");
+        break;
 
-//        case 1:
-//            printf("0\n");
-//        break;
+        case 1:
+            printf("0\n");
+        break;
 
-//        default:
-//            printf("default\n");
-//            break;
-//    }
-//}
+        default:
+            printf("default\n");
+            break;
+    }
+}
 
 void DEFER_STRANGE(void)
 {

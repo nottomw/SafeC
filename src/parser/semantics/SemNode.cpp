@@ -436,6 +436,33 @@ SemNodeDefer::SemNodeDefer( //
     attach(deferred);
 }
 
+SemNodeSwitchCaseLabel::SemNodeSwitchCaseLabel(const uint32_t pos)
+    : SemNodeScope{pos}
+{
+    mType = SemNode::Type::SwitchCaseLabel;
+}
+
+void SemNodeSwitchCaseLabel::setCaseLabel(std::shared_ptr<SemNode> label)
+{
+    mCaseLabel = label;
+    attach(mCaseLabel);
+}
+
+void SemNodeSwitchCaseLabel::setIsFallthrough(const bool isFallthrough)
+{
+    mIsFallthrough = isFallthrough;
+}
+
+std::shared_ptr<SemNode> SemNodeSwitchCaseLabel::getCaseLabel() const
+{
+    return mCaseLabel;
+}
+
+bool SemNodeSwitchCaseLabel::getIsFallthrough() const
+{
+    return mIsFallthrough;
+}
+
 SemNodeSwitchCase::SemNodeSwitchCase(const uint32_t pos)
     : SemNodeScope{pos}
 {
@@ -445,14 +472,17 @@ SemNodeSwitchCase::SemNodeSwitchCase(const uint32_t pos)
 void SemNodeSwitchCase::setSwitchExpr(std::shared_ptr<SemNode> expr)
 {
     mSwitchExpr = expr;
-}
 
-void SemNodeSwitchCase::addCaseStatement(SemNodeSwitchCase::CaseStatement &&caseStmt)
-{
-    mCaseStatements.emplace_back(caseStmt);
+    // for now just attach, maybe should be somehow marked as switch expr...
+    attach(mSwitchExpr);
 }
 
 void SemNodeSwitchCase::setDefaultStatement(std::shared_ptr<SemNode> stmt)
 {
     mDefaultStatement = stmt;
+}
+
+std::shared_ptr<SemNode> SemNodeSwitchCase::getSwitchExpr() const
+{
+    return mSwitchExpr;
 }

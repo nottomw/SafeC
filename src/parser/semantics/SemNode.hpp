@@ -373,20 +373,42 @@ private:
     std::shared_ptr<SemNode> mDeferredNode;
 };
 
+// strange name, contains all necessary nodes for
+// case X: { ... } break;
+class SemNodeSwitchCaseLabel : public SemNodeScope
+{
+public:
+    SemNodeSwitchCaseLabel(const uint32_t pos);
+
+    void setCaseLabel(std::shared_ptr<SemNode> label);
+    void setIsFallthrough(const bool isFallthrough);
+
+    std::shared_ptr<SemNode> getCaseLabel() const;
+    bool getIsFallthrough() const;
+
+    // code under label just attached in AST
+
+    std::string toStr() const override
+    {
+        return "case label";
+    }
+
+private:
+    std::shared_ptr<SemNode> mCaseLabel;
+    bool mIsFallthrough;
+};
+
 class SemNodeSwitchCase : public SemNodeScope
 {
 public:
-    struct CaseStatement
-    {
-        std::shared_ptr<SemNode> mCaseLabel;
-        std::shared_ptr<SemNode> mCaseStatements; // SemNodeScope
-    };
-
     SemNodeSwitchCase(const uint32_t pos);
 
     void setSwitchExpr(std::shared_ptr<SemNode> expr);
-    void addCaseStatement(CaseStatement &&caseStmt);
     void setDefaultStatement(std::shared_ptr<SemNode> stmt);
+
+    std::shared_ptr<SemNode> getSwitchExpr() const;
+
+    // case statements attached as AST nodes
 
     std::string toStr() const override
     {
@@ -395,7 +417,6 @@ public:
 
 private:
     std::shared_ptr<SemNode> mSwitchExpr;
-    std::vector<CaseStatement> mCaseStatements;
     std::shared_ptr<SemNode> mDefaultStatement;
 };
 

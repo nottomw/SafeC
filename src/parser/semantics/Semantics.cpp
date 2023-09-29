@@ -64,6 +64,7 @@ void Semantics::handle( //
     // stashed and reduce should consume all shifted chunks. Could be used when
     // creating nodes to mark start-stop positions precisely.
 
+    // huge switch..case, but leaving it here as-is for now to keep it simple
     switch (type)
     {
         case SyntaxChunkType::kType:
@@ -325,22 +326,89 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kSwitchStatement:
+            {
+                auto &stagedNodes = mState.getStagedNodes();
+                assert(stagedNodes.size() >= 1);
+
+                auto lastNode = stagedNodes.back();
+                stagedNodes.pop_back();
+
+                // current scope must be a switch..case
+                auto currentScope = mState.getCurrentScope();
+                assert(currentScope->getType() == SemNode::Type::SwitchCase);
+
+                auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
+                switchCaseNode->setSwitchExpr(lastNode);
+            }
             break;
 
         case SyntaxChunkType::kSwitchEnd:
             {
+                removeRedundantScopeFromCurrentScope(); // TODO: add handling of switch..case
+
                 auto currentScope = mState.getCurrentScope();
-                auto currentScopeTyped = semNodeConvert<SemNodeSwitchCase>(currentScope);
-                currentScopeTyped->setEnd(stringIndex);
+
+                // current scope must be a switch..case
+                assert(currentScope->getType() == SemNode::Type::SwitchCase);
+
+                auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
+                switchCaseNode->setEnd(stringIndex);
 
                 mState.removeScope();
             }
             break;
 
         case SyntaxChunkType::kSwitchCaseHeader:
+            {
+                assert((additional == "case") || (additional == "default"));
+
+                auto caseLabelNode = std::make_shared<SemNodeSwitchCaseLabel>(stringIndex);
+                auto &stagedNodes = mState.getStagedNodes();
+
+                // this might be a fall-through case and it will be closed later,
+                // all fall-through cases will be attached to the previous case statement
+                // case 1: case 2: case 3 ==> node {case 1} -> node {case 2} -> ...
+
+                std::shared_ptr<SemNode> nodeToBeSetAsCaseLabel = //
+                    std::make_shared<SemNodeEmptyStatement>(stringIndex);
+                if (additional == "case")
+                {
+                    assert(stagedNodes.size() >= 1);
+                    nodeToBeSetAsCaseLabel = stagedNodes.back();
+                    stagedNodes.pop_back();
+                }
+
+                auto currentScope = mState.getCurrentScope();
+                if (currentScope->getType() == SemNode::Type::SwitchCaseLabel)
+                {
+                    auto previousCaseLabel = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
+                    previousCaseLabel->setIsFallthrough(true);
+                }
+                else
+                {
+                    // did we get a break on previous case? if not this is fallthrough but
+                    // with a statement inside
+                }
+
+                caseLabelNode->setCaseLabel(nodeToBeSetAsCaseLabel);
+
+                addNodeToAst(caseLabelNode);
+                mState.addScope(caseLabelNode);
+            }
             break;
 
         case SyntaxChunkType::kSwitchCaseEnd:
+            {
+                auto currentScope = mState.getCurrentScope();
+
+                // current scope must be a switch..case label
+                assert(currentScope->getType() == SemNode::Type::SwitchCaseLabel);
+
+                auto switchCaseLabelNode = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
+                switchCaseLabelNode->setEnd(stringIndex);
+
+                mState.removeScope();
+            }
             break;
 
         default:
@@ -812,10 +880,11 @@ void Semantics::removeRedundantScopeFromCurrentScope()
     const bool isSpecialScope =                                 //
         (currentScope->getType() == SemNode::Type::Function) || //
         (currentScope->getType() == SemNode::Type::Loop) ||     //
-        (currentScope->getType() == SemNode::Type::If);
+        (currentScope->getType() == SemNode::Type::If) ||       //
+        (currentScope->getType() == SemNode::Type::SwitchCase);
     assert(isSpecialScope);
 
-    const bool isFunction = //
+    const bool isSingleNodeScope = //
         (currentScope->getType() == SemNode::Type::Function);
 
     auto specialCurrentScopeNode = semNodeConvert<SemNodeScope>(currentScope);
@@ -828,15 +897,15 @@ void Semantics::removeRedundantScopeFromCurrentScope()
 
     // loop & condition will have a single node or two nodes - one for
     // group - cond/loop statements (always) and one for scope (sometimes)
-    const bool singleScopeAttached =                    //
-        (!isFunction && (attachedNodes.size() <= 2)) || //
-        (isFunction && (attachedNodes.size() <= 1));
+    const bool singleScopeAttached =                           //
+        (!isSingleNodeScope && (attachedNodes.size() <= 2)) || //
+        (isSingleNodeScope && (attachedNodes.size() <= 1));
     assert(singleScopeAttached);
 
     const bool functionWithRedundantScope = //
-        isFunction && (attachedNodes.size() == 1);
+        isSingleNodeScope && (attachedNodes.size() == 1);
     const bool specialWithRedundantScope = //
-        !isFunction && (attachedNodes.size() == 2);
+        !isSingleNodeScope && (attachedNodes.size() == 2);
 
     if (functionWithRedundantScope || specialWithRedundantScope)
     {

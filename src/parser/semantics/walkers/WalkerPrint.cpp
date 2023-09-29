@@ -101,6 +101,34 @@ void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
         node.getPos());
 }
 
+void WalkerPrint::peek(SemNodeSwitchCase &node, const uint32_t astLevel)
+{
+    log("% on '%' { % -- % }",
+        Color::Black,
+        Color::BgYellow, //
+        getPrefix(node, astLevel),
+        SemNode::TypeInfo::toStr(node.getSwitchExpr()->getType()),
+        node.getStart(),
+        node.getEnd());
+}
+
+void WalkerPrint::peek(SemNodeSwitchCaseLabel &node, const uint32_t astLevel)
+{
+    const std::string caseLabelOn =                                       //
+        (node.getCaseLabel()->getType() == SemNode::Type::EmptyStatement) //
+            ? ("default")
+            : std::string(SemNode::TypeInfo::toStr(node.getCaseLabel()->getType()));
+
+    log("% on '%' %{ % -- % }",
+        Color::Black,
+        Color::BgYellow, //
+        getPrefix(node, astLevel),
+        caseLabelOn,
+        node.getIsFallthrough() ? "(fallthrough) " : "",
+        node.getStart(),
+        node.getEnd());
+}
+
 void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
 {
     log("% '%' { % }",
