@@ -288,6 +288,10 @@ void Semantics::handle( //
             handleInitializerList(stringIndex);
             break;
 
+        case SyntaxChunkType::kDefer:
+            handleDefer(stringIndex);
+            break;
+
         default:
             log("type not handled: %", Color::Red, static_cast<uint32_t>(type));
             break;
@@ -619,6 +623,12 @@ void Semantics::handleInitializerList(const uint32_t stringIndex)
     stagedNodes.erase(stagedNodes.begin() + 1, stagedNodes.end());
 
     mState.stageNode(nodeInitList);
+}
+
+void Semantics::handleDefer(const uint32_t stringIndex)
+{
+    auto &stagedNodes = mState.getStagedNodes();
+    assert(stagedNodes.size() > 1);
 }
 
 void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op)

@@ -142,6 +142,9 @@ unary_expression
     | SIZEOF unary_expression
     | SIZEOF '(' type_name ')'
     | SAFEC_DEFER expression
+    {
+        pr("defer", safec::Color::Green);
+    }
     ;
 
 unary_operator

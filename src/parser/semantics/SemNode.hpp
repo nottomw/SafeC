@@ -357,4 +357,18 @@ private:
     std::vector<std::shared_ptr<SemNode>> mEntries;
 };
 
+class SemNodeDefer : public SemNodePositional
+{
+public:
+    SemNodeDefer(const uint32_t pos, std::shared_ptr<SemNode> deferred);
+
+    std::string toStr() const override
+    {
+        return "defer";
+    }
+
+private:
+    std::shared_ptr<SemNode> mDeferredNode;
+};
+
 } // namespace safec

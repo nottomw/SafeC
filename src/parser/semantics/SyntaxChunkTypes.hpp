@@ -42,7 +42,8 @@
     entry(kSimpleExpr) /* needed? */ \
     entry(kJumpStatement) \
     entry(kArrayDecl) \
-    entry(kInitializerList)
+    entry(kInitializerList) \
+    entry(kDefer)
 // clang-format on
 
 enum class SyntaxChunkType : uint32_t

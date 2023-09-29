@@ -416,4 +416,13 @@ std::string SemNodeInitializerList::toStr() const
     return str;
 }
 
+SemNodeDefer::SemNodeDefer( //
+    const uint32_t pos,
+    std::shared_ptr<SemNode> deferred)
+    : SemNodePositional{pos}
+    , mDeferredNode{deferred}
+{
+    mType = SemNode::Type::Defer;
+}
+
 } // namespace safec

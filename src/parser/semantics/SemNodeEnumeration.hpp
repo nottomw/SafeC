@@ -21,5 +21,6 @@
         selector(If) \
         selector(UnaryOp) \
         selector(InitializerList) \
-        selector(Group)
+        selector(Group) \
+        selector(Defer)
 // clang-format on
