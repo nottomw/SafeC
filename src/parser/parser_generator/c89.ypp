@@ -205,8 +205,20 @@ relational_expression
         handle(SyntaxChunkType::kRelationalExpression, "<");
     }
     | relational_expression '>' shift_expression
+    {
+        pr("relational >");
+        handle(SyntaxChunkType::kRelationalExpression, ">");
+    }
     | relational_expression LE_OP shift_expression
+    {
+        pr("relational <=");
+        handle(SyntaxChunkType::kRelationalExpression, "<=");
+    }
     | relational_expression GE_OP shift_expression
+    {
+        pr("relational >=");
+        handle(SyntaxChunkType::kRelationalExpression, ">=");
+    }
     ;
 
 equality_expression
@@ -586,6 +598,7 @@ statement_list
     : statement
     | statement_list statement
     ;
+
 
 expression_statement
     : ';'
