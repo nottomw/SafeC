@@ -285,48 +285,7 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kInitializerList:
-            {
-                // braced init list
-                auto nodeInitList = std::make_shared<SemNodeInitializerList>(stringIndex);
-
-                auto &stagedNodes = mState.getStagedNodes();
-                assert(stagedNodes.size() > 1);
-
-                assert(stagedNodes[0]->getType() == SemNode::Type::BinaryOp);
-                auto binOpNode = semNodeConvert<SemNodeBinaryOp>(stagedNodes[0]);
-
-                // first staged node should be the declaration
-                // all following nodes should be identifiers - contents
-                // of the initializer list
-
-                // fold any unary operators in init list
-                const size_t stagedNodeLastIdx = stagedNodes.size() - 1;
-                for (size_t i = stagedNodeLastIdx; i > 0 /* skip first */; i--)
-                {
-                    auto node = stagedNodes[i];
-                    if (node->getType() == SemNode::Type::UnaryOp)
-                    {
-                        auto nodeUnaryOp = semNodeConvert<SemNodeUnaryOp>(node);
-
-                        const bool nextNodeInRange = ((i + 1) < stagedNodeLastIdx);
-                        if (nextNodeInRange)
-                        {
-                            auto nodeFollowing = stagedNodes[i + 1];
-                            nodeUnaryOp->setRhs(nodeFollowing);
-                            stagedNodes.erase(stagedNodes.begin() + i + 1);
-                        }
-                    }
-                }
-
-                for (size_t i = 1 /* skip first */; i < stagedNodes.size(); i++)
-                {
-                    auto node = stagedNodes[i];
-                    nodeInitList->addEntry(node);
-                }
-                stagedNodes.erase(stagedNodes.begin() + 1, stagedNodes.end());
-
-                mState.stageNode(nodeInitList);
-            }
+            handleInitializerList(stringIndex);
             break;
 
         default:
@@ -616,6 +575,50 @@ void Semantics::handleDirectDecl(const uint32_t stringIndex, const std::string &
     }
 
     chunks.clear();
+}
+
+void Semantics::handleInitializerList(const uint32_t stringIndex)
+{
+    // braced init list
+    auto nodeInitList = std::make_shared<SemNodeInitializerList>(stringIndex);
+
+    auto &stagedNodes = mState.getStagedNodes();
+    assert(stagedNodes.size() > 1);
+
+    assert(stagedNodes[0]->getType() == SemNode::Type::BinaryOp);
+    auto binOpNode = semNodeConvert<SemNodeBinaryOp>(stagedNodes[0]);
+
+    // first staged node should be the declaration
+    // all following nodes should be identifiers - contents
+    // of the initializer list
+
+    // fold any unary operators in init list
+    const size_t stagedNodeLastIdx = stagedNodes.size() - 1;
+    for (size_t i = stagedNodeLastIdx; i > 0 /* skip first */; i--)
+    {
+        auto node = stagedNodes[i];
+        if (node->getType() == SemNode::Type::UnaryOp)
+        {
+            auto nodeUnaryOp = semNodeConvert<SemNodeUnaryOp>(node);
+
+            const bool nextNodeInRange = ((i + 1) < stagedNodeLastIdx);
+            if (nextNodeInRange)
+            {
+                auto nodeFollowing = stagedNodes[i + 1];
+                nodeUnaryOp->setRhs(nodeFollowing);
+                stagedNodes.erase(stagedNodes.begin() + i + 1);
+            }
+        }
+    }
+
+    for (size_t i = 1 /* skip first */; i < stagedNodes.size(); i++)
+    {
+        auto node = stagedNodes[i];
+        nodeInitList->addEntry(node);
+    }
+    stagedNodes.erase(stagedNodes.begin() + 1, stagedNodes.end());
+
+    mState.stageNode(nodeInitList);
 }
 
 void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op)

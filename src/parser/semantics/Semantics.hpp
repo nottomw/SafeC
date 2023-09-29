@@ -57,6 +57,7 @@ private:
     void handleJumpStatement(const uint32_t stringIndex, const std::string &stmtName);
     void handleWhileLoopConditions();
     void handleDirectDecl(const uint32_t stringIndex, const std::string &additional);
+    void handleInitializerList(const uint32_t stringIndex);
 
     void addNodeToAst(std::shared_ptr<SemNode> node);
 
