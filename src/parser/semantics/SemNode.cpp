@@ -57,13 +57,12 @@ uint32_t SemNodeScope::getEnd() const
 void SemNodeScope::devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node)
 {
     auto &attachedNodesToBeDevoured = node->getAttachedNodes();
-    while (attachedNodesToBeDevoured.size() > 0)
+    for (auto &it : attachedNodesToBeDevoured)
     {
-        auto itNode = attachedNodesToBeDevoured.back();
-        attachedNodesToBeDevoured.pop_back();
-
-        attach(itNode);
+        attach(it);
     }
+
+    attachedNodesToBeDevoured.clear();
 }
 
 SemNodePositional::SemNodePositional(const uint32_t pos) //
