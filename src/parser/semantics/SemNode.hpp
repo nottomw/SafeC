@@ -373,4 +373,30 @@ private:
     std::shared_ptr<SemNode> mDeferredNode;
 };
 
+class SemNodeSwitchCase : public SemNodeScope
+{
+public:
+    struct CaseStatement
+    {
+        std::shared_ptr<SemNode> mCaseLabel;
+        std::shared_ptr<SemNode> mCaseStatements; // SemNodeScope
+    };
+
+    SemNodeSwitchCase(const uint32_t pos);
+
+    void setSwitchExpr(std::shared_ptr<SemNode> expr);
+    void addCaseStatement(CaseStatement &&caseStmt);
+    void setDefaultStatement(std::shared_ptr<SemNode> stmt);
+
+    std::string toStr() const override
+    {
+        return "switch..case";
+    }
+
+private:
+    std::shared_ptr<SemNode> mSwitchExpr;
+    std::vector<CaseStatement> mCaseStatements;
+    std::shared_ptr<SemNode> mDefaultStatement;
+};
+
 } // namespace safec

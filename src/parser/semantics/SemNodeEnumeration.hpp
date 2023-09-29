@@ -22,5 +22,6 @@
         selector(UnaryOp) \
         selector(InitializerList) \
         selector(Group) \
-        selector(Defer)
+        selector(Defer) \
+        selector(SwitchCase)
 // clang-format on

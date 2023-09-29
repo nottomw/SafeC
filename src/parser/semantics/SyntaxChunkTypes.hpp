@@ -45,7 +45,12 @@
     entry(kInitializerList) \
     entry(kDefer) \
     entry(kSimpleScopeStart) \
-    entry(kSimpleScopeEnd)
+    entry(kSimpleScopeEnd) \
+    entry(kSwitchHeader) \
+    entry(kSwitchStatement) \
+    entry(kSwitchEnd) \
+    entry(kSwitchCaseHeader) \
+    entry(kSwitchCaseEnd)
 // clang-format on
 
 enum class SyntaxChunkType : uint32_t

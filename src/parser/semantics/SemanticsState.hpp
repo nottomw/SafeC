@@ -105,6 +105,7 @@ public:
 
     void addScope(std::shared_ptr<SemNode> node)
     {
+        // addStagedNodesToCurrentScope();
         mScope.push_back(node);
     }
 

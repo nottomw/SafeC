@@ -435,3 +435,24 @@ SemNodeDefer::SemNodeDefer( //
     mType = SemNode::Type::Defer;
     attach(deferred);
 }
+
+SemNodeSwitchCase::SemNodeSwitchCase(const uint32_t pos)
+    : SemNodeScope{pos}
+{
+    mType = SemNode::Type::SwitchCase;
+}
+
+void SemNodeSwitchCase::setSwitchExpr(std::shared_ptr<SemNode> expr)
+{
+    mSwitchExpr = expr;
+}
+
+void SemNodeSwitchCase::addCaseStatement(SemNodeSwitchCase::CaseStatement &&caseStmt)
+{
+    mCaseStatements.emplace_back(caseStmt);
+}
+
+void SemNodeSwitchCase::setDefaultStatement(std::shared_ptr<SemNode> stmt)
+{
+    mDefaultStatement = stmt;
+}

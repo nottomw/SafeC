@@ -558,14 +558,18 @@ statement
 
 labeled_statement
     : IDENTIFIER ':' statement
-    | CASE constant_expression ':' statement
-    | DEFAULT ':' statement
+    | CASE constant_expression ':' { pr("case expr"); handle(SyntaxChunkType::kSwitchCaseHeader, "case"); } statement { pr("case stmt"); handle(SyntaxChunkType::kSwitchCaseEnd, "case"); }
+    | DEFAULT ':' { pr("case default header"); handle(SyntaxChunkType::kSwitchCaseHeader, "default"); } statement
+    {
+        pr("case default stmt");
+        handle(SyntaxChunkType::kSwitchCaseEnd, "default");
+    }
     ;
 
 compound_statement_scope_start
     : '{'
     {
-        pr("compound scope start");
+        // pr("compound scope start"); // commented out - confusing display
         handle(SyntaxChunkType::kSimpleScopeStart);
     }
     ;
@@ -620,7 +624,7 @@ selection_statement_if
 selection_statement
     : selection_statement_if
     | selection_statement_if ELSE { pr("else"); } statement { pr("else scope"); handle(SyntaxChunkType::kCondition); }
-    | SWITCH '(' expression ')' statement
+    | SWITCH { pr("switch header"); handle(SyntaxChunkType::kSwitchHeader); } '(' expression ')' { pr("switch expr"); handle(SyntaxChunkType::kSwitchStatement); } statement { pr("switch end"); handle(SyntaxChunkType::kSwitchEnd); }
     ;
 
 for_keyword

@@ -316,6 +316,33 @@ void Semantics::handle( //
             }
             break;
 
+        case SyntaxChunkType::kSwitchHeader:
+            {
+                auto switchNode = std::make_shared<SemNodeSwitchCase>(stringIndex);
+                addNodeToAst(switchNode);
+                mState.addScope(switchNode);
+            }
+            break;
+
+        case SyntaxChunkType::kSwitchStatement:
+            break;
+
+        case SyntaxChunkType::kSwitchEnd:
+            {
+                auto currentScope = mState.getCurrentScope();
+                auto currentScopeTyped = semNodeConvert<SemNodeSwitchCase>(currentScope);
+                currentScopeTyped->setEnd(stringIndex);
+
+                mState.removeScope();
+            }
+            break;
+
+        case SyntaxChunkType::kSwitchCaseHeader:
+            break;
+
+        case SyntaxChunkType::kSwitchCaseEnd:
+            break;
+
         default:
             log("type not handled: %", Color::Red, static_cast<uint32_t>(type));
             break;
