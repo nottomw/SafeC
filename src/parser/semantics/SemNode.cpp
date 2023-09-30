@@ -4,11 +4,15 @@ using namespace safec;
 
 SemNode::SemNode() //
     : mType{Type::Undefined}
+    , mSemStart{0}
+    , mSemEnd{0}
 {
 }
 
 SemNode::SemNode(const SemNode::Type type) //
     : mType{type}
+    , mSemStart{0}
+    , mSemEnd{0}
 {
 }
 
@@ -25,6 +29,26 @@ SemNode::Type SemNode::getType() const
 void SemNode::attach(std::shared_ptr<SemNode> node)
 {
     mRelatedNodes.push_back(node);
+}
+
+void SemNode::setSemStart(const uint32_t i)
+{
+    mSemStart = i;
+}
+
+void SemNode::setSemEnd(const uint32_t i)
+{
+    mSemEnd = i;
+}
+
+uint32_t SemNode::getSemStart() const
+{
+    return mSemStart;
+}
+
+uint32_t SemNode::getSemEnd() const
+{
+    return mSemEnd;
 }
 
 SemNodeTranslationUnit::SemNodeTranslationUnit()

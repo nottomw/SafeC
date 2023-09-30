@@ -8,11 +8,12 @@
 namespace safec
 {
 
-// TODO: add a printer with graphical tree display? image generation?
-
 void WalkerPrint::peek(SemNode &node, const uint32_t astLevel)
 {
-    log("%", Color::Magenta, getPrefix(node, astLevel));
+    log("% { % }", //
+        Color::Magenta,
+        getPrefix(node, astLevel),
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodePositional &node, const uint32_t astLevel)
@@ -20,38 +21,35 @@ void WalkerPrint::peek(SemNodePositional &node, const uint32_t astLevel)
     log("% { % }",
         Color::Magenta, //
         getPrefix(node, astLevel),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeScope &node, const uint32_t astLevel)
 {
-    log("% { %, % }",
+    log("% { % }",
         Color::Yellow, //
         getPrefix(node, astLevel),
-        node.getStart(),
-        node.getEnd());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    log("% (%) { % -- % }",
+    log("% (%) { % }",
         Color::Black,
         Color::BgCyan, //
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getStart(),
-        node.getEnd());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 {
-    log("% % { % -- % }",
+    log("% % { % }",
         Color::Black,
         Color::BgGreen, //
         getPrefix(node, astLevel),
         node.getName(),
-        node.getStart(),
-        node.getEnd());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
@@ -61,7 +59,7 @@ void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
         Color::BgBlack,
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeUnaryOp &node, const uint32_t astLevel)
@@ -70,7 +68,7 @@ void WalkerPrint::peek(SemNodeUnaryOp &node, const uint32_t astLevel)
         Color::Red, //
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeJumpStatement &node, const uint32_t astLevel)
@@ -80,7 +78,7 @@ void WalkerPrint::peek(SemNodeJumpStatement &node, const uint32_t astLevel)
         Color::BgBlack,
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeConstant &node, const uint32_t astLevel)
@@ -89,7 +87,7 @@ void WalkerPrint::peek(SemNodeConstant &node, const uint32_t astLevel)
         Color::Magenta, //
         getPrefix(node, astLevel),
         node.getName(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
@@ -98,18 +96,17 @@ void WalkerPrint::peek(SemNodeDefer &node, const uint32_t astLevel)
         Color::White, //
         Color::BgBlue,
         getPrefix(node, astLevel),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeSwitchCase &node, const uint32_t astLevel)
 {
-    log("% on '%' { % -- % }",
+    log("% on '%' { % }",
         Color::Black,
         Color::BgYellow, //
         getPrefix(node, astLevel),
         SemNode::TypeInfo::toStr(node.getSwitchExpr()->getType()),
-        node.getStart(),
-        node.getEnd());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeSwitchCaseLabel &node, const uint32_t astLevel)
@@ -119,14 +116,13 @@ void WalkerPrint::peek(SemNodeSwitchCaseLabel &node, const uint32_t astLevel)
             ? ("default")
             : std::string(SemNode::TypeInfo::toStr(node.getCaseLabel()->getType()));
 
-    log("% on '%' %{ % -- % }",
+    log("% on '%' %{ % }",
         Color::Black,
         Color::BgYellow, //
         getPrefix(node, astLevel),
         caseLabelOn,
         node.getIsFallthrough() ? "(fallthrough) " : "",
-        node.getStart(),
-        node.getEnd());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
@@ -135,7 +131,7 @@ void WalkerPrint::peek(SemNodeDeclaration &node, const uint32_t astLevel)
         Color::Green, //
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)
@@ -144,7 +140,7 @@ void WalkerPrint::peek(SemNodePostfixExpression &node, const uint32_t astLevel)
         Color::Yellow, //
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeBinaryOp &node, const uint32_t astLevel)
@@ -153,7 +149,7 @@ void WalkerPrint::peek(SemNodeBinaryOp &node, const uint32_t astLevel)
         Color::Cyan, //
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeIdentifier &node, const uint32_t astLevel)
@@ -162,17 +158,16 @@ void WalkerPrint::peek(SemNodeIdentifier &node, const uint32_t astLevel)
         Color::Green, //
         getPrefix(node, astLevel),
         node.toStr(),
-        node.getPos());
+        getPos(node));
 }
 
 void WalkerPrint::peek(SemNodeIf &node, const uint32_t astLevel)
 {
-    log("% { % -- % }", //
+    log("% { % }", //
         Color::Black,
         Color::BgMagenta,
         getPrefix(node, astLevel),
-        node.getStart(),
-        node.getEnd());
+        getPos(node));
 }
 
 std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
@@ -190,6 +185,16 @@ std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
     prefix.append(SemNode::TypeInfo::toStr(node.getType()));
 
     return prefix;
+}
+
+std::string WalkerPrint::getPos(SemNode &node)
+{
+    std::string str;
+    str += std::to_string(node.getSemStart());
+    str += " -- ";
+    str += std::to_string(node.getSemEnd());
+
+    return str;
 }
 
 } // namespace safec

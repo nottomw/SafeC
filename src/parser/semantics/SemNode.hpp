@@ -61,6 +61,12 @@ public:
         return "";
     }
 
+    void setSemStart(const uint32_t i);
+    void setSemEnd(const uint32_t i);
+
+    uint32_t getSemStart() const;
+    uint32_t getSemEnd() const;
+
     // TODO: toUnderlyingType() could be useful - convert
     // SemNode into the actual type determined by mType
     // currently semantics uses semNodeConvert<> instead
@@ -68,6 +74,9 @@ public:
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
+
+    uint32_t mSemStart;
+    uint32_t mSemEnd;
 
     friend class SemNodeWalker;
 };

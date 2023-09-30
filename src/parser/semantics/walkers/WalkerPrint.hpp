@@ -32,6 +32,7 @@ public:
 
 private:
     std::string getPrefix(SemNode &node, const uint32_t astLevel);
+    std::string getPos(SemNode &node);
 };
 
 } // namespace safec
