@@ -14,6 +14,9 @@ namespace safec
     virtual void peek(SemNode##x &node, const uint32_t astLevel) { peekDefault(node, astLevel); }
 // clang-format on
 
+// TODO: split walkers into readers and writers, readers
+// can be run in parallel or in a single pass together
+
 class WalkerStrategy
 {
 public:
