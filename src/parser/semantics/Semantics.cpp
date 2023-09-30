@@ -991,9 +991,11 @@ void Semantics::removeRedundantScopeFromCurrentScope()
         auto lastAttachedNode = attachedNodes.back();
         if (lastAttachedNode->getType() == SemNode::Type::Scope)
         {
-            attachedNodes.pop_back();                         // remove the redundant scope
-            specialCurrentScopeNode->devourAttachedNodesFrom( //
-                semNodeConvert<SemNodeScope>(lastAttachedNode));
+            attachedNodes.pop_back(); // remove the redundant scope
+
+            specialCurrentScopeNode        //
+                ->devourAttachedNodesFrom( //
+                    semNodeConvert<SemNodeScope>(lastAttachedNode));
         }
     }
 }
