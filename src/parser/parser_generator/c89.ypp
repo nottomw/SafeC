@@ -618,12 +618,12 @@ expression_statement
     ;
 
 selection_statement_if
-    : IF { pr("if"); handle(SyntaxChunkType::kConditionHeader); } '(' expression ')' { pr("if cond"); handle(SyntaxChunkType::kConditionExpression); } statement { pr("if scope"); handle(SyntaxChunkType::kCondition); }
+    : IF { pr("if"); handle(SyntaxChunkType::kConditionHeader); } '(' expression ')' { pr("if cond"); handle(SyntaxChunkType::kConditionExpression); } statement { pr("if scope end"); handle(SyntaxChunkType::kCondition); }
     ;
 
 selection_statement
     : selection_statement_if
-    | selection_statement_if ELSE { pr("else"); } statement { pr("else scope"); handle(SyntaxChunkType::kCondition); }
+    | selection_statement_if ELSE { pr("else"); } statement { pr("else scope end"); handle(SyntaxChunkType::kCondition, "else"); }
     | SWITCH { pr("switch header"); handle(SyntaxChunkType::kSwitchHeader); } '(' expression ')' { pr("switch expr"); handle(SyntaxChunkType::kSwitchStatement); } statement { pr("switch end"); handle(SyntaxChunkType::kSwitchEnd); }
     ;
 

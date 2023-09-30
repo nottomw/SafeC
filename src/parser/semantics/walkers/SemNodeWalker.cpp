@@ -35,11 +35,6 @@ void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const u
             break;
     }
 
-    // TODO: walker need to be able to handle the new AST,
-    // this means i.e. in BinaryOp have to traverse into rhs and lhs
-
-    // override "getRelatedNodes()" ?
-
     for (const auto &it : node.getAttachedNodes())
     {
         const uint32_t newLevel = (level + 1U);

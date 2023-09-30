@@ -151,7 +151,10 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kCondition:
             {
-                removeRedundantScopeFromCurrentScope();
+                if (additional != "else")
+                {
+                    removeRedundantScopeFromCurrentScope();
+                }
 
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
@@ -956,12 +959,28 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
 void Semantics::removeRedundantScopeFromCurrentScope()
 {
     auto currentScope = mState.getCurrentScope();
+
+    if (currentScope->getType() == SemNode::Type::Scope)
+    {
+        log("WARNING: removing redudant scope not in special scope - ignoring, type: %", //
+            Color::Red,
+            SemNode::TypeInfo::toStr(currentScope->getType()));
+        return;
+    }
+
     const bool isSpecialScope =                                 //
         (currentScope->getType() == SemNode::Type::Function) || //
         (currentScope->getType() == SemNode::Type::Loop) ||     //
         (currentScope->getType() == SemNode::Type::If) ||       //
         (currentScope->getType() == SemNode::Type::SwitchCase);
-    assert(isSpecialScope);
+
+    if (!isSpecialScope)
+    {
+        log("ERROR: removing redudant scope not in special scope - ignoring, type: %", //
+            Color::Red,
+            SemNode::TypeInfo::toStr(currentScope->getType()));
+        assert(isSpecialScope);
+    }
 
     const bool isSingleNodeScope = //
         (currentScope->getType() == SemNode::Type::Function);
