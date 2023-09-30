@@ -335,6 +335,8 @@ class SemNodeJumpStatement : public SemNodePositional
 public:
     SemNodeJumpStatement(const uint32_t pos, const std::string &name);
 
+    std::string getName() const;
+
     std::string toStr() const override
     {
         return mName;

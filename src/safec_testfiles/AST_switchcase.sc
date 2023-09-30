@@ -70,7 +70,7 @@ void SWITCH_CASE_BINARY(int param)
 
 void SWITCH_CASE_FALLTHROUGH_EMPTY(int param)
 {
-    switch(param + 1 + 2)
+    switch(param)
     {
         case 1:
             printf("1\n");
@@ -86,7 +86,7 @@ void SWITCH_CASE_FALLTHROUGH_EMPTY(int param)
 
 void SWITCH_CASE_FALLTHROUGH_BODY(int param)
 {
-    switch(param + 1 + 2)
+    switch(param)
     {
         case 1:
             printf("1\n");
@@ -115,4 +115,48 @@ void SWITCH_CASE_FALLTHROUGH_NO_BREAKS(int param)
     }
 }
 
-// TODO: switch..case with no breaks, no default
+void SWITCH_CASE_FALLTHROUGH_NO_BREAKS_NO_DEFAULT(int param)
+{
+    switch(param)
+    {
+        case 1:
+        case 2:
+        case 3:
+            ; // without empty statement syntax error
+    }
+}
+
+void SWITCH_CASE_WITH_SCOPES_AND_FALLTHROUGH(int param)
+{
+    switch(param)
+    {
+        case 1:
+            {
+                printf("1\n");
+                break;
+            }
+
+        case 2:
+        case 3:
+        case 4:
+            {
+                printf("2 3 4 fall\n");
+                printf("second call\n");
+            }
+            break;
+    }
+}
+
+void SWITCH_CASE_FALLTHROUGH_TO_DEFAULT(int param)
+{
+    switch(param)
+    {
+        case 1:
+        case 2:
+        default:
+        {
+            printf("1 or default\n");
+        }
+        break;
+    }
+}

@@ -326,89 +326,19 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kSwitchStatement:
-            {
-                auto &stagedNodes = mState.getStagedNodes();
-                assert(stagedNodes.size() >= 1);
-
-                auto lastNode = stagedNodes.back();
-                stagedNodes.pop_back();
-
-                // current scope must be a switch..case
-                auto currentScope = mState.getCurrentScope();
-                assert(currentScope->getType() == SemNode::Type::SwitchCase);
-
-                auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
-                switchCaseNode->setSwitchExpr(lastNode);
-            }
+            handleSwitchStatement();
             break;
 
         case SyntaxChunkType::kSwitchEnd:
-            {
-                removeRedundantScopeFromCurrentScope(); // TODO: add handling of switch..case
-
-                auto currentScope = mState.getCurrentScope();
-
-                // current scope must be a switch..case
-                assert(currentScope->getType() == SemNode::Type::SwitchCase);
-
-                auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
-                switchCaseNode->setEnd(stringIndex);
-
-                mState.removeScope();
-            }
+            handleSwitchEnd(stringIndex);
             break;
 
         case SyntaxChunkType::kSwitchCaseHeader:
-            {
-                assert((additional == "case") || (additional == "default"));
-
-                auto caseLabelNode = std::make_shared<SemNodeSwitchCaseLabel>(stringIndex);
-                auto &stagedNodes = mState.getStagedNodes();
-
-                // this might be a fall-through case and it will be closed later,
-                // all fall-through cases will be attached to the previous case statement
-                // case 1: case 2: case 3 ==> node {case 1} -> node {case 2} -> ...
-
-                std::shared_ptr<SemNode> nodeToBeSetAsCaseLabel = //
-                    std::make_shared<SemNodeEmptyStatement>(stringIndex);
-                if (additional == "case")
-                {
-                    assert(stagedNodes.size() >= 1);
-                    nodeToBeSetAsCaseLabel = stagedNodes.back();
-                    stagedNodes.pop_back();
-                }
-
-                auto currentScope = mState.getCurrentScope();
-                if (currentScope->getType() == SemNode::Type::SwitchCaseLabel)
-                {
-                    auto previousCaseLabel = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
-                    previousCaseLabel->setIsFallthrough(true);
-                }
-                else
-                {
-                    // did we get a break on previous case? if not this is fallthrough but
-                    // with a statement inside
-                }
-
-                caseLabelNode->setCaseLabel(nodeToBeSetAsCaseLabel);
-
-                addNodeToAst(caseLabelNode);
-                mState.addScope(caseLabelNode);
-            }
+            handleSwitchCaseHeader(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kSwitchCaseEnd:
-            {
-                auto currentScope = mState.getCurrentScope();
-
-                // current scope must be a switch..case label
-                assert(currentScope->getType() == SemNode::Type::SwitchCaseLabel);
-
-                auto switchCaseLabelNode = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
-                switchCaseLabelNode->setEnd(stringIndex);
-
-                mState.removeScope();
-            }
+            handleSwitchCaseEnd(stringIndex);
             break;
 
         default:
@@ -757,6 +687,155 @@ void Semantics::handleDefer(const uint32_t stringIndex)
 
     auto deferNode = std::make_shared<SemNodeDefer>(stringIndex, lastNode);
     mState.stageNode(deferNode);
+}
+
+void Semantics::handleSwitchStatement()
+{
+    auto &stagedNodes = mState.getStagedNodes();
+    assert(stagedNodes.size() >= 1);
+
+    auto lastNode = stagedNodes.back();
+    stagedNodes.pop_back();
+
+    // current scope must be a switch..case
+    auto currentScope = mState.getCurrentScope();
+    assert(currentScope->getType() == SemNode::Type::SwitchCase);
+
+    auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
+    switchCaseNode->setSwitchExpr(lastNode);
+}
+
+void Semantics::handleSwitchEnd(const uint32_t stringIndex)
+{
+    removeRedundantScopeFromCurrentScope();
+
+    auto currentScope = mState.getCurrentScope();
+
+    // current scope must be a switch..case
+    assert(currentScope->getType() == SemNode::Type::SwitchCase);
+
+    auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
+    switchCaseNode->setEnd(stringIndex);
+
+    mState.removeScope();
+}
+
+void Semantics::handleSwitchCaseHeader(const uint32_t stringIndex, const std::string &additional)
+{
+    assert((additional == "case") || (additional == "default"));
+
+    auto caseLabelNode = std::make_shared<SemNodeSwitchCaseLabel>(stringIndex);
+    auto &stagedNodes = mState.getStagedNodes();
+
+    // grab the case statement (grab X in "case X: ...")
+    std::shared_ptr<SemNode> nodeToBeSetAsCaseLabel = //
+        std::make_shared<SemNodeEmptyStatement>(stringIndex);
+    if (additional == "case")
+    {
+        assert(stagedNodes.size() >= 1);
+        nodeToBeSetAsCaseLabel = stagedNodes.back();
+        stagedNodes.pop_back();
+    }
+
+    auto currentScope = mState.getCurrentScope();
+    if (currentScope->getType() == SemNode::Type::SwitchCaseLabel)
+    {
+        // if the current scope is SwitchCaseLabel and we just saw a new case:, this
+        // means the current scope is a fall-through case statement
+        auto currentScopeLabel = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
+        currentScopeLabel->setIsFallthrough(true);
+
+        // close current scope without waiting for parser, since we
+        // already know the previous case statement is done
+        handle(SyntaxChunkType::kSwitchCaseEnd, stringIndex);
+    }
+    else
+    {
+        // more complex case: the current scope is not a switch..case label,
+        // but we still need to check for a fall-through case label that
+        // contains some statements:
+        // case 1: // fall-through
+        //      someStatement;
+        // case 2:
+
+        // Currently this is handled in a bit sketchy way, inspecting
+        // if there was a previous case label and the label contained "break".
+
+        auto getLastAttachedNodeIfTypeMatches = //
+            [&](const std::shared_ptr<SemNode> node,
+                const SemNode::Type type) -> std::shared_ptr<SemNode> //
+        {
+            if (!node)
+                return node;
+
+            auto &nodesInScope = node->getAttachedNodes();
+            if (nodesInScope.size() > 0)
+            {
+                auto lastNode = nodesInScope.back();
+                if (lastNode->getType() == type)
+                {
+                    return lastNode;
+                }
+            }
+
+            return std::shared_ptr<SemNode>{};
+        };
+
+        // if the last node in the current scope is a switch..case label (instead of break)
+        // chances are that this is a fallthrough
+        auto maybeSwitchCaseLabel = getLastAttachedNodeIfTypeMatches(currentScope, SemNode::Type::SwitchCaseLabel);
+        if (maybeSwitchCaseLabel)
+        {
+            auto nd = semNodeConvert<SemNodeSwitchCaseLabel>(maybeSwitchCaseLabel);
+            nd->setIsFallthrough(true);
+        }
+
+        // unfortunately it is possible to write
+        // case X: { ...; break; }
+        // instead of:
+        // case X: { ...; } break;
+        // this requires further inspection down the AST, since the AST
+        // will now contain break inside of a scope inside of a case label node...
+
+        auto maybeScope = //
+            getLastAttachedNodeIfTypeMatches(maybeSwitchCaseLabel, SemNode::Type::Scope);
+        auto maybeJumpStatement = getLastAttachedNodeIfTypeMatches(maybeScope, SemNode::Type::JumpStatement);
+        if (maybeJumpStatement)
+        {
+            auto jumpStatementTyped = semNodeConvert<SemNodeJumpStatement>(maybeJumpStatement);
+            if (jumpStatementTyped->getName() == "break")
+            {
+                // turns out there was a break there...
+                auto nd = semNodeConvert<SemNodeSwitchCaseLabel>(maybeSwitchCaseLabel);
+                nd->setIsFallthrough(false);
+            }
+        }
+    }
+
+    caseLabelNode->setCaseLabel(nodeToBeSetAsCaseLabel);
+
+    addNodeToAst(caseLabelNode);
+    mState.addScope(caseLabelNode);
+}
+
+void Semantics::handleSwitchCaseEnd(const uint32_t stringIndex)
+{
+    auto currentScope = mState.getCurrentScope();
+    if (currentScope->getType() == SemNode::Type::Scope)
+    {
+        // we are currently in the scope under SemNodeSwitch, this
+        // means we had a fallthrough statements that were already closed,
+        // ignore this chunk
+        return;
+    }
+
+    // current scope must be a switch..case label
+    assert(currentScope->getType() == SemNode::Type::SwitchCaseLabel);
+
+    auto switchCaseLabelNode = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
+    switchCaseLabelNode->setEnd(stringIndex);
+
+    mState.removeScope();
 }
 
 void Semantics::handleBinaryOp(const uint32_t stringIndex, const std::string &op)

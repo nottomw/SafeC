@@ -393,6 +393,11 @@ SemNodeJumpStatement::SemNodeJumpStatement( //
     mType = Type::JumpStatement;
 }
 
+std::string SemNodeJumpStatement::getName() const
+{
+    return mName;
+}
+
 SemNodeInitializerList::SemNodeInitializerList(const uint32_t pos)
     : SemNodePositional{pos}
 {
@@ -438,6 +443,7 @@ SemNodeDefer::SemNodeDefer( //
 
 SemNodeSwitchCaseLabel::SemNodeSwitchCaseLabel(const uint32_t pos)
     : SemNodeScope{pos}
+    , mIsFallthrough{false}
 {
     mType = SemNode::Type::SwitchCaseLabel;
 }
