@@ -51,7 +51,7 @@ private:
     void handleAssignment(const uint32_t stringIndex);
     void handleRelationalExpression(const uint32_t stringIndex, const std::string &op);
     void handlePostfixExpression(const uint32_t stringIndex, const std::string &op);
-    void handleForLoopConditions();
+    void handleForLoopConditions(const uint32_t pos);
     void handleConditionExpression(const uint32_t stringIndex);
     void handleBinaryOp(const uint32_t stringIndex, const std::string &op);
     void handleReturn(const uint32_t stringIndex, const std::string &additional);
@@ -78,6 +78,8 @@ private:
     void removeRedundantScopeFromCurrentScope();
 
     void printStagedNodes(const std::string &str = "");
+
+    uint32_t mPrevReducePos;
 };
 
 } // namespace safec

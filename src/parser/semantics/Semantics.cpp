@@ -35,6 +35,7 @@ std::shared_ptr<TUnderlyingSemNode> semNodeConvert(std::shared_ptr<SemNode> &w)
 
 Semantics::Semantics() //
     : mTranslationUnit{std::make_shared<SemNodeTranslationUnit>()}
+    , mPrevReducePos{0}
 {
     mState.addScope(mTranslationUnit);
 }
@@ -179,6 +180,10 @@ void Semantics::handle( //
             {
                 mState.mState = SState::InForLoopContext;
                 auto node = std::make_shared<SemNodeLoop>(stringIndex, "for");
+
+                node->setSemStart(mPrevReducePos);
+                mPrevReducePos = stringIndex;
+
                 addNodeToAst(node);
                 mState.addScope(node);
             }
@@ -187,7 +192,7 @@ void Semantics::handle( //
         case SyntaxChunkType::kForLoopConditions:
             {
                 mState.mState = SState::Idle;
-                handleForLoopConditions();
+                handleForLoopConditions(stringIndex);
             }
             break;
 
@@ -198,6 +203,9 @@ void Semantics::handle( //
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
+
+                scopeNode->setSemEnd(stringIndex);
+                mPrevReducePos = stringIndex;
 
                 mState.removeScope();
             }
@@ -246,13 +254,19 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kSimpleExpr:
             {
+                auto &stagedNodes = mState.getStagedNodes();
                 if (mState.mState != SState::InForLoopContext)
                 {
                     // flush staged nodes
-                    auto &stagedNodes = mState.getStagedNodes();
                     for (auto &it : stagedNodes)
                     {
                         addNodeToAst(it);
+                    }
+
+                    if (stagedNodes.size() > 0)
+                    {
+                        stagedNodes.back()->setSemEnd(stringIndex);
+                        mPrevReducePos = stringIndex;
                     }
 
                     stagedNodes.clear();
@@ -375,6 +389,9 @@ void Semantics::handleFunctionHeader( //
     node->setReturn(declNode->getLhsType());
     node->setName(declNode->getLhsIdentifier());
 
+    node->setSemStart(mPrevReducePos);
+    mPrevReducePos = stringIndex;
+
     // add function params
     for (uint32_t i = 1; i < stagedNodes.size(); i++)
     {
@@ -406,6 +423,9 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
     auto funScopeNode = semNodeConvert<SemNodeFunction>(currentScopeFun);
     funScopeNode->setEnd(stringIndex);
 
+    funScopeNode->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
+
     mState.removeScope();
 }
 
@@ -429,6 +449,9 @@ void Semantics::handleInitDeclaration( //
         stagedNodes.pop_back();
         binaryOp->setRhs(rhs);
 
+        binaryOp->setSemStart(mPrevReducePos);
+        binaryOp->setSemEnd(stringIndex);
+
         addNodeToAst(binaryOp);
     }
     else
@@ -436,8 +459,13 @@ void Semantics::handleInitDeclaration( //
         auto decl = stagedNodes.back();
         stagedNodes.pop_back();
 
+        decl->setSemStart(mPrevReducePos);
+        decl->setSemEnd(stringIndex);
+
         addNodeToAst(decl);
     }
+
+    mPrevReducePos = stringIndex;
 }
 
 void Semantics::handleAssignment(const uint32_t stringIndex)
@@ -458,6 +486,10 @@ void Semantics::handleAssignment(const uint32_t stringIndex)
     stagedNodes.pop_back();
     binaryOp->setRhs(rhs);
 
+    binaryOp->setSemStart(mPrevReducePos);
+    binaryOp->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
+
     mState.stageNode(binaryOp);
 }
 
@@ -475,6 +507,10 @@ void Semantics::handleRelationalExpression( //
 
     auto node = std::make_shared<SemNodeBinaryOp>(stringIndex, op, lhs);
     node->setRhs(rhs);
+
+    node->setSemStart(mPrevReducePos);
+    node->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
 
     mState.stageNode(node);
 }
@@ -499,6 +535,10 @@ void Semantics::handlePostfixExpression( //
             auto functionNameNode = stagedNodes[1];
             auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, functionNameNode);
 
+            node->setSemStart(mPrevReducePos);
+            node->setSemEnd(stringIndex);
+            mPrevReducePos = stringIndex;
+
             for (uint32_t i = 2; i < stagedNodes.size(); i++)
             {
                 node->addArg(stagedNodes[i]);
@@ -511,6 +551,10 @@ void Semantics::handlePostfixExpression( //
         {
             auto functionNameNode = stagedNodes[0];
             auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, functionNameNode);
+
+            node->setSemStart(mPrevReducePos);
+            node->setSemEnd(stringIndex);
+            mPrevReducePos = stringIndex;
 
             for (uint32_t i = 1; i < stagedNodes.size(); i++)
             {
@@ -533,6 +577,11 @@ void Semantics::handlePostfixExpression( //
         stagedNodes.pop_back();
 
         auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, lhs);
+
+        node->setSemStart(mPrevReducePos);
+        node->setSemEnd(stringIndex);
+        mPrevReducePos = stringIndex;
+
         node->addArg(indexExprNode);
         mState.stageNode(node);
     }
@@ -542,11 +591,16 @@ void Semantics::handlePostfixExpression( //
         stagedNodes.pop_back();
 
         auto node = std::make_shared<SemNodePostfixExpression>(stringIndex, op, lhs);
+
+        node->setSemStart(mPrevReducePos);
+        node->setSemEnd(stringIndex);
+        mPrevReducePos = stringIndex;
+
         mState.stageNode(node);
     }
 }
 
-void Semantics::handleForLoopConditions()
+void Semantics::handleForLoopConditions(const uint32_t pos)
 {
     auto &stagedNodes = mState.getStagedNodes();
 
@@ -562,6 +616,9 @@ void Semantics::handleForLoopConditions()
     loopNode->setIteratorInit(itInit);
     loopNode->setIteratorCondition(itCond);
     loopNode->setIteratorChange(itChange);
+
+    // TODO: set pos to the group
+    mPrevReducePos = pos;
 }
 
 void Semantics::handleConditionExpression(const uint32_t stringIndex)

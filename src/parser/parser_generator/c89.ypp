@@ -102,27 +102,31 @@ postfix_expression
     : primary_expression
     | postfix_expression '[' expression ']'
     {
-        pr("postfix[]");
+        pr("kPostfixExpression []");
         handle(SyntaxChunkType::kPostfixExpression, "[]");
     }
     | postfix_expression '(' ')'
     {
-        pr("postfix()");
+        pr("kPostfixExpression ()");
         handle(SyntaxChunkType::kPostfixExpression, "()");
     }
     | postfix_expression '(' argument_expression_list ')'
     {
-        pr("postfix(...)");
+        pr("kPostfixExpression (...)");
         handle(SyntaxChunkType::kPostfixExpression, "(...)");
     }
     | postfix_expression '.' IDENTIFIER
     | postfix_expression PTR_OP IDENTIFIER
     | postfix_expression INC_OP
     {
-        pr("postfix++");
+        pr("kPostfixExpression ++");
         handle(SyntaxChunkType::kPostfixExpression, "++");
     }
     | postfix_expression DEC_OP
+    {
+        pr("kPostfixExpression --");
+        handle(SyntaxChunkType::kPostfixExpression, "--");
+    }
     ;
 
 argument_expression_list
@@ -201,22 +205,22 @@ relational_expression
     : shift_expression
     | relational_expression '<' shift_expression
     {
-        pr("relational <");
+        pr("kRelationalExpression <");
         handle(SyntaxChunkType::kRelationalExpression, "<");
     }
     | relational_expression '>' shift_expression
     {
-        pr("relational >");
+        pr("kRelationalExpression >");
         handle(SyntaxChunkType::kRelationalExpression, ">");
     }
     | relational_expression LE_OP shift_expression
     {
-        pr("relational <=");
+        pr("kRelationalExpression <=");
         handle(SyntaxChunkType::kRelationalExpression, "<=");
     }
     | relational_expression GE_OP shift_expression
     {
-        pr("relational >=");
+        pr("kRelationalExpression >=");
         handle(SyntaxChunkType::kRelationalExpression, ">=");
     }
     ;
@@ -267,7 +271,7 @@ assignment_expression
     : conditional_expression
     | unary_expression assignment_operator assignment_expression
     {
-        pr("asgn expr");
+        pr("kAssignment");
         handle(SyntaxChunkType::kAssignment);
     }
     ;
@@ -317,12 +321,12 @@ init_declarator_list
 init_declarator
     : declarator
     {
-        pr("init decl (no asgn)");
+        pr("kInitDeclaration noasgn");
         handle(SyntaxChunkType::kInitDeclaration, "noasgn");
     }
-    | declarator '=' { pr("asgn"); handle(SyntaxChunkType::kAssignmentOperator, "="); } initializer
+    | declarator '=' { pr("kAssignmentOperator ="); handle(SyntaxChunkType::kAssignmentOperator, "="); } initializer
     {
-        pr("init decl (with asgn)");
+        pr("kInitDeclaration asgn");
         handle(SyntaxChunkType::kInitDeclaration, "asgn");
     }
     ;
@@ -444,7 +448,7 @@ declarator
 direct_declarator
     : IDENTIFIER
     {
-        pr("direct decl");
+        pr("kDirectDecl");
         handle(SyntaxChunkType::kDirectDecl, $1);
         free($1);
     }
@@ -452,7 +456,7 @@ direct_declarator
     | direct_declarator '[' constant_expression ']'
     | direct_declarator '[' ']'
     {
-        pr("direct decl array");
+        pr("kDirectDecl array");
         handle(SyntaxChunkType::kArrayDecl);
     }
     | direct_declarator '(' parameter_type_list ')'
@@ -612,7 +616,7 @@ expression_statement
     }
     | expression ';'
     {
-        pr("simple expr");
+        pr("kSimpleExpr");
         handle(SyntaxChunkType::kSimpleExpr);
     }
     ;
@@ -630,15 +634,16 @@ selection_statement
 for_keyword
     : FOR
     {
+        pr("kForLoopHeader");
         handle(SyntaxChunkType::kForLoopHeader);
     }
     ;
 
 iteration_statement
-    : WHILE { pr("while hdr"); handle(SyntaxChunkType::kWhileLoopHeader); } '(' expression ')' { pr("while cond"); handle(SyntaxChunkType::kWhileLoopConditions); } statement { pr("while body"); handle(SyntaxChunkType::kWhileLoop); }
+    : WHILE { pr("kWhileLoopHeader"); handle(SyntaxChunkType::kWhileLoopHeader); } '(' expression ')' { pr("kWhileLoopConditions"); handle(SyntaxChunkType::kWhileLoopConditions); } statement { pr("kWhileLoop"); handle(SyntaxChunkType::kWhileLoop); }
     | DO statement WHILE '(' expression ')' ';'
-    | for_keyword '(' expression_statement expression_statement ')' { handle(SyntaxChunkType::kForLoopConditions); } statement { pr("for loop body"); handle(SyntaxChunkType::kForLoop); }
-    | for_keyword '(' expression_statement expression_statement expression ')' { handle(SyntaxChunkType::kForLoopConditions); } statement { pr("for loop body"); handle(SyntaxChunkType::kForLoop); }
+    | for_keyword '(' expression_statement expression_statement ')' { pr("kForLoopConditions"); handle(SyntaxChunkType::kForLoopConditions); } statement { pr("kForLoop"); handle(SyntaxChunkType::kForLoop); }
+    | for_keyword '(' expression_statement expression_statement expression ')' { pr("kForLoopConditions"); handle(SyntaxChunkType::kForLoopConditions); } statement { pr("kForLoop"); handle(SyntaxChunkType::kForLoop); }
     ;
 
 jump_statement
@@ -677,8 +682,8 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement
-    | VOID declarator { pr("fun header (void)"); handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement { pr("fun body"); handle(SyntaxChunkType::kFunction); }
-    | declaration_specifiers declarator { pr("fun header (nonvoid)"); handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement { pr("fun body"); handle(SyntaxChunkType::kFunction); }
+    | VOID declarator { pr("kFunctionHeader (void)"); handle(SyntaxChunkType::kFunctionHeader, "void"); } compound_statement { pr("kFunction"); handle(SyntaxChunkType::kFunction); }
+    | declaration_specifiers declarator { pr("kFunctionHeader (nonvoid)"); handle(SyntaxChunkType::kFunctionHeader, "nonvoid"); } compound_statement { pr("kFunction"); handle(SyntaxChunkType::kFunction); }
     | declarator declaration_list compound_statement
     | declarator compound_statement
     ;
