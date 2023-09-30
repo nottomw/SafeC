@@ -1,0 +1,53 @@
+Parsing file: 'AST_functions.sc'...
+Parsing done, characters count 913
+
+Current AST:
+[0] TranslationUnit
+	[1] Function (int a (struct/union FUNCTION_WITH_STRUCT_PARAM, struct/union structArg,  )) { 138 -- 181 }
+		[2] BinaryOp '=' { 163 }
+			[3] Declaration 'struct/union t' { 161 }
+			[3] Identifier 'arg' { 167 }
+		[2] Return '' { 179 }
+			[3] Identifier 't' { 178 }
+	[1] Function (void staticFun ( )) { 212 -- 214 }
+	[1] Function (int constPointerRetFun ( )) { 262 -- 278 }
+		[2] Return '' { 276 }
+			[3] Identifier 'NULL' { 275 }
+	[1] Function (void FUNCTION_WITH_NO_RETURN ( )) { 316 -- 318 }
+	[1] Function (void* FUNCTION_WITH_VOIDPTR_RETURN ( )) { 362 -- 378 }
+		[2] Return '' { 376 }
+			[3] Identifier 'NULL' { 375 }
+	[1] Function (void** FUNCTION_WITH_POINTER_TO_POINTER ( )) { 427 -- 443 }
+		[2] Return '' { 441 }
+			[3] Identifier 'NULL' { 440 }
+	[1] Function (void FUNCTION_WITH_NO_RETURN_VOID_PTR_ARG (void* voidPtrArg,  )) { 506 -- 508 }
+	[1] Function (void*** FUNCTION_WITH_VOIDPTR3_RETURN_VOID_PTR_ARG (void*** voidPtr3Arg, void* voidPtr1Arg,  )) { 603 -- 629 }
+		[2] Return '' { 627 }
+			[3] Identifier 'voidPtr3Arg' { 626 }
+	[1] Function (void FUNCTION_WITH_POINTER_PARAMS (int* intPtr, double** doublePtr, char*** charPtr,  )) { 716 -- 718 }
+	[1] Function (int FUNCTION_WITH_LOOP (int a,  )) { 751 -- 841 }
+		[2] BinaryOp '=' { 763 }
+			[3] Declaration 'int i' { 761 }
+			[3] Constant '0' { 765 }
+		[2] Loop for { 774 -- 839 }
+			[3] Group
+				[4] BinaryOp '=' { 779 }
+					[5] Identifier 'i' { 777 }
+					[5] Constant '0' { 781 }
+				[4] BinaryOp '<' { 789 }
+					[5] Identifier 'i' { 784 }
+					[5] Identifier 'a' { 788 }
+				[4] PostfixExpression '++' { 793 }
+					[5] Identifier 'i' { 791 }
+			[3] PostfixExpression '(...)' { 832 }
+				[4] Identifier 'printer' { 817 }
+					[5] Constant '"num: %d\n"' { 828 }
+					[5] Identifier 'i' { 831 }
+	[1] Function (int main (int argc, char** argv,  )) { 876 -- 912 }
+		[2] PostfixExpression '(...)' { 894 }
+			[3] Identifier 'testfun' { 889 }
+				[4] Identifier 'argc' { 893 }
+		[2] Return '' { 910 }
+			[3] Constant '0' { 909 }
+
+

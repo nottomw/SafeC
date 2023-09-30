@@ -1,0 +1,198 @@
+Parsing file: 'AST_looping.sc'...
+Parsing done, characters count 1463
+
+Current AST:
+[0] TranslationUnit
+	[1] Function (void TEST_LOOP_FOR ( )) { 46 -- 135 }
+		[2] BinaryOp '=' { 58 }
+			[3] Declaration 'int i' { 56 }
+			[3] Constant '0' { 60 }
+		[2] Loop for { 69 -- 133 }
+			[3] Group
+				[4] BinaryOp '=' { 74 }
+					[5] Identifier 'i' { 72 }
+					[5] Constant '0' { 76 }
+				[4] BinaryOp '<' { 85 }
+					[5] Identifier 'i' { 79 }
+					[5] Constant '10' { 84 }
+				[4] PostfixExpression '++' { 89 }
+					[5] Identifier 'i' { 87 }
+			[3] PostfixExpression '(...)' { 126 }
+				[4] Identifier 'printf' { 112 }
+					[5] Constant '"i = %d\n"' { 122 }
+					[5] Identifier 'i' { 125 }
+	[1] Function (void TEST_LOOP_FOR_BREAK ( )) { 169 -- 317 }
+		[2] BinaryOp '=' { 181 }
+			[3] Declaration 'int i' { 179 }
+			[3] Constant '0' { 183 }
+		[2] Loop for { 192 -- 315 }
+			[3] Group
+				[4] BinaryOp '=' { 197 }
+					[5] Identifier 'i' { 195 }
+					[5] Constant '0' { 199 }
+				[4] BinaryOp '<' { 208 }
+					[5] Identifier 'i' { 202 }
+					[5] Constant '10' { 207 }
+				[4] PostfixExpression '++' { 212 }
+					[5] Identifier 'i' { 210 }
+			[3] PostfixExpression '(...)' { 249 }
+				[4] Identifier 'printf' { 235 }
+					[5] Constant '"i = %d\n"' { 245 }
+					[5] Identifier 'i' { 248 }
+			[3] If { 270 -- 309 }
+				[4] Group
+					[5] BinaryOp '==' { 270 }
+						[6] Identifier 'i' { 264 }
+						[6] Constant '5' { 269 }
+				[4] JumpStatement 'break' { 299 }
+	[1] Function (void TEST_LOOP_FOR_RETURN ( )) { 352 -- 501 }
+		[2] BinaryOp '=' { 364 }
+			[3] Declaration 'int i' { 362 }
+			[3] Constant '0' { 366 }
+		[2] Loop for { 375 -- 499 }
+			[3] Group
+				[4] BinaryOp '=' { 380 }
+					[5] Identifier 'i' { 378 }
+					[5] Constant '0' { 382 }
+				[4] BinaryOp '<' { 391 }
+					[5] Identifier 'i' { 385 }
+					[5] Constant '10' { 390 }
+				[4] PostfixExpression '++' { 395 }
+					[5] Identifier 'i' { 393 }
+			[3] PostfixExpression '(...)' { 432 }
+				[4] Identifier 'printf' { 418 }
+					[5] Constant '"i = %d\n"' { 428 }
+					[5] Identifier 'i' { 431 }
+			[3] If { 453 -- 493 }
+				[4] Group
+					[5] BinaryOp '==' { 453 }
+						[6] Identifier 'i' { 447 }
+						[6] Constant '5' { 452 }
+				[4] Return '' { 483 }
+	[1] Function (void TEST_LOOP_FOR_CONTINUE ( )) { 538 -- 690 }
+		[2] BinaryOp '=' { 550 }
+			[3] Declaration 'int i' { 548 }
+			[3] Constant '0' { 552 }
+		[2] Loop for { 561 -- 688 }
+			[3] Group
+				[4] BinaryOp '=' { 566 }
+					[5] Identifier 'i' { 564 }
+					[5] Constant '0' { 568 }
+				[4] BinaryOp '<' { 577 }
+					[5] Identifier 'i' { 571 }
+					[5] Constant '10' { 576 }
+				[4] PostfixExpression '++' { 581 }
+					[5] Identifier 'i' { 579 }
+			[3] If { 608 -- 650 }
+				[4] Group
+					[5] BinaryOp '==' { 608 }
+						[6] Identifier 'i' { 602 }
+						[6] Constant '5' { 607 }
+				[4] JumpStatement 'continue' { 640 }
+			[3] PostfixExpression '(...)' { 681 }
+				[4] Identifier 'printf' { 667 }
+					[5] Constant '"i = %d\n"' { 677 }
+					[5] Identifier 'i' { 680 }
+	[1] Function (void TEST_LOOP_WHILE ( )) { 720 -- 783 }
+		[2] BinaryOp '=' { 732 }
+			[3] Declaration 'int i' { 730 }
+			[3] Constant '0' { 734 }
+		[2] Loop while { 745 -- 781 }
+			[3] Group
+				[4] BinaryOp '<' { 753 }
+					[5] Identifier 'i' { 748 }
+					[5] Constant '5' { 752 }
+			[3] BinaryOp '+=' { 772 }
+				[4] Identifier 'i' { 772 }
+				[4] Constant '1' { 774 }
+	[1] Function (void TEST_LOOP_WHILE_BREAK ( )) { 819 -- 941 }
+		[2] BinaryOp '=' { 831 }
+			[3] Declaration 'int i' { 829 }
+			[3] Constant '0' { 833 }
+		[2] Loop while { 844 -- 939 }
+			[3] Group
+				[4] BinaryOp '<' { 852 }
+					[5] Identifier 'i' { 847 }
+					[5] Constant '5' { 851 }
+			[3] BinaryOp '+=' { 871 }
+				[4] Identifier 'i' { 871 }
+				[4] Constant '1' { 873 }
+			[3] If { 894 -- 933 }
+				[4] Group
+					[5] BinaryOp '==' { 894 }
+						[6] Identifier 'i' { 888 }
+						[6] Constant '2' { 893 }
+				[4] JumpStatement 'break' { 923 }
+	[1] Function (void TEST_LOOP_WHILE_RETURN ( )) { 978 -- 1101 }
+		[2] BinaryOp '=' { 990 }
+			[3] Declaration 'int i' { 988 }
+			[3] Constant '0' { 992 }
+		[2] Loop while { 1003 -- 1099 }
+			[3] Group
+				[4] BinaryOp '<' { 1011 }
+					[5] Identifier 'i' { 1006 }
+					[5] Constant '5' { 1010 }
+			[3] BinaryOp '+=' { 1030 }
+				[4] Identifier 'i' { 1030 }
+				[4] Constant '1' { 1032 }
+			[3] If { 1053 -- 1093 }
+				[4] Group
+					[5] BinaryOp '==' { 1053 }
+						[6] Identifier 'i' { 1047 }
+						[6] Constant '3' { 1052 }
+				[4] Return '' { 1083 }
+	[1] Function (void TEST_LOOP_WHILE_CONTINUE ( )) { 1140 -- 1296 }
+		[2] BinaryOp '=' { 1152 }
+			[3] Declaration 'int i' { 1150 }
+			[3] Constant '0' { 1154 }
+		[2] Loop while { 1165 -- 1294 }
+			[3] Group
+				[4] BinaryOp '<' { 1173 }
+					[5] Identifier 'i' { 1168 }
+					[5] Constant '5' { 1172 }
+			[3] BinaryOp '+=' { 1192 }
+				[4] Identifier 'i' { 1192 }
+				[4] Constant '1' { 1194 }
+			[3] If { 1215 -- 1257 }
+				[4] Group
+					[5] BinaryOp '==' { 1215 }
+						[6] Identifier 'i' { 1209 }
+						[6] Constant '4' { 1214 }
+				[4] JumpStatement 'continue' { 1247 }
+			[3] PostfixExpression '(...)' { 1287 }
+				[4] Identifier 'printf' { 1273 }
+					[5] Constant '"i = %d\n"' { 1283 }
+					[5] Identifier 'i' { 1286 }
+	[1] Function (void TEST_LOOP_NO_SCOPE ( )) { 1329 -- 1462 }
+		[2] BinaryOp '=' { 1341 }
+			[3] Declaration 'int i' { 1339 }
+			[3] Constant '666' { 1345 }
+		[2] Loop for { 1354 -- 1401 }
+			[3] Group
+				[4] BinaryOp '=' { 1359 }
+					[5] Identifier 'i' { 1357 }
+					[5] Constant '0' { 1361 }
+				[4] BinaryOp '<' { 1369 }
+					[5] Identifier 'i' { 1364 }
+					[5] Constant '5' { 1368 }
+				[4] UnaryOp '++' { 1374 }
+					[5] Identifier 'i' { 1373 }
+			[3] PostfixExpression '(...)' { 1400 }
+				[4] Identifier 'printf' { 1390 }
+					[5] Constant '"%d\n"' { 1396 }
+					[5] Identifier 'i' { 1399 }
+		[2] BinaryOp '=' { 1410 }
+			[3] Identifier 'i' { 1410 }
+			[3] Constant '0' { 1412 }
+		[2] Loop while { 1423 -- 1460 }
+			[3] Group
+				[4] BinaryOp '<' { 1431 }
+					[5] Identifier 'i' { 1426 }
+					[5] Constant '5' { 1430 }
+			[3] PostfixExpression '(...)' { 1459 }
+				[4] Identifier 'printf' { 1447 }
+					[5] Constant '"%d\n"' { 1453 }
+					[5] PostfixExpression '++' { 1458 }
+						[6] Identifier 'i' { 1456 }
+
+

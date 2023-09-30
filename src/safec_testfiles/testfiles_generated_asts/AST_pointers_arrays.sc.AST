@@ -1,0 +1,79 @@
+Parsing file: 'AST_pointers_arrays.sc'...
+ no cond */Parsing done, characters count 516
+
+Current AST:
+[0] TranslationUnit
+	[1] Function (void TEST_LOOP_ITER_POINTERS ( )) { 36 -- 515 }
+		[2] BinaryOp '=' { 89 }
+			[3] Declaration 'int a' { 87 }
+			[3] Constant '3' { 91 }
+		[2] BinaryOp '=' { 104 }
+			[3] Declaration 'int b' { 102 }
+			[3] Constant '6' { 106 }
+		[2] BinaryOp '=' { 119 }
+			[3] Declaration 'int c' { 117 }
+			[3] Constant '9' { 121 }
+		[2] BinaryOp '=' { 135 }
+			[3] Declaration 'int* d' { 133 }
+			[3] UnaryOp '&' { 137 }
+				[4] Identifier 'c' { 138 }
+		[2] BinaryOp '=' { 153 }
+			[3] Declaration 'int** e' { 151 }
+			[3] UnaryOp '&' { 155 }
+				[4] Identifier 'd' { 156 }
+		[2] BinaryOp '=' { 174 }
+			[3] Declaration 'int*[] arr' { 170 }
+			[3] InitializerList
+				[4] UnaryOp '&' { 177 }
+					[5] Identifier 'a' { 178 }
+				[4] UnaryOp '&' { 181 }
+					[5] Identifier 'b' { 182 }
+				[4] UnaryOp '&' { 185 }
+					[5] Identifier 'c' { 186 }
+				[4] UnaryOp '*' { 189 }
+					[5] Identifier 'd' { 190 }
+				[4] UnaryOp '*' { 193 }
+					[5] UnaryOp '*' { 194 }
+						[6] Identifier 'e' { 195 }
+				[4] BinaryOp '+' { 206 }
+					[5] Identifier 'd' { 199 }
+					[5] Constant '128' { 205 }
+				[4] Identifier 'NULL' { 212 }
+		[2] BinaryOp '=' { 227 }
+			[3] Declaration 'int i' { 225 }
+			[3] Constant '0' { 229 }
+		[2] Loop for { 238 -- 513 }
+			[3] Group
+				[4] BinaryOp '=' { 243 }
+					[5] Identifier 'i' { 241 }
+					[5] Constant '0' { 245 }
+				[4] EmptyStatement
+				[4] PostfixExpression '++' { 265 }
+					[5] Identifier 'i' { 263 }
+			[3] BinaryOp '=' { 293 }
+				[4] Declaration 'int arrVal' { 291 }
+				[4] UnaryOp '*' { 295 }
+					[5] PostfixExpression '[]' { 301 }
+						[6] Identifier 'arr' { 298 }
+							[7] Identifier 'i' { 300 }
+			[3] If { 374 -- 413 }
+				[4] Group
+					[5] BinaryOp '==' { 374 }
+						[6] PostfixExpression '[]' { 365 }
+							[7] Identifier 'arr' { 362 }
+								[8] Identifier 'i' { 364 }
+						[6] Identifier 'NULL' { 373 }
+				[4] JumpStatement 'break' { 403 }
+			[3] BinaryOp '=' { 431 }
+				[4] Identifier 'arrVal' { 431 }
+				[4] UnaryOp '*' { 433 }
+					[5] PostfixExpression '[]' { 439 }
+						[6] Identifier 'arr' { 436 }
+							[7] Identifier 'i' { 438 }
+			[3] PostfixExpression '(...)' { 506 }
+				[4] Identifier 'printf' { 471 }
+					[5] Constant '"i = %d, arrVal = %d\n"' { 494 }
+					[5] Identifier 'i' { 497 }
+					[5] Identifier 'arrVal' { 505 }
+
+
