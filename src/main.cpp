@@ -26,6 +26,7 @@ int main(int argc, char **argv)
         ("disable,d", po::value<std::vector<std::string>>(), "disable SafeC options { defer, ... }") //
         ("astdump,a", "dump AST")                                                                    //
         ("parserdump,p", "dump parser info")                                                         //
+        ("nocolor,n", "do not add color to logs")                                                    //
         ("debug", "debug mode - display all possible info");
 
     // TODO: add option to print AST
@@ -56,6 +57,11 @@ int main(int argc, char **argv)
     if (vm.count("parserdump") != 0)
     {
         safec::Config::getInstance().setDisplayParserInfo(true);
+    }
+
+    if (vm.count("nocolor") != 0)
+    {
+        safec::Config::getInstance().setNoColor(true);
     }
 
     if (vm.count("debug") != 0)

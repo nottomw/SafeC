@@ -18,18 +18,30 @@ public:
     {
         mDisplayAst = display;
     }
-    void setDisplayParserInfo(const bool display)
-    {
-        mDisplayParserInfo = display;
-    }
 
     bool getDisplayAst() const
     {
         return mDisplayAst;
     }
+
+    void setDisplayParserInfo(const bool display)
+    {
+        mDisplayParserInfo = display;
+    }
+
     bool getDisplayParserInfo() const
     {
         return mDisplayParserInfo;
+    }
+
+    void setNoColor(const bool noColor)
+    {
+        mNoColor = noColor;
+    }
+
+    bool getNoColor() const
+    {
+        return mNoColor;
     }
 
 private:
@@ -39,6 +51,8 @@ private:
 
     bool mDisplayAst;
     bool mDisplayParserInfo;
+
+    bool mNoColor;
 };
 
 } // namespace safec

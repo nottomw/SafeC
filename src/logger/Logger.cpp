@@ -1,5 +1,7 @@
 #include "Logger.hpp"
 
+#include "config/Config.hpp"
+
 namespace safec
 {
 
@@ -35,16 +37,24 @@ namespace internal
 
 void print(const std::string &str, Color color, Color bgColor, NewLine nl)
 {
-    const char *const bgColorStr =  //
-        (bgColor == Color::NoColor) //
-            ? ("")
-            : (colorToTermColor(bgColor));
+    if (safec::Config::getInstance().getNoColor() == true)
+    {
+        std::cout << str                                   //
+                  << ((nl == NewLine::Yes) ? "\r\n" : ""); //
+    }
+    else
+    {
+        const char *const bgColorStr =  //
+            (bgColor == Color::NoColor) //
+                ? ("")
+                : (colorToTermColor(bgColor));
 
-    std::cout << colorToTermColor(color)               //
-              << bgColorStr                            //
-              << str                                   //
-              << colorToTermColor(Color::NoColor)      //
-              << ((nl == NewLine::Yes) ? "\r\n" : ""); //
+        std::cout << colorToTermColor(color)               //
+                  << bgColorStr                            //
+                  << str                                   //
+                  << colorToTermColor(Color::NoColor)      //
+                  << ((nl == NewLine::Yes) ? "\r\n" : ""); //
+    }
 
     fflush(stdout);
 }
