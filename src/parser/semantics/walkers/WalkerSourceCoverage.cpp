@@ -87,22 +87,22 @@ void WalkerSourceCoverage::printReport()
     // TODO: verify scopes are continuous
     // TODO: verify positionals in scope covers the whole scope
 
-    std::vector<ScopeInfo *> scopeStack;
+    //    std::vector<ScopeInfo *> scopeStack;
 
-    for (auto &it : mScopesInfo)
-    {
-        assert(it.mNode != nullptr);
+    //    for (auto &it : mScopesInfo)
+    //    {
+    //        assert(it.mNode != nullptr);
 
-        log(" - scope info: start: %, end: %, node type: %",
-            it.mStart,
-            it.mEnd,
-            SemNode::TypeInfo::toStr(it.mNode->getType()));
+    //        log(" - scope info: start: %, end: %, node type: %",
+    //            it.mStart,
+    //            it.mEnd,
+    //            SemNode::TypeInfo::toStr(it.mNode->getType()));
 
-        // enter each scope and check if the scope is covered
-        (void)scopeStack;
-    }
+    //        // enter each scope and check if the scope is covered
+    //        (void)scopeStack;
+    //    }
 
-    log("covered indexes range: % -- %", mMinIndex, mMaxIndex);
+    //    log("covered indexes range: % -- %", mMinIndex, mMaxIndex);
 }
 
 void WalkerSourceCoverage::updateMinMax(const uint32_t pos)
