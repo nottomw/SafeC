@@ -202,7 +202,7 @@ void DEFER_WITH_COMPL_STATEMENTS(void)
 // int DEFER_MULTIPLE_RETURNS(int param)
 //{
 //    printf("fun start\n");
-//    printf("fun end\n");
+//    defer printf("fun end\n");
 
 //    if (param < 100)
 //    {
