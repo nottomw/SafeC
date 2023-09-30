@@ -30,10 +30,10 @@ do
                 diff_output=`diff -q $FILE_GENERATED $TMP_FILE_PREFIX$file`
                 if [ "$diff_output" = "" ];
                 then
-                    echo "[+] passed"
+                    echo -e "[+] \033[32mpassed\033[0m"
                     ((tests_passed++))
                 else
-                    echo "[-] FAILED"
+                    echo -e "[-] \033[31mFAILED\033[0m"
                     echo "[-]    run to see differences:"
                     echo "[-]     - diff $FILE_GENERATED $TMP_FILE_PREFIX$file"
                     echo "[-]     - kdiff3 $FILE_GENERATED $TMP_FILE_PREFIX$file"
