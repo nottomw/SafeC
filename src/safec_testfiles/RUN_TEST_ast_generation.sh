@@ -9,6 +9,9 @@ GENERATED_AST_DIR=testfiles_generated_asts
 
 AST_FILE_PREFIX="AST_"
 
+tests_passed=0
+tests_failed=0
+
 for file in `ls`;
 do
     if [ "$file" != "$SCRIPT_NAME" ];
@@ -25,11 +28,16 @@ do
                 if [ "$diff_output" = "" ];
                 then
                     echo "[+] passed"
+                    ((tests_passed++))
                 else
                     echo "[-] FAILED"
                     echo "    run to see differences: diff $FILE_GENERATED $TMP_FILE"
+                    ((tests_failed++))
                 fi
             fi
         fi
     fi
 done
+
+echo ""
+echo "[+] passed: $tests_passed, failed: $tests_failed"
