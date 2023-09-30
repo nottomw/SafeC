@@ -19,7 +19,7 @@ do
             # is there a generated ast for this file
             if [ -e "$FILE_GENERATED" ];
             then
-                echo "[+] testing $file AST..."
+                echo "[+] AST check for $file..."
                 $($SAFEC_PATH -f $file -o . -a -n > $TMP_FILE)
                 diff_output=`diff -q $FILE_GENERATED $TMP_FILE`
                 if [ "$diff_output" = "" ];
