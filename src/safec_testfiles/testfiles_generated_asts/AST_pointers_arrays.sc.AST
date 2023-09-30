@@ -1,7 +1,7 @@
 Parsing file: 'AST_pointers_arrays.sc'...
  no cond */Parsing done, characters count 516
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Function (void TEST_LOOP_ITER_POINTERS ( )) { 36 -- 515 }
 		[2] BinaryOp '=' { 89 }

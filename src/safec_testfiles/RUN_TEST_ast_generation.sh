@@ -3,7 +3,7 @@
 # very quick & dirty test for now...
 
 # regen all:
-# for i in `ls`; do ./bin/SafeCTranspiler -f $i -o . -a -n > ./testfiles_generated_asts/${i##*/}.AST; done
+# for i in `ls AST*`; do ../../build/bin/SafeCTranspiler -f $i -o . -a -n > ./testfiles_generated_asts/${i##*/}.AST; done
 
 SCRIPT_NAME=$(basename "$0")
 SAFEC_PATH=../../build/bin/SafeCTranspiler

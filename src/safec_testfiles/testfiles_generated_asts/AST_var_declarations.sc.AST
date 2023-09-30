@@ -1,7 +1,7 @@
 Parsing file: 'AST_var_declarations.sc'...
 Parsing done, characters count 2705
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Declaration 'int globalDeclarationNoAssignment' { 53 }
 	[1] BinaryOp '=' { 78 }

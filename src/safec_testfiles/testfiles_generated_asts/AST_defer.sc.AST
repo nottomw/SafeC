@@ -1,7 +1,7 @@
 Parsing file: 'AST_defer.sc'...
 Parsing done, characters count 3460
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Function (void DEFER_FUNCTION_SCOPE ( )) { 53 -- 163 }
 		[2] PostfixExpression '(...)' { 86 }

@@ -1,7 +1,7 @@
 Parsing file: 'AST_scopes.sc'...
 Parsing done, characters count 290
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Function (void FUNCTION_SCOPES ( )) { 73 -- 289 }
 		[2] BinaryOp '=' { 85 }

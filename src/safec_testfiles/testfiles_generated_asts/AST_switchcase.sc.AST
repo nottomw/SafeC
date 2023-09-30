@@ -1,7 +1,7 @@
 Parsing file: 'AST_switchcase.sc'...
 Parsing done, characters count 2506
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Function (void SWITCH_CASE_SIMPLE (int param,  )) { 83 -- 310 }
 		[2] SwitchCase on 'Identifier' { 94 -- 308 }

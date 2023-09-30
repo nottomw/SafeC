@@ -1,7 +1,7 @@
 Parsing file: 'AST_looping.sc'...
 Parsing done, characters count 1463
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Function (void TEST_LOOP_FOR ( )) { 46 -- 135 }
 		[2] BinaryOp '=' { 58 }

@@ -1,7 +1,7 @@
 Parsing file: 'AST_functions.sc'...
 Parsing done, characters count 913
 
-Current AST:
+AST:
 [0] TranslationUnit
 	[1] Function (int a (struct/union FUNCTION_WITH_STRUCT_PARAM, struct/union structArg,  )) { 138 -- 181 }
 		[2] BinaryOp '=' { 163 }
