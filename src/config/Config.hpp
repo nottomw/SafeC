@@ -44,6 +44,16 @@ public:
         return mNoColor;
     }
 
+    void setDisplayCoverage(const bool disp)
+    {
+        mDisplayCoverage = disp;
+    }
+
+    bool getDisplayCoverage() const
+    {
+        return mDisplayCoverage;
+    }
+
 private:
     Config()
         : mDisplayAst{false}
@@ -51,8 +61,8 @@ private:
 
     bool mDisplayAst;
     bool mDisplayParserInfo;
-
     bool mNoColor;
+    bool mDisplayCoverage;
 };
 
 } // namespace safec

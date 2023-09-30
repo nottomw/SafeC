@@ -76,7 +76,8 @@ uint32_t SemNodePositional::getPos() const
     return mPos;
 }
 
-SemNodeGroup::SemNodeGroup()
+SemNodeGroup::SemNodeGroup(const uint32_t pos)
+    : SemNodePositional{pos}
 {
     mType = Type::Group;
 }
@@ -248,7 +249,7 @@ SemNodeLoop::SemNodeLoop( //
 {
     mType = Type::Loop;
 
-    mLoopStatementsGroup = std::make_shared<SemNodeGroup>();
+    mLoopStatementsGroup = std::make_shared<SemNodeGroup>(pos);
     attach(mLoopStatementsGroup);
 }
 
@@ -351,7 +352,7 @@ SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)
 {
     mType = Type::If;
 
-    auto group = std::make_shared<SemNodeGroup>();
+    auto group = std::make_shared<SemNodeGroup>(pos);
     group->attach(cond);
 
     attach(group);

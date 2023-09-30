@@ -1,5 +1,4 @@
 build/
 .vscode/
 *.user
-src/safec_testfiles/test.sc
-
+src/safec_testfiles/tests_random.sc

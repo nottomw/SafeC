@@ -62,8 +62,15 @@ size_t Parser::parse(const std::string &path)
 
 void Parser::displayAst() const
 {
-    log("Current AST:");
+    log("AST:");
     mSemantics.display();
+    log("\n\n", NewLine::No);
+}
+
+void Parser::displayCoverage() const
+{
+    log("Coverage:");
+    mSemantics.displayCoverage();
     log("\n\n", NewLine::No);
 }
 

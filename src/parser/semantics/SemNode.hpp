@@ -110,10 +110,10 @@ private:
     uint32_t mPos;
 };
 
-class SemNodeGroup : public SemNode
+class SemNodeGroup : public SemNodePositional
 {
 public:
-    SemNodeGroup();
+    SemNodeGroup(const uint32_t pos);
 
 private:
 };

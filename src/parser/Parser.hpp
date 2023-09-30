@@ -25,6 +25,7 @@ public:
 
     size_t parse(const std::string &path);
     void displayAst() const;
+    void displayCoverage() const;
 
 private:
     size_t parseFile(const boost::filesystem::path &path);

@@ -27,6 +27,7 @@ int main(int argc, char **argv)
         ("astdump,a", "dump AST")                                                                    //
         ("parserdump,p", "dump parser info")                                                         //
         ("nocolor,n", "do not add color to logs")                                                    //
+        ("coverage,c", "display coverage info")                                                      //
         ("debug", "debug mode - display all possible info");
 
     // TODO: add option to print AST
@@ -64,10 +65,16 @@ int main(int argc, char **argv)
         safec::Config::getInstance().setNoColor(true);
     }
 
+    if (vm.count("coverage") != 0)
+    {
+        safec::Config::getInstance().setDisplayCoverage(true);
+    }
+
     if (vm.count("debug") != 0)
     {
         safec::Config::getInstance().setDisplayAst(true);
         safec::Config::getInstance().setDisplayParserInfo(true);
+        safec::Config::getInstance().setDisplayCoverage(true);
     }
 
     const auto outputDirectory = bfs::absolute(vm["output"].as<std::string>());
@@ -101,6 +108,11 @@ int main(int argc, char **argv)
             if (safec::Config::getInstance().getDisplayAst() == true)
             {
                 parser.displayAst();
+            }
+
+            if (safec::Config::getInstance().getDisplayCoverage() == true)
+            {
+                parser.displayCoverage();
             }
 
             //            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");

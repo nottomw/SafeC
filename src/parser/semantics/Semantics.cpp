@@ -1,8 +1,10 @@
 #include "Semantics.hpp"
 
+#include "config/Config.hpp"
 #include "logger/Logger.hpp"
 #include "walkers/SemNodeWalker.hpp"
 #include "walkers/WalkerPrint.hpp"
+#include "walkers/WalkerSourceAstIntegrity.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <cassert>
@@ -39,9 +41,19 @@ Semantics::Semantics() //
 
 void Semantics::display()
 {
-    WalkerPrint printer;
     SemNodeWalker walker;
+
+    WalkerPrint printer;
     walker.walk(*mTranslationUnit, printer);
+}
+
+void Semantics::displayCoverage()
+{
+    SemNodeWalker walker;
+
+    WalkerSourceAstIntegrity integChecker;
+    walker.walk(*mTranslationUnit, integChecker);
+    integChecker.printReport();
 }
 
 void Semantics::newTranslationUnit(const bfs::path &path)

@@ -15,23 +15,27 @@ class WalkerSourceAstIntegrity final : public WalkerStrategy
 public:
     WalkerSourceAstIntegrity();
 
+    void peek(SemNode &node, const uint32_t astLevel) override;
     void peek(SemNodePositional &node, const uint32_t astLevel) override;
     void peek(SemNodeScope &node, const uint32_t astLevel) override;
 
     bool getIntegrityOk() const;
+    void printReport();
 
 private:
     struct ScopeInfo
     {
         uint32_t mStart;
         uint32_t mEnd;
-        std::shared_ptr<SemNode> mNode;
+        SemNode *mNode; // TODO: add NonOwningPtr<>
     };
 
     bool mIntegrityOk;
     std::vector<ScopeInfo> mScopesInfo;
+    uint32_t mMinIndex;
+    uint32_t mMaxIndex;
 
-    void insertSorted(ScopeInfo &info);
+    void updateMinMax(const uint32_t pos);
 };
 
 } // namespace safec
