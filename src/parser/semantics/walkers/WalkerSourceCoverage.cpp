@@ -1,4 +1,4 @@
-#include "WalkerSourceAstIntegrity.hpp"
+#include "WalkerSourceCoverage.hpp"
 
 #include "logger/Logger.hpp"
 #include "semantics/SemNode.hpp"
@@ -7,15 +7,14 @@
 
 using namespace safec;
 
-WalkerSourceAstIntegrity::WalkerSourceAstIntegrity()
+WalkerSourceCoverage::WalkerSourceCoverage()
     : WalkerStrategy{}
-    , mIntegrityOk{false}
     , mMinIndex{UINT32_MAX}
     , mMaxIndex{0}
 {
 }
 
-void WalkerSourceAstIntegrity::peek( //
+void WalkerSourceCoverage::peek( //
     SemNode &node,
     const uint32_t astLevel)
 {
@@ -44,7 +43,7 @@ void WalkerSourceAstIntegrity::peek( //
     assert(nullptr == "node is not positional and not scope");
 }
 
-void WalkerSourceAstIntegrity::peek( //
+void WalkerSourceCoverage::peek( //
     SemNodePositional &node,
     const uint32_t astLevel)
 {
@@ -58,7 +57,7 @@ void WalkerSourceAstIntegrity::peek( //
     mScopesInfo.push_back(info);
 }
 
-void WalkerSourceAstIntegrity::peek( //
+void WalkerSourceCoverage::peek( //
     SemNodeScope &node,
     const uint32_t astLevel)
 {
@@ -73,7 +72,7 @@ void WalkerSourceAstIntegrity::peek( //
     mScopesInfo.push_back(info);
 }
 
-void WalkerSourceAstIntegrity::printReport()
+void WalkerSourceCoverage::printReport()
 {
     if (mScopesInfo.size() == 0)
     {
@@ -106,7 +105,7 @@ void WalkerSourceAstIntegrity::printReport()
     log("covered indexes range: % -- %", mMinIndex, mMaxIndex);
 }
 
-void WalkerSourceAstIntegrity::updateMinMax(const uint32_t pos)
+void WalkerSourceCoverage::updateMinMax(const uint32_t pos)
 {
     if (pos > mMaxIndex)
     {
@@ -119,7 +118,7 @@ void WalkerSourceAstIntegrity::updateMinMax(const uint32_t pos)
     }
 }
 
-void WalkerSourceAstIntegrity::prepareScopesInfo()
+void WalkerSourceCoverage::prepareScopesInfo()
 {
     auto cmpLambda =                                   //
         [](const ScopeInfo &lhs, const ScopeInfo &rhs) //

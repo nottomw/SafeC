@@ -4,7 +4,7 @@
 #include "logger/Logger.hpp"
 #include "walkers/SemNodeWalker.hpp"
 #include "walkers/WalkerPrint.hpp"
-#include "walkers/WalkerSourceAstIntegrity.hpp"
+#include "walkers/WalkerSourceCoverage.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <cassert>
@@ -51,7 +51,7 @@ void Semantics::displayCoverage()
 {
     SemNodeWalker walker;
 
-    WalkerSourceAstIntegrity integChecker;
+    WalkerSourceCoverage integChecker;
     walker.walk(*mTranslationUnit, integChecker);
     integChecker.printReport();
 }

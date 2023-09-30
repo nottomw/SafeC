@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8)
 add_library(walkers
     SemNodeWalker.cpp
     WalkerPrint.cpp
-    WalkerSourceAstIntegrity.cpp
+    WalkerSourceCoverage.cpp
     WalkerDetectWhitespacePattern.cpp
 )
 
