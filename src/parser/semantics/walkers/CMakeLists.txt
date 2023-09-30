@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.8)
 add_library(walkers
     SemNodeWalker.cpp
     WalkerPrint.cpp
+    WalkerSourceAstIntegrity.cpp
+    WalkerDetectWhitespacePattern.cpp
 )
 
 add_library(safec::walkers ALIAS walkers)
