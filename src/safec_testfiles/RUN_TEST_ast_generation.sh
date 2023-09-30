@@ -21,15 +21,13 @@ do
             then
                 echo "[+] testing $file AST..."
                 $($SAFEC_PATH -f $file -o . -a -n > $TMP_FILE)
-                diff_output=`diff $FILE_GENERATED $TMP_FILE`
+                diff_output=`diff -q $FILE_GENERATED $TMP_FILE`
                 if [ "$diff_output" = "" ];
                 then
                     echo "[+] passed"
                 else
                     echo "[-] FAILED"
-                    echo " ------ DIFF START ------"
-                    echo $diff_output
-                    echo " ------ DIFF END ------"
+                    echo "    run to see differences: diff $FILE_GENERATED $TMP_FILE"
                 fi
             fi
         fi
