@@ -27,7 +27,7 @@ private:
     {
         uint32_t mStart;
         uint32_t mEnd;
-        SemNode *mNode; // TODO: add NonOwningPtr<>
+        SemNode *mNode; // TODO: add NonOwningPtr<> / NonNullPtr<>
     };
 
     bool mIntegrityOk;
@@ -36,6 +36,7 @@ private:
     uint32_t mMaxIndex;
 
     void updateMinMax(const uint32_t pos);
+    void prepareScopesInfo();
 };
 
 } // namespace safec

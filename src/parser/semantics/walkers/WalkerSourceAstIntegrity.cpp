@@ -73,38 +73,34 @@ void WalkerSourceAstIntegrity::peek( //
     mScopesInfo.push_back(info);
 }
 
-bool WalkerSourceAstIntegrity::getIntegrityOk() const
-{
-    return mIntegrityOk;
-}
-
 void WalkerSourceAstIntegrity::printReport()
 {
-    uint32_t counter = 0;
-
-    auto cmpLambda =                                   //
-        [](const ScopeInfo &lhs, const ScopeInfo &rhs) //
+    if (mScopesInfo.size() == 0)
     {
-        // true if lhs > rhs
-        // reverse sort
-        return (lhs.mStart < rhs.mStart);
-    };
+        log("no scope info", Color::Red);
+        return;
+    }
 
-    std::sort(               //
-        mScopesInfo.begin(), //
-        mScopesInfo.end(),   //
-        cmpLambda);
+    prepareScopesInfo();
+
+    // TODO: parser - add info on start/end when doing reduce
+    // TODO: divide into ScopedInfo and PositionalInfo
+    // TODO: verify scopes are continuous
+    // TODO: verify positionals in scope covers the whole scope
+
+    std::vector<ScopeInfo *> scopeStack;
 
     for (auto &it : mScopesInfo)
     {
         assert(it.mNode != nullptr);
 
-        log("[%] scope info: start: %, end: %, node type: %",
-            counter,
+        log(" - scope info: start: %, end: %, node type: %",
             it.mStart,
             it.mEnd,
             SemNode::TypeInfo::toStr(it.mNode->getType()));
-        counter++;
+
+        // enter each scope and check if the scope is covered
+        (void)scopeStack;
     }
 
     log("covered indexes range: % -- %", mMinIndex, mMaxIndex);
@@ -121,4 +117,19 @@ void WalkerSourceAstIntegrity::updateMinMax(const uint32_t pos)
     {
         mMinIndex = pos;
     }
+}
+
+void WalkerSourceAstIntegrity::prepareScopesInfo()
+{
+    auto cmpLambda =                                   //
+        [](const ScopeInfo &lhs, const ScopeInfo &rhs) //
+    {
+        // true if lhs > rhs; here: reverse sort -> ascending order
+        return (lhs.mStart < rhs.mStart);
+    };
+
+    std::sort(               //
+        mScopesInfo.begin(), //
+        mScopesInfo.end(),   //
+        cmpLambda);
 }
