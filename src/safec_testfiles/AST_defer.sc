@@ -61,14 +61,14 @@ void DEFER_CONDITION_MULTIPLE(int someParam)
 void DEFER_LOOP(void)
 {
     int i = 0;
-    for(i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         defer printf("2\n");
         printf("1\n");
     }
 
     i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         defer printf("2\n");
         printf("1\n");
@@ -79,7 +79,7 @@ void DEFER_LOOP(void)
 void DEFER_LOOP_BREAK(int param)
 {
     int i = 0;
-    for(i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         defer printf("2\n");
 
@@ -92,7 +92,7 @@ void DEFER_LOOP_BREAK(int param)
     }
 
     i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         defer printf("2\n");
 
@@ -109,7 +109,7 @@ void DEFER_LOOP_BREAK(int param)
 void DEFER_LOOP_CONTINUE(int param)
 {
     int i = 0;
-    for(i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         defer printf("2\n");
 
@@ -122,7 +122,7 @@ void DEFER_LOOP_CONTINUE(int param)
     }
 
     i = 0;
-    while(i < 5)
+    while (i < 5)
     {
         defer printf("2\n");
 
@@ -134,7 +134,6 @@ void DEFER_LOOP_CONTINUE(int param)
         printf("1\n");
         i++;
     }
-
 }
 
 void DEFER_MULTIPLE(void)
@@ -148,15 +147,15 @@ void DEFER_SWITCH_CASE(int param)
 {
     defer printf("last\n");
 
-    switch(param)
+    switch (param)
     {
         case 0:
             printf("0\n");
-        break;
+            break;
 
         case 1:
             printf("0\n");
-        break;
+            break;
 
         default:
             printf("default\n");
@@ -170,7 +169,7 @@ void DEFER_STRANGE(void)
 
     // no-scope loops and conds
 
-    for(i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
         defer printf("%d\n", i);
 
     if (i == 0)
@@ -198,5 +197,26 @@ void DEFER_WITH_COMPL_STATEMENTS(void)
     }
     printf("counter: %d\n", counter);
 }
+
+// TODO: assertion fail on remove redundat scope
+// int DEFER_MULTIPLE_RETURNS(int param)
+//{
+//    printf("fun start\n");
+//    printf("fun end\n");
+
+//    if (param < 100)
+//    {
+//        if (param > 50)
+//        {
+//            return param;
+//        }
+//        else if(param > 80)
+//        {
+//            return 80;
+//        }
+//    }
+
+//    return 123;
+//}
 
 // TODO: simple scope with declarations etc...
