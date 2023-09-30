@@ -4,7 +4,7 @@
 
 SCRIPT_NAME=$(basename "$0")
 SAFEC_PATH=../../build/bin/SafeCTranspiler
-TMP_FILE=/tmp/safec_test_file.AST
+TMP_FILE_PREFIX=/tmp/safec_ast_test_file_
 GENERATED_AST_DIR=testfiles_generated_asts
 
 AST_FILE_PREFIX="AST_"
@@ -23,15 +23,17 @@ do
             if [ -e "$FILE_GENERATED" ];
             then
                 echo "[+] AST check for $file..."
-                $($SAFEC_PATH -f $file -o . -a -n > $TMP_FILE)
-                diff_output=`diff -q $FILE_GENERATED $TMP_FILE`
+                $($SAFEC_PATH -f $file -o . -a -n > $TMP_FILE_PREFIX$file)
+                diff_output=`diff -q $FILE_GENERATED $TMP_FILE_PREFIX$file`
                 if [ "$diff_output" = "" ];
                 then
                     echo "[+] passed"
                     ((tests_passed++))
                 else
                     echo "[-] FAILED"
-                    echo "    run to see differences: diff $FILE_GENERATED $TMP_FILE"
+                    echo "    run to see differences:"
+                    echo "     - diff $FILE_GENERATED $TMP_FILE_PREFIX$file"
+                    echo "     - kdiff3 $FILE_GENERATED $TMP_FILE_PREFIX$file"
                     ((tests_failed++))
                 fi
             fi
