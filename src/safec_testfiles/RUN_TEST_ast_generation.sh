@@ -2,6 +2,9 @@
 
 # very quick & dirty test for now...
 
+# regen all:
+# for i in `ls`; do ./bin/SafeCTranspiler -f $i -o . -a -n > ./testfiles_generated_asts/${i##*/}.AST; done
+
 SCRIPT_NAME=$(basename "$0")
 SAFEC_PATH=../../build/bin/SafeCTranspiler
 TMP_FILE_PREFIX=/tmp/safec_ast_test_file_
@@ -31,9 +34,11 @@ do
                     ((tests_passed++))
                 else
                     echo "[-] FAILED"
-                    echo "    run to see differences:"
-                    echo "     - diff $FILE_GENERATED $TMP_FILE_PREFIX$file"
-                    echo "     - kdiff3 $FILE_GENERATED $TMP_FILE_PREFIX$file"
+                    echo "[-]    run to see differences:"
+                    echo "[-]     - diff $FILE_GENERATED $TMP_FILE_PREFIX$file"
+                    echo "[-]     - kdiff3 $FILE_GENERATED $TMP_FILE_PREFIX$file"
+                    echo "[-]    run to regenerate:"
+                    echo "[-]     - $SAFEC_PATH -f $file -o . -a -n > $FILE_GENERATED"
                     ((tests_failed++))
                 fi
             fi
