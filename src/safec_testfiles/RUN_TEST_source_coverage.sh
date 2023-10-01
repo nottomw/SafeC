@@ -31,7 +31,6 @@ do
         if [[ "$file" == "$AST_FILE_PREFIX"* ]];
         then
             FILE_GENERATED="$GENERATED_DIR/$file.$GENERATED_FILE_EXT"
-            echo "file gen: $FILE_GENERATED"
             if [ -e "$FILE_GENERATED" ];
             then
                 echo "[+] Coverage check for $file..."
