@@ -369,13 +369,17 @@ void Semantics::handle( //
         case SyntaxChunkType::kSwitchHeader:
             {
                 auto switchNode = std::make_shared<SemNodeSwitchCase>(stringIndex);
+
+                switchNode->setSemStart(mPrevReducePos);
+                mPrevReducePos = stringIndex;
+
                 addNodeToAst(switchNode);
                 mState.addScope(switchNode);
             }
             break;
 
         case SyntaxChunkType::kSwitchStatement:
-            handleSwitchStatement();
+            handleSwitchStatement(stringIndex);
             break;
 
         case SyntaxChunkType::kSwitchEnd:
@@ -789,7 +793,7 @@ void Semantics::handleDefer(const uint32_t stringIndex)
     mState.stageNode(deferNode);
 }
 
-void Semantics::handleSwitchStatement()
+void Semantics::handleSwitchStatement(const uint32_t stringIndex)
 {
     auto &stagedNodes = mState.getStagedNodes();
     assert(stagedNodes.size() >= 1);
@@ -803,6 +807,8 @@ void Semantics::handleSwitchStatement()
 
     auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
     switchCaseNode->setSwitchExpr(lastNode);
+
+    mPrevReducePos = stringIndex;
 }
 
 void Semantics::handleSwitchEnd(const uint32_t stringIndex)
@@ -817,6 +823,9 @@ void Semantics::handleSwitchEnd(const uint32_t stringIndex)
     auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
     switchCaseNode->setEnd(stringIndex);
 
+    switchCaseNode->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
+
     mState.removeScope();
 }
 
@@ -825,6 +834,7 @@ void Semantics::handleSwitchCaseHeader(const uint32_t stringIndex, const std::st
     assert((additional == "case") || (additional == "default"));
 
     auto caseLabelNode = std::make_shared<SemNodeSwitchCaseLabel>(stringIndex);
+
     auto &stagedNodes = mState.getStagedNodes();
 
     // grab the case statement (grab X in "case X: ...")
@@ -847,7 +857,9 @@ void Semantics::handleSwitchCaseHeader(const uint32_t stringIndex, const std::st
 
         // close current scope without waiting for parser, since we
         // already know the previous case statement is done
-        handle(SyntaxChunkType::kSwitchCaseEnd, stringIndex);
+        // set stringIndex as previous reduce position, since we're
+        // closing a previous parser match
+        handleSwitchCaseEnd(mPrevReducePos);
     }
     else
     {
@@ -899,7 +911,8 @@ void Semantics::handleSwitchCaseHeader(const uint32_t stringIndex, const std::st
 
         auto maybeScope = //
             getLastAttachedNodeIfTypeMatches(maybeSwitchCaseLabel, SemNode::Type::Scope);
-        auto maybeJumpStatement = getLastAttachedNodeIfTypeMatches(maybeScope, SemNode::Type::JumpStatement);
+        auto maybeJumpStatement = //
+            getLastAttachedNodeIfTypeMatches(maybeScope, SemNode::Type::JumpStatement);
         if (maybeJumpStatement)
         {
             auto jumpStatementTyped = semNodeConvert<SemNodeJumpStatement>(maybeJumpStatement);
@@ -911,6 +924,9 @@ void Semantics::handleSwitchCaseHeader(const uint32_t stringIndex, const std::st
             }
         }
     }
+
+    caseLabelNode->setSemStart(mPrevReducePos);
+    mPrevReducePos = stringIndex;
 
     caseLabelNode->setCaseLabel(nodeToBeSetAsCaseLabel);
 
@@ -934,6 +950,9 @@ void Semantics::handleSwitchCaseEnd(const uint32_t stringIndex)
 
     auto switchCaseLabelNode = semNodeConvert<SemNodeSwitchCaseLabel>(currentScope);
     switchCaseLabelNode->setEnd(stringIndex);
+
+    switchCaseLabelNode->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
 
     mState.removeScope();
 }

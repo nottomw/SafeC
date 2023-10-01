@@ -60,7 +60,7 @@ private:
     void handleDirectDecl(const uint32_t stringIndex, const std::string &additional);
     void handleInitializerList(const uint32_t stringIndex);
     void handleDefer(const uint32_t stringIndex);
-    void handleSwitchStatement();
+    void handleSwitchStatement(const uint32_t stringIndex);
     void handleSwitchEnd(const uint32_t stringIndex);
     void handleSwitchCaseHeader(const uint32_t stringIndex, const std::string &additional);
     void handleSwitchCaseEnd(const uint32_t stringIndex);
