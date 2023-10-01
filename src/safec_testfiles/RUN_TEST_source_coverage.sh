@@ -6,10 +6,14 @@
 # for i in `ls AST*`; do ../../build/bin/SafeCTranspiler -f $i -o . -c -n; done
 
 SCRIPT_NAME=$(basename "$0")
-SAFEC_PATH=../../build/bin/SafeCTranspiler
 TMP_FILE_PREFIX=/tmp/safec_cov_test_file_
 GENERATED_DIR=testfiles_generated_coverage
 GENERATED_FILE_EXT=COV
+
+if [ -z "$SAFEC_PATH"];
+then
+    SAFEC_PATH=../../build/bin/SafeCTranspiler
+fi
 
 AST_FILE_PREFIX="AST_"
 
