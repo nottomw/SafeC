@@ -54,6 +54,8 @@ echo ""
 if [ "$tests_failed" -eq 0 ];
 then
     echo -e "[+] ${COLOR_GREEN}passed: $tests_passed, failed: $tests_failed${COLOR_NC}"
+    exit 0
 else
     echo -e "[-] ${COLOR_RED}passed: $tests_passed, failed: $tests_failed${COLOR_NC}"
+    exit 1
 fi
