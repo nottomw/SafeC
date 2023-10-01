@@ -1,0 +1,30 @@
+name: safec-tests
+
+on:
+  workflow_run:
+    workflows: ["safec"]
+    branches: [main]
+    types: 
+      - completed
+
+jobs:
+  test:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: RUN_TEST_all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download safec transpiler
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: SafeCTranspiler
+          workflow: safec.yml
+          workflow_conclusion: success
+
+      - shell: bash
+        run: |
+          chmod +x ${{github.workspace}}/SafeCTranspiler
+          export SAFEC_PATH=${{github.workspace}}/SafeCTranspiler
+          cd ${{github.workspace}}/src/safec_testfiles
+          bash RUN_TEST_all.sh
