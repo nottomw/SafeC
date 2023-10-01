@@ -63,4 +63,3 @@ jobs:
           export SAFEC_PATH=${{github.workspace}}/SafeCTranspiler
           cd ${{github.workspace}}/src/safec_testfiles
           bash RUN_TEST_all.sh
-          exit 1
