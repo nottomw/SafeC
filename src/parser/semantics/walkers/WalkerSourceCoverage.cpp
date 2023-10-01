@@ -108,6 +108,8 @@ void WalkerSourceCoverage::checkScopes()
 
     std::vector<std::pair<PosInfo, PosInfo>> covGapsInfo;
 
+    // This probably could be done much more efficiently, but good
+    // for now...
     for (size_t i = 1; i < scopeInfoCopy.size(); i++)
     {
         auto &scopePrev = scopeInfoCopy[i - 1];
