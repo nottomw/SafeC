@@ -152,6 +152,11 @@ void WalkerSourceCoverage::checkScopes()
             scopeCur.mStart,
             scopeCur.mEnd);
     }
+
+    if (covGapsInfo.size() == 0)
+    {
+        log("\twhole source covered", Color::Green);
+    }
 }
 
 void WalkerSourceCoverage::updateMinMax(const uint32_t pos)
