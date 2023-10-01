@@ -143,26 +143,31 @@ void comment(void)
  	while ((c = input()) != '*' && c != 0)
 	{
         comment_length += 1;
- 		putchar(c);
+
+        if (ConfigGetDisplayParserInfo() == true)
+            putchar(c);
 	}
 
 	if (c != 0)
 	{
         comment_length += 1;
-		putchar(c);
+        if (ConfigGetDisplayParserInfo() == true)
+            putchar(c);
 	}
  
  	if ((c1 = input()) != '/' && c != 0)
  	{
         comment_length -= 1;
- 		unput(c1);
+        if (ConfigGetDisplayParserInfo() == true)
+            unput(c1);
  		goto loop;
  	}
  
  	if (c != 0)
 	{
         comment_length += 1;
- 		putchar(c1);
+        if (ConfigGetDisplayParserInfo() == true)
+            putchar(c1);
 	}
 
     lex_current_char += comment_length;
@@ -189,10 +194,10 @@ void count(void)
 
 	lex_current_char += i;
 
-if (ConfigGetDisplayParserInfo() == true)
-{
-	// display the token
-	ECHO;
+    if (ConfigGetDisplayParserInfo() == true)
+    {
+        // display the token
+        ECHO;
     }
 }
 
