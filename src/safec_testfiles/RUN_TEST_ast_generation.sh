@@ -12,6 +12,10 @@ GENERATED_AST_DIR=testfiles_generated_asts
 
 AST_FILE_PREFIX="AST_"
 
+COLOR_RED="\033[31m"
+COLOR_GREEN="\033[32m"
+COLOR_NC="\033[0m"
+
 tests_passed=0
 tests_failed=0
 
@@ -30,10 +34,10 @@ do
                 diff_output=`diff -q $FILE_GENERATED $TMP_FILE_PREFIX$file`
                 if [ "$diff_output" = "" ];
                 then
-                    echo -e "[+] \033[32mpassed\033[0m"
+                    echo -e "[+] ${COLOR_GREEN}passed${COLOR_NC}"
                     ((tests_passed++))
                 else
-                    echo -e "[-] \033[31mFAILED\033[0m"
+                    echo -e "[-] ${COLOR_RED}FAILED${COLOR_NC}"
                     echo "[-]    run to see differences:"
                     echo "[-]     - diff $FILE_GENERATED $TMP_FILE_PREFIX$file"
                     echo "[-]     - kdiff3 $FILE_GENERATED $TMP_FILE_PREFIX$file"
@@ -47,4 +51,9 @@ do
 done
 
 echo ""
-echo "[+] passed: $tests_passed, failed: $tests_failed"
+if [ "$tests_failed" -eq 0 ];
+then
+    echo -e "[+] ${COLOR_GREEN}passed: $tests_passed, failed: $tests_failed${COLOR_NC}"
+else
+    echo -e "[-] ${COLOR_RED}passed: $tests_passed, failed: $tests_failed${COLOR_NC}"
+fi
