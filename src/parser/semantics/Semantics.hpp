@@ -55,6 +55,8 @@ private:
     void handleConditionExpression(const uint32_t stringIndex);
     void handleBinaryOp(const uint32_t stringIndex, const std::string &op);
     void handleReturn(const uint32_t stringIndex, const std::string &additional);
+    void handleUnaryOp(const uint32_t stringIndex, const std::string &additional);
+    void handleSimpleExpr(const uint32_t stringIndex);
     void handleJumpStatement(const uint32_t stringIndex, const std::string &stmtName);
     void handleWhileLoopConditions(const uint32_t stringIndex);
     void handleDirectDecl(const uint32_t stringIndex, const std::string &additional);

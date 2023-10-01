@@ -241,50 +241,11 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kUnaryOp:
-            {
-                auto node = std::make_shared<SemNodeUnaryOp>(stringIndex, additional);
-
-                node->setSemStart(mPrevReducePos);
-                node->setSemEnd(stringIndex);
-                mPrevReducePos = stringIndex;
-
-                if (additional == "++")
-                {
-                    // ++prefix;
-                    auto &stagedNodes = mState.getStagedNodes();
-                    assert(stagedNodes.size() >= 1);
-                    auto rhs = stagedNodes.back();
-                    stagedNodes.pop_back();
-                    node->setRhs(rhs);
-                    mState.stageNode(node);
-                }
-                else
-                {
-                    mState.stageNode(node);
-                }
-            }
+            handleUnaryOp(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kSimpleExpr:
-            {
-                auto &stagedNodes = mState.getStagedNodes();
-                if (mState.mState != SState::InForLoopContext)
-                {
-                    // flush staged nodes
-                    for (auto &it : stagedNodes)
-                    {
-                        addNodeToAst(it);
-                    }
-
-                    if (stagedNodes.size() > 0)
-                    {
-                        stagedNodes.back()->setSemEnd(stringIndex);
-                        mPrevReducePos = stringIndex;
-                    }
-
-                    stagedNodes.clear();
-                }
-            }
+            handleSimpleExpr(stringIndex);
             break;
 
         case SyntaxChunkType::kBinaryOp:
@@ -1025,6 +986,51 @@ void Semantics::handleReturn(const uint32_t stringIndex, const std::string &addi
         mPrevReducePos = stringIndex;
 
         addNodeToAst(node);
+    }
+}
+
+void Semantics::handleUnaryOp(const uint32_t stringIndex, const std::string &additional)
+{
+    auto node = std::make_shared<SemNodeUnaryOp>(stringIndex, additional);
+
+    node->setSemStart(mPrevReducePos);
+    node->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
+
+    if (additional == "++")
+    {
+        // ++prefix;
+        auto &stagedNodes = mState.getStagedNodes();
+        assert(stagedNodes.size() >= 1);
+        auto rhs = stagedNodes.back();
+        stagedNodes.pop_back();
+        node->setRhs(rhs);
+        mState.stageNode(node);
+    }
+    else
+    {
+        mState.stageNode(node);
+    }
+}
+
+void Semantics::handleSimpleExpr(const uint32_t stringIndex)
+{
+    auto &stagedNodes = mState.getStagedNodes();
+    if (mState.mState != SState::InForLoopContext)
+    {
+        // flush staged nodes
+        for (auto &it : stagedNodes)
+        {
+            addNodeToAst(it);
+        }
+
+        if (stagedNodes.size() > 0)
+        {
+            stagedNodes.back()->setSemEnd(stringIndex);
+            mPrevReducePos = stringIndex;
+        }
+
+        stagedNodes.clear();
     }
 }
 
