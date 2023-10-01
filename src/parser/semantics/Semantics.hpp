@@ -56,7 +56,7 @@ private:
     void handleBinaryOp(const uint32_t stringIndex, const std::string &op);
     void handleReturn(const uint32_t stringIndex, const std::string &additional);
     void handleJumpStatement(const uint32_t stringIndex, const std::string &stmtName);
-    void handleWhileLoopConditions();
+    void handleWhileLoopConditions(const uint32_t stringIndex);
     void handleDirectDecl(const uint32_t stringIndex, const std::string &additional);
     void handleInitializerList(const uint32_t stringIndex);
     void handleDefer(const uint32_t stringIndex);

@@ -296,13 +296,17 @@ void Semantics::handle( //
         case SyntaxChunkType::kWhileLoopHeader:
             {
                 auto node = std::make_shared<SemNodeLoop>(stringIndex, "while");
+
+                node->setSemStart(mPrevReducePos);
+                mPrevReducePos = stringIndex;
+
                 addNodeToAst(node);
                 mState.addScope(node);
             }
             break;
 
         case SyntaxChunkType::kWhileLoopConditions:
-            handleWhileLoopConditions();
+            handleWhileLoopConditions(stringIndex);
             break;
 
         case SyntaxChunkType::kWhileLoop:
@@ -312,6 +316,9 @@ void Semantics::handle( //
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
+
+                scopeNode->setSemEnd(stringIndex);
+                mPrevReducePos = stringIndex;
 
                 mState.removeScope();
             }
@@ -659,7 +666,7 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     mState.addScope(nodeIf);
 }
 
-void Semantics::handleWhileLoopConditions()
+void Semantics::handleWhileLoopConditions(const uint32_t stringIndex)
 {
     auto &stagedNodes = mState.getStagedNodes();
 
@@ -671,6 +678,8 @@ void Semantics::handleWhileLoopConditions()
     auto currentScope = mState.getCurrentScope(); // the loop
     auto loopNode = semNodeConvert<SemNodeLoop>(currentScope);
     loopNode->setIteratorCondition(itCond);
+
+    mPrevReducePos = stringIndex;
 }
 
 void Semantics::handleDirectDecl(const uint32_t stringIndex, const std::string &additional)
