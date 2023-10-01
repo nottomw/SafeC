@@ -252,7 +252,6 @@ void Semantics::handle( //
                     auto rhs = stagedNodes.back();
                     stagedNodes.pop_back();
                     node->setRhs(rhs);
-                    //                    addNodeToAst(node);
                     mState.stageNode(node);
                 }
                 else
