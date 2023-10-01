@@ -1,4 +1,5 @@
 ![safec](https://github.com/nottomw/safec/actions/workflows/safec.yml/badge.svg)
+![safec-tests](https://github.com/nottomw/safec/actions/workflows/safec-tests.yml/badge.svg)
 
 ## Safe C - safe(r) version of C language.
 
