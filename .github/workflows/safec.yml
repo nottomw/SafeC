@@ -43,3 +43,19 @@ jobs:
       with:
         name: SafeCTranspiler
         path: ${{github.workspace}}/build/bin/SafeCTranspiler
+        retention-days: 5
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download safec transpiler
+        uses: actions/download-artifact@v3
+        with:
+          name: SafeCTranspiler
+
+      - shell: bash
+        run: |
+          cd ${{github.workspace}}/src/safec_testfiles
+          ./RUN_TEST_all.sh
