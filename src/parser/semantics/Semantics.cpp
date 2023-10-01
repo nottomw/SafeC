@@ -244,6 +244,10 @@ void Semantics::handle( //
             {
                 auto node = std::make_shared<SemNodeUnaryOp>(stringIndex, additional);
 
+                node->setSemStart(mPrevReducePos);
+                node->setSemEnd(stringIndex);
+                mPrevReducePos = stringIndex;
+
                 if (additional == "++")
                 {
                     // ++prefix;
