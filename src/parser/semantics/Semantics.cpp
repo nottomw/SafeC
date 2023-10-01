@@ -249,9 +249,7 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kBinaryOp:
-            {
-                handleBinaryOp(stringIndex, additional);
-            }
+            handleBinaryOp(stringIndex, additional);
             break;
 
         case SyntaxChunkType::kJumpStatement:
@@ -441,7 +439,29 @@ void Semantics::handleInitDeclaration( //
         stagedNodes.pop_back();
         binaryOp->setRhs(rhs);
 
-        binaryOp->setSemStart(mPrevReducePos);
+        // rhs might use a unary operator (&, *) -- this breaks
+        // position setting for init decl, fix it here
+        uint32_t fixedStartPos = rhs->getSemStart();
+        if (fixedStartPos == 0)
+        {
+            fixedStartPos = mPrevReducePos;
+
+            // check if initializer list with unary operator...
+            if (rhs->getType() == SemNode::Type::InitializerList)
+            {
+                auto &initListEntries = semNodeConvert<SemNodeInitializerList>(rhs)->getEntries();
+                if (initListEntries.size() > 0)
+                {
+                    const uint32_t initListWithUnaryOpSemStart = initListEntries[0]->getSemStart();
+                    if (initListWithUnaryOpSemStart != 0)
+                    {
+                        fixedStartPos = initListWithUnaryOpSemStart;
+                    }
+                }
+            }
+        }
+
+        binaryOp->setSemStart(fixedStartPos);
         binaryOp->setSemEnd(stringIndex);
 
         addNodeToAst(binaryOp);
@@ -478,7 +498,14 @@ void Semantics::handleAssignment(const uint32_t stringIndex)
     stagedNodes.pop_back();
     binaryOp->setRhs(rhs);
 
-    binaryOp->setSemStart(mPrevReducePos);
+    // if rhs contains an unary op, need to fix the position...
+    uint32_t fixedStartPos = rhs->getSemStart();
+    if (fixedStartPos == 0)
+    {
+        fixedStartPos = mPrevReducePos;
+    }
+
+    binaryOp->setSemStart(fixedStartPos);
     binaryOp->setSemEnd(stringIndex);
     mPrevReducePos = stringIndex;
 
@@ -993,7 +1020,14 @@ void Semantics::handleReturn(const uint32_t stringIndex, const std::string &addi
 
         auto node = std::make_shared<SemNodeReturn>(stringIndex, finalRhs);
 
-        node->setSemStart(mPrevReducePos);
+        // if returning unary op need to fix the sem position
+        uint32_t fixedStartPos = rhs->getSemStart();
+        if (fixedStartPos == 0)
+        {
+            fixedStartPos = mPrevReducePos;
+        }
+
+        node->setSemStart(fixedStartPos);
         node->setSemEnd(stringIndex);
         mPrevReducePos = stringIndex;
 
