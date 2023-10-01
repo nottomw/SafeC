@@ -14,7 +14,7 @@ do
     if [ "$i" != "$SCRIPT_NAME" ];
     then
         echo "Running test group $i..."
-        ./$i
+        bash ./$i
 
         if [ $? -eq 0 ];
         then
