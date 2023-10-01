@@ -69,9 +69,7 @@ void Parser::displayAst() const
 
 void Parser::displayCoverage() const
 {
-    log("Coverage:");
     mSemantics.displayCoverage();
-    log("\n\n", NewLine::No);
 }
 
 size_t Parser::parseFile(const bfs::path &path)

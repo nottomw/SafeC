@@ -37,7 +37,7 @@ void WalkerSourceCoverage::peek( //
         return;
     }
 
-    log("warn: integrity check node is not positional and not scope, type: %", //
+    log("error: integrity check node is not positional and not scope, type: %", //
         Color::Yellow,
         SemNode::TypeInfo::toStr(node.getType()));
     assert(nullptr == "node is not positional and not scope");
@@ -47,62 +47,121 @@ void WalkerSourceCoverage::peek( //
     SemNodePositional &node,
     const uint32_t astLevel)
 {
-    ScopeInfo info{};
-    info.mStart = node.getPos();
-    info.mEnd = node.getPos();
-    info.mNode = &node;
+    updateMinMax(node.getSemStart());
+    updateMinMax(node.getSemEnd());
 
-    updateMinMax(info.mStart);
+    PosInfo posInfo;
+    posInfo.mStart = node.getSemStart();
+    posInfo.mEnd = node.getSemEnd();
+    posInfo.mAstLevel = astLevel;
+    posInfo.mNode = &node;
 
-    mScopesInfo.push_back(info);
+    mPosInfo.push_back(posInfo);
 }
 
 void WalkerSourceCoverage::peek( //
     SemNodeScope &node,
     const uint32_t astLevel)
 {
-    ScopeInfo info{};
-    info.mStart = node.getStart();
-    info.mEnd = node.getEnd();
-    info.mNode = &node;
+    updateMinMax(node.getSemStart());
+    updateMinMax(node.getSemEnd());
 
-    updateMinMax(info.mStart);
-    updateMinMax(info.mEnd);
+    PosInfo scopeInfo;
+    scopeInfo.mStart = node.getSemStart();
+    scopeInfo.mEnd = node.getSemEnd();
+    scopeInfo.mAstLevel = astLevel;
+    scopeInfo.mNode = &node;
 
-    mScopesInfo.push_back(info);
+    mScopesInfo.push_back(scopeInfo);
 }
 
 void WalkerSourceCoverage::printReport()
 {
-    if (mScopesInfo.size() == 0)
+    log("Coverage info:");
+    checkScopes();
+
+    log("covered min/max range: % -- %", mMinIndex, mMaxIndex);
+}
+
+void WalkerSourceCoverage::checkScopes()
+{
+    assert(mScopesInfo.size() > 1);
+
+    auto scopeInfoCopy = mScopesInfo;
+
+    std::vector<std::pair<PosInfo, PosInfo>> covGapsInfo;
+
+    for (size_t i = 1; i < scopeInfoCopy.size(); i++)
     {
-        log("no scope info", Color::Red);
-        return;
+        auto &scopePrev = scopeInfoCopy[i - 1];
+        auto &scopeCur = scopeInfoCopy[i];
+
+        if (scopePrev.mAstLevel == scopeCur.mAstLevel)
+        {
+            if ((scopePrev.mEnd != scopeCur.mStart) && //
+                (scopePrev.mEnd != (scopeCur.mStart + 1)))
+            {
+                covGapsInfo.push_back(std::make_pair(scopePrev, scopeCur));
+            }
+
+            // scope checked
+            scopeInfoCopy.erase(scopeInfoCopy.begin() + i - 1);
+            i = 0; // reset loop
+        }
+        else if (scopePrev.mAstLevel > scopeCur.mAstLevel)
+        {
+            // scope left
+            scopeInfoCopy.erase(scopeInfoCopy.begin() + i - 1);
+            i = 0; // reset loop
+        }
+        else // prevSeenScope.mAstLevel < scopeInfo.mAstLevel
+        {
+            // nothing
+        }
     }
 
-    prepareScopesInfo();
+    for (auto &it : covGapsInfo)
+    {
+        auto &scopePrev = it.first;
+        auto &scopeCur = it.second;
+        log("\tscope gap (% -- %) between nodes % (% - %) and % (% - %)", //
+            scopePrev.mEnd,
+            scopeCur.mStart,
+            scopePrev.mNode->getTypeStr(),
+            scopePrev.mStart,
+            scopePrev.mEnd,
+            scopeCur.mNode->getTypeStr(),
+            scopeCur.mStart,
+            scopeCur.mEnd);
 
-    // TODO: parser - add info on start/end when doing reduce
-    // TODO: divide into ScopedInfo and PositionalInfo
-    // TODO: verify scopes are continuous
-    // TODO: verify positionals in scope covers the whole scope
+        auto gapCoveredByPositional = //
+            std::find_if(             //
+                mPosInfo.begin(),
+                mPosInfo.end(),
+                [&scopePrev, &scopeCur](const PosInfo &positional) //
+                {                                                  //
+                    const bool startCovered =                      //
+                        (positional.mStart == scopePrev.mEnd) ||   //
+                        (positional.mStart == scopePrev.mEnd);
+                    const bool endCovered =                     //
+                        (positional.mEnd == scopeCur.mStart) || //
+                        (positional.mEnd == (scopeCur.mStart + 1));
 
-    //    std::vector<ScopeInfo *> scopeStack;
-
-    //    for (auto &it : mScopesInfo)
-    //    {
-    //        assert(it.mNode != nullptr);
-
-    //        log(" - scope info: start: %, end: %, node type: %",
-    //            it.mStart,
-    //            it.mEnd,
-    //            SemNode::TypeInfo::toStr(it.mNode->getType()));
-
-    //        // enter each scope and check if the scope is covered
-    //        (void)scopeStack;
-    //    }
-
-    //    log("covered indexes range: % -- %", mMinIndex, mMaxIndex);
+                    return (startCovered) && (endCovered);
+                });
+        if (gapCoveredByPositional == mPosInfo.end())
+        {
+            log("\t\tnot covered by any single positional", Color::Red);
+        }
+        else
+        {
+            log("\t\tcovered by single positional % (% -- %)", //
+                Color::Green,
+                gapCoveredByPositional->mNode->getTypeStr(),
+                gapCoveredByPositional->mStart,
+                gapCoveredByPositional->mEnd);
+        }
+    }
 }
 
 void WalkerSourceCoverage::updateMinMax(const uint32_t pos)
@@ -116,19 +175,4 @@ void WalkerSourceCoverage::updateMinMax(const uint32_t pos)
     {
         mMinIndex = pos;
     }
-}
-
-void WalkerSourceCoverage::prepareScopesInfo()
-{
-    auto cmpLambda =                                   //
-        [](const ScopeInfo &lhs, const ScopeInfo &rhs) //
-    {
-        // true if lhs > rhs; here: reverse sort -> ascending order
-        return (lhs.mStart < rhs.mStart);
-    };
-
-    std::sort(               //
-        mScopesInfo.begin(), //
-        mScopesInfo.end(),   //
-        cmpLambda);
 }

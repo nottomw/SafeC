@@ -22,19 +22,23 @@ public:
     void printReport();
 
 private:
-    struct ScopeInfo
+    struct PosInfo
     {
         uint32_t mStart;
         uint32_t mEnd;
+        uint32_t mAstLevel;
         SemNode *mNode; // TODO: add NonOwningPtr<> / NonNullPtr<>
     };
 
-    std::vector<ScopeInfo> mScopesInfo;
+    std::vector<PosInfo> mScopesInfo;
+    std::vector<PosInfo> mPosInfo;
+
     uint32_t mMinIndex;
     uint32_t mMaxIndex;
 
+    void checkScopes();
+
     void updateMinMax(const uint32_t pos);
-    void prepareScopesInfo();
 };
 
 } // namespace safec
