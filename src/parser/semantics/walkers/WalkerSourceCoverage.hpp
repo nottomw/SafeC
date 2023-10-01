@@ -19,6 +19,8 @@ public:
     void peek(SemNodePositional &node, const uint32_t astLevel) override;
     void peek(SemNodeScope &node, const uint32_t astLevel) override;
 
+    void peek(SemNodeGroup &node, const uint32_t astLevel) override;
+
     void printReport();
 
 private:
@@ -31,7 +33,6 @@ private:
     };
 
     std::vector<PosInfo> mScopesInfo;
-    std::vector<PosInfo> mPosInfo;
 
     uint32_t mMinIndex;
     uint32_t mMaxIndex;

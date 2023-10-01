@@ -47,6 +47,12 @@ void WalkerSourceCoverage::peek( //
     SemNodePositional &node,
     const uint32_t astLevel)
 {
+    if (node.getSemStart() == 0 && node.getSemEnd() == 0)
+    {
+        // ignore if no semantic pos info
+        return;
+    }
+
     updateMinMax(node.getSemStart());
     updateMinMax(node.getSemEnd());
 
@@ -56,13 +62,19 @@ void WalkerSourceCoverage::peek( //
     posInfo.mAstLevel = astLevel;
     posInfo.mNode = &node;
 
-    mPosInfo.push_back(posInfo);
+    mScopesInfo.push_back(posInfo);
 }
 
 void WalkerSourceCoverage::peek( //
     SemNodeScope &node,
     const uint32_t astLevel)
 {
+    if (node.getSemStart() == 0 && node.getSemEnd() == 0)
+    {
+        // ignore if no semantic pos info
+        return;
+    }
+
     updateMinMax(node.getSemStart());
     updateMinMax(node.getSemEnd());
 
@@ -75,12 +87,17 @@ void WalkerSourceCoverage::peek( //
     mScopesInfo.push_back(scopeInfo);
 }
 
+void WalkerSourceCoverage::peek(SemNodeGroup &node, const uint32_t astLevel)
+{
+    // ignore
+}
+
 void WalkerSourceCoverage::printReport()
 {
     log("Coverage info:");
     checkScopes();
 
-    log("covered min/max range: % -- %", mMinIndex, mMaxIndex);
+    log("\n\tcovered min/max range: % -- %", mMinIndex, mMaxIndex);
 }
 
 void WalkerSourceCoverage::checkScopes()
@@ -125,6 +142,7 @@ void WalkerSourceCoverage::checkScopes()
         auto &scopePrev = it.first;
         auto &scopeCur = it.second;
         log("\tscope gap (% -- %) between nodes % (% - %) and % (% - %)", //
+            Color::Red,
             scopePrev.mEnd,
             scopeCur.mStart,
             scopePrev.mNode->getTypeStr(),
@@ -133,34 +151,6 @@ void WalkerSourceCoverage::checkScopes()
             scopeCur.mNode->getTypeStr(),
             scopeCur.mStart,
             scopeCur.mEnd);
-
-        auto gapCoveredByPositional = //
-            std::find_if(             //
-                mPosInfo.begin(),
-                mPosInfo.end(),
-                [&scopePrev, &scopeCur](const PosInfo &positional) //
-                {                                                  //
-                    const bool startCovered =                      //
-                        (positional.mStart == scopePrev.mEnd) ||   //
-                        (positional.mStart == scopePrev.mEnd);
-                    const bool endCovered =                     //
-                        (positional.mEnd == scopeCur.mStart) || //
-                        (positional.mEnd == (scopeCur.mStart + 1));
-
-                    return (startCovered) && (endCovered);
-                });
-        if (gapCoveredByPositional == mPosInfo.end())
-        {
-            log("\t\tnot covered by any single positional", Color::Red);
-        }
-        else
-        {
-            log("\t\tcovered by single positional % (% -- %)", //
-                Color::Green,
-                gapCoveredByPositional->mNode->getTypeStr(),
-                gapCoveredByPositional->mStart,
-                gapCoveredByPositional->mEnd);
-        }
     }
 }
 
