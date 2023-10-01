@@ -312,6 +312,10 @@ void Semantics::handle( //
         case SyntaxChunkType::kSimpleScopeStart:
             {
                 auto scopeNode = std::make_shared<SemNodeScope>(stringIndex);
+
+                scopeNode->setSemStart(mPrevReducePos);
+                mPrevReducePos = stringIndex;
+
                 addNodeToAst(scopeNode);
                 mState.addScope(scopeNode);
             }
@@ -322,6 +326,9 @@ void Semantics::handle( //
                 auto currentScope = mState.getCurrentScope();
                 auto currentScopeTyped = semNodeConvert<SemNodeScope>(currentScope);
                 currentScopeTyped->setEnd(stringIndex);
+
+                currentScopeTyped->setSemEnd(stringIndex);
+                mPrevReducePos = stringIndex;
 
                 mState.removeScope();
             }
@@ -751,6 +758,11 @@ void Semantics::handleDefer(const uint32_t stringIndex)
     stagedNodes.pop_back();
 
     auto deferNode = std::make_shared<SemNodeDefer>(stringIndex, lastNode);
+
+    deferNode->setSemStart(lastNode->getSemStart());
+    deferNode->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
+
     mState.stageNode(deferNode);
 }
 
