@@ -1001,6 +1001,11 @@ void Semantics::handleJumpStatement( //
     const std::string &stmtName)
 {
     auto node = std::make_shared<SemNodeJumpStatement>(stringIndex, stmtName);
+
+    node->setSemStart(mPrevReducePos);
+    node->setSemEnd(stringIndex);
+    mPrevReducePos = stringIndex;
+
     addNodeToAst(node);
 }
 
