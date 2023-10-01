@@ -63,3 +63,5 @@ else
     echo -e "[-] ${COLOR_RED}passed: $tests_passed, failed: $tests_failed${COLOR_NC}"
     exit 1
 fi
+
+exit 1 # break test
