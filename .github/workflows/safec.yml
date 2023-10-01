@@ -60,5 +60,6 @@ jobs:
 
       - shell: bash
         run: |
+          chmod +x ${SAFEC_PATH}
           cd ${{github.workspace}}/src/safec_testfiles
           bash RUN_TEST_all.sh
