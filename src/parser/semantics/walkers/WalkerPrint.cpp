@@ -10,10 +10,9 @@ namespace safec
 
 void WalkerPrint::peek(SemNode &node, const uint32_t astLevel)
 {
-    log("% { % }", //
+    log("%", //
         Color::Magenta,
-        getPrefix(node, astLevel),
-        getPos(node));
+        getPrefix(node, astLevel));
 }
 
 void WalkerPrint::peek(SemNodePositional &node, const uint32_t astLevel)
