@@ -175,6 +175,11 @@ SemNodeReturn::SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs)
     }
 }
 
+std::shared_ptr<SemNode> SemNodeReturn::getReturnedNode() const
+{
+    return mRhs;
+}
+
 std::string SemNodeReturn::toStr() const
 {
     return "";

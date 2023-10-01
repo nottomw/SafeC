@@ -168,6 +168,8 @@ public:
     SemNodeReturn(const uint32_t index);
     SemNodeReturn(const uint32_t index, std::shared_ptr<SemNode> rhs);
 
+    std::shared_ptr<SemNode> getReturnedNode() const;
+
     std::string toStr() const override;
 
 private:

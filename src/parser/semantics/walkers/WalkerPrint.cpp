@@ -54,11 +54,19 @@ void WalkerPrint::peek(SemNodeLoop &node, const uint32_t astLevel)
 
 void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
 {
+    std::string returnedNodeType = "empty";
+
+    auto returnedNode = node.getReturnedNode();
+    if (returnedNode)
+    {
+        returnedNodeType = SemNode::TypeInfo::toStr(returnedNode->getType());
+    }
+
     log("% '%' { % }", //
         Color::White,
         Color::BgBlack,
         getPrefix(node, astLevel),
-        node.toStr(),
+        returnedNodeType,
         getPos(node));
 }
 
