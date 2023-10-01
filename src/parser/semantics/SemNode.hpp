@@ -317,12 +317,15 @@ private:
 class SemNodeIf : public SemNodeScope
 {
 public:
-    SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond);
+    SemNodeIf(const uint32_t pos);
+
+    void setCond(std::shared_ptr<SemNode> cond);
 
     std::string toStr() const override;
 
 private:
     std::shared_ptr<SemNode> mCond;
+    std::shared_ptr<SemNodeGroup> mGroup;
 };
 
 class SemNodeUnaryOp : public SemNodePositional

@@ -370,16 +370,20 @@ std::string SemNodeBinaryOp::toStr() const
     return mOp;
 }
 
-SemNodeIf::SemNodeIf(const uint32_t pos, std::shared_ptr<SemNode> cond)
+SemNodeIf::SemNodeIf(const uint32_t pos)
     : SemNodeScope{pos}
-    , mCond{cond}
+    , mCond{}
 {
     mType = Type::If;
 
-    auto group = std::make_shared<SemNodeGroup>(pos);
-    group->attach(cond);
+    mGroup = std::make_shared<SemNodeGroup>(pos);
+    attach(mGroup);
+}
 
-    attach(group);
+void SemNodeIf::setCond(std::shared_ptr<SemNode> cond)
+{
+    assert(mGroup);
+    mGroup->attach(cond);
 }
 
 std::string SemNodeIf::toStr() const

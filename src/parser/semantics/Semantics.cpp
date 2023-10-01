@@ -156,6 +156,12 @@ void Semantics::handle( //
             break;
 
         case SyntaxChunkType::kConditionHeader:
+            {
+                auto nodeIf = std::make_shared<SemNodeIf>(stringIndex);
+                nodeIf->setSemStart(mPrevReducePos);
+                mPrevReducePos = stringIndex;
+                mState.stageNode(nodeIf);
+            }
             break;
 
         case SyntaxChunkType::kConditionExpression:
@@ -172,6 +178,10 @@ void Semantics::handle( //
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
+
+                scopeNode->setSemEnd(stringIndex);
+                mPrevReducePos = stringIndex;
+
                 mState.removeScope();
             }
             break;
@@ -628,7 +638,13 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     auto condNode = stagedNodes.back();
     stagedNodes.pop_back();
 
-    auto nodeIf = std::make_shared<SemNodeIf>(stringIndex, condNode);
+    auto nodeIf = stagedNodes.back();
+    stagedNodes.pop_back();
+
+    assert(nodeIf->getType() == SemNode::Type::If);
+    semNodeConvert<SemNodeIf>(nodeIf)->setCond(condNode);
+
+    mPrevReducePos = stringIndex;
 
     // all staged nodes should be now placed into AST, since
     // we now encountered condition expression the previously
