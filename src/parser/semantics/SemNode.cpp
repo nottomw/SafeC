@@ -26,6 +26,11 @@ SemNode::Type SemNode::getType() const
     return mType;
 }
 
+std::string_view SemNode::getTypeStr() const
+{
+    return TypeInfo::toStr(mType);
+}
+
 void SemNode::attach(std::shared_ptr<SemNode> node)
 {
     mRelatedNodes.push_back(node);

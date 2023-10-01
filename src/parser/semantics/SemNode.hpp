@@ -49,6 +49,7 @@ public:
     virtual ~SemNode() = default;
     void reset();
     Type getType() const;
+    std::string_view getTypeStr() const;
     void attach(std::shared_ptr<SemNode> node);
 
     std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()
