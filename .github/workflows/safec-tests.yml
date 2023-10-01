@@ -19,7 +19,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           name: SafeCTranspiler
-          workflow: safec
+          workflow: safec.yml
           workflow_conclusion: success
 
       - shell: bash
