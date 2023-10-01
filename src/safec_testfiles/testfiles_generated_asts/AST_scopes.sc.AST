@@ -3,42 +3,42 @@ Parsing done, characters count 290
 
 AST:
 [0] TranslationUnit
-	[1] Function (void FUNCTION_SCOPES ( )) { 73 -- 289 }
-		[2] BinaryOp '=' { 85 }
-			[3] Declaration 'int a' { 83 }
-			[3] Constant '5' { 87 }
-		[2] BinaryOp '=' { 100 }
-			[3] Declaration 'int b' { 98 }
-			[3] Constant '6' { 102 }
-		[2] BinaryOp '=' { 112 }
-			[3] Identifier 'a' { 112 }
-			[3] BinaryOp '+' { 119 }
-				[4] Identifier 'a' { 114 }
-				[4] Identifier 'b' { 118 }
-		[2] Scope { 138, 169 }
-			[3] BinaryOp '=' { 142 }
-				[4] Declaration 'int c' { 140 }
-				[4] Constant '123' { 146 }
-			[3] BinaryOp '+=' { 160 }
-				[4] Identifier 'c' { 160 }
-				[4] Constant '1' { 162 }
-		[2] BinaryOp '=' { 178 }
-			[3] Identifier 'b' { 178 }
-			[3] Constant '666' { 182 }
-		[2] Scope { 202, 273 }
-			[3] BinaryOp '=' { 206 }
-				[4] Declaration 'int d' { 204 }
-				[4] Constant '654' { 210 }
-			[3] Scope { 236, 248 }
-				[4] UnaryOp '++' { 238 }
-					[5] Identifier 'd' { 237 }
-			[3] BinaryOp '=' { 260 }
-				[4] Identifier 'd' { 260 }
-				[4] BinaryOp '+' { 267 }
-					[5] Identifier 'd' { 262 }
-					[5] Identifier 'b' { 266 }
-		[2] BinaryOp '=' { 282 }
-			[3] Identifier 'b' { 282 }
-			[3] Constant '777' { 286 }
+	[1] Function (void FUNCTION_SCOPES ( )) { 0 -- 289 }
+		[2] BinaryOp '=' { 81 -- 88 }
+			[3] Declaration 'int a' { 0 -- 0 }
+			[3] Constant '5' { 0 -- 0 }
+		[2] BinaryOp '=' { 88 -- 103 }
+			[3] Declaration 'int b' { 0 -- 0 }
+			[3] Constant '6' { 0 -- 0 }
+		[2] BinaryOp '=' { 103 -- 119 }
+			[3] Identifier 'a' { 0 -- 0 }
+			[3] BinaryOp '+' { 0 -- 0 }
+				[4] Identifier 'a' { 0 -- 0 }
+				[4] Identifier 'b' { 0 -- 0 }
+		[2] Scope { 119 -- 169 }
+			[3] BinaryOp '=' { 138 -- 147 }
+				[4] Declaration 'int c' { 0 -- 0 }
+				[4] Constant '123' { 0 -- 0 }
+			[3] BinaryOp '+=' { 147 -- 163 }
+				[4] Identifier 'c' { 0 -- 0 }
+				[4] Constant '1' { 0 -- 0 }
+		[2] BinaryOp '=' { 169 -- 183 }
+			[3] Identifier 'b' { 0 -- 0 }
+			[3] Constant '666' { 0 -- 0 }
+		[2] Scope { 183 -- 273 }
+			[3] BinaryOp '=' { 202 -- 211 }
+				[4] Declaration 'int d' { 0 -- 0 }
+				[4] Constant '654' { 0 -- 0 }
+			[3] Scope { 211 -- 248 }
+				[4] UnaryOp '++' { 236 -- 238 }
+					[5] Identifier 'd' { 0 -- 0 }
+			[3] BinaryOp '=' { 248 -- 267 }
+				[4] Identifier 'd' { 0 -- 0 }
+				[4] BinaryOp '+' { 0 -- 0 }
+					[5] Identifier 'd' { 0 -- 0 }
+					[5] Identifier 'b' { 0 -- 0 }
+		[2] BinaryOp '=' { 273 -- 287 }
+			[3] Identifier 'b' { 0 -- 0 }
+			[3] Constant '777' { 0 -- 0 }
 
 
