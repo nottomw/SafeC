@@ -949,6 +949,11 @@ void Semantics::handleReturn(const uint32_t stringIndex, const std::string &addi
     if (additional == "no-value")
     {
         auto node = std::make_shared<SemNodeReturn>(stringIndex);
+
+        node->setSemStart(mPrevReducePos);
+        node->setSemEnd(stringIndex);
+        mPrevReducePos = stringIndex;
+
         addNodeToAst(node);
     }
     else
@@ -982,6 +987,11 @@ void Semantics::handleReturn(const uint32_t stringIndex, const std::string &addi
         }
 
         auto node = std::make_shared<SemNodeReturn>(stringIndex, finalRhs);
+
+        node->setSemStart(mPrevReducePos);
+        node->setSemEnd(stringIndex);
+        mPrevReducePos = stringIndex;
+
         addNodeToAst(node);
     }
 }
