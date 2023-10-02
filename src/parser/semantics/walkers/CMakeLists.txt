@@ -4,7 +4,6 @@ add_library(walkers
     SemNodeWalker.cpp
     WalkerPrint.cpp
     WalkerSourceCoverage.cpp
-    WalkerDetectWhitespacePattern.cpp
 )
 
 add_library(safec::walkers ALIAS walkers)
