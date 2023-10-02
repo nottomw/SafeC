@@ -3,6 +3,8 @@
 #include "logger/Logger.hpp"
 #include "semantics/Semantics.hpp"
 #include "semantics/walkers/SemNodeWalker.hpp"
+#include "semantics/walkers/WalkerPrint.hpp"
+#include "semantics/walkers/WalkerSourceCoverage.hpp"
 #include "utils/Utils.hpp"
 
 #include <boost/filesystem/fstream.hpp>
@@ -63,13 +65,23 @@ size_t Parser::parse(const std::string &path)
 void Parser::displayAst() const
 {
     log("AST:");
-    mSemantics.display();
+
+    SemNodeWalker walker;
+    WalkerPrint printer;
+
+    mSemantics.walk(walker, printer);
+
     log("\n\n", NewLine::No);
 }
 
 void Parser::displayCoverage() const
 {
-    mSemantics.displayCoverage();
+    SemNodeWalker walker;
+    WalkerSourceCoverage covChecker;
+
+    mSemantics.walk(walker, covChecker);
+
+    covChecker.printReport();
 }
 
 size_t Parser::parseFile(const bfs::path &path)
@@ -79,17 +91,16 @@ size_t Parser::parseFile(const bfs::path &path)
     mCurrentlyParsedFile = path;
 
     // TODO: handle preprocessor stuff
-    // currently cannot use e.g.:
-    //      #define TEST "asdf"
-    //      printf(TEST);
-    // not detected by grammar as a valid case
+    //      currently cannot use e.g.:
+    //          #define TEST "asdf"
+    //          printf(TEST);
+    //      not detected by grammar as a valid case
+    // TODO: handle defer use in preprocessor
+    //      should be able to do things like:
+    //          #define LOCK_GUARD(lock) acquire(lock); defer release(lock);
 
     // TODO: handle string literal concat
     // printf("one" "two"); will raise an error in current grammar
-
-    // TODO: handle defer use in preprocessor
-    // should be able to do things like:
-    //      #define LOCK_GUARD(lock) acquire(lock); defer release(lock);
 
     {
         yyin = fopen(path.c_str(), "r");
@@ -97,7 +108,6 @@ size_t Parser::parseFile(const bfs::path &path)
 
         utils::DeferredCall defer{[] { fclose(yyin); }};
 
-        // TODO: add class TranslationUnitFile, will be helpful when implementing preprocessor support
         mSemantics.newTranslationUnit(path);
 
         const int32_t parseRes = yyparse();

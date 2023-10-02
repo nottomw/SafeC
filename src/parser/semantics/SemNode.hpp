@@ -53,10 +53,6 @@ public:
     uint32_t getSemStart() const;
     uint32_t getSemEnd() const;
 
-    // TODO: toUnderlyingType() could be useful - convert
-    // SemNode into the actual type determined by mType
-    // currently semantics uses semNodeConvert<> instead
-
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;

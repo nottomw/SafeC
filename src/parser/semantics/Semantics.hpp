@@ -29,8 +29,6 @@ public:
     Semantics &operator=(const Semantics &) = delete;
     Semantics &operator=(Semantics &&) = delete;
 
-    void display();
-    void displayCoverage();
     void newTranslationUnit(const boost::filesystem::path &path);
     void walk(SemNodeWalker &walker, WalkerStrategy &strategy);
 

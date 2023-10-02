@@ -12,10 +12,6 @@
 
 // TODO: typedefs not supported at all, current parser does not recognize the type
 
-// TODO: handle indentation
-// make sure that for each break/continue/return/scope end the indentation (column) is also
-// saved so then it can be used to generate C code (verify if tabs/spaces used)
-
 namespace safec
 {
 
@@ -40,23 +36,6 @@ Semantics::Semantics() //
     mState.addScope(mTranslationUnit);
 }
 
-void Semantics::display()
-{
-    SemNodeWalker walker;
-
-    WalkerPrint printer;
-    walker.walk(*mTranslationUnit, printer);
-}
-
-void Semantics::displayCoverage()
-{
-    SemNodeWalker walker;
-
-    WalkerSourceCoverage integChecker;
-    walker.walk(*mTranslationUnit, integChecker);
-    integChecker.printReport();
-}
-
 void Semantics::newTranslationUnit(const bfs::path &path)
 {
     mTranslationUnit->reset();
@@ -73,10 +52,6 @@ void Semantics::handle( //
     const uint32_t stringIndex,
     const std::string &additional)
 {
-    // this is actually another shift-reduce step, where shift chunks are
-    // stashed and reduce should consume all shifted chunks. Could be used when
-    // creating nodes to mark start-stop positions precisely.
-
     // huge switch..case, but leaving it here as-is for now to keep it simple
     switch (type)
     {
