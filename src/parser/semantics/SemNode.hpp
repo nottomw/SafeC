@@ -16,11 +16,6 @@ class SemNodeWalker;
 
 // clang-format off
 #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
-#define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)   \
-    case Type::x: {                             \
-        return #x;                              \
-    }                                           \
-    break;
 // clang-format on
 
 class SemNode
@@ -31,25 +26,15 @@ public:
         SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_VALUE)
     };
 
-    struct TypeInfo
-    {
-        static constexpr std::string_view toStr(const Type type)
-        {
-            switch (type)
-            {
-                SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_VALUE_TO_STR)
-            }
-
-            return "undefined";
-        }
-    };
-
     SemNode();
     SemNode(const Type type);
     virtual ~SemNode() = default;
+
     void reset();
+
     Type getType() const;
     std::string_view getTypeStr() const;
+
     void attach(std::shared_ptr<SemNode> node);
 
     std::vector<std::shared_ptr<SemNode>> &getAttachedNodes()

@@ -39,7 +39,7 @@ void WalkerSourceCoverage::peek( //
 
     log("error: integrity check node is not positional and not scope, type: %", //
         Color::Yellow,
-        SemNode::TypeInfo::toStr(node.getType()));
+        node.getTypeStr());
     assert(nullptr == "node is not positional and not scope");
 }
 

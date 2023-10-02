@@ -1147,7 +1147,7 @@ void Semantics::removeRedundantScopeFromCurrentScope()
     {
         log("WARNING: removing redudant scope not in special scope - ignoring, type: %", //
             Color::Red,
-            SemNode::TypeInfo::toStr(currentScope->getType()));
+            currentScope->getTypeStr());
         return;
     }
 
@@ -1161,7 +1161,7 @@ void Semantics::removeRedundantScopeFromCurrentScope()
     {
         log("ERROR: removing redudant scope not in special scope - ignoring, type: %", //
             Color::Red,
-            SemNode::TypeInfo::toStr(currentScope->getType()));
+            currentScope->getTypeStr());
         assert(isSpecialScope);
     }
 
@@ -1208,7 +1208,7 @@ void Semantics::printStagedNodes(const std::string &str)
     auto &stagedNodes = mState.getStagedNodes();
     for (auto &it : stagedNodes)
     {
-        log("\tstaged node: [ % ] %", Color::Green, SemNode::TypeInfo::toStr(it->getType()), it->toStr());
+        log("\tstaged node: [ % ] %", Color::Green, it->getTypeStr(), it->toStr());
     }
 }
 

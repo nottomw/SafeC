@@ -58,7 +58,7 @@ void WalkerPrint::peek(SemNodeReturn &node, const uint32_t astLevel)
     auto returnedNode = node.getReturnedNode();
     if (returnedNode)
     {
-        returnedNodeType = SemNode::TypeInfo::toStr(returnedNode->getType());
+        returnedNodeType = returnedNode->getTypeStr();
     }
 
     log("% '%' { % }", //
@@ -112,7 +112,7 @@ void WalkerPrint::peek(SemNodeSwitchCase &node, const uint32_t astLevel)
         Color::Black,
         Color::BgYellow, //
         getPrefix(node, astLevel),
-        SemNode::TypeInfo::toStr(node.getSwitchExpr()->getType()),
+        node.getSwitchExpr()->getTypeStr(),
         getPos(node));
 }
 
@@ -121,7 +121,7 @@ void WalkerPrint::peek(SemNodeSwitchCaseLabel &node, const uint32_t astLevel)
     const std::string caseLabelOn =                                       //
         (node.getCaseLabel()->getType() == SemNode::Type::EmptyStatement) //
             ? ("default")
-            : std::string(SemNode::TypeInfo::toStr(node.getCaseLabel()->getType()));
+            : std::string(node.getCaseLabel()->getTypeStr());
 
     log("% on '%' %{ % }",
         Color::Black,
@@ -189,7 +189,7 @@ std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
     prefix.append("[");
     prefix.append(std::to_string(astLevel));
     prefix.append("] ");
-    prefix.append(SemNode::TypeInfo::toStr(node.getType()));
+    prefix.append(node.getTypeStr());
 
     return prefix;
 }

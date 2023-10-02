@@ -28,7 +28,21 @@ SemNode::Type SemNode::getType() const
 
 std::string_view SemNode::getTypeStr() const
 {
-    return TypeInfo::toStr(mType);
+// clang-format off
+    #define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)                                                                          \
+        case Type::x:                                                                                                      \
+        {                                                                                                              \
+            return #x;                                                                                                 \
+        }                                                                                                              \
+        break;
+    // clang-format on
+
+    switch (mType)
+    {
+        SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_VALUE_TO_STR)
+    }
+
+    return "undefined";
 }
 
 void SemNode::attach(std::shared_ptr<SemNode> node)
