@@ -2,10 +2,13 @@
 
 using namespace safec;
 
+uint32_t SemNode::mIdGlobal = 0;
+
 SemNode::SemNode() //
     : mType{Type::Undefined}
     , mSemStart{0}
     , mSemEnd{0}
+    , mId{mIdGlobal++}
 {
 }
 
@@ -28,7 +31,7 @@ SemNode::Type SemNode::getType() const
 
 std::string_view SemNode::getTypeStr() const
 {
-// clang-format off
+    // clang-format off
     #define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)                                                                          \
         case Type::x:                                                                                                      \
         {                                                                                                              \
@@ -68,6 +71,11 @@ uint32_t SemNode::getSemStart() const
 uint32_t SemNode::getSemEnd() const
 {
     return mSemEnd;
+}
+
+uint32_t SemNode::getId() const
+{
+    return mId;
 }
 
 SemNodeTranslationUnit::SemNodeTranslationUnit()

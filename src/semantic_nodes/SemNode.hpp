@@ -54,12 +54,17 @@ public:
     uint32_t getSemStart() const;
     uint32_t getSemEnd() const;
 
+    uint32_t getId() const;
+
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
 
     uint32_t mSemStart;
     uint32_t mSemEnd;
+
+    static uint32_t mIdGlobal;
+    uint32_t mId;
 
     friend class SemNodeWalker;
 };
