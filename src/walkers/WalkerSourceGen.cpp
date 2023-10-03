@@ -41,7 +41,7 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
     const int32_t endPos = node.getSemEnd();
     const int32_t nodeStringLen = endPos - startPos;
 
-    if (startPos == 0 && endPos == 0)
+    if ((startPos == 0) && (endPos == 0))
     {
         // skip node with no sem pos info
         return;
