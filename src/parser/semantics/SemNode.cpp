@@ -75,6 +75,16 @@ SemNodeTranslationUnit::SemNodeTranslationUnit()
     mType = Type::TranslationUnit;
 }
 
+void SemNodeTranslationUnit::setSourcePath(const std::filesystem::path &path)
+{
+    mSourcePath = path;
+}
+
+std::filesystem::path SemNodeTranslationUnit::getSourcePath() const
+{
+    return mSourcePath;
+}
+
 SemNodeScope::SemNodeScope(const uint32_t start) //
     : mStartIndex{start}
     , mEndIndex{0}

@@ -3,6 +3,7 @@
 #include "SemNodeEnumeration.hpp"
 
 #include <cassert>
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -71,6 +72,12 @@ class SemNodeTranslationUnit : public SemNode
 {
 public:
     SemNodeTranslationUnit();
+
+    void setSourcePath(const std::filesystem::path &path);
+    std::filesystem::path getSourcePath() const;
+
+private:
+    std::filesystem::path mSourcePath;
 };
 
 // Semantic node with dual position info (start & end).

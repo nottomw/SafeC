@@ -38,7 +38,6 @@ public:
 
 private:
     std::shared_ptr<SemNodeTranslationUnit> mTranslationUnit;
-    fs::path mTranslationUnitSourceFilePath;
 
     SemanticsState mState;
 

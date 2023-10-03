@@ -36,7 +36,7 @@ Semantics::Semantics() //
 void Semantics::newTranslationUnit(const fs::path &path)
 {
     mTranslationUnit->reset();
-    mTranslationUnitSourceFilePath = path;
+    mTranslationUnit->setSourcePath(path);
 }
 
 void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)
