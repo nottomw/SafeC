@@ -2,6 +2,8 @@
 
 #include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
+#include "walkers/SemNodeWalker.hpp"
+#include "walkers/WalkerSourceGen.hpp"
 
 namespace safec
 {
@@ -19,6 +21,10 @@ void Generator::generateFinalSource( //
     std::shared_ptr<SemNodeTranslationUnit> ast,
     const std::filesystem::path &outputFile)
 {
+    SemNodeWalker walker;
+    WalkerSourceGen sourceGen{outputFile};
+
+    walker.walk(*ast, sourceGen);
 }
 
 } // namespace safec

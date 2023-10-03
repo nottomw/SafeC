@@ -4,6 +4,7 @@ add_library(walkers
     SemNodeWalker.cpp
     WalkerPrint.cpp
     WalkerSourceCoverage.cpp
+    WalkerSourceGen.cpp
 )
 
 add_library(safec::walkers ALIAS walkers)

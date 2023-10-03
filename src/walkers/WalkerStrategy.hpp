@@ -16,6 +16,8 @@ namespace safec
 // TODO: split walkers into readers and writers, readers
 // can be run in parallel or in a single pass together
 
+// TODO: add option to break the iteration when walker fails
+
 class WalkerStrategy
 {
 public:

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "WalkerStrategy.hpp"
-#include "walkers/SemNodeWalker.hpp"
 
 namespace safec
 {
