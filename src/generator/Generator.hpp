@@ -1,6 +1,7 @@
 #pragma once
 
 #include "semantic_nodes/SemNode.hpp"
+#include "walkers/SemNodeWalker.hpp"
 
 #include <filesystem>
 #include <memory>
@@ -23,6 +24,8 @@ private:
     void generateFinalSource( //
         std::shared_ptr<SemNodeTranslationUnit> ast,
         const fs::path &outputFile);
+
+    SemNodeWalker mWalker;
 };
 
 } // namespace safec

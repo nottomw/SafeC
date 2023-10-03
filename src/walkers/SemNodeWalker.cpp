@@ -34,7 +34,7 @@ void SemNodeWalker::walkLeveled(SemNode &node, WalkerStrategy &strategy, const u
             break;
     }
 
-    for (const auto &it : node.getAttachedNodes())
+    for (auto it : node.getAttachedNodes())
     {
         const uint32_t newLevel = (level + 1U);
         walkLeveled(*it, strategy, newLevel);
