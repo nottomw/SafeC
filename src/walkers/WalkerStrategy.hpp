@@ -18,6 +18,8 @@ namespace safec
 
 // TODO: add option to break the iteration when walker fails
 
+// TODO: add FAST WALKER strategy - parallel (and use in search)
+
 class WalkerStrategy
 {
 public:
