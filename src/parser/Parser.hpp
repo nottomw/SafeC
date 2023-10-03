@@ -31,12 +31,9 @@ public:
 
 private:
     size_t parseFile(const boost::filesystem::path &path);
-    void dumpFileWithModifications(const boost::filesystem::path &path);
 
     Semantics &mSemantics;
     boost::filesystem::path mCurrentlyParsedFile;
-
-    friend class Generator;
 };
 
 } // namespace safec
