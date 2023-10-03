@@ -30,6 +30,14 @@ void WalkerDeferExecute::peek(SemNodeDefer &node, const uint32_t astLevel)
     mAstLevelPrev = astLevel;
 
     deferArm(node, astLevel);
+
+    // fire the defer in current scope
+    auto &deferAttachedNodes = node.getAttachedNodes();
+    assert(deferAttachedNodes.size() > 0);
+    auto deferredOperation = deferAttachedNodes[0];
+    log("FIRING & UNARMING DEFER: %", Color::Green, deferredOperation->getTypeStr());
+
+    scopeGetCurrent()->attach(deferredOperation);
 }
 
 void WalkerDeferExecute::peek(SemNodeReturn &node, const uint32_t astLevel)
@@ -53,9 +61,14 @@ void WalkerDeferExecute::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerDeferExecute::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
+    mDefersArmed.clear(); // since this is a new function clear all previous defers
+    scopeRemove();        // remove previous function scope
+
     (void)getAstLevelEvent(astLevel);
     mAstLevelPrev = astLevel;
     scopeAdd(node);
+
+    log("--- function: %", Color::Blue, node.getName());
 }
 
 void WalkerDeferExecute::peek(SemNodeLoop &node, const uint32_t astLevel)
@@ -123,27 +136,25 @@ void WalkerDeferExecute::scopeRemove()
         return;
     }
 
-    // fire & unarm all defers in current scope
+    log("current defers (%):", mDefersArmed.size());
+    for (auto &it : mDefersArmed)
+    {
+        log("\t->defer ast: % name: %", it.mAstLevel, it.mDeferNode->getAttachedNodes()[0]->getTypeStr());
+    }
+
+    // erase all defers matching the previous ast level
     auto it = mDefersArmed.begin();
     while (it != mDefersArmed.end())
     {
-        bool erased = false;
-        if (it->mAstLevel == mAstLevelPrev)
+        if (it->mAstLevel >= mAstLevelPrev)
         {
-            auto &deferAttachedNodes = it->mDeferNode->getAttachedNodes();
-            assert(deferAttachedNodes.size() != 0);
-            auto deferredOperation = deferAttachedNodes[0];
-
-            log("FIRING & UNARMING DEFER: %", Color::Green, deferredOperation->getTypeStr());
-
-            //            auto currentScope = scopeGetCurrent();
-            //            currentScope->attach(deferredOperation);
-
+            log("REMOVING defer ast: % name: %",
+                Color::Cyan,
+                it->mAstLevel,
+                it->mDeferNode->getAttachedNodes()[0]->getTypeStr());
             it = mDefersArmed.erase(it);
-            erased = true;
         }
-
-        if (erased == false)
+        else
         {
             it++;
         }
