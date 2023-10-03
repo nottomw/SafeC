@@ -1,19 +1,16 @@
 #include "Generator.hpp"
 
+#include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
 
 namespace safec
 {
 
-Generator::Generator(safec::Parser &parser)
-    : mParser{parser}
+void Generator::generate( //
+    std::shared_ptr<SemNodeTranslationUnit> ast,
+    const bfs::path &outputFile)
 {
-}
-
-void Generator::generate(const bfs::path &outputFile)
-{
-    // For now just forward the request to parser.
-    mParser.dumpFileWithModifications(outputFile);
+    log("generating...");
 }
 
 } // namespace safec

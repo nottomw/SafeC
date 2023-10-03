@@ -2,15 +2,15 @@
 
 #include <any>
 #include <boost/filesystem.hpp>
+#include <memory>
 #include <string>
-#include <string_view>
 #include <utility>
-#include <vector>
 
 namespace safec
 {
 
 class Semantics;
+class SemNodeTranslationUnit;
 
 class Parser final
 {
@@ -26,6 +26,8 @@ public:
     size_t parse(const std::string &path);
     void displayAst() const;
     void displayCoverage() const;
+
+    std::shared_ptr<SemNodeTranslationUnit> getAst() const;
 
 private:
     size_t parseFile(const boost::filesystem::path &path);

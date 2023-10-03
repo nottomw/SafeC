@@ -37,6 +37,8 @@ public:
         const uint32_t stringIndex,
         const std::string &additional = "");
 
+    std::shared_ptr<SemNodeTranslationUnit> getAst() const;
+
 private:
     std::shared_ptr<SemNodeTranslationUnit> mTranslationUnit;
     boost::iostreams::mapped_file_source mSemanticsSourceFile;

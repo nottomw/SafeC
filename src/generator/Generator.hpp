@@ -1,22 +1,25 @@
 #pragma once
 
+#include "parser/semantics/SemNode.hpp"
+
 #include <boost/filesystem.hpp>
+#include <memory>
 
 namespace bfs = boost::filesystem;
 
-namespace safec {
+namespace safec
+{
 
 class Parser;
 
 class Generator
 {
 public:
-    Generator(Parser &parser);
-
-    void generate(const bfs::path &outputFile);
+    void generate( //
+        std::shared_ptr<SemNodeTranslationUnit> ast,
+        const bfs::path &outputFile);
 
 private:
-    Parser &mParser;
 };
 
-}
+} // namespace safec

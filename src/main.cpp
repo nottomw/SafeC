@@ -30,10 +30,6 @@ int main(int argc, char **argv)
         ("coverage,c", "display coverage info")                                                      //
         ("debug", "debug mode - display all possible info");
 
-    // TODO: add option to print AST
-    // TODO: add option to echo lexed/parsed file
-    // TODO: add option to switch parser to C99/GNU/other
-
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
@@ -115,13 +111,12 @@ int main(int argc, char **argv)
                 parser.displayCoverage();
             }
 
-            //            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
-            //            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
+            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
+            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
 
-            //            safec::log("Generating C file: '%'", outputFileFullPath.c_str());
-
-            //            safec::Generator generator{parser};
-            //            generator.generate(outputFileFullPath);
+            safec::log("Generating C file: '%'", outputFileFullPath.c_str());
+            safec::Generator generator;
+            generator.generate(parser.getAst(), outputFileFullPath);
         }
     }
 

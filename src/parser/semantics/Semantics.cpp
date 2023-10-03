@@ -341,6 +341,11 @@ void Semantics::handle( //
     }
 }
 
+std::shared_ptr<SemNodeTranslationUnit> Semantics::getAst() const
+{
+    return mTranslationUnit;
+}
+
 void Semantics::handleFunctionHeader( //
     const uint32_t stringIndex,
     const bool isVoidOrVoidPtrRetType)

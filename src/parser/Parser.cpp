@@ -13,6 +13,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 #include <iostream>
+#include <string_view>
 
 extern "C"
 {
@@ -82,6 +83,11 @@ void Parser::displayCoverage() const
     mSemantics.walk(walker, covChecker);
 
     covChecker.printReport();
+}
+
+std::shared_ptr<SemNodeTranslationUnit> Parser::getAst() const
+{
+    return mSemantics.getAst();
 }
 
 size_t Parser::parseFile(const bfs::path &path)
