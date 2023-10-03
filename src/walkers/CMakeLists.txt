@@ -6,6 +6,7 @@ add_library(walkers
     WalkerSourceCoverage.cpp
     WalkerSourceGen.cpp
     WalkerDeferExecute.cpp
+    WalkerFindById.cpp
 )
 
 add_library(safec::walkers ALIAS walkers)
