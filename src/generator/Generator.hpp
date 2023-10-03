@@ -1,6 +1,6 @@
 #pragma once
 
-#include "parser/semantics/SemNode.hpp"
+#include "semantic_nodes/SemNode.hpp"
 
 #include <filesystem>
 #include <memory>
@@ -20,6 +20,9 @@ public:
         const fs::path &outputFile);
 
 private:
+    void generateFinalSource( //
+        std::shared_ptr<SemNodeTranslationUnit> ast,
+        const fs::path &outputFile);
 };
 
 } // namespace safec

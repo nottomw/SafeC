@@ -1,8 +1,7 @@
-#include "SemNodeWalker.hpp"
+#include "walkers/SemNodeWalker.hpp"
 
 #include "WalkerStrategy.hpp"
-#include "semantics/SemNode.hpp"
-#include "semantics/SemNodeEnumeration.hpp"
+#include "semantic_nodes/SemNode.hpp"
 
 namespace safec
 {

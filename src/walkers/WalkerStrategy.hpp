@@ -1,7 +1,6 @@
 #pragma once
 
-#include "semantics/SemNode.hpp"
-#include "semantics/SemNodeEnumeration.hpp"
+#include "semantic_nodes/SemNode.hpp"
 
 #include <cassert>
 #include <cstdint>

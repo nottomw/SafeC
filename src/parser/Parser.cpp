@@ -2,10 +2,10 @@
 
 #include "logger/Logger.hpp"
 #include "semantics/Semantics.hpp"
-#include "semantics/walkers/SemNodeWalker.hpp"
-#include "semantics/walkers/WalkerPrint.hpp"
-#include "semantics/walkers/WalkerSourceCoverage.hpp"
 #include "utils/Utils.hpp"
+#include "walkers/SemNodeWalker.hpp"
+#include "walkers/WalkerPrint.hpp"
+#include "walkers/WalkerSourceCoverage.hpp"
 
 #include <cassert>
 #include <iostream>

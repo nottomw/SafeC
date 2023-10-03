@@ -1,7 +1,7 @@
 #include "WalkerSourceCoverage.hpp"
 
 #include "logger/Logger.hpp"
-#include "semantics/SemNode.hpp"
+#include "semantic_nodes/SemNode.hpp"
 
 #include <algorithm>
 

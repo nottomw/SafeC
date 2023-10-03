@@ -2,7 +2,7 @@
 #include "generator/Generator.hpp"
 #include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
-#include "parser/semantics/SemanticsFactory.hpp"
+#include "semantics/SemanticsFactory.hpp"
 
 #include <boost/program_options.hpp>
 #include <filesystem>

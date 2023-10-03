@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SemNode.hpp"
 #include "SemanticsState.hpp"
 #include "SyntaxChunkTypes.hpp"
+#include "semantic_nodes/SemNode.hpp"
 
 #include <cstdint>
 #include <filesystem>

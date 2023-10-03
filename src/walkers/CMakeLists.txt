@@ -13,8 +13,7 @@ target_include_directories(walkers
         ${PROJECT_SOURCE_DIR}/parser
 )
 
-# TODO: temporary: need to supress unused param warning in references walker
-# until implemented
+# supressed because of peek() overloads - to strict
 target_compile_options(walkers PRIVATE -Wno-unused-parameter)
 
 target_link_libraries(walkers

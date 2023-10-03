@@ -7,7 +7,10 @@ include(${CMAKE_SOURCE_DIR}/cmake/Deps.cmake)
 add_subdirectory(logger)
 add_subdirectory(parser)
 add_subdirectory(generator)
+add_subdirectory(semantic_nodes)
+add_subdirectory(walkers)
 add_subdirectory(utils)
+add_subdirectory(semantics)
 add_subdirectory(config)
 
 add_executable(SafeCTranspiler

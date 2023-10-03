@@ -2,6 +2,7 @@
 
 #include "SyntaxChunkTypes.hpp"
 #include "logger/Logger.hpp"
+#include "semantic_nodes/SemNode.hpp"
 
 #include <memory>
 #include <string>

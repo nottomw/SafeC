@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdint>
+#include <string_view>
+
 // clang-format off
 
 // TODO: duplicate with SEMNODE_TYPE_SELECTOR_VALUE, move to common header

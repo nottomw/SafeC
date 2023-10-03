@@ -10,7 +10,15 @@ void Generator::generate( //
     std::shared_ptr<SemNodeTranslationUnit> ast,
     const fs::path &outputFile)
 {
-    log("generating...");
+    // run modifiying walkers here...
+
+    generateFinalSource(ast, outputFile);
+}
+
+void Generator::generateFinalSource( //
+    std::shared_ptr<SemNodeTranslationUnit> ast,
+    const std::filesystem::path &outputFile)
+{
 }
 
 } // namespace safec

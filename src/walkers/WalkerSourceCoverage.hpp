@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SemNodeWalker.hpp"
 #include "WalkerStrategy.hpp"
+#include "walkers/SemNodeWalker.hpp"
 
 #include <memory>
 #include <vector>
