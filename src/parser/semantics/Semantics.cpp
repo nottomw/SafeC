@@ -6,17 +6,14 @@
 #include "walkers/WalkerPrint.hpp"
 #include "walkers/WalkerSourceCoverage.hpp"
 
-#include <boost/filesystem/path.hpp>
 #include <cassert>
+#include <filesystem>
 #include <iostream>
 
 // TODO: typedefs not supported at all, current parser does not recognize the type
 
 namespace safec
 {
-
-namespace bio = ::boost::iostreams;
-namespace bfs = ::boost::filesystem;
 
 namespace
 {
@@ -36,10 +33,10 @@ Semantics::Semantics() //
     mState.addScope(mTranslationUnit);
 }
 
-void Semantics::newTranslationUnit(const bfs::path &path)
+void Semantics::newTranslationUnit(const fs::path &path)
 {
     mTranslationUnit->reset();
-    mSemanticsSourceFile = bio::mapped_file_source{path};
+    mTranslationUnitSourceFilePath = path;
 }
 
 void Semantics::walk(SemNodeWalker &walker, WalkerStrategy &strategy)

@@ -54,15 +54,31 @@ public:
         return mDisplayCoverage;
     }
 
+    void setGenerate(const bool g)
+    {
+        mGenerate = g;
+    }
+
+    bool getGenerate() const
+    {
+        return mGenerate;
+    }
+
 private:
     Config()
         : mDisplayAst{false}
-        , mDisplayParserInfo{false} {};
+        , mDisplayParserInfo{false}
+        , mNoColor{false}
+        , mDisplayCoverage{false}
+        , mGenerate{true}
+    {
+    }
 
     bool mDisplayAst;
     bool mDisplayParserInfo;
     bool mNoColor;
     bool mDisplayCoverage;
+    bool mGenerate;
 };
 
 } // namespace safec

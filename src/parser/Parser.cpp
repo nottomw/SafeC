@@ -7,10 +7,6 @@
 #include "semantics/walkers/WalkerSourceCoverage.hpp"
 #include "utils/Utils.hpp"
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <cassert>
 #include <iostream>
 #include <string_view>
@@ -26,7 +22,7 @@ extern "C"
     extern int lex_current_char;
 }
 
-namespace bfs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace safec
 {
@@ -41,19 +37,19 @@ size_t Parser::parse(const std::string &path)
 {
     size_t charCount = 0;
 
-    const bfs::path filePathBoost{path};
-    if (bfs::exists(filePathBoost) == false)
+    const fs::path filePath{path};
+    if (fs::exists(filePath) == false)
     {
         throw std::runtime_error("file not found");
     }
 
-    if (bfs::is_directory(filePathBoost) == true)
+    if (fs::is_directory(filePath) == true)
     {
         throw std::runtime_error("got directory to transpile - file required");
     }
-    else if (bfs::is_regular_file(filePathBoost) == true)
+    else if (fs::is_regular_file(filePath) == true)
     {
-        charCount = parseFile(filePathBoost);
+        charCount = parseFile(filePath);
     }
     else
     {
@@ -90,9 +86,9 @@ std::shared_ptr<SemNodeTranslationUnit> Parser::getAst() const
     return mSemantics.getAst();
 }
 
-size_t Parser::parseFile(const bfs::path &path)
+size_t Parser::parseFile(const fs::path &path)
 {
-    assert(bfs::is_regular_file(path) == true);
+    assert(fs::is_regular_file(path) == true);
 
     mCurrentlyParsedFile = path;
 

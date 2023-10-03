@@ -4,17 +4,14 @@
 #include "SemanticsState.hpp"
 #include "SyntaxChunkTypes.hpp"
 
-#include <boost/iostreams/device/mapped_file.hpp>
 #include <cstdint>
+#include <filesystem>
 #include <string>
-
-namespace boost::filesystem
-{
-class path;
-} // namespace boost::filesystem
 
 namespace safec
 {
+
+namespace fs = ::std::filesystem;
 
 class SemNodeWalker;
 class WalkerStrategy;
@@ -29,7 +26,7 @@ public:
     Semantics &operator=(const Semantics &) = delete;
     Semantics &operator=(Semantics &&) = delete;
 
-    void newTranslationUnit(const boost::filesystem::path &path);
+    void newTranslationUnit(const fs::path &path);
     void walk(SemNodeWalker &walker, WalkerStrategy &strategy);
 
     void handle( //
@@ -41,7 +38,7 @@ public:
 
 private:
     std::shared_ptr<SemNodeTranslationUnit> mTranslationUnit;
-    boost::iostreams::mapped_file_source mSemanticsSourceFile;
+    fs::path mTranslationUnitSourceFilePath;
 
     SemanticsState mState;
 

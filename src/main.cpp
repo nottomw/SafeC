@@ -4,16 +4,15 @@
 #include "parser/Parser.hpp"
 #include "parser/semantics/SemanticsFactory.hpp"
 
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <vector>
 
 namespace po = boost::program_options;
-namespace bfs = boost::filesystem;
+namespace fs = std::filesystem;
 
-// TODO: maybe use std::filesystem instead of boost::filesystem
 // TODO: some proper functional/unit tests
 
 int main(int argc, char **argv)
@@ -28,6 +27,7 @@ int main(int argc, char **argv)
         ("parserdump,p", "dump parser info")                                                         //
         ("nocolor,n", "do not add color to logs")                                                    //
         ("coverage,c", "display coverage info")                                                      //
+        ("generate", "generate the output C file - now for debug purposes")                          //
         ("debug", "debug mode - display all possible info");
 
     po::variables_map vm;
@@ -66,15 +66,26 @@ int main(int argc, char **argv)
         safec::Config::getInstance().setDisplayCoverage(true);
     }
 
+    // eventually should generate by default, but for now hidden behind an option
+    if (vm.count("generate") != 0)
+    {
+        safec::Config::getInstance().setGenerate(true);
+    }
+    else
+    {
+        safec::Config::getInstance().setGenerate(false);
+    }
+
     if (vm.count("debug") != 0)
     {
         safec::Config::getInstance().setDisplayAst(true);
         safec::Config::getInstance().setDisplayParserInfo(true);
         safec::Config::getInstance().setDisplayCoverage(true);
+        safec::Config::getInstance().setGenerate(true);
     }
 
-    const auto outputDirectory = bfs::absolute(vm["output"].as<std::string>());
-    if (bfs::is_directory(outputDirectory) == false)
+    const auto outputDirectory = fs::absolute(vm["output"].as<std::string>());
+    if (fs::is_directory(outputDirectory) == false)
     {
         safec::log("provided 'output' parameter does not point to a directory");
         return -1;
@@ -111,12 +122,15 @@ int main(int argc, char **argv)
                 parser.displayCoverage();
             }
 
-            const auto outputFileName = bfs::path{it}.filename().replace_extension("c");
-            const auto outputFileFullPath = (outputDirectory / outputFileName).normalize();
+            if (safec::Config::getInstance().getGenerate())
+            {
+                const auto outputFileName = fs::path{it}.filename().replace_extension("c");
+                const auto outputFileFullPath = std::filesystem::weakly_canonical(outputDirectory / outputFileName);
 
-            safec::log("Generating C file: '%'", outputFileFullPath.c_str());
-            safec::Generator generator;
-            generator.generate(parser.getAst(), outputFileFullPath);
+                safec::log("Generating C file: '%'", outputFileFullPath.c_str());
+                safec::Generator generator;
+                generator.generate(parser.getAst(), outputFileFullPath);
+            }
         }
     }
 

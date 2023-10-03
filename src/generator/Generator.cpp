@@ -8,7 +8,7 @@ namespace safec
 
 void Generator::generate( //
     std::shared_ptr<SemNodeTranslationUnit> ast,
-    const bfs::path &outputFile)
+    const fs::path &outputFile)
 {
     log("generating...");
 }

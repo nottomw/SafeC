@@ -1,7 +1,7 @@
 #pragma once
 
 #include <any>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <utility>
@@ -30,10 +30,10 @@ public:
     std::shared_ptr<SemNodeTranslationUnit> getAst() const;
 
 private:
-    size_t parseFile(const boost::filesystem::path &path);
+    size_t parseFile(const std::filesystem::path &path);
 
     Semantics &mSemantics;
-    boost::filesystem::path mCurrentlyParsedFile;
+    std::filesystem::path mCurrentlyParsedFile;
 };
 
 } // namespace safec

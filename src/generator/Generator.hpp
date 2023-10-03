@@ -2,10 +2,10 @@
 
 #include "parser/semantics/SemNode.hpp"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <memory>
 
-namespace bfs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace safec
 {
@@ -17,7 +17,7 @@ class Generator
 public:
     void generate( //
         std::shared_ptr<SemNodeTranslationUnit> ast,
-        const bfs::path &outputFile);
+        const fs::path &outputFile);
 
 private:
 };
