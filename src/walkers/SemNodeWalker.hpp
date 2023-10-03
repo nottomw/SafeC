@@ -9,6 +9,8 @@ namespace safec
 class WalkerStrategy;
 class SemNode;
 
+// WARNING: the walker cannot modify the AST during walk...
+
 class SemNodeWalker
 {
 public:

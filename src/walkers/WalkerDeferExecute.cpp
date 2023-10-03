@@ -32,12 +32,13 @@ void WalkerDeferExecute::peek(SemNodeDefer &node, const uint32_t astLevel)
     deferArm(node, astLevel);
 
     // fire the defer in current scope
-    auto &deferAttachedNodes = node.getAttachedNodes();
-    assert(deferAttachedNodes.size() > 0);
-    auto deferredOperation = deferAttachedNodes[0];
-    log("FIRING & UNARMING DEFER: %", Color::Green, deferredOperation->getTypeStr());
 
-    scopeGetCurrent()->attach(deferredOperation);
+    DeferApplyInfo deferApply;
+    deferApply.mDeferNode = &node;
+    deferApply.mDeferOwnerScope = scopeGetCurrent();
+    deferApply.mScopeToAttachDefer = scopeGetCurrent();
+    deferApply.mNodeToPrefixWithDefer = nullptr;
+    mDeferApplyInfo.push_back(deferApply);
 }
 
 void WalkerDeferExecute::peek(SemNodeReturn &node, const uint32_t astLevel)
@@ -61,14 +62,12 @@ void WalkerDeferExecute::peek(SemNodeScope &node, const uint32_t astLevel)
 
 void WalkerDeferExecute::peek(SemNodeFunction &node, const uint32_t astLevel)
 {
-    mDefersArmed.clear(); // since this is a new function clear all previous defers
-    scopeRemove();        // remove previous function scope
+    //    mDefersArmed.clear(); // since this is a new function clear all previous defers
+    scopeRemove(); // remove previous function scope
 
     (void)getAstLevelEvent(astLevel);
     mAstLevelPrev = astLevel;
     scopeAdd(node);
-
-    log("--- function: %", Color::Blue, node.getName());
 }
 
 void WalkerDeferExecute::peek(SemNodeLoop &node, const uint32_t astLevel)
@@ -90,6 +89,42 @@ void WalkerDeferExecute::peek(SemNodeSwitchCaseLabel &node, const uint32_t astLe
     (void)getAstLevelEvent(astLevel);
     mAstLevelPrev = astLevel;
     scopeAdd(node);
+}
+
+void WalkerDeferExecute::commit()
+{
+    // apply all deferred changes
+    for (auto &it : mDeferApplyInfo)
+    {
+        auto &deferAttachedNodes = it.mDeferNode->getAttachedNodes();
+        assert(deferAttachedNodes.size() > 0);
+
+        auto deferredOperation = deferAttachedNodes[0];
+        if (it.mScopeToAttachDefer != nullptr)
+        {
+            it.mScopeToAttachDefer->attach(deferredOperation);
+        }
+    }
+
+    //        // remove the defer nodes from AST
+    //    for (auto &it : mDeferApplyInfo)
+    //    {
+    //        auto &ownerScopeAttachedNodes = it.mDeferOwnerScope->getAttachedNodes();
+    //        auto ownerScopeNodeIt = ownerScopeAttachedNodes.begin();
+    //        while (ownerScopeNodeIt != ownerScopeAttachedNodes.end())
+    //        {
+    //            auto &nodeIt = *ownerScopeNodeIt;
+    //            if (nodeIt->getId() == it.mDeferNode->getId())
+    //            {
+    //                ownerScopeNodeIt = ownerScopeAttachedNodes.erase(ownerScopeNodeIt);
+    //                break;
+    //            }
+    //            else
+    //            {
+    //                ownerScopeNodeIt++;
+    //            }
+    //        }
+    //    }
 }
 
 WalkerDeferExecute::AstLevelEvent WalkerDeferExecute::getAstLevelEvent(const uint32_t currentAstLevel)
@@ -136,22 +171,12 @@ void WalkerDeferExecute::scopeRemove()
         return;
     }
 
-    log("current defers (%):", mDefersArmed.size());
-    for (auto &it : mDefersArmed)
-    {
-        log("\t->defer ast: % name: %", it.mAstLevel, it.mDeferNode->getAttachedNodes()[0]->getTypeStr());
-    }
-
-    // erase all defers matching the previous ast level
+    // erase all defers matching the previous & bigger ast levels
     auto it = mDefersArmed.begin();
     while (it != mDefersArmed.end())
     {
         if (it->mAstLevel >= mAstLevelPrev)
         {
-            log("REMOVING defer ast: % name: %",
-                Color::Cyan,
-                it->mAstLevel,
-                it->mDeferNode->getAttachedNodes()[0]->getTypeStr());
             it = mDefersArmed.erase(it);
         }
         else

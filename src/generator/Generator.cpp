@@ -17,6 +17,7 @@ void Generator::generate( //
     // run modifiying walkers here...
     WalkerDeferExecute deferExec;
     mWalker.walk(*ast, deferExec);
+    deferExec.commit();
 
     // DBG: print modified AST
     WalkerPrint printer;

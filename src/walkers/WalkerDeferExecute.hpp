@@ -29,6 +29,8 @@ public:
     void peek(SemNodeIf &node, const uint32_t astLevel) override;
     void peek(SemNodeSwitchCaseLabel &node, const uint32_t astLevel) override;
 
+    void commit();
+
 private:
     struct DeferInfo
     {
@@ -36,9 +38,18 @@ private:
         SemNodeDefer *mDeferNode;
     };
 
+    struct DeferApplyInfo
+    {
+        SemNodeDefer *mDeferNode;
+        SemNode *mDeferOwnerScope;
+        SemNode *mScopeToAttachDefer;
+        SemNode *mNodeToPrefixWithDefer;
+    };
+
     uint32_t mAstLevelPrev;
     std::vector<SemNode *> mScopes;
     std::vector<DeferInfo> mDefersArmed;
+    std::vector<DeferApplyInfo> mDeferApplyInfo;
 
     enum class AstLevelEvent
     {
