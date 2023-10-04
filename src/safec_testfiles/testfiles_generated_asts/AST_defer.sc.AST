@@ -1,5 +1,5 @@
 Parsing file: 'AST_defer.sc'...
-Parsing done, characters count 3460
+Parsing done, characters count 3726
 
 AST:
 [0] TranslationUnit
@@ -66,275 +66,304 @@ AST:
 		[2] PostfixExpression '(...)' { 702 -- 728 }
 			[3] Identifier 'printf' { 0 -- 0 }
 				[4] Constant '"fun end\n"' { 0 -- 0 }
-	[1] Function (void DEFER_CONDITION_MULTIPLE (int someParam,  )) { 730 -- 979 }
-		[2] Defer { 788 -- 804 }
-			[3] PostfixExpression '(...)' { 788 -- 803 }
+	[1] Function (void DEFER_CONDITION_MULTIPLE_NESTED (int someParam,  )) { 730 -- 986 }
+		[2] Defer { 795 -- 811 }
+			[3] PostfixExpression '(...)' { 795 -- 810 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"last"' { 0 -- 0 }
-		[2] If { 804 -- 977 }
+		[2] If { 811 -- 984 }
 			[3] Group
-				[4] BinaryOp '>' { 812 -- 829 }
+				[4] BinaryOp '>' { 819 -- 836 }
 					[5] Identifier 'someParam' { 0 -- 0 }
 					[5] Constant '10' { 0 -- 0 }
-			[3] Defer { 849 -- 864 }
-				[4] PostfixExpression '(...)' { 849 -- 863 }
+			[3] Defer { 856 -- 871 }
+				[4] PostfixExpression '(...)' { 856 -- 870 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] If { 864 -- 971 }
+			[3] If { 871 -- 978 }
 				[4] Group
-					[5] BinaryOp '<' { 875 -- 891 }
+					[5] BinaryOp '<' { 882 -- 898 }
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
-				[4] Defer { 919 -- 934 }
-					[5] PostfixExpression '(...)' { 919 -- 933 }
+				[4] Defer { 926 -- 941 }
+					[5] PostfixExpression '(...)' { 926 -- 940 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"2\n"' { 0 -- 0 }
-				[4] PostfixExpression '(...)' { 934 -- 961 }
+				[4] PostfixExpression '(...)' { 941 -- 968 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"1\n"' { 0 -- 0 }
-	[1] Function (void DEFER_LOOP ( )) { 979 -- 1220 }
-		[2] BinaryOp '=' { 1012 -- 1019 }
+	[1] Function (void DEFER_CONDITION_MULTIPLE (int someParam,  )) { 986 -- 1245 }
+		[2] Defer { 1044 -- 1060 }
+			[3] PostfixExpression '(...)' { 1044 -- 1059 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"last"' { 0 -- 0 }
+		[2] If { 1060 -- 1151 }
+			[3] Group
+				[4] BinaryOp '>' { 1068 -- 1085 }
+					[5] Identifier 'someParam' { 0 -- 0 }
+					[5] Constant '10' { 0 -- 0 }
+			[3] Defer { 1105 -- 1122 }
+				[4] PostfixExpression '(...)' { 1105 -- 1121 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"1.2\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 1122 -- 1145 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1.1"' { 0 -- 0 }
+		[2] If { 1151 -- 1243 }
+			[3] Group
+				[4] BinaryOp '<' { 1159 -- 1175 }
+					[5] Identifier 'someParam' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+			[3] Defer { 1195 -- 1212 }
+				[4] PostfixExpression '(...)' { 1195 -- 1211 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"2.2\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 1212 -- 1237 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2.1\n"' { 0 -- 0 }
+	[1] Function (void DEFER_LOOP ( )) { 1245 -- 1486 }
+		[2] BinaryOp '=' { 1278 -- 1285 }
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop for { 1019 -- 1111 }
+		[2] Loop for { 1285 -- 1377 }
 			[3] Group
-				[4] BinaryOp '=' { 1027 -- 1035 }
+				[4] BinaryOp '=' { 1293 -- 1301 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 1035 -- 1042 }
+				[4] BinaryOp '<' { 1301 -- 1308 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 1042 -- 1046 }
+				[4] PostfixExpression '++' { 1308 -- 1312 }
 					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer { 1067 -- 1082 }
-				[4] PostfixExpression '(...)' { 1067 -- 1081 }
+			[3] Defer { 1333 -- 1348 }
+				[4] PostfixExpression '(...)' { 1333 -- 1347 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 1082 -- 1105 }
+			[3] PostfixExpression '(...)' { 1348 -- 1371 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-		[2] BinaryOp '=' { 1111 -- 1123 }
+		[2] BinaryOp '=' { 1377 -- 1389 }
 			[3] Identifier 'i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop while { 1123 -- 1218 }
+		[2] Loop while { 1389 -- 1484 }
 			[3] Group
-				[4] BinaryOp '<' { 1133 -- 1141 }
+				[4] BinaryOp '<' { 1399 -- 1407 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-			[3] Defer { 1161 -- 1176 }
-				[4] PostfixExpression '(...)' { 1161 -- 1175 }
+			[3] Defer { 1427 -- 1442 }
+				[4] PostfixExpression '(...)' { 1427 -- 1441 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 1176 -- 1199 }
+			[3] PostfixExpression '(...)' { 1442 -- 1465 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression '++' { 1199 -- 1212 }
+			[3] PostfixExpression '++' { 1465 -- 1478 }
 				[4] Identifier 'i' { 0 -- 0 }
-	[1] Function (void DEFER_LOOP_BREAK (int param,  )) { 1220 -- 1602 }
-		[2] BinaryOp '=' { 1264 -- 1271 }
+	[1] Function (void DEFER_LOOP_BREAK (int param,  )) { 1486 -- 1868 }
+		[2] BinaryOp '=' { 1530 -- 1537 }
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop for { 1271 -- 1428 }
+		[2] Loop for { 1537 -- 1694 }
 			[3] Group
-				[4] BinaryOp '=' { 1279 -- 1287 }
+				[4] BinaryOp '=' { 1545 -- 1553 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 1287 -- 1294 }
+				[4] BinaryOp '<' { 1553 -- 1560 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 1294 -- 1298 }
+				[4] PostfixExpression '++' { 1560 -- 1564 }
 					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer { 1319 -- 1334 }
-				[4] PostfixExpression '(...)' { 1319 -- 1333 }
+			[3] Defer { 1585 -- 1600 }
+				[4] PostfixExpression '(...)' { 1585 -- 1599 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] If { 1334 -- 1398 }
+			[3] If { 1600 -- 1664 }
 				[4] Group
-					[5] BinaryOp '==' { 1346 -- 1359 }
+					[5] BinaryOp '==' { 1612 -- 1625 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'break' { 1387 -- 1388 }
-			[3] PostfixExpression '(...)' { 1398 -- 1422 }
+				[4] JumpStatement 'break' { 1653 -- 1654 }
+			[3] PostfixExpression '(...)' { 1664 -- 1688 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-		[2] BinaryOp '=' { 1428 -- 1440 }
+		[2] BinaryOp '=' { 1694 -- 1706 }
 			[3] Identifier 'i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop while { 1440 -- 1600 }
+		[2] Loop while { 1706 -- 1866 }
 			[3] Group
-				[4] BinaryOp '<' { 1450 -- 1458 }
+				[4] BinaryOp '<' { 1716 -- 1724 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-			[3] Defer { 1478 -- 1493 }
-				[4] PostfixExpression '(...)' { 1478 -- 1492 }
+			[3] Defer { 1744 -- 1759 }
+				[4] PostfixExpression '(...)' { 1744 -- 1758 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] If { 1493 -- 1557 }
+			[3] If { 1759 -- 1823 }
 				[4] Group
-					[5] BinaryOp '==' { 1505 -- 1518 }
+					[5] BinaryOp '==' { 1771 -- 1784 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'break' { 1546 -- 1547 }
-			[3] PostfixExpression '(...)' { 1557 -- 1581 }
+				[4] JumpStatement 'break' { 1812 -- 1813 }
+			[3] PostfixExpression '(...)' { 1823 -- 1847 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression '++' { 1581 -- 1594 }
+			[3] PostfixExpression '++' { 1847 -- 1860 }
 				[4] Identifier 'i' { 0 -- 0 }
-	[1] Function (void DEFER_LOOP_CONTINUE (int param,  )) { 1602 -- 1993 }
-		[2] BinaryOp '=' { 1649 -- 1656 }
+	[1] Function (void DEFER_LOOP_CONTINUE (int param,  )) { 1868 -- 2259 }
+		[2] BinaryOp '=' { 1915 -- 1922 }
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop for { 1656 -- 1816 }
+		[2] Loop for { 1922 -- 2082 }
 			[3] Group
-				[4] BinaryOp '=' { 1664 -- 1672 }
+				[4] BinaryOp '=' { 1930 -- 1938 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 1672 -- 1679 }
+				[4] BinaryOp '<' { 1938 -- 1945 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 1679 -- 1683 }
+				[4] PostfixExpression '++' { 1945 -- 1949 }
 					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer { 1704 -- 1719 }
-				[4] PostfixExpression '(...)' { 1704 -- 1718 }
+			[3] Defer { 1970 -- 1985 }
+				[4] PostfixExpression '(...)' { 1970 -- 1984 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] If { 1719 -- 1786 }
+			[3] If { 1985 -- 2052 }
 				[4] Group
-					[5] BinaryOp '==' { 1731 -- 1744 }
+					[5] BinaryOp '==' { 1997 -- 2010 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'continue' { 1775 -- 1776 }
-			[3] PostfixExpression '(...)' { 1786 -- 1810 }
+				[4] JumpStatement 'continue' { 2041 -- 2042 }
+			[3] PostfixExpression '(...)' { 2052 -- 2076 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-		[2] BinaryOp '=' { 1816 -- 1828 }
+		[2] BinaryOp '=' { 2082 -- 2094 }
 			[3] Identifier 'i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop while { 1828 -- 1991 }
+		[2] Loop while { 2094 -- 2257 }
 			[3] Group
-				[4] BinaryOp '<' { 1838 -- 1846 }
+				[4] BinaryOp '<' { 2104 -- 2112 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-			[3] Defer { 1866 -- 1881 }
-				[4] PostfixExpression '(...)' { 1866 -- 1880 }
+			[3] Defer { 2132 -- 2147 }
+				[4] PostfixExpression '(...)' { 2132 -- 2146 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
-			[3] If { 1881 -- 1948 }
+			[3] If { 2147 -- 2214 }
 				[4] Group
-					[5] BinaryOp '==' { 1893 -- 1906 }
+					[5] BinaryOp '==' { 2159 -- 2172 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'continue' { 1937 -- 1938 }
-			[3] PostfixExpression '(...)' { 1948 -- 1972 }
+				[4] JumpStatement 'continue' { 2203 -- 2204 }
+			[3] PostfixExpression '(...)' { 2214 -- 2238 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression '++' { 1972 -- 1985 }
+			[3] PostfixExpression '++' { 2238 -- 2251 }
 				[4] Identifier 'i' { 0 -- 0 }
-	[1] Function (void DEFER_MULTIPLE ( )) { 1993 -- 2099 }
-		[2] Defer { 2032 -- 2047 }
-			[3] PostfixExpression '(...)' { 2032 -- 2046 }
+	[1] Function (void DEFER_MULTIPLE ( )) { 2259 -- 2365 }
+		[2] Defer { 2298 -- 2313 }
+			[3] PostfixExpression '(...)' { 2298 -- 2312 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"3\n"' { 0 -- 0 }
-		[2] Defer { 2047 -- 2072 }
-			[3] PostfixExpression '(...)' { 2047 -- 2071 }
+		[2] Defer { 2313 -- 2338 }
+			[3] PostfixExpression '(...)' { 2313 -- 2337 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"2\n"' { 0 -- 0 }
-		[2] Defer { 2072 -- 2097 }
-			[3] PostfixExpression '(...)' { 2072 -- 2096 }
+		[2] Defer { 2338 -- 2363 }
+			[3] PostfixExpression '(...)' { 2338 -- 2362 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
-	[1] Function (void DEFER_SWITCH_CASE (int param,  )) { 2099 -- 2393 }
-		[2] Defer { 2146 -- 2164 }
-			[3] PostfixExpression '(...)' { 2146 -- 2163 }
+	[1] Function (void DEFER_SWITCH_CASE (int param,  )) { 2365 -- 2659 }
+		[2] Defer { 2412 -- 2430 }
+			[3] PostfixExpression '(...)' { 2412 -- 2429 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"last\n"' { 0 -- 0 }
-		[2] SwitchCase on 'Identifier' { 2164 -- 2391 }
+		[2] SwitchCase on 'Identifier' { 2430 -- 2657 }
 			[3] Identifier 'param' { 0 -- 0 }
-			[3] SwitchCaseLabel on 'Constant' { 2203 -- 2233 }
+			[3] SwitchCaseLabel on 'Constant' { 2469 -- 2499 }
 				[4] Constant '0' { 0 -- 0 }
-				[4] PostfixExpression '(...)' { 2206 -- 2233 }
+				[4] PostfixExpression '(...)' { 2472 -- 2499 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"0\n"' { 0 -- 0 }
-			[3] JumpStatement 'break' { 2233 -- 2252 }
-			[3] SwitchCaseLabel on 'Constant' { 2252 -- 2296 }
+			[3] JumpStatement 'break' { 2499 -- 2518 }
+			[3] SwitchCaseLabel on 'Constant' { 2518 -- 2562 }
 				[4] Constant '1' { 0 -- 0 }
-				[4] PostfixExpression '(...)' { 2269 -- 2296 }
+				[4] PostfixExpression '(...)' { 2535 -- 2562 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"0\n"' { 0 -- 0 }
-			[3] JumpStatement 'break' { 2296 -- 2315 }
-			[3] SwitchCaseLabel on 'default' { 2315 -- 2366 }
+			[3] JumpStatement 'break' { 2562 -- 2581 }
+			[3] SwitchCaseLabel on 'default' { 2581 -- 2632 }
 				[4] EmptyStatement
-				[4] PostfixExpression '(...)' { 2333 -- 2366 }
+				[4] PostfixExpression '(...)' { 2599 -- 2632 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"default\n"' { 0 -- 0 }
-			[3] JumpStatement 'break' { 2366 -- 2385 }
-	[1] Function (void DEFER_STRANGE ( )) { 2393 -- 2651 }
-		[2] BinaryOp '=' { 2429 -- 2436 }
+			[3] JumpStatement 'break' { 2632 -- 2651 }
+	[1] Function (void DEFER_STRANGE ( )) { 2659 -- 2917 }
+		[2] BinaryOp '=' { 2695 -- 2702 }
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] Loop for { 2436 -- 2531 }
+		[2] Loop for { 2702 -- 2797 }
 			[3] Group
-				[4] BinaryOp '=' { 2478 -- 2486 }
+				[4] BinaryOp '=' { 2744 -- 2752 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 2486 -- 2493 }
+				[4] BinaryOp '<' { 2752 -- 2759 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 2493 -- 2497 }
+				[4] PostfixExpression '++' { 2759 -- 2763 }
 					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer { 2498 -- 2531 }
-				[4] PostfixExpression '(...)' { 2498 -- 2530 }
+			[3] Defer { 2764 -- 2797 }
+				[4] PostfixExpression '(...)' { 2764 -- 2796 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"%d\n"' { 0 -- 0 }
 						[6] Identifier 'i' { 0 -- 0 }
-		[2] If { 2531 -- 2598 }
+		[2] If { 2797 -- 2864 }
 			[3] Group
-				[4] BinaryOp '==' { 2539 -- 2548 }
+				[4] BinaryOp '==' { 2805 -- 2814 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
-			[3] Defer { 2548 -- 2598 }
-				[4] PostfixExpression '(...)' { 2548 -- 2597 }
+			[3] Defer { 2814 -- 2864 }
+				[4] PostfixExpression '(...)' { 2814 -- 2863 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"deferred print in cond\n"' { 0 -- 0 }
-		[2] Defer { 2598 -- 2649 }
-			[3] PostfixExpression '(...)' { 2598 -- 2648 }
+		[2] Defer { 2864 -- 2915 }
+			[3] PostfixExpression '(...)' { 2864 -- 2914 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"last statement in function\n"' { 0 -- 0 }
-	[1] Function (void DEFER_WITH_COMPL_STATEMENTS ( )) { 2651 -- 3034 }
-		[2] BinaryOp '=' { 2701 -- 2714 }
+	[1] Function (void DEFER_WITH_COMPL_STATEMENTS ( )) { 2917 -- 3300 }
+		[2] BinaryOp '=' { 2967 -- 2980 }
 			[3] Declaration 'int counter' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
-		[2] BinaryOp '=' { 2714 -- 2741 }
+		[2] BinaryOp '=' { 2980 -- 3007 }
 			[3] Declaration 'int counterSecond' { 0 -- 0 }
 			[3] Constant '5' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 2741 -- 2769 }
+		[2] PostfixExpression '(...)' { 3007 -- 3035 }
 			[3] Identifier 'printf' { 0 -- 0 }
 				[4] Constant '"fun start\n"' { 0 -- 0 }
-		[2] Scope { 2769 -- 2852 }
-			[3] Defer { 2790 -- 2804 }
-				[4] BinaryOp '+=' { 2790 -- 2804 }
+		[2] Scope { 3035 -- 3118 }
+			[3] Defer { 3056 -- 3070 }
+				[4] BinaryOp '+=' { 3056 -- 3070 }
 					[5] Identifier 'counter' { 0 -- 0 }
 					[5] Constant '1' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 2804 -- 2846 }
+			[3] PostfixExpression '(...)' { 3070 -- 3112 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"counter: %d\n"' { 0 -- 0 }
 					[5] Identifier 'counter' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 2852 -- 2890 }
+		[2] PostfixExpression '(...)' { 3118 -- 3156 }
 			[3] Identifier 'printf' { 0 -- 0 }
 				[4] Constant '"counter: %d\n"' { 0 -- 0 }
 				[4] Identifier 'counter' { 0 -- 0 }
-		[2] Scope { 2890 -- 2994 }
-			[3] Defer { 2911 -- 2946 }
-				[4] BinaryOp '=' { 2911 -- 2946 }
+		[2] Scope { 3156 -- 3260 }
+			[3] Defer { 3177 -- 3212 }
+				[4] BinaryOp '=' { 3177 -- 3212 }
 					[5] Identifier 'counter' { 0 -- 0 }
 					[5] BinaryOp '+' { 0 -- 0 }
 						[6] Identifier 'counterSecond' { 0 -- 0 }
 						[6] Identifier 'counter' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 2946 -- 2988 }
+			[3] PostfixExpression '(...)' { 3212 -- 3254 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"counter: %d\n"' { 0 -- 0 }
 					[5] Identifier 'counter' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 2994 -- 3032 }
+		[2] PostfixExpression '(...)' { 3260 -- 3298 }
 			[3] Identifier 'printf' { 0 -- 0 }
 				[4] Constant '"counter: %d\n"' { 0 -- 0 }
 				[4] Identifier 'counter' { 0 -- 0 }
