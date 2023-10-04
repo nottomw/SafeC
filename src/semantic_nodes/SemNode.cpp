@@ -78,6 +78,16 @@ uint32_t SemNode::getId() const
     return mId;
 }
 
+void SemNode::setDirty(const bool dirty)
+{
+    mDirty = dirty;
+}
+
+bool SemNode::getDirty() const
+{
+    return mDirty;
+}
+
 SemNodeTranslationUnit::SemNodeTranslationUnit()
 {
     mType = Type::TranslationUnit;

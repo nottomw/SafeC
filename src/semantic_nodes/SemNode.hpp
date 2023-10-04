@@ -56,6 +56,11 @@ public:
 
     uint32_t getId() const;
 
+    // if the node was modified and the generator
+    // needs to know, mark the node as dirty
+    void setDirty(const bool dirty);
+    bool getDirty() const;
+
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
@@ -65,6 +70,8 @@ protected:
 
     static uint32_t mIdGlobal;
     uint32_t mId;
+
+    bool mDirty;
 
     friend class SemNodeWalker;
 };
