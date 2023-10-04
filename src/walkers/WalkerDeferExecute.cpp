@@ -56,11 +56,15 @@ void WalkerDeferExecute::peek(SemNodeDefer &node, const uint32_t astLevel)
 void WalkerDeferExecute::peek(SemNodeReturn &node, const uint32_t astLevel)
 {
     scopeRemoveIfLeftScope(astLevel);
+
+    // TODO: fire ALL ARMED (return) defers before current node
 }
 
 void WalkerDeferExecute::peek(SemNodeJumpStatement &node, const uint32_t astLevel)
 {
     scopeRemoveIfLeftScope(astLevel);
+
+    // TODO: fire armed defers from current scope
 }
 
 void WalkerDeferExecute::peek(SemNodeScope &node, const uint32_t astLevel)
