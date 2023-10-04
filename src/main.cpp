@@ -83,7 +83,8 @@ int main(int argc, char **argv)
     {
         if (cfg.getGenerate() == false)
         {
-            throw std::runtime_error("when using --astdump-mod --generate must be also set");
+            safec::log("ERROR: when using --astdump-mod --generate must be also set");
+            return -1;
         }
 
         cfg.setDisplayAstMod(true);
