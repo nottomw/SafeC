@@ -9,6 +9,7 @@ SemNode::SemNode() //
     , mSemStart{0}
     , mSemEnd{0}
     , mId{mIdGlobal++}
+    , mDirty{false}
 {
 }
 
@@ -16,6 +17,8 @@ SemNode::SemNode(const SemNode::Type type) //
     : mType{type}
     , mSemStart{0}
     , mSemEnd{0}
+    , mId{mIdGlobal++}
+    , mDirty{false}
 {
 }
 
