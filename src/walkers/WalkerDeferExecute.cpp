@@ -16,6 +16,9 @@ namespace
     WalkerFindById finder{id};
     SemNodeWalker walker;
 
+    // TODO: instead of SemNodeWalker could write something like
+    //       SemNodeWalkerParallel to search the AST faster...
+
     walker.walk(haystack, finder);
 
     assert(finder.getResult() != nullptr);
