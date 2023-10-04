@@ -1,0 +1,347 @@
+Parsing file: 'AST_defer.sc'...
+Parsing done, characters count 3726
+
+Generating C file: '/tmp/AST_defer.c'
+
+Modified AST:
+
+[0] TranslationUnit
+	[1] Function (DIRTY)  (void DEFER_FUNCTION_SCOPE ( )) { 0 -- 163 }
+		[2] PostfixExpression '(...)' { 64 -- 87 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"function scope 1\n"' { 0 -- 0 }
+		[2] PostfixExpression '(...)' { 127 -- 161 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"function scope 2\n"' { 0 -- 0 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"function scope 3\n"' { 0 -- 0 }
+	[1] Function (void DEFER_SIMPLE_SCOPE_ONLY ( )) { 163 -- 308 }
+		[2] Scope (DIRTY)  { 207 -- 306 }
+			[3] PostfixExpression '(...)' { 222 -- 236 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"scope 1\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 271 -- 300 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"scope 2\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"scope 3\n"' { 0 -- 0 }
+	[1] Function (void DEFER_SIMPLE_SCOPE ( )) { 308 -- 524 }
+		[2] PostfixExpression '(...)' { 352 -- 379 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"function scope start\n"' { 0 -- 0 }
+		[2] Scope (DIRTY)  { 379 -- 485 }
+			[3] PostfixExpression '(...)' { 401 -- 415 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"scope 1\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 450 -- 479 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"scope 2\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"scope 3\n"' { 0 -- 0 }
+		[2] PostfixExpression '(...)' { 485 -- 522 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"function scope end\n"' { 0 -- 0 }
+	[1] Function (void DEFER_CONDITION (int someParam,  )) { 524 -- 730 }
+		[2] PostfixExpression '(...)' { 574 -- 590 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"fun start\n"' { 0 -- 0 }
+		[2] If (DIRTY)  { 590 -- 702 }
+			[3] Group
+				[4] BinaryOp '==' { 598 -- 615 }
+					[5] Identifier 'someParam' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 636 -- 644 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 673 -- 696 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"3\n"' { 0 -- 0 }
+		[2] PostfixExpression '(...)' { 702 -- 728 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"fun end\n"' { 0 -- 0 }
+	[1] Function (DIRTY)  (void DEFER_CONDITION_MULTIPLE_NESTED (int someParam,  )) { 730 -- 986 }
+		[2] If (DIRTY)  { 811 -- 984 }
+			[3] Group
+				[4] BinaryOp '>' { 819 -- 836 }
+					[5] Identifier 'someParam' { 0 -- 0 }
+					[5] Constant '10' { 0 -- 0 }
+			[3] If (DIRTY)  { 871 -- 978 }
+				[4] Group
+					[5] BinaryOp '<' { 882 -- 898 }
+						[6] Identifier 'someParam' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 941 -- 968 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"1\n"' { 0 -- 0 }
+				[4] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"2\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"last"' { 0 -- 0 }
+	[1] Function (DIRTY)  (void DEFER_CONDITION_MULTIPLE (int someParam,  )) { 986 -- 1245 }
+		[2] If (DIRTY)  { 1060 -- 1151 }
+			[3] Group
+				[4] BinaryOp '>' { 1068 -- 1085 }
+					[5] Identifier 'someParam' { 0 -- 0 }
+					[5] Constant '10' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 1122 -- 1145 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1.1"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1.2\n"' { 0 -- 0 }
+		[2] If (DIRTY)  { 1151 -- 1243 }
+			[3] Group
+				[4] BinaryOp '<' { 1159 -- 1175 }
+					[5] Identifier 'someParam' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 1212 -- 1237 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2.1\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2.2\n"' { 0 -- 0 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"last"' { 0 -- 0 }
+	[1] Function (void DEFER_LOOP ( )) { 1245 -- 1486 }
+		[2] BinaryOp '=' { 1278 -- 1285 }
+			[3] Declaration 'int i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  for { 1285 -- 1377 }
+			[3] Group
+				[4] BinaryOp '=' { 1293 -- 1301 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '0' { 0 -- 0 }
+				[4] BinaryOp '<' { 1301 -- 1308 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+				[4] PostfixExpression '++' { 1308 -- 1312 }
+					[5] Identifier 'i' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 1348 -- 1371 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+		[2] BinaryOp '=' { 1377 -- 1389 }
+			[3] Identifier 'i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  while { 1389 -- 1484 }
+			[3] Group
+				[4] BinaryOp '<' { 1399 -- 1407 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 1442 -- 1465 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression '++' { 1465 -- 1478 }
+				[4] Identifier 'i' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+	[1] Function (void DEFER_LOOP_BREAK (int param,  )) { 1486 -- 1868 }
+		[2] BinaryOp '=' { 1530 -- 1537 }
+			[3] Declaration 'int i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  for { 1537 -- 1694 }
+			[3] Group
+				[4] BinaryOp '=' { 1545 -- 1553 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '0' { 0 -- 0 }
+				[4] BinaryOp '<' { 1553 -- 1560 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+				[4] PostfixExpression '++' { 1560 -- 1564 }
+					[5] Identifier 'i' { 0 -- 0 }
+			[3] If { 1600 -- 1664 }
+				[4] Group
+					[5] BinaryOp '==' { 1612 -- 1625 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Identifier 'param' { 0 -- 0 }
+				[4] JumpStatement 'break' { 1653 -- 1654 }
+			[3] PostfixExpression '(...)' { 1664 -- 1688 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+		[2] BinaryOp '=' { 1694 -- 1706 }
+			[3] Identifier 'i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  while { 1706 -- 1866 }
+			[3] Group
+				[4] BinaryOp '<' { 1716 -- 1724 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+			[3] If { 1759 -- 1823 }
+				[4] Group
+					[5] BinaryOp '==' { 1771 -- 1784 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Identifier 'param' { 0 -- 0 }
+				[4] JumpStatement 'break' { 1812 -- 1813 }
+			[3] PostfixExpression '(...)' { 1823 -- 1847 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression '++' { 1847 -- 1860 }
+				[4] Identifier 'i' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+	[1] Function (void DEFER_LOOP_CONTINUE (int param,  )) { 1868 -- 2259 }
+		[2] BinaryOp '=' { 1915 -- 1922 }
+			[3] Declaration 'int i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  for { 1922 -- 2082 }
+			[3] Group
+				[4] BinaryOp '=' { 1930 -- 1938 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '0' { 0 -- 0 }
+				[4] BinaryOp '<' { 1938 -- 1945 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+				[4] PostfixExpression '++' { 1945 -- 1949 }
+					[5] Identifier 'i' { 0 -- 0 }
+			[3] If { 1985 -- 2052 }
+				[4] Group
+					[5] BinaryOp '==' { 1997 -- 2010 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Identifier 'param' { 0 -- 0 }
+				[4] JumpStatement 'continue' { 2041 -- 2042 }
+			[3] PostfixExpression '(...)' { 2052 -- 2076 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+		[2] BinaryOp '=' { 2082 -- 2094 }
+			[3] Identifier 'i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  while { 2094 -- 2257 }
+			[3] Group
+				[4] BinaryOp '<' { 2104 -- 2112 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+			[3] If { 2147 -- 2214 }
+				[4] Group
+					[5] BinaryOp '==' { 2159 -- 2172 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Identifier 'param' { 0 -- 0 }
+				[4] JumpStatement 'continue' { 2203 -- 2204 }
+			[3] PostfixExpression '(...)' { 2214 -- 2238 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression '++' { 2238 -- 2251 }
+				[4] Identifier 'i' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"2\n"' { 0 -- 0 }
+	[1] Function (DIRTY)  (void DEFER_MULTIPLE ( )) { 2259 -- 2365 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"3\n"' { 0 -- 0 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"2\n"' { 0 -- 0 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"1\n"' { 0 -- 0 }
+	[1] Function (DIRTY)  (void DEFER_SWITCH_CASE (int param,  )) { 2365 -- 2659 }
+		[2] SwitchCase on 'Identifier' { 2430 -- 2657 }
+			[3] Identifier 'param' { 0 -- 0 }
+			[3] SwitchCaseLabel on 'Constant' { 2469 -- 2499 }
+				[4] Constant '0' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 2472 -- 2499 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"0\n"' { 0 -- 0 }
+			[3] JumpStatement 'break' { 2499 -- 2518 }
+			[3] SwitchCaseLabel on 'Constant' { 2518 -- 2562 }
+				[4] Constant '1' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 2535 -- 2562 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"0\n"' { 0 -- 0 }
+			[3] JumpStatement 'break' { 2562 -- 2581 }
+			[3] SwitchCaseLabel on 'default' { 2581 -- 2632 }
+				[4] EmptyStatement
+				[4] PostfixExpression '(...)' { 2599 -- 2632 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"default\n"' { 0 -- 0 }
+			[3] JumpStatement 'break' { 2632 -- 2651 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"last\n"' { 0 -- 0 }
+	[1] Function (DIRTY)  (void DEFER_STRANGE ( )) { 2659 -- 2917 }
+		[2] BinaryOp '=' { 2695 -- 2702 }
+			[3] Declaration 'int i' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] Loop (DIRTY)  for { 2702 -- 2797 }
+			[3] Group
+				[4] BinaryOp '=' { 2744 -- 2752 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '0' { 0 -- 0 }
+				[4] BinaryOp '<' { 2752 -- 2759 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '5' { 0 -- 0 }
+				[4] PostfixExpression '++' { 2759 -- 2763 }
+					[5] Identifier 'i' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"%d\n"' { 0 -- 0 }
+					[5] Identifier 'i' { 0 -- 0 }
+		[2] If (DIRTY)  { 2797 -- 2864 }
+			[3] Group
+				[4] BinaryOp '==' { 2805 -- 2814 }
+					[5] Identifier 'i' { 0 -- 0 }
+					[5] Constant '0' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"deferred print in cond\n"' { 0 -- 0 }
+		[2] PostfixExpression (DIRTY)  '(...)' { 0 -- 0 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"last statement in function\n"' { 0 -- 0 }
+	[1] Function (void DEFER_WITH_COMPL_STATEMENTS ( )) { 2917 -- 3300 }
+		[2] BinaryOp '=' { 2967 -- 2980 }
+			[3] Declaration 'int counter' { 0 -- 0 }
+			[3] Constant '0' { 0 -- 0 }
+		[2] BinaryOp '=' { 2980 -- 3007 }
+			[3] Declaration 'int counterSecond' { 0 -- 0 }
+			[3] Constant '5' { 0 -- 0 }
+		[2] PostfixExpression '(...)' { 3007 -- 3035 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"fun start\n"' { 0 -- 0 }
+		[2] Scope (DIRTY)  { 3035 -- 3118 }
+			[3] PostfixExpression '(...)' { 3070 -- 3112 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"counter: %d\n"' { 0 -- 0 }
+					[5] Identifier 'counter' { 0 -- 0 }
+			[3] BinaryOp (DIRTY)  '+=' { 0 -- 0 }
+				[4] Identifier 'counter' { 0 -- 0 }
+				[4] Constant '1' { 0 -- 0 }
+		[2] PostfixExpression '(...)' { 3118 -- 3156 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"counter: %d\n"' { 0 -- 0 }
+				[4] Identifier 'counter' { 0 -- 0 }
+		[2] Scope (DIRTY)  { 3156 -- 3260 }
+			[3] PostfixExpression '(...)' { 3212 -- 3254 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"counter: %d\n"' { 0 -- 0 }
+					[5] Identifier 'counter' { 0 -- 0 }
+			[3] BinaryOp (DIRTY)  '=' { 0 -- 0 }
+				[4] Identifier 'counter' { 0 -- 0 }
+				[4] BinaryOp '+' { 0 -- 0 }
+					[5] Identifier 'counterSecond' { 0 -- 0 }
+					[5] Identifier 'counter' { 0 -- 0 }
+		[2] PostfixExpression '(...)' { 3260 -- 3298 }
+			[3] Identifier 'printf' { 0 -- 0 }
+				[4] Constant '"counter: %d\n"' { 0 -- 0 }
+				[4] Identifier 'counter' { 0 -- 0 }
