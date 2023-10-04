@@ -43,7 +43,7 @@ void DEFER_CONDITION(int someParam)
     printf("fun end\n");
 }
 
-void DEFER_CONDITION_MULTIPLE(int someParam)
+void DEFER_CONDITION_MULTIPLE_NESTED(int someParam)
 {
     defer printf("last");
 
@@ -55,6 +55,23 @@ void DEFER_CONDITION_MULTIPLE(int someParam)
             defer printf("2\n");
             printf("1\n");
         }
+    }
+}
+
+void DEFER_CONDITION_MULTIPLE(int someParam)
+{
+    defer printf("last");
+
+    if (someParam > 10)
+    {
+        defer printf("1.2\n");
+        printf("1.1");
+    }
+
+    if (someParam < 5)
+    {
+        defer printf("2.2\n");
+        printf("2.1\n");
     }
 }
 
