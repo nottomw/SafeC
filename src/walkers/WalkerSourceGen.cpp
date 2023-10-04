@@ -35,7 +35,20 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
 
     // Extremely dumb walker for now that just overwrites the
     // source code with incoming nodes underlying source start/end
-    // position. Has to be changed if any modifications to AST made...
+    // position.
+
+    // TODO: Has to be changed if any modifications to AST made...
+    // TODO: proper output file generation:
+    //  - how to handle removed nodes (maybe just mark node as
+    //    removed/ignored during generation instead of removing from AST?)
+    //  - how to handle added nodes - all following nodes must
+    //    be offset by the strlen of the added node
+    //  - maybe could:
+    //      1) copy the original source code
+    //      2) if node was removed, remove part of code
+    //         offset all following nodes by - strlen(removedNode)
+    //      3) if node was added, insert code just before following node
+    //         offset all following nodes by + strlen(addedNode)
 
     const int32_t startPos = node.getSemStart();
     const int32_t endPos = node.getSemEnd();
