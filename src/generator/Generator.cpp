@@ -1,5 +1,6 @@
 #include "Generator.hpp"
 
+#include "config/Config.hpp"
 #include "logger/Logger.hpp"
 #include "parser/Parser.hpp"
 #include "walkers/SemNodeWalker.hpp"
@@ -19,9 +20,12 @@ void Generator::generate( //
     mWalker.walk(*ast, deferExec);
     deferExec.commit();
 
-    // DBG: print modified AST
-    WalkerPrint printer;
-    mWalker.walk(*ast, printer);
+    if (Config::getInstance().getDisplayAstMod())
+    {
+        log("\nModified AST:\n");
+        WalkerPrint printer;
+        mWalker.walk(*ast, printer);
+    }
 
     generateFinalSource(ast, outputFile);
 }

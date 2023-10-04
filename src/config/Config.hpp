@@ -64,6 +64,16 @@ public:
         return mGenerate;
     }
 
+    void setDisplayAstMod(const bool m)
+    {
+        mDisplayAstMod = m;
+    }
+
+    bool getDisplayAstMod() const
+    {
+        return mDisplayAstMod;
+    }
+
 private:
     Config()
         : mDisplayAst{false}
@@ -71,6 +81,7 @@ private:
         , mNoColor{false}
         , mDisplayCoverage{false}
         , mGenerate{true}
+        , mDisplayAstMod{false}
     {
     }
 
@@ -79,6 +90,7 @@ private:
     bool mNoColor;
     bool mDisplayCoverage;
     bool mGenerate;
+    bool mDisplayAstMod;
 };
 
 } // namespace safec

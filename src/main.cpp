@@ -28,6 +28,7 @@ int main(int argc, char **argv)
         ("nocolor,n", "do not add color to logs")                                                    //
         ("coverage,c", "display coverage info")                                                      //
         ("generate", "generate the output C file - now for debug purposes")                          //
+        ("astdump-mod", "dump AST after all modifications (must be used with --generate)")           //
         ("debug", "debug mode - display all possible info");
 
     po::variables_map vm;
@@ -46,42 +47,55 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    auto &cfg = safec::Config::getInstance();
+
     if (vm.count("astdump") != 0)
     {
-        safec::Config::getInstance().setDisplayAst(true);
+        cfg.setDisplayAst(true);
     }
 
     if (vm.count("parserdump") != 0)
     {
-        safec::Config::getInstance().setDisplayParserInfo(true);
+        cfg.setDisplayParserInfo(true);
     }
 
     if (vm.count("nocolor") != 0)
     {
-        safec::Config::getInstance().setNoColor(true);
+        cfg.setNoColor(true);
     }
 
     if (vm.count("coverage") != 0)
     {
-        safec::Config::getInstance().setDisplayCoverage(true);
+        cfg.setDisplayCoverage(true);
     }
 
     // eventually should generate by default, but for now hidden behind an option
     if (vm.count("generate") != 0)
     {
-        safec::Config::getInstance().setGenerate(true);
+        cfg.setGenerate(true);
     }
     else
     {
-        safec::Config::getInstance().setGenerate(false);
+        cfg.setGenerate(false);
+    }
+
+    if (vm.count("astdump-mod") != 0)
+    {
+        if (cfg.getGenerate() == false)
+        {
+            throw std::runtime_error("when using --astdump-mod --generate must be also set");
+        }
+
+        cfg.setDisplayAstMod(true);
     }
 
     if (vm.count("debug") != 0)
     {
-        safec::Config::getInstance().setDisplayAst(true);
-        safec::Config::getInstance().setDisplayParserInfo(true);
-        safec::Config::getInstance().setDisplayCoverage(true);
-        safec::Config::getInstance().setGenerate(true);
+        cfg.setDisplayAst(true);
+        cfg.setDisplayParserInfo(true);
+        cfg.setDisplayCoverage(true);
+        cfg.setGenerate(true);
+        cfg.setDisplayAstMod(true);
     }
 
     const auto outputDirectory = fs::absolute(vm["output"].as<std::string>());
@@ -112,17 +126,17 @@ int main(int argc, char **argv)
             const size_t charCount = parser.parse(it);
             safec::log("Parsing done, characters count %\n", charCount);
 
-            if (safec::Config::getInstance().getDisplayAst() == true)
+            if (cfg.getDisplayAst() == true)
             {
                 parser.displayAst();
             }
 
-            if (safec::Config::getInstance().getDisplayCoverage() == true)
+            if (cfg.getDisplayCoverage() == true)
             {
                 parser.displayCoverage();
             }
 
-            if (safec::Config::getInstance().getGenerate())
+            if (cfg.getGenerate())
             {
                 const auto outputFileName = fs::path{it}.filename().replace_extension("c");
                 const auto outputFileFullPath = std::filesystem::weakly_canonical(outputDirectory / outputFileName);
