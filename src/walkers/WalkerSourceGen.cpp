@@ -46,9 +46,9 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
     //  - maybe could:
     //      1) copy the original source code
     //      2) if node was removed, remove part of code
-    //         offset all following nodes by - strlen(removedNode)
+    //         (offset all following nodes by - strlen(removedNode))
     //      3) if node was added, insert code just before following node
-    //         offset all following nodes by + strlen(addedNode)
+    //         (offset all following nodes by + strlen(addedNode))
 
     const int32_t startPos = node.getSemStart();
     const int32_t endPos = node.getSemEnd();
