@@ -48,7 +48,7 @@ private:
         int32_t mNodeToPrefixWithDeferId;
     };
 
-    uint32_t mAstLevelPrev;
+    uint32_t mAstLevelOfScopePrev;
     std::vector<SemNode *> mScopes;
     std::vector<DeferInfo> mDefersArmed;
     std::vector<DeferApplyInfo> mDeferApplyInfo;
@@ -66,6 +66,7 @@ private:
     void scopeAdd(SemNode &node);
     SemNode *scopeGetCurrent() const;
     void scopeRemove();
+    void scopeRemoveIfLeftScope(const uint32_t astLevel);
 
     void deferArm(SemNodeDefer &deferNode, const uint32_t astLevel);
 };
