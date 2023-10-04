@@ -43,11 +43,6 @@ void WalkerDeferExecute::peek(SemNodeDefer &node, const uint32_t astLevel)
     // fire the defer in current scope
 
     auto currentScope = scopeGetCurrent();
-    log("defer pos: (% -- %), ast: %, in scope: %",
-        node.getSemStart(),
-        node.getSemEnd(),
-        astLevel,
-        currentScope->getTypeStr());
     assert(currentScope != nullptr);
 
     DeferApplyInfo deferApply;
@@ -118,19 +113,7 @@ void WalkerDeferExecute::peek(SemNodeTranslationUnit &node, const uint32_t astLe
 
 void WalkerDeferExecute::commit()
 {
-    log(" --------- COMMIT", Color::Cyan);
     scopeRemoveIfLeftScope(0);
-
-    // TODO: the scoping does not work as expected, because of the
-    // way different nodes are incoming and marked as scope/no scope,
-    // especially when leaving some scope there is no event at all,
-    // and the next seen node will reset the scope which probably
-    // results in strange behavior.
-
-    // TODO: handle case when defer is used in the last function with
-    // no return in function scope - there are no more nodes that are
-    // lower in ast level so the walker will not visit them and will
-    // not have a chance to call scopeRemove()
 
     // apply all deferred changes
     for (auto &it : mDeferApplyInfo)
@@ -152,14 +135,6 @@ void WalkerDeferExecute::commit()
         deferredOperation->setDirty(true);
 
         scopeToAttachDefer.attach(deferredOperation);
-
-        log("DEFER COMMIT: % (% -- %) into %",
-            Color::Blue,
-            Color::BgWhite,
-            deferredOperation->getTypeStr(),
-            deferNode.getSemStart(),
-            deferNode.getSemEnd(),
-            scopeToAttachDefer.getTypeStr());
     }
 
     // remove the defer nodes from AST
@@ -206,14 +181,6 @@ WalkerDeferExecute::AstLevelEvent WalkerDeferExecute::getAstLevelEvent(const uin
 
 void WalkerDeferExecute::scopeAdd(SemNode &node)
 {
-    for (uint32_t i = 0; i < mScopes.size(); i++)
-        log("\t", NewLine::No);
-    log("(count: %) ADDING SCOPE (%) pos: (% -- %)", //
-        Color::Green,
-        mScopes.size(),
-        node.getTypeStr(),
-        node.getSemStart(),
-        node.getSemEnd());
     mScopes.push_back(&node);
 }
 
@@ -235,26 +202,11 @@ void WalkerDeferExecute::scopeRemove()
         return;
     }
 
-    for (uint32_t i = 0; i < mScopes.size(); i++)
-        log("\t", NewLine::No);
-
-    log("(count: %) REMOVING SCOPE (%) pos: (% -- %)", //
-        Color::Green,
-        mScopes.size(),
-        mScopes.back()->getTypeStr(),
-        mScopes.back()->getSemStart(),
-        mScopes.back()->getSemEnd());
-
     // remove all defers from the scope that we're leaving
     for (auto it = mDefersArmed.begin(); it != mDefersArmed.end(); /*empty*/)
     {
         if (it->mAstLevel >= mAstLevelOfScopePrev)
         {
-            log("Removing defer: % (% -- %)",
-                Color::Red,
-                it->mDeferNode->getTypeStr(),
-                it->mDeferNode->getSemStart(),
-                it->mDeferNode->getSemEnd());
             it = mDefersArmed.erase(it);
         }
         else
@@ -275,15 +227,13 @@ void WalkerDeferExecute::scopeRemoveIfLeftScope(const uint32_t astLevel)
         const AstLevelEvent ev = getAstLevelEvent(astLevel);
         if (ev == AstLevelEvent::Exit)
         {
-            log("SCOPE REMOVE: exit");
             scopeRemove();
             removed = true;
         }
         else if (ev == AstLevelEvent::Same)
         {
-            log("SCOPE REMOVE: same");
             scopeRemove();
-            break;
+            break; // no further scopes to remove
         }
         else
         {
