@@ -191,6 +191,11 @@ std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
     prefix.append("] ");
     prefix.append(node.getTypeStr());
 
+    if (node.getDirty())
+    {
+        prefix.append(" (DIRTY) ");
+    }
+
     return prefix;
 }
 
