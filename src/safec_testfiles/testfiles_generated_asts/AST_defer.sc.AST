@@ -49,7 +49,7 @@ AST:
 			[3] Identifier 'printf' { 0 -- 0 }
 				[4] Constant '"fun start\n"' { 0 -- 0 }
 		[2] If { 590 -- 702 }
-			[3] Group
+			[3] Group { 590 -- 615 }
 				[4] BinaryOp '==' { 598 -- 615 }
 					[5] Identifier 'someParam' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
@@ -72,7 +72,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"last"' { 0 -- 0 }
 		[2] If { 811 -- 984 }
-			[3] Group
+			[3] Group { 811 -- 836 }
 				[4] BinaryOp '>' { 819 -- 836 }
 					[5] Identifier 'someParam' { 0 -- 0 }
 					[5] Constant '10' { 0 -- 0 }
@@ -81,7 +81,7 @@ AST:
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
 			[3] If { 871 -- 978 }
-				[4] Group
+				[4] Group { 871 -- 898 }
 					[5] BinaryOp '<' { 882 -- 898 }
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
@@ -98,7 +98,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"last"' { 0 -- 0 }
 		[2] If { 1060 -- 1151 }
-			[3] Group
+			[3] Group { 1060 -- 1085 }
 				[4] BinaryOp '>' { 1068 -- 1085 }
 					[5] Identifier 'someParam' { 0 -- 0 }
 					[5] Constant '10' { 0 -- 0 }
@@ -110,7 +110,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1.1"' { 0 -- 0 }
 		[2] If { 1151 -- 1243 }
-			[3] Group
+			[3] Group { 1151 -- 1175 }
 				[4] BinaryOp '<' { 1159 -- 1175 }
 					[5] Identifier 'someParam' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
@@ -126,7 +126,7 @@ AST:
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop for { 1285 -- 1377 }
-			[3] Group
+			[3] Group { 1312 -- 1313 }
 				[4] BinaryOp '=' { 1293 -- 1301 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
@@ -146,7 +146,7 @@ AST:
 			[3] Identifier 'i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop while { 1389 -- 1484 }
-			[3] Group
+			[3] Group { 0 -- 0 }
 				[4] BinaryOp '<' { 1399 -- 1407 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
@@ -164,7 +164,7 @@ AST:
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop for { 1537 -- 1694 }
-			[3] Group
+			[3] Group { 1564 -- 1565 }
 				[4] BinaryOp '=' { 1545 -- 1553 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
@@ -178,7 +178,7 @@ AST:
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
 			[3] If { 1600 -- 1664 }
-				[4] Group
+				[4] Group { 1600 -- 1625 }
 					[5] BinaryOp '==' { 1612 -- 1625 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
@@ -190,7 +190,7 @@ AST:
 			[3] Identifier 'i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop while { 1706 -- 1866 }
-			[3] Group
+			[3] Group { 0 -- 0 }
 				[4] BinaryOp '<' { 1716 -- 1724 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
@@ -199,7 +199,7 @@ AST:
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
 			[3] If { 1759 -- 1823 }
-				[4] Group
+				[4] Group { 1759 -- 1784 }
 					[5] BinaryOp '==' { 1771 -- 1784 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
@@ -214,7 +214,7 @@ AST:
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop for { 1922 -- 2082 }
-			[3] Group
+			[3] Group { 1949 -- 1950 }
 				[4] BinaryOp '=' { 1930 -- 1938 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
@@ -228,7 +228,7 @@ AST:
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
 			[3] If { 1985 -- 2052 }
-				[4] Group
+				[4] Group { 1985 -- 2010 }
 					[5] BinaryOp '==' { 1997 -- 2010 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
@@ -240,7 +240,7 @@ AST:
 			[3] Identifier 'i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop while { 2094 -- 2257 }
-			[3] Group
+			[3] Group { 0 -- 0 }
 				[4] BinaryOp '<' { 2104 -- 2112 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '5' { 0 -- 0 }
@@ -249,7 +249,7 @@ AST:
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"2\n"' { 0 -- 0 }
 			[3] If { 2147 -- 2214 }
-				[4] Group
+				[4] Group { 2147 -- 2172 }
 					[5] BinaryOp '==' { 2159 -- 2172 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'param' { 0 -- 0 }
@@ -302,7 +302,7 @@ AST:
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop for { 2702 -- 2797 }
-			[3] Group
+			[3] Group { 2763 -- 2764 }
 				[4] BinaryOp '=' { 2744 -- 2752 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
@@ -317,7 +317,7 @@ AST:
 						[6] Constant '"%d\n"' { 0 -- 0 }
 						[6] Identifier 'i' { 0 -- 0 }
 		[2] If { 2797 -- 2864 }
-			[3] Group
+			[3] Group { 2797 -- 2814 }
 				[4] BinaryOp '==' { 2805 -- 2814 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }

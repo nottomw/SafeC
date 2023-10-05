@@ -50,7 +50,7 @@ AST:
 			[3] Declaration 'int i' { 0 -- 0 }
 			[3] Constant '0' { 0 -- 0 }
 		[2] Loop for { 274 -- 557 }
-			[3] Group
+			[3] Group { 309 -- 310 }
 				[4] BinaryOp '=' { 282 -- 290 }
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
@@ -64,7 +64,7 @@ AST:
 						[6] Identifier 'arr' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
 			[3] If { 346 -- 457 }
-				[4] Group
+				[4] Group { 346 -- 418 }
 					[5] BinaryOp '==' { 409 -- 418 }
 						[6] PostfixExpression '[]' { 401 -- 409 }
 							[7] Identifier 'arr' { 0 -- 0 }
