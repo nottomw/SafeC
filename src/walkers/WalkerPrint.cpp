@@ -177,6 +177,14 @@ void WalkerPrint::peek(SemNodeIf &node, const uint32_t astLevel)
         getPos(node));
 }
 
+void WalkerPrint::peek(SemNodeGroup &node, const uint32_t astLevel)
+{
+    log("% { % }", //
+        Color::Magenta,
+        getPrefix(node, astLevel),
+        getPos(node));
+}
+
 std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
 {
     std::string prefix{};
