@@ -131,6 +131,10 @@ void Semantics::handle( //
             {
                 auto nodeIf = std::make_shared<SemNodeIf>(stringIndex);
                 nodeIf->setSemStart(mPrevReducePos);
+
+                auto ifGroup = nodeIf->getGroup();
+                ifGroup->setSemStart(mPrevReducePos);
+
                 mPrevReducePos = stringIndex;
                 mState.stageNode(nodeIf);
             }
@@ -624,6 +628,10 @@ void Semantics::handleForLoopConditions(const uint32_t pos)
     loopNode->setIteratorCondition(itCond);
     loopNode->setIteratorChange(itChange);
 
+    auto group = loopNode->getGroup();
+    group->setSemStart(mPrevReducePos);
+    group->setSemEnd(pos);
+
     // TODO: set pos to the group
     mPrevReducePos = pos;
 }
@@ -639,7 +647,11 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     stagedNodes.pop_back();
 
     assert(nodeIf->getType() == SemNode::Type::If);
-    semNodeConvert<SemNodeIf>(nodeIf)->setCond(condNode);
+    auto nodeIfTyped = semNodeConvert<SemNodeIf>(nodeIf);
+    nodeIfTyped->setCond(condNode);
+
+    auto group = nodeIfTyped->getGroup();
+    group->setSemEnd(stringIndex);
 
     mPrevReducePos = stringIndex;
 

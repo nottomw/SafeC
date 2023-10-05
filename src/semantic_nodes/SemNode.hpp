@@ -338,6 +338,8 @@ public:
         return mLoopName;
     }
 
+    std::shared_ptr<SemNodeGroup> getGroup() const;
+
     std::string toStr() const override;
 
     virtual std::shared_ptr<SemNode> clone() override
@@ -406,6 +408,8 @@ public:
     void setCond(std::shared_ptr<SemNode> cond);
 
     std::string toStr() const override;
+
+    std::shared_ptr<SemNodeGroup> getGroup() const;
 
     virtual std::shared_ptr<SemNode> clone() override
     {

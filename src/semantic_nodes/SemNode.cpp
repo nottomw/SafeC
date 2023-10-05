@@ -375,6 +375,11 @@ std::shared_ptr<SemNode> SemNodeLoop::getIteratorChange() const
     return mIteratorChange;
 }
 
+std::shared_ptr<SemNodeGroup> SemNodeLoop::getGroup() const
+{
+    return mLoopStatementsGroup;
+}
+
 std::string SemNodeLoop::toStr() const
 {
     std::string itInit = "empty";
@@ -457,6 +462,11 @@ std::string SemNodeIf::toStr() const
     if (mCond)
         cond = mCond->toStr();
     return cond;
+}
+
+std::shared_ptr<SemNodeGroup> SemNodeIf::getGroup() const
+{
+    return mGroup;
 }
 
 SemNodeUnaryOp::SemNodeUnaryOp(const uint32_t pos, const std::string &op)
