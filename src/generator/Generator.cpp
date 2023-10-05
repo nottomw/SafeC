@@ -28,6 +28,8 @@ void Generator::generate( //
     }
 
     generateFinalSource(ast, outputFile);
+
+    log("Generated file %", outputFile.c_str());
 }
 
 void Generator::generateFinalSource( //
@@ -36,6 +38,8 @@ void Generator::generateFinalSource( //
 {
     WalkerSourceGen sourceGen{outputFile};
     mWalker.walk(*ast, sourceGen);
+
+    sourceGen.generate();
 }
 
 } // namespace safec
