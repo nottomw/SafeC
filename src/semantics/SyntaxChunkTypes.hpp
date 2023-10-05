@@ -46,6 +46,7 @@
     entry(kJumpStatement) \
     entry(kArrayDecl) \
     entry(kInitializerList) \
+    entry(kDeferHeader) \
     entry(kDefer) \
     entry(kSimpleScopeStart) \
     entry(kSimpleScopeEnd) \

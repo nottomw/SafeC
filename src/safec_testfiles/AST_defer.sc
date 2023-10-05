@@ -217,7 +217,7 @@ void DEFER_WITH_COMPL_STATEMENTS(void)
 
 // TODO: assertion fail on remove redundat scope
 // int DEFER_MULTIPLE_RETURNS(int param)
-//{
+// {
 //    printf("fun start\n");
 //    defer printf("fun end\n");
 
@@ -234,6 +234,6 @@ void DEFER_WITH_COMPL_STATEMENTS(void)
 //    }
 
 //    return 123;
-//}
+// }
 
 // TODO: simple scope with declarations etc...

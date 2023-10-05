@@ -275,6 +275,17 @@ void Semantics::handle( //
             handleInitializerList(stringIndex);
             break;
 
+        case SyntaxChunkType::kDeferHeader:
+            {
+                auto deferNode = std::make_shared<SemNodeDefer>(stringIndex);
+                deferNode->setSemStart(mPrevReducePos);
+                mPrevReducePos = stringIndex;
+
+                mState.mDeferNodeWaitingForDeferredOp = deferNode;
+                mState.mState = SState::WaitingForDeferredOp;
+            }
+            break;
+
         case SyntaxChunkType::kDefer:
             handleDefer(stringIndex);
             break;
@@ -755,15 +766,22 @@ void Semantics::handleInitializerList(const uint32_t stringIndex)
 
 void Semantics::handleDefer(const uint32_t stringIndex)
 {
+    assert(mState.mState == SState::WaitingForDeferredOp);
+    mState.mState = SState::Idle;
+
+    auto deferNode = mState.mDeferNodeWaitingForDeferredOp;
+    mState.mDeferNodeWaitingForDeferredOp.reset();
+
     auto &stagedNodes = mState.getStagedNodes();
     assert(stagedNodes.size() >= 1);
 
     auto lastNode = stagedNodes.back();
     stagedNodes.pop_back();
 
-    auto deferNode = std::make_shared<SemNodeDefer>(stringIndex, lastNode);
+    assert(deferNode->getType() == SemNode::Type::Defer);
+    auto deferNodeTyped = semNodeConvert<SemNodeDefer>(deferNode);
+    deferNodeTyped->setDeferredNode(lastNode);
 
-    deferNode->setSemStart(lastNode->getSemStart());
     deferNode->setSemEnd(stringIndex);
     mPrevReducePos = stringIndex;
 

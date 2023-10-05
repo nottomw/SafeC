@@ -1,5 +1,5 @@
 Parsing file: 'AST_defer.sc'...
-Parsing done, characters count 3726
+Parsing done, characters count 3728
 
 AST:
 [0] TranslationUnit
@@ -8,7 +8,7 @@ AST:
 			[3] Identifier 'printf' { 0 -- 0 }
 				[4] Constant '"function scope 1\n"' { 0 -- 0 }
 		[2] Defer { 87 -- 127 }
-			[3] PostfixExpression '(...)' { 87 -- 126 }
+			[3] PostfixExpression '(...)' { 97 -- 126 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"function scope 3\n"' { 0 -- 0 }
 		[2] PostfixExpression '(...)' { 127 -- 161 }
@@ -20,7 +20,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"scope 1\n"' { 0 -- 0 }
 			[3] Defer { 236 -- 271 }
-				[4] PostfixExpression '(...)' { 236 -- 270 }
+				[4] PostfixExpression '(...)' { 250 -- 270 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"scope 3\n"' { 0 -- 0 }
 			[3] PostfixExpression '(...)' { 271 -- 300 }
@@ -35,7 +35,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"scope 1\n"' { 0 -- 0 }
 			[3] Defer { 415 -- 450 }
-				[4] PostfixExpression '(...)' { 415 -- 449 }
+				[4] PostfixExpression '(...)' { 429 -- 449 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"scope 3\n"' { 0 -- 0 }
 			[3] PostfixExpression '(...)' { 450 -- 479 }
@@ -57,7 +57,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
 			[3] Defer { 644 -- 673 }
-				[4] PostfixExpression '(...)' { 644 -- 672 }
+				[4] PostfixExpression '(...)' { 658 -- 672 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"3\n"' { 0 -- 0 }
 			[3] PostfixExpression '(...)' { 673 -- 696 }
@@ -265,11 +265,11 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"3\n"' { 0 -- 0 }
 		[2] Defer { 2313 -- 2338 }
-			[3] PostfixExpression '(...)' { 2313 -- 2337 }
+			[3] PostfixExpression '(...)' { 2323 -- 2337 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"2\n"' { 0 -- 0 }
 		[2] Defer { 2338 -- 2363 }
-			[3] PostfixExpression '(...)' { 2338 -- 2362 }
+			[3] PostfixExpression '(...)' { 2348 -- 2362 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"1\n"' { 0 -- 0 }
 	[1] Function (void DEFER_SWITCH_CASE (int param,  )) { 2365 -- 2659 }
@@ -312,7 +312,7 @@ AST:
 				[4] PostfixExpression '++' { 2759 -- 2763 }
 					[5] Identifier 'i' { 0 -- 0 }
 			[3] Defer { 2764 -- 2797 }
-				[4] PostfixExpression '(...)' { 2764 -- 2796 }
+				[4] PostfixExpression '(...)' { 2778 -- 2796 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"%d\n"' { 0 -- 0 }
 						[6] Identifier 'i' { 0 -- 0 }
@@ -322,11 +322,11 @@ AST:
 					[5] Identifier 'i' { 0 -- 0 }
 					[5] Constant '0' { 0 -- 0 }
 			[3] Defer { 2814 -- 2864 }
-				[4] PostfixExpression '(...)' { 2814 -- 2863 }
+				[4] PostfixExpression '(...)' { 2828 -- 2863 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"deferred print in cond\n"' { 0 -- 0 }
 		[2] Defer { 2864 -- 2915 }
-			[3] PostfixExpression '(...)' { 2864 -- 2914 }
+			[3] PostfixExpression '(...)' { 2875 -- 2914 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"last statement in function\n"' { 0 -- 0 }
 	[1] Function (void DEFER_WITH_COMPL_STATEMENTS ( )) { 2917 -- 3300 }

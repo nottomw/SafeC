@@ -34,7 +34,7 @@ SemNode::Type SemNode::getType() const
 
 std::string_view SemNode::getTypeStr() const
 {
-// clang-format off
+    // clang-format off
     #define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)                                                                          \
         case Type::x:                                                                                                      \
         {                                                                                                              \
@@ -84,6 +84,16 @@ uint32_t SemNode::getId() const
 void SemNode::setDirty(const DirtyType dirty)
 {
     mDirty = dirty;
+
+    // HACK: propagate the dirty type to child nodes if
+    // the type is removed
+    if (dirty == DirtyType::Removed)
+    {
+        for (auto &it : mRelatedNodes)
+        {
+            it->setDirty(dirty);
+        }
+    }
 }
 
 SemNode::DirtyType SemNode::getDirty() const
@@ -516,12 +526,15 @@ std::string SemNodeInitializerList::toStr() const
 }
 
 SemNodeDefer::SemNodeDefer( //
-    const uint32_t pos,
-    std::shared_ptr<SemNode> deferred)
+    const uint32_t pos)
     : SemNodePositional{pos}
-    , mDeferredNode{deferred}
 {
     mType = SemNode::Type::Defer;
+}
+
+void SemNodeDefer::setDeferredNode(std::shared_ptr<SemNode> deferred)
+{
+    mDeferredNode = deferred;
     attach(deferred);
 }
 

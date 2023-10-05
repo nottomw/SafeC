@@ -18,6 +18,7 @@ enum class SState
     Idle,
     WaitingForStructType,
     InForLoopContext,
+    WaitingForDeferredOp,
 };
 
 struct SyntaxChunkInfo
@@ -52,6 +53,8 @@ class SemanticsState
 {
 public:
     SState mState;
+    std::shared_ptr<SemNode> mDeferNodeWaitingForDeferredOp;
+
     using StagedNodesType = std::vector<std::shared_ptr<SemNode>>;
 
     SemanticsState() //

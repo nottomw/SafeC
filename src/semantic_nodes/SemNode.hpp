@@ -18,7 +18,7 @@ class SemNodeWalker;
 class SemNode
 {
 public:
-    // clang-format off
+// clang-format off
     #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
     // clang-format on
 
@@ -480,7 +480,9 @@ private:
 class SemNodeDefer : public SemNodePositional
 {
 public:
-    SemNodeDefer(const uint32_t pos, std::shared_ptr<SemNode> deferred);
+    SemNodeDefer(const uint32_t pos);
+
+    void setDeferredNode(std::shared_ptr<SemNode> deferred);
 
     std::string toStr() const override
     {
