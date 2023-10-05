@@ -4,83 +4,86 @@ Parsing done, characters count 560
 AST:
 [0] TranslationUnit
 	[1] Function (void TEST_LOOP_ITER_POINTERS ( )) { 0 -- 559 }
-		[2] BinaryOp '=' { 85 -- 92 }
-			[3] Declaration 'int a' { 0 -- 0 }
-			[3] Constant '3' { 0 -- 0 }
-		[2] BinaryOp '=' { 92 -- 107 }
-			[3] Declaration 'int b' { 0 -- 0 }
-			[3] Constant '6' { 0 -- 0 }
-		[2] BinaryOp '=' { 107 -- 122 }
-			[3] Declaration 'int c' { 0 -- 0 }
-			[3] Constant '9' { 0 -- 0 }
-		[2] BinaryOp '=' { 122 -- 139 }
-			[3] Declaration 'int* d' { 0 -- 0 }
-			[3] UnaryOp '&' { 122 -- 137 }
-				[4] Identifier 'c' { 0 -- 0 }
-		[2] BinaryOp '=' { 139 -- 157 }
-			[3] Declaration 'int** e' { 0 -- 0 }
-			[3] UnaryOp '&' { 139 -- 155 }
-				[4] Identifier 'd' { 0 -- 0 }
-		[2] BinaryOp '=' { 157 -- 198 }
-			[3] Declaration 'int[] arrWithConsts' { 0 -- 0 }
-			[3] InitializerList
-				[4] Constant '1' { 0 -- 0 }
-				[4] Constant '2' { 0 -- 0 }
+		[2] Scope { 36 -- 559 }
+			[3] BinaryOp '=' { 85 -- 92 }
+				[4] Declaration 'int a' { 0 -- 0 }
 				[4] Constant '3' { 0 -- 0 }
-				[4] Constant '4' { 0 -- 0 }
-		[2] BinaryOp '=' { 198 -- 257 }
-			[3] Declaration 'int*[] arr' { 0 -- 0 }
-			[3] InitializerList
-				[4] UnaryOp '&' { 198 -- 220 }
-					[5] Identifier 'a' { 0 -- 0 }
-				[4] UnaryOp '&' { 220 -- 224 }
-					[5] Identifier 'b' { 0 -- 0 }
-				[4] UnaryOp '&' { 224 -- 228 }
+			[3] BinaryOp '=' { 92 -- 107 }
+				[4] Declaration 'int b' { 0 -- 0 }
+				[4] Constant '6' { 0 -- 0 }
+			[3] BinaryOp '=' { 107 -- 122 }
+				[4] Declaration 'int c' { 0 -- 0 }
+				[4] Constant '9' { 0 -- 0 }
+			[3] BinaryOp '=' { 122 -- 139 }
+				[4] Declaration 'int* d' { 0 -- 0 }
+				[4] UnaryOp '&' { 122 -- 137 }
 					[5] Identifier 'c' { 0 -- 0 }
-				[4] UnaryOp '*' { 228 -- 232 }
+			[3] BinaryOp '=' { 139 -- 157 }
+				[4] Declaration 'int** e' { 0 -- 0 }
+				[4] UnaryOp '&' { 139 -- 155 }
 					[5] Identifier 'd' { 0 -- 0 }
-				[4] UnaryOp '*' { 232 -- 236 }
-					[5] UnaryOp '*' { 236 -- 237 }
-						[6] Identifier 'e' { 0 -- 0 }
-				[4] BinaryOp '+' { 0 -- 0 }
-					[5] Identifier 'd' { 0 -- 0 }
-					[5] Constant '128' { 0 -- 0 }
-				[4] Identifier 'NULL' { 0 -- 0 }
-		[2] BinaryOp '=' { 257 -- 274 }
-			[3] Declaration 'int i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop for { 274 -- 557 }
-			[3] Group { 309 -- 310 }
-				[4] BinaryOp '=' { 282 -- 290 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '0' { 0 -- 0 }
-				[4] EmptyStatement
-				[4] PostfixExpression '++' { 290 -- 309 }
-					[5] Identifier 'i' { 0 -- 0 }
-			[3] BinaryOp '=' { 328 -- 346 }
-				[4] Declaration 'int arrVal' { 0 -- 0 }
-				[4] UnaryOp '*' { 328 -- 339 }
-					[5] PostfixExpression '[]' { 339 -- 345 }
-						[6] Identifier 'arr' { 0 -- 0 }
+			[3] BinaryOp '=' { 157 -- 198 }
+				[4] Declaration 'int[] arrWithConsts' { 0 -- 0 }
+				[4] InitializerList
+					[5] Constant '1' { 0 -- 0 }
+					[5] Constant '2' { 0 -- 0 }
+					[5] Constant '3' { 0 -- 0 }
+					[5] Constant '4' { 0 -- 0 }
+			[3] BinaryOp '=' { 198 -- 257 }
+				[4] Declaration 'int*[] arr' { 0 -- 0 }
+				[4] InitializerList
+					[5] UnaryOp '&' { 198 -- 220 }
+						[6] Identifier 'a' { 0 -- 0 }
+					[5] UnaryOp '&' { 220 -- 224 }
+						[6] Identifier 'b' { 0 -- 0 }
+					[5] UnaryOp '&' { 224 -- 228 }
+						[6] Identifier 'c' { 0 -- 0 }
+					[5] UnaryOp '*' { 228 -- 232 }
+						[6] Identifier 'd' { 0 -- 0 }
+					[5] UnaryOp '*' { 232 -- 236 }
+						[6] UnaryOp '*' { 236 -- 237 }
+							[7] Identifier 'e' { 0 -- 0 }
+					[5] BinaryOp '+' { 0 -- 0 }
+						[6] Identifier 'd' { 0 -- 0 }
+						[6] Constant '128' { 0 -- 0 }
+					[5] Identifier 'NULL' { 0 -- 0 }
+			[3] BinaryOp '=' { 257 -- 274 }
+				[4] Declaration 'int i' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop for { 274 -- 557 }
+				[4] Group { 309 -- 310 }
+					[5] BinaryOp '=' { 282 -- 290 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '0' { 0 -- 0 }
+					[5] EmptyStatement
+					[5] PostfixExpression '++' { 290 -- 309 }
+						[6] Identifier 'i' { 0 -- 0 }
+				[4] Scope { 310 -- 557 }
+					[5] BinaryOp '=' { 328 -- 346 }
+						[6] Declaration 'int arrVal' { 0 -- 0 }
+						[6] UnaryOp '*' { 328 -- 339 }
+							[7] PostfixExpression '[]' { 339 -- 345 }
+								[8] Identifier 'arr' { 0 -- 0 }
+									[9] Identifier 'i' { 0 -- 0 }
+					[5] If { 346 -- 457 }
+						[6] Group { 346 -- 418 }
+							[7] BinaryOp '==' { 409 -- 418 }
+								[8] PostfixExpression '[]' { 401 -- 409 }
+									[9] Identifier 'arr' { 0 -- 0 }
+										[10] Identifier 'i' { 0 -- 0 }
+								[8] Identifier 'NULL' { 0 -- 0 }
+						[6] Scope { 418 -- 457 }
+							[7] JumpStatement 'break' { 446 -- 447 }
+					[5] BinaryOp '=' { 457 -- 484 }
+						[6] Identifier 'arrVal' { 0 -- 0 }
+						[6] UnaryOp '*' { 457 -- 477 }
+							[7] PostfixExpression '[]' { 477 -- 483 }
+								[8] Identifier 'arr' { 0 -- 0 }
+									[9] Identifier 'i' { 0 -- 0 }
+					[5] PostfixExpression '(...)' { 484 -- 551 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"i = %d, arrVal = %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
-			[3] If { 346 -- 457 }
-				[4] Group { 346 -- 418 }
-					[5] BinaryOp '==' { 409 -- 418 }
-						[6] PostfixExpression '[]' { 401 -- 409 }
-							[7] Identifier 'arr' { 0 -- 0 }
-								[8] Identifier 'i' { 0 -- 0 }
-						[6] Identifier 'NULL' { 0 -- 0 }
-				[4] JumpStatement 'break' { 446 -- 447 }
-			[3] BinaryOp '=' { 457 -- 484 }
-				[4] Identifier 'arrVal' { 0 -- 0 }
-				[4] UnaryOp '*' { 457 -- 477 }
-					[5] PostfixExpression '[]' { 477 -- 483 }
-						[6] Identifier 'arr' { 0 -- 0 }
-							[7] Identifier 'i' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 484 -- 551 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"i = %d, arrVal = %d\n"' { 0 -- 0 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Identifier 'arrVal' { 0 -- 0 }
+							[7] Identifier 'arrVal' { 0 -- 0 }
 
 

@@ -146,11 +146,6 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kCondition:
             {
-                if (additional != "else")
-                {
-                    removeRedundantScopeFromCurrentScope();
-                }
-
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
@@ -184,8 +179,6 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kForLoop:
             {
-                removeRedundantScopeFromCurrentScope();
-
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
@@ -250,8 +243,6 @@ void Semantics::handle( //
 
         case SyntaxChunkType::kWhileLoop:
             {
-                removeRedundantScopeFromCurrentScope();
-
                 auto currentScope = mState.getCurrentScope();
                 auto scopeNode = semNodeConvert<SemNodeScope>(currentScope);
                 scopeNode->setEnd(stringIndex);
@@ -398,8 +389,6 @@ void Semantics::handleFunctionHeader( //
 
 void Semantics::handleFunctionEnd(const uint32_t stringIndex)
 {
-    removeRedundantScopeFromCurrentScope();
-
     auto currentScopeFun = mState.getCurrentScope();
     assert(currentScopeFun->getType() == SemNode::Type::Function);
     auto funScopeNode = semNodeConvert<SemNodeFunction>(currentScopeFun);
@@ -820,8 +809,6 @@ void Semantics::handleSwitchStatement(const uint32_t stringIndex)
 
 void Semantics::handleSwitchEnd(const uint32_t stringIndex)
 {
-    removeRedundantScopeFromCurrentScope();
-
     auto currentScope = mState.getCurrentScope();
 
     // current scope must be a switch..case
@@ -1144,93 +1131,6 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
     chunks.erase(chunks.begin() + index, chunks.begin() + index + ptrCount);
 
     return ptrCount;
-}
-
-void Semantics::removeRedundantScopeFromCurrentScope()
-{
-    return;
-
-    auto currentScope = mState.getCurrentScope();
-
-    if (currentScope->getType() == SemNode::Type::Scope)
-    {
-        log("WARNING: removing redudant scope not in special scope - ignoring, type: %", //
-            Color::Red,
-            currentScope->getTypeStr());
-        return;
-    }
-
-    const bool isSpecialScope =                                 //
-        (currentScope->getType() == SemNode::Type::Function) || //
-        (currentScope->getType() == SemNode::Type::Loop) ||     //
-        (currentScope->getType() == SemNode::Type::If) ||       //
-        (currentScope->getType() == SemNode::Type::SwitchCase);
-
-    if (!isSpecialScope)
-    {
-        log("ERROR: removing redudant scope not in special scope - ignoring, type: %", //
-            Color::Red,
-            currentScope->getTypeStr());
-        assert(isSpecialScope);
-    }
-
-    const bool isSingleNodeScope = //
-        (currentScope->getType() == SemNode::Type::Function);
-
-    auto specialCurrentScopeNode = semNodeConvert<SemNodeScope>(currentScope);
-    auto &attachedNodes = specialCurrentScopeNode->getAttachedNodes();
-
-    // special cases:
-    // - empty function - no additional scope - do nothing
-    // - if without scope (if(...) ...) - no additional scope - do nothing
-    // - loop without scope - no additional scope - do nothing
-
-    // loop & condition will have a single node or two nodes - one for
-    // group - cond/loop statements (always) and one for scope (sometimes)
-    const bool singleScopeAttached =                           //
-        (!isSingleNodeScope && (attachedNodes.size() <= 2)) || //
-        (isSingleNodeScope && (attachedNodes.size() <= 1));
-    assert(singleScopeAttached);
-
-    const bool functionWithRedundantScope = //
-        isSingleNodeScope && (attachedNodes.size() == 1);
-    const bool specialWithRedundantScope = //
-        !isSingleNodeScope && (attachedNodes.size() == 2);
-
-    if (functionWithRedundantScope || specialWithRedundantScope)
-    {
-        auto lastAttachedNode = attachedNodes.back();
-        if (lastAttachedNode->getType() == SemNode::Type::Scope)
-        {
-            attachedNodes.pop_back(); // remove the redundant scope
-
-            // TODO: maybe just better to leave these scopes in place...
-
-            // Hackish fix for keeping position continuity when redundant
-            // scope had some proper start index set - if the removed scope
-            // had smaller index than the first node attached to it, let the
-            // first node in the redundant scope inherit the starting index
-            //            auto &redundantScopeAttachedNodes = lastAttachedNode->getAttachedNodes();
-            //            if (redundantScopeAttachedNodes.size() > 0)
-            //            {
-            //                if (lastAttachedNode->getSemStart() < redundantScopeAttachedNodes[0]->getSemStart())
-            //                {
-            //                    // TODO: this needs to be fixed, it breaks when the first node is
-            //                    // removed during generation (like a defer call first node in the
-            //                    // function or loop or any other scope). The node will be removed
-            //                    // and there is still a gap
-            //                    // this is a general problem that first statement in a function will get
-            //                    // incorrect indexes, that indicate the first statement spans across first '{'
-            //                    // of the scope...
-            //                    redundantScopeAttachedNodes[0]->setSemStart(lastAttachedNode->getSemStart());
-            //                }
-            //            }
-
-            specialCurrentScopeNode        //
-                ->devourAttachedNodesFrom( //
-                    semNodeConvert<SemNodeScope>(lastAttachedNode));
-        }
-    }
 }
 
 void Semantics::printStagedNodes(const std::string &str)

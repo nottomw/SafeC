@@ -69,12 +69,6 @@ private:
 
     uint32_t countPointersInChunks(const uint32_t index);
 
-    // with introduction of simple scope, in each "special" scope
-    // (if, loop, function) there is a single node SemNodeScope that
-    // holds all the nodes for the special scope. This function
-    // simplifies the AST by removing this additional scope when necessary.
-    void removeRedundantScopeFromCurrentScope();
-
     void printStagedNodes(const std::string &str = "");
 
     uint32_t mPrevReducePos;

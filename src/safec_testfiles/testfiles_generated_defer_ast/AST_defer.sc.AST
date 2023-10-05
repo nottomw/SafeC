@@ -6,461 +6,689 @@ Generating C file: '/tmp/AST_defer.c'
 Modified AST:
 
 [0] TranslationUnit
-	[1] Function (DIRTY: modified)  (void DEFER_FUNCTION_SCOPE ( )) { 0 -- 163 }
-		[2] PostfixExpression '(...)' { 64 -- 87 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"function scope 1\n"' { 0 -- 0 }
-		[2] Defer (DIRTY: removed)  { 87 -- 127 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 97 -- 126 }
+	[1] Function (void DEFER_FUNCTION_SCOPE ( )) { 0 -- 163 }
+		[2] Scope (DIRTY: modified)  { 53 -- 163 }
+			[3] PostfixExpression '(...)' { 64 -- 87 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"function scope 1\n"' { 0 -- 0 }
+			[3] Defer (DIRTY: removed)  { 87 -- 127 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 97 -- 126 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"function scope 3\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 127 -- 161 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"function scope 2\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 97 -- 126 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"function scope 3\n"' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 127 -- 161 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"function scope 2\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 97 -- 126 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"function scope 3\n"' { 0 -- 0 }
 	[1] Function (void DEFER_SIMPLE_SCOPE_ONLY ( )) { 163 -- 308 }
-		[2] Scope (DIRTY: modified)  { 207 -- 306 }
-			[3] PostfixExpression '(...)' { 222 -- 236 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"scope 1\n"' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 236 -- 271 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 250 -- 270 }
+		[2] Scope { 201 -- 308 }
+			[3] Scope (DIRTY: modified)  { 207 -- 306 }
+				[4] PostfixExpression '(...)' { 222 -- 236 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"scope 1\n"' { 0 -- 0 }
+				[4] Defer (DIRTY: removed)  { 236 -- 271 }
+					[5] PostfixExpression (DIRTY: removed)  '(...)' { 250 -- 270 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"scope 3\n"' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 271 -- 300 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"scope 2\n"' { 0 -- 0 }
+				[4] PostfixExpression (DIRTY: added)  '(...)' { 250 -- 270 }
 					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 						[6] Constant (DIRTY: removed)  '"scope 3\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 271 -- 300 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"scope 2\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 250 -- 270 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"scope 3\n"' { 0 -- 0 }
 	[1] Function (void DEFER_SIMPLE_SCOPE ( )) { 308 -- 524 }
-		[2] PostfixExpression '(...)' { 352 -- 379 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"function scope start\n"' { 0 -- 0 }
-		[2] Scope (DIRTY: modified)  { 379 -- 485 }
-			[3] PostfixExpression '(...)' { 401 -- 415 }
+		[2] Scope { 341 -- 524 }
+			[3] PostfixExpression '(...)' { 352 -- 379 }
 				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"scope 1\n"' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 415 -- 450 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 429 -- 449 }
+					[5] Constant '"function scope start\n"' { 0 -- 0 }
+			[3] Scope (DIRTY: modified)  { 379 -- 485 }
+				[4] PostfixExpression '(...)' { 401 -- 415 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"scope 1\n"' { 0 -- 0 }
+				[4] Defer (DIRTY: removed)  { 415 -- 450 }
+					[5] PostfixExpression (DIRTY: removed)  '(...)' { 429 -- 449 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"scope 3\n"' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 450 -- 479 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"scope 2\n"' { 0 -- 0 }
+				[4] PostfixExpression (DIRTY: added)  '(...)' { 429 -- 449 }
 					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 						[6] Constant (DIRTY: removed)  '"scope 3\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 450 -- 479 }
+			[3] PostfixExpression '(...)' { 485 -- 522 }
 				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"scope 2\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 429 -- 449 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"scope 3\n"' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 485 -- 522 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"function scope end\n"' { 0 -- 0 }
+					[5] Constant '"function scope end\n"' { 0 -- 0 }
 	[1] Function (void DEFER_CONDITION (int someParam,  )) { 524 -- 730 }
-		[2] PostfixExpression '(...)' { 574 -- 590 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"fun start\n"' { 0 -- 0 }
-		[2] If (DIRTY: modified)  { 590 -- 702 }
-			[3] Group { 590 -- 615 }
-				[4] BinaryOp '==' { 598 -- 615 }
-					[5] Identifier 'someParam' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 636 -- 644 }
+		[2] Scope { 563 -- 730 }
+			[3] PostfixExpression '(...)' { 574 -- 590 }
 				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 644 -- 673 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 658 -- 672 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 673 -- 696 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"2\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 658 -- 672 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 702 -- 728 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"fun end\n"' { 0 -- 0 }
-	[1] Function (DIRTY: modified)  (void DEFER_CONDITION_MULTIPLE_NESTED (int someParam,  )) { 730 -- 986 }
-		[2] Defer (DIRTY: removed)  { 795 -- 811 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 795 -- 810 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
-		[2] If (DIRTY: modified)  { 811 -- 984 }
-			[3] Group { 811 -- 836 }
-				[4] BinaryOp '>' { 819 -- 836 }
-					[5] Identifier 'someParam' { 0 -- 0 }
-					[5] Constant '10' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 856 -- 871 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 856 -- 870 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] If (DIRTY: modified)  { 871 -- 978 }
-				[4] Group { 871 -- 898 }
-					[5] BinaryOp '<' { 882 -- 898 }
+					[5] Constant '"fun start\n"' { 0 -- 0 }
+			[3] If { 590 -- 702 }
+				[4] Group { 590 -- 615 }
+					[5] BinaryOp '==' { 598 -- 615 }
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
-				[4] Defer (DIRTY: removed)  { 926 -- 941 }
-					[5] PostfixExpression (DIRTY: removed)  '(...)' { 926 -- 940 }
+				[4] Scope (DIRTY: modified)  { 615 -- 702 }
+					[5] PostfixExpression '(...)' { 636 -- 644 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] Defer (DIRTY: removed)  { 644 -- 673 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 658 -- 672 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
+					[5] PostfixExpression '(...)' { 673 -- 696 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"2\n"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 658 -- 672 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 702 -- 728 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"fun end\n"' { 0 -- 0 }
+	[1] Function (void DEFER_CONDITION_MULTIPLE_NESTED (int someParam,  )) { 730 -- 986 }
+		[2] Scope (DIRTY: modified)  { 785 -- 986 }
+			[3] Defer (DIRTY: removed)  { 795 -- 811 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 795 -- 810 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
+			[3] If { 811 -- 984 }
+				[4] Group { 811 -- 836 }
+					[5] BinaryOp '>' { 819 -- 836 }
+						[6] Identifier 'someParam' { 0 -- 0 }
+						[6] Constant '10' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 836 -- 984 }
+					[5] Defer (DIRTY: removed)  { 856 -- 871 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 856 -- 870 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] If { 871 -- 978 }
+						[6] Group { 871 -- 898 }
+							[7] BinaryOp '<' { 882 -- 898 }
+								[8] Identifier 'someParam' { 0 -- 0 }
+								[8] Constant '5' { 0 -- 0 }
+						[6] Scope (DIRTY: modified)  { 898 -- 978 }
+							[7] Defer (DIRTY: removed)  { 926 -- 941 }
+								[8] PostfixExpression (DIRTY: removed)  '(...)' { 926 -- 940 }
+									[9] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+										[10] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+							[7] PostfixExpression '(...)' { 941 -- 968 }
+								[8] Identifier 'printf' { 0 -- 0 }
+									[9] Constant '"1\n"' { 0 -- 0 }
+							[7] PostfixExpression (DIRTY: added)  '(...)' { 926 -- 940 }
+								[8] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+									[9] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 856 -- 870 }
 						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-				[4] PostfixExpression '(...)' { 941 -- 968 }
-					[5] Identifier 'printf' { 0 -- 0 }
-						[6] Constant '"1\n"' { 0 -- 0 }
-				[4] PostfixExpression (DIRTY: added)  '(...)' { 926 -- 940 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 856 -- 870 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 795 -- 810 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
-	[1] Function (DIRTY: modified)  (void DEFER_CONDITION_MULTIPLE (int someParam,  )) { 986 -- 1245 }
-		[2] Defer (DIRTY: removed)  { 1044 -- 1060 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 1044 -- 1059 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 795 -- 810 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
-		[2] If (DIRTY: modified)  { 1060 -- 1151 }
-			[3] Group { 1060 -- 1085 }
-				[4] BinaryOp '>' { 1068 -- 1085 }
-					[5] Identifier 'someParam' { 0 -- 0 }
-					[5] Constant '10' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1105 -- 1122 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1105 -- 1121 }
+	[1] Function (void DEFER_CONDITION_MULTIPLE (int someParam,  )) { 986 -- 1245 }
+		[2] Scope (DIRTY: modified)  { 1034 -- 1245 }
+			[3] Defer (DIRTY: removed)  { 1044 -- 1060 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1044 -- 1059 }
 					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"1.2\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 1122 -- 1145 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1.1"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1105 -- 1121 }
+						[6] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
+			[3] If { 1060 -- 1151 }
+				[4] Group { 1060 -- 1085 }
+					[5] BinaryOp '>' { 1068 -- 1085 }
+						[6] Identifier 'someParam' { 0 -- 0 }
+						[6] Constant '10' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1085 -- 1151 }
+					[5] Defer (DIRTY: removed)  { 1105 -- 1122 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1105 -- 1121 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"1.2\n"' { 0 -- 0 }
+					[5] PostfixExpression '(...)' { 1122 -- 1145 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1.1"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1105 -- 1121 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"1.2\n"' { 0 -- 0 }
+			[3] If { 1151 -- 1243 }
+				[4] Group { 1151 -- 1175 }
+					[5] BinaryOp '<' { 1159 -- 1175 }
+						[6] Identifier 'someParam' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1175 -- 1243 }
+					[5] Defer (DIRTY: removed)  { 1195 -- 1212 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1195 -- 1211 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2.2\n"' { 0 -- 0 }
+					[5] PostfixExpression '(...)' { 1212 -- 1237 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"2.1\n"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1195 -- 1211 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2.2\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 1044 -- 1059 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"1.2\n"' { 0 -- 0 }
-		[2] If (DIRTY: modified)  { 1151 -- 1243 }
-			[3] Group { 1151 -- 1175 }
-				[4] BinaryOp '<' { 1159 -- 1175 }
-					[5] Identifier 'someParam' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1195 -- 1212 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1195 -- 1211 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2.2\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 1212 -- 1237 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"2.1\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1195 -- 1211 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2.2\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 1044 -- 1059 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
+					[5] Constant (DIRTY: removed)  '"last"' { 0 -- 0 }
 	[1] Function (void DEFER_LOOP ( )) { 1245 -- 1486 }
-		[2] BinaryOp '=' { 1278 -- 1285 }
-			[3] Declaration 'int i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  for { 1285 -- 1377 }
-			[3] Group { 1312 -- 1313 }
-				[4] BinaryOp '=' { 1293 -- 1301 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 1301 -- 1308 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 1308 -- 1312 }
-					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1333 -- 1348 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1333 -- 1347 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 1348 -- 1371 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1333 -- 1347 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-		[2] BinaryOp '=' { 1377 -- 1389 }
-			[3] Identifier 'i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  while { 1389 -- 1484 }
-			[3] Group { 0 -- 0 }
-				[4] BinaryOp '<' { 1399 -- 1407 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1427 -- 1442 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1427 -- 1441 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 1442 -- 1465 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression '++' { 1465 -- 1478 }
+		[2] Scope { 1270 -- 1486 }
+			[3] BinaryOp '=' { 1278 -- 1285 }
+				[4] Declaration 'int i' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop for { 1285 -- 1377 }
+				[4] Group { 1312 -- 1313 }
+					[5] BinaryOp '=' { 1293 -- 1301 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '0' { 0 -- 0 }
+					[5] BinaryOp '<' { 1301 -- 1308 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+					[5] PostfixExpression '++' { 1308 -- 1312 }
+						[6] Identifier 'i' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1313 -- 1377 }
+					[5] Defer (DIRTY: removed)  { 1333 -- 1348 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1333 -- 1347 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] PostfixExpression '(...)' { 1348 -- 1371 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1333 -- 1347 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+			[3] BinaryOp '=' { 1377 -- 1389 }
 				[4] Identifier 'i' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1427 -- 1441 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop while { 1389 -- 1484 }
+				[4] Group { 0 -- 0 }
+					[5] BinaryOp '<' { 1399 -- 1407 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1407 -- 1484 }
+					[5] Defer (DIRTY: removed)  { 1427 -- 1442 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1427 -- 1441 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] PostfixExpression '(...)' { 1442 -- 1465 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] PostfixExpression '++' { 1465 -- 1478 }
+						[6] Identifier 'i' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1427 -- 1441 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
 	[1] Function (void DEFER_LOOP_BREAK (int param,  )) { 1486 -- 1868 }
-		[2] BinaryOp '=' { 1530 -- 1537 }
-			[3] Declaration 'int i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  for { 1537 -- 1694 }
-			[3] Group { 1564 -- 1565 }
-				[4] BinaryOp '=' { 1545 -- 1553 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 1553 -- 1560 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 1560 -- 1564 }
-					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1585 -- 1600 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1585 -- 1599 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] If { 1600 -- 1664 }
-				[4] Group { 1600 -- 1625 }
-					[5] BinaryOp '==' { 1612 -- 1625 }
+		[2] Scope { 1522 -- 1868 }
+			[3] BinaryOp '=' { 1530 -- 1537 }
+				[4] Declaration 'int i' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop for { 1537 -- 1694 }
+				[4] Group { 1564 -- 1565 }
+					[5] BinaryOp '=' { 1545 -- 1553 }
 						[6] Identifier 'i' { 0 -- 0 }
-						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'break' { 1653 -- 1654 }
-			[3] PostfixExpression '(...)' { 1664 -- 1688 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1585 -- 1599 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-		[2] BinaryOp '=' { 1694 -- 1706 }
-			[3] Identifier 'i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  while { 1706 -- 1866 }
-			[3] Group { 0 -- 0 }
-				[4] BinaryOp '<' { 1716 -- 1724 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1744 -- 1759 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1744 -- 1758 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] If { 1759 -- 1823 }
-				[4] Group { 1759 -- 1784 }
-					[5] BinaryOp '==' { 1771 -- 1784 }
+						[6] Constant '0' { 0 -- 0 }
+					[5] BinaryOp '<' { 1553 -- 1560 }
 						[6] Identifier 'i' { 0 -- 0 }
-						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'break' { 1812 -- 1813 }
-			[3] PostfixExpression '(...)' { 1823 -- 1847 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression '++' { 1847 -- 1860 }
+						[6] Constant '5' { 0 -- 0 }
+					[5] PostfixExpression '++' { 1560 -- 1564 }
+						[6] Identifier 'i' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1565 -- 1694 }
+					[5] Defer (DIRTY: removed)  { 1585 -- 1600 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1585 -- 1599 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] If { 1600 -- 1664 }
+						[6] Group { 1600 -- 1625 }
+							[7] BinaryOp '==' { 1612 -- 1625 }
+								[8] Identifier 'i' { 0 -- 0 }
+								[8] Identifier 'param' { 0 -- 0 }
+						[6] Scope { 1625 -- 1664 }
+							[7] JumpStatement 'break' { 1653 -- 1654 }
+					[5] PostfixExpression '(...)' { 1664 -- 1688 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1585 -- 1599 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+			[3] BinaryOp '=' { 1694 -- 1706 }
 				[4] Identifier 'i' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1744 -- 1758 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop while { 1706 -- 1866 }
+				[4] Group { 0 -- 0 }
+					[5] BinaryOp '<' { 1716 -- 1724 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1724 -- 1866 }
+					[5] Defer (DIRTY: removed)  { 1744 -- 1759 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1744 -- 1758 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] If { 1759 -- 1823 }
+						[6] Group { 1759 -- 1784 }
+							[7] BinaryOp '==' { 1771 -- 1784 }
+								[8] Identifier 'i' { 0 -- 0 }
+								[8] Identifier 'param' { 0 -- 0 }
+						[6] Scope { 1784 -- 1823 }
+							[7] JumpStatement 'break' { 1812 -- 1813 }
+					[5] PostfixExpression '(...)' { 1823 -- 1847 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] PostfixExpression '++' { 1847 -- 1860 }
+						[6] Identifier 'i' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1744 -- 1758 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
 	[1] Function (void DEFER_LOOP_CONTINUE (int param,  )) { 1868 -- 2259 }
-		[2] BinaryOp '=' { 1915 -- 1922 }
-			[3] Declaration 'int i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  for { 1922 -- 2082 }
-			[3] Group { 1949 -- 1950 }
-				[4] BinaryOp '=' { 1930 -- 1938 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 1938 -- 1945 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 1945 -- 1949 }
-					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 1970 -- 1985 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 1970 -- 1984 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] If { 1985 -- 2052 }
-				[4] Group { 1985 -- 2010 }
-					[5] BinaryOp '==' { 1997 -- 2010 }
+		[2] Scope { 1907 -- 2259 }
+			[3] BinaryOp '=' { 1915 -- 1922 }
+				[4] Declaration 'int i' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop for { 1922 -- 2082 }
+				[4] Group { 1949 -- 1950 }
+					[5] BinaryOp '=' { 1930 -- 1938 }
 						[6] Identifier 'i' { 0 -- 0 }
-						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'continue' { 2041 -- 2042 }
-			[3] PostfixExpression '(...)' { 2052 -- 2076 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 1970 -- 1984 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-		[2] BinaryOp '=' { 2082 -- 2094 }
-			[3] Identifier 'i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  while { 2094 -- 2257 }
-			[3] Group { 0 -- 0 }
-				[4] BinaryOp '<' { 2104 -- 2112 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 2132 -- 2147 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2132 -- 2146 }
-					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-			[3] If { 2147 -- 2214 }
-				[4] Group { 2147 -- 2172 }
-					[5] BinaryOp '==' { 2159 -- 2172 }
+						[6] Constant '0' { 0 -- 0 }
+					[5] BinaryOp '<' { 1938 -- 1945 }
 						[6] Identifier 'i' { 0 -- 0 }
-						[6] Identifier 'param' { 0 -- 0 }
-				[4] JumpStatement 'continue' { 2203 -- 2204 }
-			[3] PostfixExpression '(...)' { 2214 -- 2238 }
-				[4] Identifier 'printf' { 0 -- 0 }
-					[5] Constant '"1\n"' { 0 -- 0 }
-			[3] PostfixExpression '++' { 2238 -- 2251 }
+						[6] Constant '5' { 0 -- 0 }
+					[5] PostfixExpression '++' { 1945 -- 1949 }
+						[6] Identifier 'i' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 1950 -- 2082 }
+					[5] Defer (DIRTY: removed)  { 1970 -- 1985 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 1970 -- 1984 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] If { 1985 -- 2052 }
+						[6] Group { 1985 -- 2010 }
+							[7] BinaryOp '==' { 1997 -- 2010 }
+								[8] Identifier 'i' { 0 -- 0 }
+								[8] Identifier 'param' { 0 -- 0 }
+						[6] Scope { 2010 -- 2052 }
+							[7] JumpStatement 'continue' { 2041 -- 2042 }
+					[5] PostfixExpression '(...)' { 2052 -- 2076 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 1970 -- 1984 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+			[3] BinaryOp '=' { 2082 -- 2094 }
 				[4] Identifier 'i' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 2132 -- 2146 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-	[1] Function (DIRTY: modified)  (void DEFER_MULTIPLE ( )) { 2259 -- 2365 }
-		[2] Defer (DIRTY: removed)  { 2298 -- 2313 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 2298 -- 2312 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] Loop while { 2094 -- 2257 }
+				[4] Group { 0 -- 0 }
+					[5] BinaryOp '<' { 2104 -- 2112 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+				[4] Scope (DIRTY: modified)  { 2112 -- 2257 }
+					[5] Defer (DIRTY: removed)  { 2132 -- 2147 }
+						[6] PostfixExpression (DIRTY: removed)  '(...)' { 2132 -- 2146 }
+							[7] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+								[8] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+					[5] If { 2147 -- 2214 }
+						[6] Group { 2147 -- 2172 }
+							[7] BinaryOp '==' { 2159 -- 2172 }
+								[8] Identifier 'i' { 0 -- 0 }
+								[8] Identifier 'param' { 0 -- 0 }
+						[6] Scope { 2172 -- 2214 }
+							[7] JumpStatement 'continue' { 2203 -- 2204 }
+					[5] PostfixExpression '(...)' { 2214 -- 2238 }
+						[6] Identifier 'printf' { 0 -- 0 }
+							[7] Constant '"1\n"' { 0 -- 0 }
+					[5] PostfixExpression '++' { 2238 -- 2251 }
+						[6] Identifier 'i' { 0 -- 0 }
+					[5] PostfixExpression (DIRTY: added)  '(...)' { 2132 -- 2146 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+	[1] Function (void DEFER_MULTIPLE ( )) { 2259 -- 2365 }
+		[2] Scope (DIRTY: modified)  { 2288 -- 2365 }
+			[3] Defer (DIRTY: removed)  { 2298 -- 2313 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2298 -- 2312 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
+			[3] Defer (DIRTY: removed)  { 2313 -- 2338 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2323 -- 2337 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
+			[3] Defer (DIRTY: removed)  { 2338 -- 2363 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2348 -- 2362 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"1\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 2298 -- 2312 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
-		[2] Defer (DIRTY: removed)  { 2313 -- 2338 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 2323 -- 2337 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 2323 -- 2337 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-		[2] Defer (DIRTY: removed)  { 2338 -- 2363 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 2348 -- 2362 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 2348 -- 2362 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"1\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 2298 -- 2312 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"3\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 2323 -- 2337 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"2\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 2348 -- 2362 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"1\n"' { 0 -- 0 }
-	[1] Function (DIRTY: modified)  (void DEFER_SWITCH_CASE (int param,  )) { 2365 -- 2659 }
-		[2] Defer (DIRTY: removed)  { 2412 -- 2430 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 2412 -- 2429 }
+	[1] Function (void DEFER_SWITCH_CASE (int param,  )) { 2365 -- 2659 }
+		[2] Scope (DIRTY: modified)  { 2402 -- 2659 }
+			[3] Defer (DIRTY: removed)  { 2412 -- 2430 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2412 -- 2429 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"last\n"' { 0 -- 0 }
+			[3] SwitchCase on 'Identifier' { 2430 -- 2657 }
+				[4] Identifier 'param' { 0 -- 0 }
+				[4] Scope { 2450 -- 2657 }
+					[5] SwitchCaseLabel on 'Constant' { 2469 -- 2499 }
+						[6] Constant '0' { 0 -- 0 }
+						[6] PostfixExpression '(...)' { 2472 -- 2499 }
+							[7] Identifier 'printf' { 0 -- 0 }
+								[8] Constant '"0\n"' { 0 -- 0 }
+					[5] JumpStatement 'break' { 2499 -- 2518 }
+					[5] SwitchCaseLabel on 'Constant' { 2518 -- 2562 }
+						[6] Constant '1' { 0 -- 0 }
+						[6] PostfixExpression '(...)' { 2535 -- 2562 }
+							[7] Identifier 'printf' { 0 -- 0 }
+								[8] Constant '"0\n"' { 0 -- 0 }
+					[5] JumpStatement 'break' { 2562 -- 2581 }
+					[5] SwitchCaseLabel on 'default' { 2581 -- 2632 }
+						[6] EmptyStatement
+						[6] PostfixExpression '(...)' { 2599 -- 2632 }
+							[7] Identifier 'printf' { 0 -- 0 }
+								[8] Constant '"default\n"' { 0 -- 0 }
+					[5] JumpStatement 'break' { 2632 -- 2651 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 2412 -- 2429 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"last\n"' { 0 -- 0 }
-		[2] SwitchCase on 'Identifier' { 2430 -- 2657 }
-			[3] Identifier 'param' { 0 -- 0 }
-			[3] SwitchCaseLabel on 'Constant' { 2469 -- 2499 }
+	[1] Function (void DEFER_STRANGE ( )) { 2659 -- 2917 }
+		[2] Scope (DIRTY: modified)  { 2687 -- 2917 }
+			[3] BinaryOp '=' { 2695 -- 2702 }
+				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
-				[4] PostfixExpression '(...)' { 2472 -- 2499 }
-					[5] Identifier 'printf' { 0 -- 0 }
-						[6] Constant '"0\n"' { 0 -- 0 }
-			[3] JumpStatement 'break' { 2499 -- 2518 }
-			[3] SwitchCaseLabel on 'Constant' { 2518 -- 2562 }
-				[4] Constant '1' { 0 -- 0 }
-				[4] PostfixExpression '(...)' { 2535 -- 2562 }
-					[5] Identifier 'printf' { 0 -- 0 }
-						[6] Constant '"0\n"' { 0 -- 0 }
-			[3] JumpStatement 'break' { 2562 -- 2581 }
-			[3] SwitchCaseLabel on 'default' { 2581 -- 2632 }
-				[4] EmptyStatement
-				[4] PostfixExpression '(...)' { 2599 -- 2632 }
-					[5] Identifier 'printf' { 0 -- 0 }
-						[6] Constant '"default\n"' { 0 -- 0 }
-			[3] JumpStatement 'break' { 2632 -- 2651 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 2412 -- 2429 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"last\n"' { 0 -- 0 }
-	[1] Function (DIRTY: modified)  (void DEFER_STRANGE ( )) { 2659 -- 2917 }
-		[2] BinaryOp '=' { 2695 -- 2702 }
-			[3] Declaration 'int i' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] Loop (DIRTY: modified)  for { 2702 -- 2797 }
-			[3] Group { 2763 -- 2764 }
-				[4] BinaryOp '=' { 2744 -- 2752 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '0' { 0 -- 0 }
-				[4] BinaryOp '<' { 2752 -- 2759 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '5' { 0 -- 0 }
-				[4] PostfixExpression '++' { 2759 -- 2763 }
-					[5] Identifier 'i' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 2764 -- 2797 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2778 -- 2796 }
+			[3] Loop (DIRTY: modified)  for { 2702 -- 2797 }
+				[4] Group { 2763 -- 2764 }
+					[5] BinaryOp '=' { 2744 -- 2752 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '0' { 0 -- 0 }
+					[5] BinaryOp '<' { 2752 -- 2759 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '5' { 0 -- 0 }
+					[5] PostfixExpression '++' { 2759 -- 2763 }
+						[6] Identifier 'i' { 0 -- 0 }
+				[4] Defer (DIRTY: removed)  { 2764 -- 2797 }
+					[5] PostfixExpression (DIRTY: removed)  '(...)' { 2778 -- 2796 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"%d\n"' { 0 -- 0 }
+							[7] Identifier (DIRTY: removed)  'i' { 0 -- 0 }
+				[4] PostfixExpression (DIRTY: added)  '(...)' { 2778 -- 2796 }
 					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 						[6] Constant (DIRTY: removed)  '"%d\n"' { 0 -- 0 }
 						[6] Identifier (DIRTY: removed)  'i' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 2778 -- 2796 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"%d\n"' { 0 -- 0 }
-					[5] Identifier (DIRTY: removed)  'i' { 0 -- 0 }
-		[2] If (DIRTY: modified)  { 2797 -- 2864 }
-			[3] Group { 2797 -- 2814 }
-				[4] BinaryOp '==' { 2805 -- 2814 }
-					[5] Identifier 'i' { 0 -- 0 }
-					[5] Constant '0' { 0 -- 0 }
-			[3] Defer (DIRTY: removed)  { 2814 -- 2864 }
-				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2828 -- 2863 }
+			[3] If (DIRTY: modified)  { 2797 -- 2864 }
+				[4] Group { 2797 -- 2814 }
+					[5] BinaryOp '==' { 2805 -- 2814 }
+						[6] Identifier 'i' { 0 -- 0 }
+						[6] Constant '0' { 0 -- 0 }
+				[4] Defer (DIRTY: removed)  { 2814 -- 2864 }
+					[5] PostfixExpression (DIRTY: removed)  '(...)' { 2828 -- 2863 }
+						[6] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+							[7] Constant (DIRTY: removed)  '"deferred print in cond\n"' { 0 -- 0 }
+				[4] PostfixExpression (DIRTY: added)  '(...)' { 2828 -- 2863 }
 					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 						[6] Constant (DIRTY: removed)  '"deferred print in cond\n"' { 0 -- 0 }
-			[3] PostfixExpression (DIRTY: added)  '(...)' { 2828 -- 2863 }
-				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-					[5] Constant (DIRTY: removed)  '"deferred print in cond\n"' { 0 -- 0 }
-		[2] Defer (DIRTY: removed)  { 2864 -- 2915 }
-			[3] PostfixExpression (DIRTY: removed)  '(...)' { 2875 -- 2914 }
+			[3] Defer (DIRTY: removed)  { 2864 -- 2915 }
+				[4] PostfixExpression (DIRTY: removed)  '(...)' { 2875 -- 2914 }
+					[5] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '"last statement in function\n"' { 0 -- 0 }
+			[3] PostfixExpression (DIRTY: added)  '(...)' { 2875 -- 2914 }
 				[4] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '"last statement in function\n"' { 0 -- 0 }
-		[2] PostfixExpression (DIRTY: added)  '(...)' { 2875 -- 2914 }
-			[3] Identifier (DIRTY: removed)  'printf' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '"last statement in function\n"' { 0 -- 0 }
 	[1] Function (void DEFER_WITH_COMPL_STATEMENTS ( )) { 2917 -- 3300 }
-		[2] BinaryOp '=' { 2967 -- 2980 }
-			[3] Declaration 'int counter' { 0 -- 0 }
-			[3] Constant '0' { 0 -- 0 }
-		[2] BinaryOp '=' { 2980 -- 3007 }
-			[3] Declaration 'int counterSecond' { 0 -- 0 }
-			[3] Constant '5' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 3007 -- 3035 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"fun start\n"' { 0 -- 0 }
-		[2] Scope (DIRTY: modified)  { 3035 -- 3118 }
-			[3] Defer (DIRTY: removed)  { 3056 -- 3070 }
-				[4] BinaryOp (DIRTY: removed)  '+=' { 3056 -- 3070 }
+		[2] Scope { 2959 -- 3300 }
+			[3] BinaryOp '=' { 2967 -- 2980 }
+				[4] Declaration 'int counter' { 0 -- 0 }
+				[4] Constant '0' { 0 -- 0 }
+			[3] BinaryOp '=' { 2980 -- 3007 }
+				[4] Declaration 'int counterSecond' { 0 -- 0 }
+				[4] Constant '5' { 0 -- 0 }
+			[3] PostfixExpression '(...)' { 3007 -- 3035 }
+				[4] Identifier 'printf' { 0 -- 0 }
+					[5] Constant '"fun start\n"' { 0 -- 0 }
+			[3] Scope (DIRTY: modified)  { 3035 -- 3118 }
+				[4] Defer (DIRTY: removed)  { 3056 -- 3070 }
+					[5] BinaryOp (DIRTY: removed)  '+=' { 3056 -- 3070 }
+						[6] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
+						[6] Constant (DIRTY: removed)  '1' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 3070 -- 3112 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"counter: %d\n"' { 0 -- 0 }
+						[6] Identifier 'counter' { 0 -- 0 }
+				[4] BinaryOp (DIRTY: added)  '+=' { 3056 -- 3070 }
 					[5] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
 					[5] Constant (DIRTY: removed)  '1' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 3070 -- 3112 }
+			[3] PostfixExpression '(...)' { 3118 -- 3156 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"counter: %d\n"' { 0 -- 0 }
 					[5] Identifier 'counter' { 0 -- 0 }
-			[3] BinaryOp (DIRTY: added)  '+=' { 3056 -- 3070 }
-				[4] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
-				[4] Constant (DIRTY: removed)  '1' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 3118 -- 3156 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"counter: %d\n"' { 0 -- 0 }
-				[4] Identifier 'counter' { 0 -- 0 }
-		[2] Scope (DIRTY: modified)  { 3156 -- 3260 }
-			[3] Defer (DIRTY: removed)  { 3177 -- 3212 }
-				[4] BinaryOp (DIRTY: removed)  '=' { 3177 -- 3212 }
+			[3] Scope (DIRTY: modified)  { 3156 -- 3260 }
+				[4] Defer (DIRTY: removed)  { 3177 -- 3212 }
+					[5] BinaryOp (DIRTY: removed)  '=' { 3177 -- 3212 }
+						[6] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
+						[6] BinaryOp (DIRTY: removed)  '+' { 0 -- 0 }
+							[7] Identifier (DIRTY: removed)  'counterSecond' { 0 -- 0 }
+							[7] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
+				[4] PostfixExpression '(...)' { 3212 -- 3254 }
+					[5] Identifier 'printf' { 0 -- 0 }
+						[6] Constant '"counter: %d\n"' { 0 -- 0 }
+						[6] Identifier 'counter' { 0 -- 0 }
+				[4] BinaryOp (DIRTY: added)  '=' { 3177 -- 3212 }
 					[5] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
 					[5] BinaryOp (DIRTY: removed)  '+' { 0 -- 0 }
 						[6] Identifier (DIRTY: removed)  'counterSecond' { 0 -- 0 }
 						[6] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
-			[3] PostfixExpression '(...)' { 3212 -- 3254 }
+			[3] PostfixExpression '(...)' { 3260 -- 3298 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"counter: %d\n"' { 0 -- 0 }
 					[5] Identifier 'counter' { 0 -- 0 }
-			[3] BinaryOp (DIRTY: added)  '=' { 3177 -- 3212 }
-				[4] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
-				[4] BinaryOp (DIRTY: removed)  '+' { 0 -- 0 }
-					[5] Identifier (DIRTY: removed)  'counterSecond' { 0 -- 0 }
-					[5] Identifier (DIRTY: removed)  'counter' { 0 -- 0 }
-		[2] PostfixExpression '(...)' { 3260 -- 3298 }
-			[3] Identifier 'printf' { 0 -- 0 }
-				[4] Constant '"counter: %d\n"' { 0 -- 0 }
-				[4] Identifier 'counter' { 0 -- 0 }
-squashed range: (0 -- 64) Function
+adding range: (0-163) Function
+adding range: (53-163) Scope
+adding range: (64-87) PostfixExpression
+adding range: (127-161) PostfixExpression
+adding range: (97-126) PostfixExpression
+adding range: (163-308) Function
+adding range: (201-308) Scope
+adding range: (207-306) Scope
+adding range: (222-236) PostfixExpression
+adding range: (271-300) PostfixExpression
+adding range: (250-270) PostfixExpression
+adding range: (308-524) Function
+adding range: (341-524) Scope
+adding range: (352-379) PostfixExpression
+adding range: (379-485) Scope
+adding range: (401-415) PostfixExpression
+adding range: (450-479) PostfixExpression
+adding range: (429-449) PostfixExpression
+adding range: (485-522) PostfixExpression
+adding range: (524-730) Function
+adding range: (563-730) Scope
+adding range: (574-590) PostfixExpression
+adding range: (590-702) If
+adding range: (590-615) Group
+adding range: (598-615) BinaryOp
+adding range: (615-702) Scope
+adding range: (636-644) PostfixExpression
+adding range: (673-696) PostfixExpression
+adding range: (658-672) PostfixExpression
+adding range: (702-728) PostfixExpression
+adding range: (730-986) Function
+adding range: (785-986) Scope
+adding range: (811-984) If
+adding range: (811-836) Group
+adding range: (819-836) BinaryOp
+adding range: (836-984) Scope
+adding range: (871-978) If
+adding range: (871-898) Group
+adding range: (882-898) BinaryOp
+adding range: (898-978) Scope
+adding range: (941-968) PostfixExpression
+adding range: (926-940) PostfixExpression
+adding range: (856-870) PostfixExpression
+adding range: (795-810) PostfixExpression
+adding range: (986-1245) Function
+adding range: (1034-1245) Scope
+adding range: (1060-1151) If
+adding range: (1060-1085) Group
+adding range: (1068-1085) BinaryOp
+adding range: (1085-1151) Scope
+adding range: (1122-1145) PostfixExpression
+adding range: (1105-1121) PostfixExpression
+adding range: (1151-1243) If
+adding range: (1151-1175) Group
+adding range: (1159-1175) BinaryOp
+adding range: (1175-1243) Scope
+adding range: (1212-1237) PostfixExpression
+adding range: (1195-1211) PostfixExpression
+adding range: (1044-1059) PostfixExpression
+adding range: (1245-1486) Function
+adding range: (1270-1486) Scope
+adding range: (1278-1285) BinaryOp
+adding range: (1285-1377) Loop
+adding range: (1312-1313) Group
+adding range: (1293-1301) BinaryOp
+adding range: (1301-1308) BinaryOp
+adding range: (1308-1312) PostfixExpression
+adding range: (1313-1377) Scope
+adding range: (1348-1371) PostfixExpression
+adding range: (1333-1347) PostfixExpression
+adding range: (1377-1389) BinaryOp
+adding range: (1389-1484) Loop
+adding range: (1399-1407) BinaryOp
+adding range: (1407-1484) Scope
+adding range: (1442-1465) PostfixExpression
+adding range: (1465-1478) PostfixExpression
+adding range: (1427-1441) PostfixExpression
+adding range: (1486-1868) Function
+adding range: (1522-1868) Scope
+adding range: (1530-1537) BinaryOp
+adding range: (1537-1694) Loop
+adding range: (1564-1565) Group
+adding range: (1545-1553) BinaryOp
+adding range: (1553-1560) BinaryOp
+adding range: (1560-1564) PostfixExpression
+adding range: (1565-1694) Scope
+adding range: (1600-1664) If
+adding range: (1600-1625) Group
+adding range: (1612-1625) BinaryOp
+adding range: (1625-1664) Scope
+adding range: (1653-1654) JumpStatement
+adding range: (1664-1688) PostfixExpression
+adding range: (1585-1599) PostfixExpression
+adding range: (1694-1706) BinaryOp
+adding range: (1706-1866) Loop
+adding range: (1716-1724) BinaryOp
+adding range: (1724-1866) Scope
+adding range: (1759-1823) If
+adding range: (1759-1784) Group
+adding range: (1771-1784) BinaryOp
+adding range: (1784-1823) Scope
+adding range: (1812-1813) JumpStatement
+adding range: (1823-1847) PostfixExpression
+adding range: (1847-1860) PostfixExpression
+adding range: (1744-1758) PostfixExpression
+adding range: (1868-2259) Function
+adding range: (1907-2259) Scope
+adding range: (1915-1922) BinaryOp
+adding range: (1922-2082) Loop
+adding range: (1949-1950) Group
+adding range: (1930-1938) BinaryOp
+adding range: (1938-1945) BinaryOp
+adding range: (1945-1949) PostfixExpression
+adding range: (1950-2082) Scope
+adding range: (1985-2052) If
+adding range: (1985-2010) Group
+adding range: (1997-2010) BinaryOp
+adding range: (2010-2052) Scope
+adding range: (2041-2042) JumpStatement
+adding range: (2052-2076) PostfixExpression
+adding range: (1970-1984) PostfixExpression
+adding range: (2082-2094) BinaryOp
+adding range: (2094-2257) Loop
+adding range: (2104-2112) BinaryOp
+adding range: (2112-2257) Scope
+adding range: (2147-2214) If
+adding range: (2147-2172) Group
+adding range: (2159-2172) BinaryOp
+adding range: (2172-2214) Scope
+adding range: (2203-2204) JumpStatement
+adding range: (2214-2238) PostfixExpression
+adding range: (2238-2251) PostfixExpression
+adding range: (2132-2146) PostfixExpression
+adding range: (2259-2365) Function
+adding range: (2288-2365) Scope
+adding range: (2298-2312) PostfixExpression
+adding range: (2323-2337) PostfixExpression
+adding range: (2348-2362) PostfixExpression
+adding range: (2365-2659) Function
+adding range: (2402-2659) Scope
+adding range: (2430-2657) SwitchCase
+adding range: (2450-2657) Scope
+adding range: (2469-2499) SwitchCaseLabel
+adding range: (2472-2499) PostfixExpression
+adding range: (2499-2518) JumpStatement
+adding range: (2518-2562) SwitchCaseLabel
+adding range: (2535-2562) PostfixExpression
+adding range: (2562-2581) JumpStatement
+adding range: (2581-2632) SwitchCaseLabel
+adding range: (2599-2632) PostfixExpression
+adding range: (2632-2651) JumpStatement
+adding range: (2412-2429) PostfixExpression
+adding range: (2659-2917) Function
+adding range: (2687-2917) Scope
+adding range: (2695-2702) BinaryOp
+adding range: (2702-2797) Loop
+adding range: (2763-2764) Group
+adding range: (2744-2752) BinaryOp
+adding range: (2752-2759) BinaryOp
+adding range: (2759-2763) PostfixExpression
+adding range: (2778-2796) PostfixExpression
+adding range: (2797-2864) If
+adding range: (2797-2814) Group
+adding range: (2805-2814) BinaryOp
+adding range: (2828-2863) PostfixExpression
+adding range: (2875-2914) PostfixExpression
+adding range: (2917-3300) Function
+adding range: (2959-3300) Scope
+adding range: (2967-2980) BinaryOp
+adding range: (2980-3007) BinaryOp
+adding range: (3007-3035) PostfixExpression
+adding range: (3035-3118) Scope
+adding range: (3070-3112) PostfixExpression
+adding range: (3056-3070) BinaryOp
+adding range: (3118-3156) PostfixExpression
+adding range: (3156-3260) Scope
+adding range: (3212-3254) PostfixExpression
+adding range: (3177-3212) BinaryOp
+adding range: (3260-3298) PostfixExpression
+trying to split node: (590 -- 615) Group (following first node: (598 -- 615) BinaryOp)
+trying to split node: (811 -- 836) Group (following first node: (819 -- 836) BinaryOp)
+trying to split node: (871 -- 898) Group (following first node: (882 -- 898) BinaryOp)
+trying to split node: (1060 -- 1085) Group (following first node: (1068 -- 1085) BinaryOp)
+trying to split node: (1151 -- 1175) Group (following first node: (1159 -- 1175) BinaryOp)
+trying to split node: (1600 -- 1625) Group (following first node: (1612 -- 1625) BinaryOp)
+trying to split node: (1625 -- 1664) Scope (following first node: (1653 -- 1654) JumpStatement)
+trying to split node: (1759 -- 1784) Group (following first node: (1771 -- 1784) BinaryOp)
+trying to split node: (1784 -- 1823) Scope (following first node: (1812 -- 1813) JumpStatement)
+trying to split node: (1985 -- 2010) Group (following first node: (1997 -- 2010) BinaryOp)
+trying to split node: (2010 -- 2052) Scope (following first node: (2041 -- 2042) JumpStatement)
+trying to split node: (2147 -- 2172) Group (following first node: (2159 -- 2172) BinaryOp)
+trying to split node: (2172 -- 2214) Scope (following first node: (2203 -- 2204) JumpStatement)
+trying to split node: (2469 -- 2499) SwitchCaseLabel (following first node: (2472 -- 2499) PostfixExpression)
+trying to split node: (2518 -- 2562) SwitchCaseLabel (following first node: (2535 -- 2562) PostfixExpression)
+trying to split node: (2581 -- 2632) SwitchCaseLabel (following first node: (2599 -- 2632) PostfixExpression)
+trying to split node: (2797 -- 2814) Group (following first node: (2805 -- 2814) BinaryOp)
+squashed range: (0 -- 53) Function
+squashed range: (53 -- 64) Scope
 squashed range: (64 -- 87) PostfixExpression
 squashed range: (127 -- 161) PostfixExpression
 squashed range: (97 -- 126) PostfixExpression
-squashed range: (161 -- 163) Function
-squashed range: (163 -- 207) Function
+squashed range: (161 -- 163) Scope
+squashed range: (163 -- 201) Function
+squashed range: (201 -- 207) Scope
 squashed range: (207 -- 222) Scope
 squashed range: (222 -- 236) PostfixExpression
 squashed range: (271 -- 300) PostfixExpression
 squashed range: (250 -- 270) PostfixExpression
 squashed range: (300 -- 306) Scope
-squashed range: (306 -- 308) Function
-squashed range: (308 -- 352) Function
+squashed range: (306 -- 308) Scope
+squashed range: (308 -- 341) Function
+squashed range: (341 -- 352) Scope
 squashed range: (352 -- 379) PostfixExpression
 squashed range: (379 -- 401) Scope
 squashed range: (401 -- 415) PostfixExpression
@@ -468,141 +696,157 @@ squashed range: (450 -- 479) PostfixExpression
 squashed range: (429 -- 449) PostfixExpression
 squashed range: (479 -- 485) Scope
 squashed range: (485 -- 522) PostfixExpression
-squashed range: (522 -- 524) Function
-squashed range: (524 -- 574) Function
+squashed range: (522 -- 524) Scope
+squashed range: (524 -- 563) Function
+squashed range: (563 -- 574) Scope
 squashed range: (574 -- 590) PostfixExpression
-squashed range: (590 -- 590) If
-squashed range: (590 -- 615) Group
+squashed range: (590 -- 598) Group
 squashed range: (598 -- 615) BinaryOp
+squashed range: (615 -- 636) Scope
 squashed range: (636 -- 644) PostfixExpression
 squashed range: (673 -- 696) PostfixExpression
 squashed range: (658 -- 672) PostfixExpression
-squashed range: (696 -- 702) If
+squashed range: (696 -- 702) Scope
 squashed range: (702 -- 728) PostfixExpression
-squashed range: (728 -- 730) Function
-squashed range: (730 -- 811) Function
-squashed range: (811 -- 811) If
-squashed range: (811 -- 836) Group
+squashed range: (728 -- 730) Scope
+squashed range: (730 -- 785) Function
+squashed range: (785 -- 811) Scope
+squashed range: (811 -- 819) Group
 squashed range: (819 -- 836) BinaryOp
-squashed range: (871 -- 871) If
-squashed range: (871 -- 898) Group
+squashed range: (836 -- 871) Scope
+squashed range: (871 -- 882) Group
 squashed range: (882 -- 898) BinaryOp
+squashed range: (898 -- 941) Scope
 squashed range: (941 -- 968) PostfixExpression
 squashed range: (926 -- 940) PostfixExpression
-squashed range: (968 -- 978) If
+squashed range: (968 -- 978) Scope
 squashed range: (856 -- 870) PostfixExpression
-squashed range: (978 -- 984) If
+squashed range: (978 -- 984) Scope
 squashed range: (795 -- 810) PostfixExpression
-squashed range: (984 -- 986) Function
-squashed range: (986 -- 1060) Function
-squashed range: (1060 -- 1060) If
-squashed range: (1060 -- 1085) Group
+squashed range: (984 -- 986) Scope
+squashed range: (986 -- 1034) Function
+squashed range: (1034 -- 1060) Scope
+squashed range: (1060 -- 1068) Group
 squashed range: (1068 -- 1085) BinaryOp
+squashed range: (1085 -- 1122) Scope
 squashed range: (1122 -- 1145) PostfixExpression
 squashed range: (1105 -- 1121) PostfixExpression
-squashed range: (1145 -- 1151) If
-squashed range: (1151 -- 1151) If
-squashed range: (1151 -- 1175) Group
+squashed range: (1145 -- 1151) Scope
+squashed range: (1151 -- 1159) Group
 squashed range: (1159 -- 1175) BinaryOp
+squashed range: (1175 -- 1212) Scope
 squashed range: (1212 -- 1237) PostfixExpression
 squashed range: (1195 -- 1211) PostfixExpression
-squashed range: (1237 -- 1243) If
+squashed range: (1237 -- 1243) Scope
 squashed range: (1044 -- 1059) PostfixExpression
-squashed range: (1243 -- 1245) Function
-squashed range: (1245 -- 1278) Function
+squashed range: (1243 -- 1245) Scope
+squashed range: (1245 -- 1270) Function
+squashed range: (1270 -- 1278) Scope
 squashed range: (1278 -- 1285) BinaryOp
 squashed range: (1285 -- 1312) Loop
 squashed range: (1312 -- 1313) Group
 squashed range: (1293 -- 1301) BinaryOp
 squashed range: (1301 -- 1308) BinaryOp
 squashed range: (1308 -- 1312) PostfixExpression
+squashed range: (1313 -- 1348) Scope
 squashed range: (1348 -- 1371) PostfixExpression
 squashed range: (1333 -- 1347) PostfixExpression
-squashed range: (1371 -- 1377) Loop
+squashed range: (1371 -- 1377) Scope
 squashed range: (1377 -- 1389) BinaryOp
 squashed range: (1389 -- 1399) Loop
 squashed range: (1399 -- 1407) BinaryOp
+squashed range: (1407 -- 1442) Scope
 squashed range: (1442 -- 1465) PostfixExpression
 squashed range: (1465 -- 1478) PostfixExpression
 squashed range: (1427 -- 1441) PostfixExpression
-squashed range: (1478 -- 1484) Loop
-squashed range: (1484 -- 1486) Function
-squashed range: (1486 -- 1530) Function
+squashed range: (1478 -- 1484) Scope
+squashed range: (1484 -- 1486) Scope
+squashed range: (1486 -- 1522) Function
+squashed range: (1522 -- 1530) Scope
 squashed range: (1530 -- 1537) BinaryOp
 squashed range: (1537 -- 1564) Loop
 squashed range: (1564 -- 1565) Group
 squashed range: (1545 -- 1553) BinaryOp
 squashed range: (1553 -- 1560) BinaryOp
 squashed range: (1560 -- 1564) PostfixExpression
-squashed range: (1600 -- 1600) If
-squashed range: (1600 -- 1625) Group
+squashed range: (1565 -- 1600) Scope
+squashed range: (1600 -- 1612) Group
 squashed range: (1612 -- 1625) BinaryOp
+squashed range: (1625 -- 1653) Scope
 squashed range: (1653 -- 1654) JumpStatement
-squashed range: (1654 -- 1664) If
+squashed range: (1654 -- 1664) Scope
 squashed range: (1664 -- 1688) PostfixExpression
 squashed range: (1585 -- 1599) PostfixExpression
-squashed range: (1688 -- 1694) Loop
+squashed range: (1688 -- 1694) Scope
 squashed range: (1694 -- 1706) BinaryOp
 squashed range: (1706 -- 1716) Loop
 squashed range: (1716 -- 1724) BinaryOp
-squashed range: (1759 -- 1759) If
-squashed range: (1759 -- 1784) Group
+squashed range: (1724 -- 1759) Scope
+squashed range: (1759 -- 1771) Group
 squashed range: (1771 -- 1784) BinaryOp
+squashed range: (1784 -- 1812) Scope
 squashed range: (1812 -- 1813) JumpStatement
-squashed range: (1813 -- 1823) If
+squashed range: (1813 -- 1823) Scope
 squashed range: (1823 -- 1847) PostfixExpression
 squashed range: (1847 -- 1860) PostfixExpression
 squashed range: (1744 -- 1758) PostfixExpression
-squashed range: (1860 -- 1866) Loop
-squashed range: (1866 -- 1868) Function
-squashed range: (1868 -- 1915) Function
+squashed range: (1860 -- 1866) Scope
+squashed range: (1866 -- 1868) Scope
+squashed range: (1868 -- 1907) Function
+squashed range: (1907 -- 1915) Scope
 squashed range: (1915 -- 1922) BinaryOp
 squashed range: (1922 -- 1949) Loop
 squashed range: (1949 -- 1950) Group
 squashed range: (1930 -- 1938) BinaryOp
 squashed range: (1938 -- 1945) BinaryOp
 squashed range: (1945 -- 1949) PostfixExpression
-squashed range: (1985 -- 1985) If
-squashed range: (1985 -- 2010) Group
+squashed range: (1950 -- 1985) Scope
+squashed range: (1985 -- 1997) Group
 squashed range: (1997 -- 2010) BinaryOp
+squashed range: (2010 -- 2041) Scope
 squashed range: (2041 -- 2042) JumpStatement
-squashed range: (2042 -- 2052) If
+squashed range: (2042 -- 2052) Scope
 squashed range: (2052 -- 2076) PostfixExpression
 squashed range: (1970 -- 1984) PostfixExpression
-squashed range: (2076 -- 2082) Loop
+squashed range: (2076 -- 2082) Scope
 squashed range: (2082 -- 2094) BinaryOp
 squashed range: (2094 -- 2104) Loop
 squashed range: (2104 -- 2112) BinaryOp
-squashed range: (2147 -- 2147) If
-squashed range: (2147 -- 2172) Group
+squashed range: (2112 -- 2147) Scope
+squashed range: (2147 -- 2159) Group
 squashed range: (2159 -- 2172) BinaryOp
+squashed range: (2172 -- 2203) Scope
 squashed range: (2203 -- 2204) JumpStatement
-squashed range: (2204 -- 2214) If
+squashed range: (2204 -- 2214) Scope
 squashed range: (2214 -- 2238) PostfixExpression
 squashed range: (2238 -- 2251) PostfixExpression
 squashed range: (2132 -- 2146) PostfixExpression
-squashed range: (2251 -- 2257) Loop
-squashed range: (2257 -- 2259) Function
-squashed range: (2259 -- 2298) Function
+squashed range: (2251 -- 2257) Scope
+squashed range: (2257 -- 2259) Scope
+squashed range: (2259 -- 2288) Function
+squashed range: (2288 -- 2298) Scope
 squashed range: (2298 -- 2312) PostfixExpression
 squashed range: (2323 -- 2337) PostfixExpression
 squashed range: (2348 -- 2362) PostfixExpression
-squashed range: (2362 -- 2365) Function
-squashed range: (2365 -- 2430) Function
-squashed range: (2430 -- 2469) SwitchCase
-squashed range: (2469 -- 2499) SwitchCaseLabel
+squashed range: (2362 -- 2365) Scope
+squashed range: (2365 -- 2402) Function
+squashed range: (2402 -- 2430) Scope
+squashed range: (2430 -- 2450) SwitchCase
+squashed range: (2450 -- 2469) Scope
+squashed range: (2469 -- 2472) SwitchCaseLabel
 squashed range: (2472 -- 2499) PostfixExpression
 squashed range: (2499 -- 2518) JumpStatement
-squashed range: (2518 -- 2562) SwitchCaseLabel
+squashed range: (2518 -- 2535) SwitchCaseLabel
 squashed range: (2535 -- 2562) PostfixExpression
 squashed range: (2562 -- 2581) JumpStatement
-squashed range: (2581 -- 2632) SwitchCaseLabel
+squashed range: (2581 -- 2599) SwitchCaseLabel
 squashed range: (2599 -- 2632) PostfixExpression
 squashed range: (2632 -- 2651) JumpStatement
-squashed range: (2651 -- 2657) SwitchCase
+squashed range: (2651 -- 2657) Scope
 squashed range: (2412 -- 2429) PostfixExpression
-squashed range: (2657 -- 2659) Function
-squashed range: (2659 -- 2695) Function
+squashed range: (2657 -- 2659) Scope
+squashed range: (2659 -- 2687) Function
+squashed range: (2687 -- 2695) Scope
 squashed range: (2695 -- 2702) BinaryOp
 squashed range: (2702 -- 2763) Loop
 squashed range: (2763 -- 2764) Group
@@ -611,14 +855,14 @@ squashed range: (2752 -- 2759) BinaryOp
 squashed range: (2759 -- 2763) PostfixExpression
 squashed range: (2778 -- 2796) PostfixExpression
 squashed range: (2796 -- 2797) Loop
-squashed range: (2797 -- 2797) If
-squashed range: (2797 -- 2814) Group
+squashed range: (2797 -- 2805) Group
 squashed range: (2805 -- 2814) BinaryOp
 squashed range: (2828 -- 2863) PostfixExpression
 squashed range: (2863 -- 2864) If
 squashed range: (2875 -- 2914) PostfixExpression
-squashed range: (2914 -- 2917) Function
-squashed range: (2917 -- 2967) Function
+squashed range: (2914 -- 2917) Scope
+squashed range: (2917 -- 2959) Function
+squashed range: (2959 -- 2967) Scope
 squashed range: (2967 -- 2980) BinaryOp
 squashed range: (2980 -- 3007) BinaryOp
 squashed range: (3007 -- 3035) PostfixExpression
@@ -632,5 +876,5 @@ squashed range: (3212 -- 3254) PostfixExpression
 squashed range: (3177 -- 3212) BinaryOp
 squashed range: (3254 -- 3260) Scope
 squashed range: (3260 -- 3298) PostfixExpression
-squashed range: (3298 -- 3300) Function
+squashed range: (3298 -- 3300) Scope
 Generated file /tmp/AST_defer.c
