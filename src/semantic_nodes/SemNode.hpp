@@ -15,16 +15,24 @@ namespace safec
 
 class SemNodeWalker;
 
-// clang-format off
-#define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
-// clang-format on
-
 class SemNode
 {
 public:
+// clang-format off
+    #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
+    // clang-format on
+
     enum class Type : uint32_t
     {
         SEMNODE_TYPE_ENUMERATE(SEMNODE_TYPE_SELECTOR_VALUE)
+    };
+
+    enum class DirtyType : uint32_t
+    {
+        Clean,
+        Removed,
+        Added,
+        Modified
     };
 
     SemNode();
@@ -58,8 +66,8 @@ public:
 
     // if the node was modified and the generator
     // needs to know, mark the node as dirty
-    void setDirty(const bool dirty);
-    bool getDirty() const;
+    void setDirty(const DirtyType dirty);
+    DirtyType getDirty() const;
 
 protected:
     Type mType;
@@ -71,7 +79,7 @@ protected:
     static uint32_t mIdGlobal;
     uint32_t mId;
 
-    bool mDirty;
+    DirtyType mDirty;
 
     friend class SemNodeWalker;
 };

@@ -191,9 +191,24 @@ std::string WalkerPrint::getPrefix(SemNode &node, const uint32_t astLevel)
     prefix.append("] ");
     prefix.append(node.getTypeStr());
 
-    if (node.getDirty())
+    switch (node.getDirty())
     {
-        prefix.append(" (DIRTY) ");
+        case SemNode::DirtyType::Removed:
+            prefix.append(" (DIRTY: removed) ");
+            break;
+
+        case SemNode::DirtyType::Modified:
+            prefix.append(" (DIRTY: modified) ");
+            break;
+
+        case SemNode::DirtyType::Added:
+            prefix.append(" (DIRTY: added) ");
+            break;
+
+        case SemNode::DirtyType::Clean: // fallthrough
+        default:
+            // nothing
+            break;
     }
 
     return prefix;

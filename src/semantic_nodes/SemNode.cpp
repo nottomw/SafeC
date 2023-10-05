@@ -9,7 +9,7 @@ SemNode::SemNode() //
     , mSemStart{0}
     , mSemEnd{0}
     , mId{mIdGlobal++}
-    , mDirty{false}
+    , mDirty{DirtyType::Clean}
 {
 }
 
@@ -18,7 +18,7 @@ SemNode::SemNode(const SemNode::Type type) //
     , mSemStart{0}
     , mSemEnd{0}
     , mId{mIdGlobal++}
-    , mDirty{false}
+    , mDirty{DirtyType::Clean}
 {
 }
 
@@ -34,7 +34,7 @@ SemNode::Type SemNode::getType() const
 
 std::string_view SemNode::getTypeStr() const
 {
-    // clang-format off
+// clang-format off
     #define SEMNODE_TYPE_SELECTOR_VALUE_TO_STR(x)                                                                          \
         case Type::x:                                                                                                      \
         {                                                                                                              \
@@ -81,12 +81,12 @@ uint32_t SemNode::getId() const
     return mId;
 }
 
-void SemNode::setDirty(const bool dirty)
+void SemNode::setDirty(const DirtyType dirty)
 {
     mDirty = dirty;
 }
 
-bool SemNode::getDirty() const
+SemNode::DirtyType SemNode::getDirty() const
 {
     return mDirty;
 }

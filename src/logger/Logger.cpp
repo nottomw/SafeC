@@ -1,15 +1,13 @@
 #include "Logger.hpp"
 
 #include "config/Config.hpp"
+#include "utils/Utils.hpp"
 
 namespace safec
 {
 
 namespace logger
 {
-
-// move to some utils?
-#define STRINGIFY(x) #x
 
 // clang-format off
 #define COLORS_ENUMERATE_IN_SWITCH_CASE(color_name, color_value) \

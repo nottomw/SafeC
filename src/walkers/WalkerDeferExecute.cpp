@@ -137,9 +137,9 @@ void WalkerDeferExecute::commit()
         // TODO: need to recalculate positions after this node to properly
         // generate the output source file. For now just zero out the
         // positions and mark the node as dirty.
-        deferredOperation->setSemStart(0);
-        deferredOperation->setSemEnd(0);
-        deferredOperation->setDirty(true);
+
+        // TODO: clone the deferred operation
+        deferredOperation->setDirty(SemNode::DirtyType::Added);
 
         scopeToAttachDefer.attach(deferredOperation);
     }
@@ -157,9 +157,9 @@ void WalkerDeferExecute::commit()
             auto &deferredNode = findNodeById(*mTranslationUnit, it.mDeferNodeId);
             if (nodeIt->getId() == deferredNode.getId())
             {
-                // set as dirty since node is removed from this scope
-                deferOwnerScope.setDirty(true);
-                ownerScopeNodeIt = ownerScopeAttachedNodes.erase(ownerScopeNodeIt);
+                deferredNode.setDirty(SemNode::DirtyType::Removed);
+                deferOwnerScope.setDirty(SemNode::DirtyType::Modified);
+                // ownerScopeNodeIt = ownerScopeAttachedNodes.erase(ownerScopeNodeIt);
                 break;
             }
             else

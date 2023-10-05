@@ -50,6 +50,19 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
     //      3) if node was added, insert code just before following node
     //         (offset all following nodes by + strlen(addedNode))
 
+    // 1) walk through all nodes, get all available ranges
+    //      - if node deleted - ignore the range
+    // 2) during the walk split ranges into smaller chunks, eg:
+    //      function { 1 -- 100 }
+    //          if { 2 - 50 }
+    //          loop { 51 - 99 }
+    //    should be split into ranges:
+    //      {1  - 2}   - function start
+    //      {2  - 50}  - if
+    //      {51 - 99}  - loop
+    //      {99 - 100} - function end
+    //
+
     const int32_t startPos = node.getSemStart();
     const int32_t endPos = node.getSemEnd();
     const int32_t nodeStringLen = endPos - startPos;

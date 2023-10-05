@@ -5,6 +5,8 @@
 
 #define TODO(void) assert(nullptr == "not implemented yet");
 
+#define STRINGIFY(x) #x
+
 namespace safec
 {
 
