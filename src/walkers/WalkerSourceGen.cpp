@@ -81,6 +81,8 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
         requestAction(sourceRange.mSpecialAction, SpecialAction::AppendSemicolon);
     }
 
+    log("adding range: (%-%) %", startPos, endPos, node.getTypeStr());
+
     mSourceRanges.push_back(sourceRange);
 }
 
@@ -136,7 +138,6 @@ std::string WalkerSourceGen::getStrFromSource( //
     const uint32_t startPos,
     const uint32_t endPos)
 {
-
     if (startPos == endPos)
     {
         return std::string{};
@@ -208,7 +209,7 @@ void WalkerSourceGen::squashRanges()
     {
         auto &currentRange = mSourceRanges[i];
 
-        const uint32_t currentRangeFirstIdx = i + 1;
+        uint32_t currentRangeFirstIdx = i + 1;
         uint32_t currentRangeLastIdx = i + 1;
         uint32_t maxEndPosInCurrentRange = 0;
         for (uint32_t j = i + 1; j < mSourceRanges.size(); j++)
@@ -231,7 +232,36 @@ void WalkerSourceGen::squashRanges()
 
         if (currentRangeFirstIdx == currentRangeLastIdx)
         {
-            continue;
+            // check if still in range...
+            if (currentRangeFirstIdx == mSourceRanges.size())
+            {
+                continue;
+            }
+
+            // either node is not nested or there is just a single node that fits
+            // in current scope
+            auto &followingRange = mSourceRanges[currentRangeFirstIdx];
+            if ((followingRange.mStartPos >= currentRange.mStartPos) && //
+                (followingRange.mEndPos <= currentRange.mEndPos))
+            {
+                if (followingRange.mStartPos == followingRange.mEndPos)
+                {
+                    continue;
+                }
+
+                // this node must be split
+                log("trying to split node: (% -- %) % (following first node: (% -- %) %)",
+                    currentRange.mStartPos,
+                    currentRange.mEndPos,
+                    currentRange.mNodeType,
+                    followingRange.mStartPos,
+                    followingRange.mEndPos,
+                    followingRange.mNodeType);
+            }
+            else
+            {
+                continue;
+            }
         }
 
         // first idx is the index of first node that is included in currentRange
@@ -248,10 +278,22 @@ void WalkerSourceGen::squashRanges()
         // modify the current range to end at the start of first nested node
         currentRange.mEndPos = currentRangeFirst.mStartPos;
 
-        // insert the ending range just after the last node
-        mSourceRanges.insert( //
-            mSourceRanges.begin() + currentRangeLastIdx + 1,
-            endingRange);
+        // discard nodes with no impact on generator (size: 0)
+
+        int32_t offsetFix = 0;
+        if (currentRange.mEndPos == currentRange.mStartPos)
+        {
+            mSourceRanges.erase(mSourceRanges.begin() + i);
+            offsetFix = -1; // hackish...
+        }
+
+        if (endingRange.mStartPos != endingRange.mEndPos)
+        {
+            // insert the ending range just after the last node
+            mSourceRanges.insert( //
+                mSourceRanges.begin() + currentRangeLastIdx + 1 + offsetFix,
+                endingRange);
+        }
 
         i = 0; // reset loop to handle nested ranges
     }

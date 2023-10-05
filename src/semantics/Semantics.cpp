@@ -1148,6 +1148,8 @@ uint32_t Semantics::countPointersInChunks(const uint32_t index)
 
 void Semantics::removeRedundantScopeFromCurrentScope()
 {
+    return;
+
     auto currentScope = mState.getCurrentScope();
 
     if (currentScope->getType() == SemNode::Type::Scope)
@@ -1201,6 +1203,28 @@ void Semantics::removeRedundantScopeFromCurrentScope()
         if (lastAttachedNode->getType() == SemNode::Type::Scope)
         {
             attachedNodes.pop_back(); // remove the redundant scope
+
+            // TODO: maybe just better to leave these scopes in place...
+
+            // Hackish fix for keeping position continuity when redundant
+            // scope had some proper start index set - if the removed scope
+            // had smaller index than the first node attached to it, let the
+            // first node in the redundant scope inherit the starting index
+            //            auto &redundantScopeAttachedNodes = lastAttachedNode->getAttachedNodes();
+            //            if (redundantScopeAttachedNodes.size() > 0)
+            //            {
+            //                if (lastAttachedNode->getSemStart() < redundantScopeAttachedNodes[0]->getSemStart())
+            //                {
+            //                    // TODO: this needs to be fixed, it breaks when the first node is
+            //                    // removed during generation (like a defer call first node in the
+            //                    // function or loop or any other scope). The node will be removed
+            //                    // and there is still a gap
+            //                    // this is a general problem that first statement in a function will get
+            //                    // incorrect indexes, that indicate the first statement spans across first '{'
+            //                    // of the scope...
+            //                    redundantScopeAttachedNodes[0]->setSemStart(lastAttachedNode->getSemStart());
+            //                }
+            //            }
 
             specialCurrentScopeNode        //
                 ->devourAttachedNodesFrom( //
