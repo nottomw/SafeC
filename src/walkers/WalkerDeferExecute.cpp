@@ -138,10 +138,9 @@ void WalkerDeferExecute::commit()
         // generate the output source file. For now just zero out the
         // positions and mark the node as dirty.
 
-        // TODO: clone the deferred operation
-        deferredOperation->setDirty(SemNode::DirtyType::Added);
-
-        scopeToAttachDefer.attach(deferredOperation);
+        auto deferredOperationClone = deferredOperation->clone();
+        deferredOperationClone->setDirty(SemNode::DirtyType::Added);
+        scopeToAttachDefer.attach(deferredOperationClone);
     }
 
     // remove the defer nodes from AST

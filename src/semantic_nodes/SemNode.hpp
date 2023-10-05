@@ -18,7 +18,7 @@ class SemNodeWalker;
 class SemNode
 {
 public:
-// clang-format off
+    // clang-format off
     #define SEMNODE_TYPE_SELECTOR_VALUE(x) x,
     // clang-format on
 
@@ -69,6 +69,13 @@ public:
     void setDirty(const DirtyType dirty);
     DirtyType getDirty() const;
 
+    // allow polymorphic clone
+    virtual std::shared_ptr<SemNode> clone()
+    {
+        assert(nullptr == "cloning of SemNode?");
+        return std::make_shared<SemNode>(*this);
+    }
+
 protected:
     Type mType;
     std::vector<std::shared_ptr<SemNode>> mRelatedNodes;
@@ -92,9 +99,15 @@ class SemNodeTranslationUnit : public SemNode
 {
 public:
     SemNodeTranslationUnit();
+    SemNodeTranslationUnit(const SemNodeTranslationUnit &) = default;
 
     void setSourcePath(const std::filesystem::path &path);
     std::filesystem::path getSourcePath() const;
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeTranslationUnit>(*this);
+    }
 
 private:
     std::filesystem::path mSourcePath;
@@ -111,6 +124,11 @@ public:
 
     void devourAttachedNodesFrom(std::shared_ptr<SemNodeScope> node);
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeScope>(*this);
+    }
+
 protected:
     uint32_t mStartIndex;
     uint32_t mEndIndex;
@@ -124,6 +142,11 @@ public:
 
     uint32_t getPos() const;
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodePositional>(*this);
+    }
+
 private:
     uint32_t mPos;
 };
@@ -132,6 +155,11 @@ class SemNodeGroup : public SemNodePositional
 {
 public:
     SemNodeGroup(const uint32_t pos);
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeGroup>(*this);
+    }
 
 private:
 };
@@ -165,6 +193,11 @@ public:
 
     std::string toStr() const override;
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeFunction>(*this);
+    }
+
 private:
     std::string mReturnType;
     std::vector<Param> mParams;
@@ -180,6 +213,11 @@ public:
     std::shared_ptr<SemNode> getReturnedNode() const;
 
     std::string toStr() const override;
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeReturn>(*this);
+    }
 
 private:
     std::shared_ptr<SemNode> mRhs;
@@ -197,6 +235,11 @@ public:
         return mName;
     }
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeIdentifier>(*this);
+    }
+
 private:
     std::string mName;
 };
@@ -211,6 +254,11 @@ public:
     std::string toStr() const override
     {
         return mName;
+    }
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeConstant>(*this);
     }
 
 private:
@@ -235,6 +283,11 @@ public:
         return mLhsType + " " + mLhsIdentifier;
     }
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeDeclaration>(*this);
+    }
+
 private:
     std::string mLhsType;
     std::string mLhsIdentifier;
@@ -254,6 +307,11 @@ public:
     void addArg(std::shared_ptr<SemNode> arg);
 
     std::string toStr() const override;
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodePostfixExpression>(*this);
+    }
 
 private:
     std::string mOperator;
@@ -282,6 +340,11 @@ public:
 
     std::string toStr() const override;
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeLoop>(*this);
+    }
+
 private:
     std::string mLoopName;
     std::shared_ptr<SemNodeGroup> mLoopStatementsGroup;
@@ -298,6 +361,11 @@ public:
     std::string toStr() const override
     {
         return "empty stmt";
+    }
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeEmptyStatement>(*this);
     }
 };
 
@@ -318,6 +386,11 @@ public:
 
     std::string toStr() const override;
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeBinaryOp>(*this);
+    }
+
 private:
     std::string mOp;
 
@@ -334,6 +407,11 @@ public:
 
     std::string toStr() const override;
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeIf>(*this);
+    }
+
 private:
     std::shared_ptr<SemNode> mCond;
     std::shared_ptr<SemNodeGroup> mGroup;
@@ -347,6 +425,11 @@ public:
     void setRhs(std::shared_ptr<SemNode> rhs);
 
     std::string toStr() const override;
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeUnaryOp>(*this);
+    }
 
 private:
     std::string mOp;
@@ -365,6 +448,11 @@ public:
         return mName;
     }
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeJumpStatement>(*this);
+    }
+
 private:
     std::string mName;
 };
@@ -380,6 +468,11 @@ public:
 
     std::string toStr() const override;
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeInitializerList>(*this);
+    }
+
 private:
     std::vector<std::shared_ptr<SemNode>> mEntries;
 };
@@ -392,6 +485,11 @@ public:
     std::string toStr() const override
     {
         return "defer";
+    }
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeDefer>(*this);
     }
 
 private:
@@ -418,6 +516,11 @@ public:
         return "case label";
     }
 
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeSwitchCaseLabel>(*this);
+    }
+
 private:
     std::shared_ptr<SemNode> mCaseLabel;
     bool mIsFallthrough;
@@ -438,6 +541,11 @@ public:
     std::string toStr() const override
     {
         return "switch..case";
+    }
+
+    virtual std::shared_ptr<SemNode> clone() override
+    {
+        return std::make_shared<SemNodeSwitchCase>(*this);
     }
 
 private:
