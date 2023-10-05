@@ -106,18 +106,12 @@ void WalkerSourceGen::generate()
         writeChunkToOutputFile(sourceChunk, sourceChunkLen);
     }
 
-    uint32_t prevEnd = mSourceRanges[0].mEndPos;
     for (uint32_t i = 1; i < mSourceRanges.size(); i++)
     {
         auto &it = mSourceRanges[i];
 
         uint32_t chunkStartPos = it.mStartPos;
         uint32_t chunkEndPos = it.mEndPos;
-
-        if (chunkStartPos == prevEnd)
-        {
-            chunkStartPos += 1;
-        }
 
         const auto sourceChunk = getStrFromSource(chunkStartPos, chunkEndPos);
         const uint32_t sourceChunkLen = chunkEndPos - chunkStartPos;
@@ -135,8 +129,6 @@ void WalkerSourceGen::generate()
             std::string s = ";";
             writeChunkToOutputFile(s, s.size());
         }
-
-        prevEnd = it.mEndPos;
     }
 }
 
