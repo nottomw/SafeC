@@ -125,7 +125,7 @@ int main(int argc, char **argv)
         {
             safec::log("Parsing file: '%'...", it);
             const size_t charCount = parser.parse(it);
-            safec::log("Parsing done, characters count %\n", charCount);
+            safec::log("\n\nParsing done, characters count %\n", charCount);
 
             if (cfg.getDisplayAst() == true)
             {
