@@ -3,7 +3,7 @@ Parsing file: 'AST_defer.sc'...
 
 Parsing done, characters count 3728
 
-Generating C file: '/tmp/AST_defer.c'
+Generating C file: '/tmp/safec_c_source/AST_defer.c'
 
 Modified AST:
 
@@ -479,4 +479,4 @@ Modified AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"counter: %d\n"' { 0 -- 0 }
 					[5] Identifier 'counter' { 0 -- 0 }
-Generated file /tmp/AST_defer.c
+Generated file /tmp/safec_c_source/AST_defer.c
