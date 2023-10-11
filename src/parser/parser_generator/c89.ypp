@@ -580,6 +580,10 @@ compound_statement_scope_start
 
 compound_statement
     : compound_statement_scope_start '}'
+    {
+        pr("kSimpleScopeEnd empty");
+        handle(SyntaxChunkType::kSimpleScopeEnd);
+    }
     | compound_statement_scope_start statement_list '}'
     {
         pr("kSimpleScopeEnd stmt");
