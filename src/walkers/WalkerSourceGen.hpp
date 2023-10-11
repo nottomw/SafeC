@@ -38,6 +38,7 @@ private:
     {
         SourceRange()
             : mSpecialAction{SpecialAction::Nothing}
+            , mAdded{false}
         {
         }
 
@@ -45,6 +46,7 @@ private:
         uint32_t mEndPos;
         std::string mNodeType;
         SpecialAction mSpecialAction;
+        bool mAdded;
     };
 
     [[maybe_unused]] const fs::path &mOutputFile;
@@ -54,6 +56,7 @@ private:
     FILE *mSourceFileFp;
 
     std::vector<SourceRange> mSourceRanges;
+    std::vector<SourceRange> mRemovedRanges;
 
     std::string getStrFromSource( //
         const uint32_t startPos,
@@ -64,6 +67,7 @@ private:
         const uint32_t sourceChunkSize);
 
     void squashRanges();
+    void applyNodeRemoves();
 };
 
 } // namespace safec

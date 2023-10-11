@@ -59,16 +59,17 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
         return;
     }
 
-    if (node.getDirty() == SemNode::DirtyType::Removed)
-    {
-        // skip removed nodes
-        return;
-    }
-
     SourceRange sourceRange;
     sourceRange.mStartPos = startPos;
     sourceRange.mEndPos = endPos;
     sourceRange.mNodeType = node.getTypeStr();
+
+    if (node.getDirty() == SemNode::DirtyType::Removed)
+    {
+        // skip removed nodes, but save them for later
+        mRemovedRanges.push_back(sourceRange);
+        return;
+    }
 
     if (node.getDirty() == SemNode::DirtyType::Added)
     {
@@ -79,9 +80,11 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
         // defer will never contain ';' since the deferred op is never terminated
         // (the incoming ';' is always for the "defer" keyword)
         requestAction(sourceRange.mSpecialAction, SpecialAction::AppendSemicolon);
+
+        sourceRange.mAdded = true;
     }
 
-    log("adding range: (%-%) %", startPos, endPos, node.getTypeStr());
+    log("adding range: (%-%) % (added: %)", startPos, endPos, node.getTypeStr(), sourceRange.mAdded ? "true" : "false");
 
     mSourceRanges.push_back(sourceRange);
 }
@@ -96,6 +99,7 @@ void WalkerSourceGen::peek(SemNodeTranslationUnit &node, const uint32_t)
 void WalkerSourceGen::generate()
 {
     squashRanges();
+    applyNodeRemoves();
 
     {
         // write the first range, since iteration starts from "1"
@@ -301,5 +305,66 @@ void WalkerSourceGen::squashRanges()
     for (auto &it : mSourceRanges)
     {
         log("squashed range: (% -- %) %", it.mStartPos, it.mEndPos, it.mNodeType);
+    }
+}
+
+void WalkerSourceGen::applyNodeRemoves()
+{
+    for (uint32_t sourceRangeIdx = 0; sourceRangeIdx < mSourceRanges.size(); /* empty */)
+    {
+        auto &sourceRange = mSourceRanges[sourceRangeIdx];
+
+        bool shouldAdvance = true;
+
+        if (sourceRange.mAdded == false)
+        {
+            for (auto &removedRange : mRemovedRanges)
+            {
+                if ((removedRange.mStartPos >= sourceRange.mStartPos) && //
+                    (removedRange.mEndPos <= sourceRange.mEndPos))
+                {
+                    log("APPLY REMOVES: % -- % ; % -- %",
+                        Color::Red,
+                        sourceRange.mStartPos,
+                        sourceRange.mEndPos,
+                        removedRange.mStartPos,
+                        removedRange.mEndPos);
+
+                    if ((removedRange.mStartPos == sourceRange.mStartPos) && //
+                        (removedRange.mEndPos == sourceRange.mEndPos))
+                    {
+                        // whole range removed
+                        shouldAdvance = false;
+                        mSourceRanges.erase(mSourceRanges.begin() + sourceRangeIdx);
+                    }
+                    else
+                    {
+                        // add the remainder...
+                        SourceRange newRange;
+                        newRange.mStartPos = removedRange.mEndPos; // currentRangeLast.mEndPos;
+                        newRange.mEndPos = sourceRange.mEndPos;
+                        newRange.mNodeType = sourceRange.mNodeType;
+
+                        // remove the range from current
+                        sourceRange.mEndPos = removedRange.mStartPos;
+
+                        // insert new range only if size non-zero
+                        if (newRange.mStartPos != newRange.mEndPos)
+                        {
+                            mSourceRanges.insert(mSourceRanges.begin() + sourceRangeIdx, newRange);
+                        }
+
+                        // restart since we modified the currently iterated vector...
+                        shouldAdvance = false;
+                        sourceRangeIdx = 0;
+                    }
+                }
+            }
+        }
+
+        if (shouldAdvance)
+        {
+            sourceRangeIdx++;
+        }
     }
 }
