@@ -619,10 +619,9 @@ void Semantics::handleForLoopConditions(const uint32_t pos)
     loopNode->setIteratorChange(itChange);
 
     auto group = loopNode->getGroup();
-    group->setSemStart(mPrevReducePos);
+    group->setSemStart(itInit->getSemStart()); // grab the start of first node in group...
     group->setSemEnd(pos);
 
-    // TODO: set pos to the group
     setPrevReducePos(pos);
 }
 
