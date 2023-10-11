@@ -13,7 +13,7 @@ Safer version of C89 language - transpiles to C89.
 3. Transpiled output code should be readable, so it doesn't get in the way when debugging.
 
 ### Main features
-1. `defer`
+1. `defer` - simple scoped operations for C
     - partially done, see:
         - [input file](https://github.com/nottomw/SafeC/blob/main/src/safec_testfiles/AST_defer.sc)
         - [output file](https://github.com/nottomw/SafeC/blob/main/src/safec_testfiles/testfiles_generated_defer_ast/AST_defer.c)
