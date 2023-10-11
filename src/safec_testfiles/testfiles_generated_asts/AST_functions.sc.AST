@@ -42,7 +42,7 @@ AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 766 -- 839 }
-				[4] Group { 793 -- 794 }
+				[4] Group { 774 -- 794 }
 					[5] BinaryOp '=' { 774 -- 782 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }

@@ -140,7 +140,7 @@ AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1285 -- 1377 }
-				[4] Group { 1312 -- 1313 }
+				[4] Group { 1293 -- 1313 }
 					[5] BinaryOp '=' { 1293 -- 1301 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -181,7 +181,7 @@ AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1537 -- 1694 }
-				[4] Group { 1564 -- 1565 }
+				[4] Group { 1545 -- 1565 }
 					[5] BinaryOp '=' { 1545 -- 1553 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -236,7 +236,7 @@ AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1922 -- 2082 }
-				[4] Group { 1949 -- 1950 }
+				[4] Group { 1930 -- 1950 }
 					[5] BinaryOp '=' { 1930 -- 1938 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -332,7 +332,7 @@ AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 2702 -- 2797 }
-				[4] Group { 2763 -- 2764 }
+				[4] Group { 2744 -- 2764 }
 					[5] BinaryOp '=' { 2744 -- 2752 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }

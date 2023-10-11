@@ -173,7 +173,7 @@ Modified AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1285 -- 1377 }
-				[4] Group { 1312 -- 1313 }
+				[4] Group { 1293 -- 1313 }
 					[5] BinaryOp '=' { 1293 -- 1301 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -220,7 +220,7 @@ Modified AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1537 -- 1694 }
-				[4] Group { 1564 -- 1565 }
+				[4] Group { 1545 -- 1565 }
 					[5] BinaryOp '=' { 1545 -- 1553 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -281,7 +281,7 @@ Modified AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1922 -- 2082 }
-				[4] Group { 1949 -- 1950 }
+				[4] Group { 1930 -- 1950 }
 					[5] BinaryOp '=' { 1930 -- 1938 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -395,7 +395,7 @@ Modified AST:
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop (DIRTY: modified)  for { 2702 -- 2797 }
-				[4] Group { 2763 -- 2764 }
+				[4] Group { 2744 -- 2764 }
 					[5] BinaryOp '=' { 2744 -- 2752 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -542,7 +542,7 @@ adding range: (1245-1486) Function (added: false)
 adding range: (1270-1486) Scope (added: false)
 adding range: (1270-1285) BinaryOp (added: false)
 adding range: (1285-1377) Loop (added: false)
-adding range: (1312-1313) Group (added: false)
+adding range: (1293-1313) Group (added: false)
 adding range: (1293-1301) BinaryOp (added: false)
 adding range: (1301-1308) BinaryOp (added: false)
 adding range: (1308-1312) PostfixExpression (added: false)
@@ -560,7 +560,7 @@ adding range: (1486-1868) Function (added: false)
 adding range: (1522-1868) Scope (added: false)
 adding range: (1522-1537) BinaryOp (added: false)
 adding range: (1537-1694) Loop (added: false)
-adding range: (1564-1565) Group (added: false)
+adding range: (1545-1565) Group (added: false)
 adding range: (1545-1553) BinaryOp (added: false)
 adding range: (1553-1560) BinaryOp (added: false)
 adding range: (1560-1564) PostfixExpression (added: false)
@@ -588,7 +588,7 @@ adding range: (1868-2259) Function (added: false)
 adding range: (1907-2259) Scope (added: false)
 adding range: (1907-1922) BinaryOp (added: false)
 adding range: (1922-2082) Loop (added: false)
-adding range: (1949-1950) Group (added: false)
+adding range: (1930-1950) Group (added: false)
 adding range: (1930-1938) BinaryOp (added: false)
 adding range: (1938-1945) BinaryOp (added: false)
 adding range: (1945-1949) PostfixExpression (added: false)
@@ -635,7 +635,7 @@ adding range: (2659-2917) Function (added: false)
 adding range: (2687-2917) Scope (added: false)
 adding range: (2687-2702) BinaryOp (added: false)
 adding range: (2702-2797) Loop (added: false)
-adding range: (2763-2764) Group (added: false)
+adding range: (2744-2764) Group (added: false)
 adding range: (2744-2752) BinaryOp (added: false)
 adding range: (2752-2759) BinaryOp (added: false)
 adding range: (2759-2763) PostfixExpression (added: false)
@@ -740,11 +740,11 @@ squashed range: (1044 -- 1059) PostfixExpression
 squashed range: (1243 -- 1245) Scope
 squashed range: (1245 -- 1270) Function
 squashed range: (1270 -- 1285) BinaryOp
-squashed range: (1285 -- 1312) Loop
-squashed range: (1312 -- 1313) Group
+squashed range: (1285 -- 1293) Loop
 squashed range: (1293 -- 1301) BinaryOp
 squashed range: (1301 -- 1308) BinaryOp
 squashed range: (1308 -- 1312) PostfixExpression
+squashed range: (1312 -- 1313) Group
 squashed range: (1313 -- 1348) Scope
 squashed range: (1348 -- 1371) PostfixExpression
 squashed range: (1333 -- 1347) PostfixExpression
@@ -760,11 +760,11 @@ squashed range: (1478 -- 1484) Scope
 squashed range: (1484 -- 1486) Scope
 squashed range: (1486 -- 1522) Function
 squashed range: (1522 -- 1537) BinaryOp
-squashed range: (1537 -- 1564) Loop
-squashed range: (1564 -- 1565) Group
+squashed range: (1537 -- 1545) Loop
 squashed range: (1545 -- 1553) BinaryOp
 squashed range: (1553 -- 1560) BinaryOp
 squashed range: (1560 -- 1564) PostfixExpression
+squashed range: (1564 -- 1565) Group
 squashed range: (1565 -- 1600) Scope
 squashed range: (1600 -- 1612) Group
 squashed range: (1612 -- 1625) BinaryOp
@@ -790,11 +790,11 @@ squashed range: (1860 -- 1866) Scope
 squashed range: (1866 -- 1868) Scope
 squashed range: (1868 -- 1907) Function
 squashed range: (1907 -- 1922) BinaryOp
-squashed range: (1922 -- 1949) Loop
-squashed range: (1949 -- 1950) Group
+squashed range: (1922 -- 1930) Loop
 squashed range: (1930 -- 1938) BinaryOp
 squashed range: (1938 -- 1945) BinaryOp
 squashed range: (1945 -- 1949) PostfixExpression
+squashed range: (1949 -- 1950) Group
 squashed range: (1950 -- 1985) Scope
 squashed range: (1985 -- 1997) Group
 squashed range: (1997 -- 2010) BinaryOp
@@ -842,11 +842,11 @@ squashed range: (2412 -- 2429) PostfixExpression
 squashed range: (2657 -- 2659) Scope
 squashed range: (2659 -- 2687) Function
 squashed range: (2687 -- 2702) BinaryOp
-squashed range: (2702 -- 2763) Loop
-squashed range: (2763 -- 2764) Group
+squashed range: (2702 -- 2744) Loop
 squashed range: (2744 -- 2752) BinaryOp
 squashed range: (2752 -- 2759) BinaryOp
 squashed range: (2759 -- 2763) PostfixExpression
+squashed range: (2763 -- 2764) Group
 squashed range: (2778 -- 2796) PostfixExpression
 squashed range: (2796 -- 2797) Loop
 squashed range: (2797 -- 2805) Group

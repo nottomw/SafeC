@@ -97,7 +97,7 @@ AST:
 				[4] Identifier 'varWithNoValue' { 0 -- 0 }
 				[4] Constant '123' { 0 -- 0 }
 			[3] Loop for { 1238 -- 1409 }
-				[4] Group { 1289 -- 1290 }
+				[4] Group { 1270 -- 1290 }
 					[5] BinaryOp '=' { 1270 -- 1278 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '0' { 0 -- 0 }
@@ -118,7 +118,7 @@ AST:
 							[7] Constant '"num: %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
 			[3] Loop for { 1409 -- 1479 }
-				[4] Group { 1432 -- 1433 }
+				[4] Group { 0 -- 1433 }
 					[5] EmptyStatement
 					[5] BinaryOp '<' { 1418 -- 1428 }
 						[6] Identifier 'i' { 0 -- 0 }
@@ -130,7 +130,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '2' { 0 -- 0 }
 			[3] Loop for { 1479 -- 1596 }
-				[4] Group { 1519 -- 1520 }
+				[4] Group { 1488 -- 1520 }
 					[5] BinaryOp '=' { 1488 -- 1508 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Identifier 'SOME_INIT_VAL' { 0 -- 0 }
