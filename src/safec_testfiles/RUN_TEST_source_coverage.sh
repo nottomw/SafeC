@@ -3,7 +3,7 @@
 # very quick & dirty test for now...
 
 # regen all:
-# for i in `ls AST*`; do ../../build/bin/SafeCTranspiler -f $i -o . -c -n; done
+# for i in `ls AST*`; do ../../build/bin/SafeCTranspiler -f $i -o . -c -n > ./testfiles_generated_coverage/${i##*/}.COV; done
 
 SCRIPT_NAME=$(basename "$0")
 TMP_FILE_PREFIX=/tmp/safec_cov_test_file_
