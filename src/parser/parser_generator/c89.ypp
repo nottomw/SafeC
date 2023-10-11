@@ -573,26 +573,26 @@ labeled_statement
 compound_statement_scope_start
     : '{'
     {
-        // pr("compound scope start"); // commented out - confusing display
+        pr("kSimpleScopeStart");
         handle(SyntaxChunkType::kSimpleScopeStart);
     }
     ;
 
 compound_statement
-    : '{' '}'
+    : compound_statement_scope_start '}'
     | compound_statement_scope_start statement_list '}'
     {
-        pr("stmt scope");
+        pr("kSimpleScopeEnd stmt");
         handle(SyntaxChunkType::kSimpleScopeEnd);
     }
     | compound_statement_scope_start declaration_list '}'
     {
-        pr("decl scope");
+        pr("kSimpleScopeEnd decl");
         handle(SyntaxChunkType::kSimpleScopeEnd);
     }
     | compound_statement_scope_start declaration_list statement_list '}'
     {
-        pr("stmt and decl scope");
+        pr("kSimpleScopeEnd stmt&decl");
         handle(SyntaxChunkType::kSimpleScopeEnd);
     }
     ;
