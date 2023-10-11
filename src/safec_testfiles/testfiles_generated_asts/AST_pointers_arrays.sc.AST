@@ -1,11 +1,13 @@
 Parsing file: 'AST_pointers_arrays.sc'...
+
+
 Parsing done, characters count 560
 
 AST:
 [0] TranslationUnit
 	[1] Function (void TEST_LOOP_ITER_POINTERS ( )) { 0 -- 559 }
 		[2] Scope { 36 -- 559 }
-			[3] BinaryOp '=' { 85 -- 92 }
+			[3] BinaryOp '=' { 36 -- 92 }
 				[4] Declaration 'int a' { 0 -- 0 }
 				[4] Constant '3' { 0 -- 0 }
 			[3] BinaryOp '=' { 92 -- 107 }
@@ -59,9 +61,9 @@ AST:
 					[5] PostfixExpression '++' { 290 -- 309 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 310 -- 557 }
-					[5] BinaryOp '=' { 328 -- 346 }
+					[5] BinaryOp '=' { 316 -- 346 }
 						[6] Declaration 'int arrVal' { 0 -- 0 }
-						[6] UnaryOp '*' { 328 -- 339 }
+						[6] UnaryOp '*' { 316 -- 339 }
 							[7] PostfixExpression '[]' { 339 -- 345 }
 								[8] Identifier 'arr' { 0 -- 0 }
 									[9] Identifier 'i' { 0 -- 0 }
@@ -73,7 +75,7 @@ AST:
 										[10] Identifier 'i' { 0 -- 0 }
 								[8] Identifier 'NULL' { 0 -- 0 }
 						[6] Scope { 418 -- 457 }
-							[7] JumpStatement 'break' { 446 -- 447 }
+							[7] JumpStatement 'break' { 428 -- 447 }
 					[5] BinaryOp '=' { 457 -- 484 }
 						[6] Identifier 'arrVal' { 0 -- 0 }
 						[6] UnaryOp '*' { 457 -- 477 }

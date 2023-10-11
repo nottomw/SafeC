@@ -1,11 +1,13 @@
 Parsing file: 'AST_scopes.sc'...
+
+
 Parsing done, characters count 290
 
 AST:
 [0] TranslationUnit
 	[1] Function (void FUNCTION_SCOPES ( )) { 0 -- 289 }
 		[2] Scope { 73 -- 289 }
-			[3] BinaryOp '=' { 81 -- 88 }
+			[3] BinaryOp '=' { 73 -- 88 }
 				[4] Declaration 'int a' { 0 -- 0 }
 				[4] Constant '5' { 0 -- 0 }
 			[3] BinaryOp '=' { 88 -- 103 }
@@ -17,7 +19,7 @@ AST:
 					[5] Identifier 'a' { 0 -- 0 }
 					[5] Identifier 'b' { 0 -- 0 }
 			[3] Scope { 119 -- 169 }
-				[4] BinaryOp '=' { 138 -- 147 }
+				[4] BinaryOp '=' { 126 -- 147 }
 					[5] Declaration 'int c' { 0 -- 0 }
 					[5] Constant '123' { 0 -- 0 }
 				[4] BinaryOp '+=' { 147 -- 163 }
@@ -27,11 +29,11 @@ AST:
 				[4] Identifier 'b' { 0 -- 0 }
 				[4] Constant '666' { 0 -- 0 }
 			[3] Scope { 183 -- 273 }
-				[4] BinaryOp '=' { 202 -- 211 }
+				[4] BinaryOp '=' { 190 -- 211 }
 					[5] Declaration 'int d' { 0 -- 0 }
 					[5] Constant '654' { 0 -- 0 }
 				[4] Scope { 211 -- 248 }
-					[5] UnaryOp '++' { 236 -- 238 }
+					[5] UnaryOp '++' { 221 -- 238 }
 						[6] Identifier 'd' { 0 -- 0 }
 				[4] BinaryOp '=' { 248 -- 267 }
 					[5] Identifier 'd' { 0 -- 0 }

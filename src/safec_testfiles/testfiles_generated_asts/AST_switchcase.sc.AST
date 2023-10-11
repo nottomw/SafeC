@@ -1,14 +1,16 @@
 Parsing file: 'AST_switchcase.sc'...
+
+
 Parsing done, characters count 2506
 
 AST:
 [0] TranslationUnit
 	[1] Function (void SWITCH_CASE_SIMPLE (int param,  )) { 0 -- 310 }
 		[2] Scope { 83 -- 310 }
-			[3] SwitchCase on 'Identifier' { 94 -- 308 }
+			[3] SwitchCase on 'Identifier' { 83 -- 308 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 101 -- 308 }
-					[5] SwitchCaseLabel on 'Constant' { 120 -- 150 }
+					[5] SwitchCaseLabel on 'Constant' { 107 -- 150 }
 						[6] Constant '0' { 0 -- 0 }
 						[6] PostfixExpression '(...)' { 123 -- 150 }
 							[7] Identifier 'printf' { 0 -- 0 }
@@ -28,10 +30,10 @@ AST:
 					[5] JumpStatement 'break' { 283 -- 302 }
 	[1] Function (void SWITCH_CASE_IDENTIFIER_LABEL (int param,  )) { 310 -- 545 }
 		[2] Scope { 358 -- 545 }
-			[3] SwitchCase on 'Identifier' { 389 -- 543 }
+			[3] SwitchCase on 'Identifier' { 358 -- 543 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 396 -- 543 }
-					[5] SwitchCaseLabel on 'Identifier' { 415 -- 448 }
+					[5] SwitchCaseLabel on 'Identifier' { 402 -- 448 }
 						[6] Identifier 'ZERO' { 0 -- 0 }
 						[6] PostfixExpression '(...)' { 421 -- 448 }
 							[7] Identifier 'printf' { 0 -- 0 }
@@ -45,10 +47,10 @@ AST:
 					[5] JumpStatement 'break' { 518 -- 537 }
 	[1] Function (void SWITCH_CASE_IDENTIFIER_EXPR (int param,  )) { 545 -- 786 }
 		[2] Scope { 592 -- 786 }
-			[3] SwitchCase on 'Identifier' { 603 -- 762 }
+			[3] SwitchCase on 'Identifier' { 592 -- 762 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 610 -- 762 }
-					[5] SwitchCaseLabel on 'BinaryOp' { 629 -- 667 }
+					[5] SwitchCaseLabel on 'BinaryOp' { 616 -- 667 }
 						[6] BinaryOp '+' { 0 -- 0 }
 							[7] Constant '3' { 0 -- 0 }
 							[7] Constant '4' { 0 -- 0 }
@@ -67,12 +69,12 @@ AST:
 					[5] Constant '"end\n"' { 0 -- 0 }
 	[1] Function (void SWITCH_CASE_BINARY (int param,  )) { 786 -- 1020 }
 		[2] Scope { 824 -- 1020 }
-			[3] SwitchCase on 'BinaryOp' { 835 -- 996 }
+			[3] SwitchCase on 'BinaryOp' { 824 -- 996 }
 				[4] BinaryOp '+' { 0 -- 0 }
 					[5] Identifier 'param' { 0 -- 0 }
 					[5] Constant '666' { 0 -- 0 }
 				[4] Scope { 848 -- 996 }
-					[5] SwitchCaseLabel on 'Constant' { 867 -- 901 }
+					[5] SwitchCaseLabel on 'Constant' { 854 -- 901 }
 						[6] Constant '667' { 0 -- 0 }
 						[6] PostfixExpression '(...)' { 872 -- 901 }
 							[7] Identifier 'printf' { 0 -- 0 }
@@ -89,10 +91,10 @@ AST:
 					[5] Constant '"end\n"' { 0 -- 0 }
 	[1] Function (void SWITCH_CASE_FALLTHROUGH_EMPTY (int param,  )) { 1020 -- 1260 }
 		[2] Scope { 1069 -- 1260 }
-			[3] SwitchCase on 'Identifier' { 1080 -- 1258 }
+			[3] SwitchCase on 'Identifier' { 1069 -- 1258 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 1087 -- 1258 }
-					[5] SwitchCaseLabel on 'Constant' { 1106 -- 1136 }
+					[5] SwitchCaseLabel on 'Constant' { 1093 -- 1136 }
 						[6] Constant '1' { 0 -- 0 }
 						[6] PostfixExpression '(...)' { 1109 -- 1136 }
 							[7] Identifier 'printf' { 0 -- 0 }
@@ -110,10 +112,10 @@ AST:
 					[5] JumpStatement 'break' { 1237 -- 1252 }
 	[1] Function (void SWITCH_CASE_FALLTHROUGH_BODY (int param,  )) { 1260 -- 1569 }
 		[2] Scope { 1308 -- 1569 }
-			[3] SwitchCase on 'Identifier' { 1319 -- 1567 }
+			[3] SwitchCase on 'Identifier' { 1308 -- 1567 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 1326 -- 1567 }
-					[5] SwitchCaseLabel on 'Constant' { 1345 -- 1375 }
+					[5] SwitchCaseLabel on 'Constant' { 1332 -- 1375 }
 						[6] Constant '1' { 0 -- 0 }
 						[6] PostfixExpression '(...)' { 1348 -- 1375 }
 							[7] Identifier 'printf' { 0 -- 0 }
@@ -139,10 +141,10 @@ AST:
 					[5] JumpStatement 'break' { 1546 -- 1561 }
 	[1] Function (void SWITCH_CASE_FALLTHROUGH_NO_BREAKS (int param,  )) { 1569 -- 1733 }
 		[2] Scope { 1622 -- 1733 }
-			[3] SwitchCase on 'Identifier' { 1633 -- 1731 }
+			[3] SwitchCase on 'Identifier' { 1622 -- 1731 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 1640 -- 1731 }
-					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 1659 -- 1662 }
+					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 1646 -- 1662 }
 						[6] Constant '1' { 0 -- 0 }
 					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 1662 -- 1678 }
 						[6] Constant '2' { 0 -- 0 }
@@ -153,10 +155,10 @@ AST:
 						[6] EmptyStatement
 	[1] Function (void SWITCH_CASE_FALLTHROUGH_NO_BREAKS_NO_DEFAULT (int param,  )) { 1733 -- 1931 }
 		[2] Scope { 1797 -- 1931 }
-			[3] SwitchCase on 'Identifier' { 1808 -- 1929 }
+			[3] SwitchCase on 'Identifier' { 1797 -- 1929 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 1815 -- 1929 }
-					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 1834 -- 1837 }
+					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 1821 -- 1837 }
 						[6] Constant '1' { 0 -- 0 }
 					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 1837 -- 1853 }
 						[6] Constant '2' { 0 -- 0 }
@@ -165,13 +167,13 @@ AST:
 						[6] EmptyStatement
 	[1] Function (void SWITCH_CASE_WITH_SCOPES_AND_FALLTHROUGH (int param,  )) { 1931 -- 2297 }
 		[2] Scope { 1990 -- 2297 }
-			[3] SwitchCase on 'Identifier' { 2001 -- 2295 }
+			[3] SwitchCase on 'Identifier' { 1990 -- 2295 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 2008 -- 2295 }
-					[5] SwitchCaseLabel on 'Constant' { 2027 -- 2112 }
+					[5] SwitchCaseLabel on 'Constant' { 2014 -- 2112 }
 						[6] Constant '1' { 0 -- 0 }
 						[6] Scope { 2030 -- 2112 }
-							[7] PostfixExpression '(...)' { 2067 -- 2075 }
+							[7] PostfixExpression '(...)' { 2044 -- 2075 }
 								[8] Identifier 'printf' { 0 -- 0 }
 									[9] Constant '"1\n"' { 0 -- 0 }
 							[7] JumpStatement 'break' { 2075 -- 2098 }
@@ -182,7 +184,7 @@ AST:
 					[5] SwitchCaseLabel on 'Constant' { 2145 -- 2270 }
 						[6] Constant '4' { 0 -- 0 }
 						[6] Scope { 2161 -- 2270 }
-							[7] PostfixExpression '(...)' { 2198 -- 2215 }
+							[7] PostfixExpression '(...)' { 2175 -- 2215 }
 								[8] Identifier 'printf' { 0 -- 0 }
 									[9] Constant '"2 3 4 fall\n"' { 0 -- 0 }
 							[7] PostfixExpression '(...)' { 2215 -- 2256 }
@@ -191,17 +193,17 @@ AST:
 					[5] JumpStatement 'break' { 2270 -- 2289 }
 	[1] Function (void SWITCH_CASE_FALLTHROUGH_TO_DEFAULT (int param,  )) { 2297 -- 2505 }
 		[2] Scope { 2351 -- 2505 }
-			[3] SwitchCase on 'Identifier' { 2362 -- 2503 }
+			[3] SwitchCase on 'Identifier' { 2351 -- 2503 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 2369 -- 2503 }
-					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 2388 -- 2391 }
+					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 2375 -- 2391 }
 						[6] Constant '1' { 0 -- 0 }
 					[5] SwitchCaseLabel on 'Constant' (fallthrough) { 2391 -- 2407 }
 						[6] Constant '2' { 0 -- 0 }
 					[5] SwitchCaseLabel on 'default' { 2407 -- 2482 }
 						[6] EmptyStatement
 						[6] Scope { 2424 -- 2482 }
-							[7] PostfixExpression '(...)' { 2453 -- 2472 }
+							[7] PostfixExpression '(...)' { 2434 -- 2472 }
 								[8] Identifier 'printf' { 0 -- 0 }
 									[9] Constant '"1 or default\n"' { 0 -- 0 }
 					[5] JumpStatement 'break' { 2482 -- 2497 }

@@ -1,38 +1,44 @@
 Parsing file: 'AST_functions.sc'...
+
+
 Parsing done, characters count 913
 
 AST:
 [0] TranslationUnit
 	[1] Function (int a (struct/union FUNCTION_WITH_STRUCT_PARAM, struct/union structArg,  )) { 0 -- 181 }
 		[2] Scope { 138 -- 181 }
-			[3] BinaryOp '=' { 146 -- 168 }
+			[3] BinaryOp '=' { 138 -- 168 }
 				[4] Declaration 'struct/union t' { 0 -- 0 }
 				[4] Identifier 'arg' { 0 -- 0 }
 			[3] Return 'Identifier' { 168 -- 179 }
 				[4] Identifier 't' { 0 -- 0 }
 	[1] Function (void staticFun ( )) { 181 -- 214 }
+		[2] Scope { 212 -- 214 }
 	[1] Function (int constPointerRetFun ( )) { 214 -- 278 }
 		[2] Scope { 262 -- 278 }
-			[3] Return 'Identifier' { 270 -- 276 }
+			[3] Return 'Identifier' { 262 -- 276 }
 				[4] Identifier 'NULL' { 0 -- 0 }
 	[1] Function (void FUNCTION_WITH_NO_RETURN ( )) { 278 -- 318 }
+		[2] Scope { 316 -- 318 }
 	[1] Function (void* FUNCTION_WITH_VOIDPTR_RETURN ( )) { 318 -- 378 }
 		[2] Scope { 362 -- 378 }
-			[3] Return 'Identifier' { 370 -- 376 }
+			[3] Return 'Identifier' { 362 -- 376 }
 				[4] Identifier 'NULL' { 0 -- 0 }
 	[1] Function (void** FUNCTION_WITH_POINTER_TO_POINTER ( )) { 378 -- 443 }
 		[2] Scope { 427 -- 443 }
-			[3] Return 'Identifier' { 435 -- 441 }
+			[3] Return 'Identifier' { 427 -- 441 }
 				[4] Identifier 'NULL' { 0 -- 0 }
 	[1] Function (void FUNCTION_WITH_NO_RETURN_VOID_PTR_ARG (void* voidPtrArg,  )) { 443 -- 508 }
+		[2] Scope { 506 -- 508 }
 	[1] Function (void*** FUNCTION_WITH_VOIDPTR3_RETURN_VOID_PTR_ARG (void*** voidPtr3Arg, void* voidPtr1Arg,  )) { 508 -- 629 }
 		[2] Scope { 603 -- 629 }
-			[3] Return 'Identifier' { 614 -- 627 }
+			[3] Return 'Identifier' { 603 -- 627 }
 				[4] Identifier 'voidPtr3Arg' { 0 -- 0 }
 	[1] Function (void FUNCTION_WITH_POINTER_PARAMS (int* intPtr, double** doublePtr, char*** charPtr,  )) { 629 -- 718 }
+		[2] Scope { 716 -- 718 }
 	[1] Function (int FUNCTION_WITH_LOOP (int a,  )) { 718 -- 841 }
 		[2] Scope { 751 -- 841 }
-			[3] BinaryOp '=' { 759 -- 766 }
+			[3] BinaryOp '=' { 751 -- 766 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 766 -- 839 }
@@ -46,13 +52,13 @@ AST:
 					[5] PostfixExpression '++' { 789 -- 793 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 794 -- 839 }
-					[5] PostfixExpression '(...)' { 816 -- 833 }
+					[5] PostfixExpression '(...)' { 800 -- 833 }
 						[6] Identifier 'printer' { 0 -- 0 }
 							[7] Constant '"num: %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
 	[1] Function (int main (int argc, char** argv,  )) { 841 -- 912 }
 		[2] Scope { 876 -- 912 }
-			[3] PostfixExpression '(...)' { 888 -- 895 }
+			[3] PostfixExpression '(...)' { 876 -- 895 }
 				[4] Identifier 'testfun' { 0 -- 0 }
 					[5] Identifier 'argc' { 0 -- 0 }
 			[3] Return 'Constant' { 895 -- 910 }

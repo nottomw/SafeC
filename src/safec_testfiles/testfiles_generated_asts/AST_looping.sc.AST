@@ -1,11 +1,13 @@
 Parsing file: 'AST_looping.sc'...
+
+
 Parsing done, characters count 1463
 
 AST:
 [0] TranslationUnit
 	[1] Function (void TEST_LOOP_FOR ( )) { 0 -- 135 }
 		[2] Scope { 46 -- 135 }
-			[3] BinaryOp '=' { 54 -- 61 }
+			[3] BinaryOp '=' { 46 -- 61 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 61 -- 133 }
@@ -19,13 +21,13 @@ AST:
 					[5] PostfixExpression '++' { 85 -- 89 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 90 -- 133 }
-					[5] PostfixExpression '(...)' { 111 -- 127 }
+					[5] PostfixExpression '(...)' { 96 -- 127 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"i = %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
 	[1] Function (void TEST_LOOP_FOR_BREAK ( )) { 135 -- 317 }
 		[2] Scope { 169 -- 317 }
-			[3] BinaryOp '=' { 177 -- 184 }
+			[3] BinaryOp '=' { 169 -- 184 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 184 -- 315 }
@@ -39,7 +41,7 @@ AST:
 					[5] PostfixExpression '++' { 208 -- 212 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 213 -- 315 }
-					[5] PostfixExpression '(...)' { 234 -- 250 }
+					[5] PostfixExpression '(...)' { 219 -- 250 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"i = %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
@@ -49,10 +51,10 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Constant '5' { 0 -- 0 }
 						[6] Scope { 270 -- 309 }
-							[7] JumpStatement 'break' { 298 -- 299 }
+							[7] JumpStatement 'break' { 280 -- 299 }
 	[1] Function (void TEST_LOOP_FOR_RETURN ( )) { 317 -- 501 }
 		[2] Scope { 352 -- 501 }
-			[3] BinaryOp '=' { 360 -- 367 }
+			[3] BinaryOp '=' { 352 -- 367 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 367 -- 499 }
@@ -66,7 +68,7 @@ AST:
 					[5] PostfixExpression '++' { 391 -- 395 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 396 -- 499 }
-					[5] PostfixExpression '(...)' { 417 -- 433 }
+					[5] PostfixExpression '(...)' { 402 -- 433 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"i = %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
@@ -76,10 +78,10 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Constant '5' { 0 -- 0 }
 						[6] Scope { 453 -- 493 }
-							[7] Return 'empty' { 482 -- 483 }
+							[7] Return 'empty' { 463 -- 483 }
 	[1] Function (void TEST_LOOP_FOR_CONTINUE ( )) { 501 -- 690 }
 		[2] Scope { 538 -- 690 }
-			[3] BinaryOp '=' { 546 -- 553 }
+			[3] BinaryOp '=' { 538 -- 553 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 553 -- 688 }
@@ -93,20 +95,20 @@ AST:
 					[5] PostfixExpression '++' { 577 -- 581 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 582 -- 688 }
-					[5] If { 599 -- 650 }
-						[6] Group { 599 -- 608 }
+					[5] If { 588 -- 650 }
+						[6] Group { 588 -- 608 }
 							[7] BinaryOp '==' { 599 -- 608 }
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Constant '5' { 0 -- 0 }
 						[6] Scope { 608 -- 650 }
-							[7] JumpStatement 'continue' { 639 -- 640 }
+							[7] JumpStatement 'continue' { 618 -- 640 }
 					[5] PostfixExpression '(...)' { 650 -- 682 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"i = %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
 	[1] Function (void TEST_LOOP_WHILE ( )) { 690 -- 783 }
 		[2] Scope { 720 -- 783 }
-			[3] BinaryOp '=' { 728 -- 735 }
+			[3] BinaryOp '=' { 720 -- 735 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop while { 735 -- 781 }
@@ -115,12 +117,12 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 753 -- 781 }
-					[5] BinaryOp '+=' { 769 -- 775 }
+					[5] BinaryOp '+=' { 759 -- 775 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '1' { 0 -- 0 }
 	[1] Function (void TEST_LOOP_WHILE_BREAK ( )) { 783 -- 941 }
 		[2] Scope { 819 -- 941 }
-			[3] BinaryOp '=' { 827 -- 834 }
+			[3] BinaryOp '=' { 819 -- 834 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop while { 834 -- 939 }
@@ -129,7 +131,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 852 -- 939 }
-					[5] BinaryOp '+=' { 868 -- 874 }
+					[5] BinaryOp '+=' { 858 -- 874 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '1' { 0 -- 0 }
 					[5] If { 874 -- 933 }
@@ -138,10 +140,10 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Constant '2' { 0 -- 0 }
 						[6] Scope { 894 -- 933 }
-							[7] JumpStatement 'break' { 922 -- 923 }
+							[7] JumpStatement 'break' { 904 -- 923 }
 	[1] Function (void TEST_LOOP_WHILE_RETURN ( )) { 941 -- 1101 }
 		[2] Scope { 978 -- 1101 }
-			[3] BinaryOp '=' { 986 -- 993 }
+			[3] BinaryOp '=' { 978 -- 993 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop while { 993 -- 1099 }
@@ -150,7 +152,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 1011 -- 1099 }
-					[5] BinaryOp '+=' { 1027 -- 1033 }
+					[5] BinaryOp '+=' { 1017 -- 1033 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '1' { 0 -- 0 }
 					[5] If { 1033 -- 1093 }
@@ -159,10 +161,10 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Constant '3' { 0 -- 0 }
 						[6] Scope { 1053 -- 1093 }
-							[7] Return 'empty' { 1082 -- 1083 }
+							[7] Return 'empty' { 1063 -- 1083 }
 	[1] Function (void TEST_LOOP_WHILE_CONTINUE ( )) { 1101 -- 1296 }
 		[2] Scope { 1140 -- 1296 }
-			[3] BinaryOp '=' { 1148 -- 1155 }
+			[3] BinaryOp '=' { 1140 -- 1155 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop while { 1155 -- 1294 }
@@ -171,7 +173,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 1173 -- 1294 }
-					[5] BinaryOp '+=' { 1189 -- 1195 }
+					[5] BinaryOp '+=' { 1179 -- 1195 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '1' { 0 -- 0 }
 					[5] If { 1195 -- 1257 }
@@ -180,14 +182,14 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Constant '4' { 0 -- 0 }
 						[6] Scope { 1215 -- 1257 }
-							[7] JumpStatement 'continue' { 1246 -- 1247 }
+							[7] JumpStatement 'continue' { 1225 -- 1247 }
 					[5] PostfixExpression '(...)' { 1257 -- 1288 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"i = %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
 	[1] Function (void TEST_LOOP_NO_SCOPE ( )) { 1296 -- 1462 }
 		[2] Scope { 1329 -- 1462 }
-			[3] BinaryOp '=' { 1337 -- 1346 }
+			[3] BinaryOp '=' { 1329 -- 1346 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '666' { 0 -- 0 }
 			[3] Loop for { 1346 -- 1401 }

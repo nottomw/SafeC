@@ -1,4 +1,6 @@
 Parsing file: 'AST_var_declarations.sc'...
+
+
 Parsing done, characters count 2705
 
 AST:
@@ -8,31 +10,33 @@ AST:
 		[2] Declaration 'int globalDeclaration' { 0 -- 0 }
 		[2] Constant '5' { 0 -- 0 }
 	[1] Function (void FUNCTION_NO_RETURN_NO_PARAMS ( )) { 81 -- 141 }
+		[2] Scope { 124 -- 141 }
 	[1] Function (void** FUNCTION_WITH_VOIDPTR_RETURN_NO_PARAMS ( )) { 141 -- 213 }
+		[2] Scope { 196 -- 213 }
 	[1] Function (int FUNCTION_RETURNING_CONSTANT ( )) { 213 -- 272 }
 		[2] Scope { 254 -- 272 }
-			[3] Return 'Constant' { 265 -- 270 }
+			[3] Return 'Constant' { 254 -- 270 }
 				[4] Constant '123' { 0 -- 0 }
 	[1] Function (int FUNCTION_RETURNING_CONSTANT_EXPRESSION ( )) { 272 -- 348 }
 		[2] Scope { 324 -- 348 }
-			[3] Return 'BinaryOp' { 335 -- 346 }
+			[3] Return 'BinaryOp' { 324 -- 346 }
 				[4] BinaryOp '+' { 0 -- 0 }
 					[5] Constant '123' { 0 -- 0 }
 					[5] Constant '456' { 0 -- 0 }
 	[1] Function (int FUNCTION_RETURNING_DEREF ( )) { 348 -- 440 }
 		[2] Scope { 386 -- 440 }
-			[3] BinaryOp '=' { 394 -- 421 }
+			[3] BinaryOp '=' { 386 -- 421 }
 				[4] Declaration 'int* ptr' { 0 -- 0 }
-				[4] UnaryOp '&' { 394 -- 403 }
+				[4] UnaryOp '&' { 386 -- 403 }
 					[5] Identifier 'globalDeclaration' { 0 -- 0 }
 			[3] Return 'UnaryOp' { 421 -- 438 }
 				[4] UnaryOp '*' { 421 -- 434 }
 					[5] Identifier 'ptr' { 0 -- 0 }
 	[1] Function (int FUNCTION_RETURNING_DOUBLE_DEREF ( )) { 440 -- 567 }
 		[2] Scope { 485 -- 567 }
-			[3] BinaryOp '=' { 493 -- 520 }
+			[3] BinaryOp '=' { 485 -- 520 }
 				[4] Declaration 'int* ptr' { 0 -- 0 }
-				[4] UnaryOp '&' { 493 -- 502 }
+				[4] UnaryOp '&' { 485 -- 502 }
 					[5] Identifier 'globalDeclaration' { 0 -- 0 }
 			[3] BinaryOp '=' { 520 -- 544 }
 				[4] Declaration 'int* ptrptr' { 0 -- 0 }
@@ -44,17 +48,17 @@ AST:
 						[6] Identifier 'ptrptr' { 0 -- 0 }
 	[1] Function (int FUNCTION_RETURNING_PREINCREMENT ( )) { 567 -- 646 }
 		[2] Scope { 612 -- 646 }
-			[3] Return 'UnaryOp' { 623 -- 644 }
-				[4] UnaryOp '++' { 623 -- 644 }
+			[3] Return 'UnaryOp' { 612 -- 644 }
+				[4] UnaryOp '++' { 612 -- 644 }
 					[5] Identifier 'globalDeclaration' { 0 -- 0 }
 	[1] Function (int FUNCTION_RETURNING_POSTINCREMENT ( )) { 646 -- 726 }
 		[2] Scope { 692 -- 726 }
-			[3] Return 'PostfixExpression' { 703 -- 724 }
-				[4] PostfixExpression '++' { 703 -- 723 }
+			[3] Return 'PostfixExpression' { 692 -- 724 }
+				[4] PostfixExpression '++' { 692 -- 723 }
 					[5] Identifier 'globalDeclaration' { 0 -- 0 }
 	[1] Function (int FUNCTION_WITH_DECLARATIONS (int paramCondition, float* foo, double** bar,  )) { 726 -- 2314 }
 		[2] Scope { 812 -- 2314 }
-			[3] Declaration 'int varWithNoValue' { 820 -- 836 }
+			[3] Declaration 'int varWithNoValue' { 812 -- 836 }
 			[3] BinaryOp '=' { 836 -- 899 }
 				[4] Declaration 'int varWithAssignmentFromOtherIdentifier' { 0 -- 0 }
 				[4] Identifier 'varWithNoValue' { 0 -- 0 }
@@ -103,7 +107,7 @@ AST:
 					[5] PostfixExpression '++' { 1285 -- 1289 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 1290 -- 1409 }
-					[5] BinaryOp '=' { 1308 -- 1327 }
+					[5] BinaryOp '=' { 1296 -- 1327 }
 						[6] Declaration 'int varInsideLoop' { 0 -- 0 }
 						[6] Identifier 'i' { 0 -- 0 }
 					[5] BinaryOp '=' { 1327 -- 1354 }
@@ -122,7 +126,7 @@ AST:
 					[5] PostfixExpression '++' { 1428 -- 1432 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 1433 -- 1479 }
-					[5] BinaryOp '=' { 1468 -- 1473 }
+					[5] BinaryOp '=' { 1458 -- 1473 }
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '2' { 0 -- 0 }
 			[3] Loop for { 1479 -- 1596 }
@@ -136,7 +140,7 @@ AST:
 					[5] PostfixExpression '++' { 1515 -- 1519 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 1520 -- 1596 }
-					[5] PostfixExpression '(...)' { 1542 -- 1559 }
+					[5] PostfixExpression '(...)' { 1526 -- 1559 }
 						[6] Identifier 'printer' { 0 -- 0 }
 							[7] Constant '"num: %d\n"' { 0 -- 0 }
 							[7] Identifier 'i' { 0 -- 0 }
@@ -150,7 +154,7 @@ AST:
 						[6] Identifier 'paramCondition' { 0 -- 0 }
 						[6] Constant '42' { 0 -- 0 }
 				[4] Scope { 1627 -- 1678 }
-					[5] PostfixExpression '(...)' { 1649 -- 1672 }
+					[5] PostfixExpression '(...)' { 1633 -- 1672 }
 						[6] Identifier 'printer' { 0 -- 0 }
 							[7] Constant '"if with constant\n"' { 0 -- 0 }
 			[3] If { 1678 -- 2285 }
@@ -159,9 +163,9 @@ AST:
 						[6] Identifier 'paramCondition' { 0 -- 0 }
 						[6] Identifier 'SOME_TEST_VAL' { 0 -- 0 }
 				[4] Scope { 1720 -- 2285 }
-					[5] BinaryOp '=' { 1738 -- 1808 }
+					[5] BinaryOp '=' { 1726 -- 1808 }
 						[6] Declaration 'int resFromCalledFunWithExprInFun' { 0 -- 0 }
-						[6] PostfixExpression '(...)' { 1738 -- 1807 }
+						[6] PostfixExpression '(...)' { 1726 -- 1807 }
 							[7] Identifier 'calledFunction' { 0 -- 0 }
 								[8] BinaryOp '+' { 0 -- 0 }
 									[9] Identifier 'paramCondition' { 0 -- 0 }
@@ -204,8 +208,8 @@ AST:
 								[8] Identifier 'resFromCalledFun' { 0 -- 0 }
 								[8] Constant '0' { 0 -- 0 }
 						[6] Scope { 2205 -- 2279 }
-							[7] Return 'PostfixExpression' { 2234 -- 2269 }
-								[8] PostfixExpression '()' { 2234 -- 2268 }
+							[7] Return 'PostfixExpression' { 2215 -- 2269 }
+								[8] PostfixExpression '()' { 2215 -- 2268 }
 									[9] Identifier 'FUNCTION_RETURNING_PREINCREMENT' { 0 -- 0 }
 			[3] UnaryOp '++' { 2285 -- 2295 }
 				[4] Identifier 'i' { 0 -- 0 }
@@ -218,7 +222,7 @@ AST:
 	[1] Function (void FUNCTION_WITH_EMPTY_STATEMENTS_AND_GLOBAL_SET (int someArg,  )) { 2366 -- 2614 }
 		[2] Scope { 2439 -- 2614 }
 			[3] EmptyStatement
-			[3] BinaryOp '=' { 2445 -- 2481 }
+			[3] BinaryOp '=' { 2439 -- 2481 }
 				[4] Identifier 'gSomeGlobal' { 0 -- 0 }
 				[4] Identifier 'someArg' { 0 -- 0 }
 			[3] BinaryOp '=' { 2481 -- 2525 }
@@ -236,5 +240,6 @@ AST:
 					[5] EmptyStatement
 			[3] EmptyStatement
 	[1] Function (void FUNCTION_WITH_MULTIPLE_SAME_TYPE_VARS ( )) { 2614 -- 2704 }
+		[2] Scope { 2666 -- 2704 }
 
 

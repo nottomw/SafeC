@@ -1,11 +1,13 @@
 Parsing file: 'AST_defer.sc'...
+
+
 Parsing done, characters count 3728
 
 AST:
 [0] TranslationUnit
 	[1] Function (void DEFER_FUNCTION_SCOPE ( )) { 0 -- 163 }
 		[2] Scope { 53 -- 163 }
-			[3] PostfixExpression '(...)' { 64 -- 87 }
+			[3] PostfixExpression '(...)' { 53 -- 87 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"function scope 1\n"' { 0 -- 0 }
 			[3] Defer { 87 -- 127 }
@@ -17,8 +19,8 @@ AST:
 					[5] Constant '"function scope 2\n"' { 0 -- 0 }
 	[1] Function (void DEFER_SIMPLE_SCOPE_ONLY ( )) { 163 -- 308 }
 		[2] Scope { 201 -- 308 }
-			[3] Scope { 207 -- 306 }
-				[4] PostfixExpression '(...)' { 222 -- 236 }
+			[3] Scope { 201 -- 306 }
+				[4] PostfixExpression '(...)' { 207 -- 236 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"scope 1\n"' { 0 -- 0 }
 				[4] Defer { 236 -- 271 }
@@ -30,11 +32,11 @@ AST:
 						[6] Constant '"scope 2\n"' { 0 -- 0 }
 	[1] Function (void DEFER_SIMPLE_SCOPE ( )) { 308 -- 524 }
 		[2] Scope { 341 -- 524 }
-			[3] PostfixExpression '(...)' { 352 -- 379 }
+			[3] PostfixExpression '(...)' { 341 -- 379 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"function scope start\n"' { 0 -- 0 }
 			[3] Scope { 379 -- 485 }
-				[4] PostfixExpression '(...)' { 401 -- 415 }
+				[4] PostfixExpression '(...)' { 386 -- 415 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"scope 1\n"' { 0 -- 0 }
 				[4] Defer { 415 -- 450 }
@@ -49,7 +51,7 @@ AST:
 					[5] Constant '"function scope end\n"' { 0 -- 0 }
 	[1] Function (void DEFER_CONDITION (int someParam,  )) { 524 -- 730 }
 		[2] Scope { 563 -- 730 }
-			[3] PostfixExpression '(...)' { 574 -- 590 }
+			[3] PostfixExpression '(...)' { 563 -- 590 }
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"fun start\n"' { 0 -- 0 }
 			[3] If { 590 -- 702 }
@@ -58,7 +60,7 @@ AST:
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 615 -- 702 }
-					[5] PostfixExpression '(...)' { 636 -- 644 }
+					[5] PostfixExpression '(...)' { 621 -- 644 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"1\n"' { 0 -- 0 }
 					[5] Defer { 644 -- 673 }
@@ -73,7 +75,7 @@ AST:
 					[5] Constant '"fun end\n"' { 0 -- 0 }
 	[1] Function (void DEFER_CONDITION_MULTIPLE_NESTED (int someParam,  )) { 730 -- 986 }
 		[2] Scope { 785 -- 986 }
-			[3] Defer { 795 -- 811 }
+			[3] Defer { 785 -- 811 }
 				[4] PostfixExpression '(...)' { 795 -- 810 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"last"' { 0 -- 0 }
@@ -83,17 +85,17 @@ AST:
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '10' { 0 -- 0 }
 				[4] Scope { 836 -- 984 }
-					[5] Defer { 856 -- 871 }
+					[5] Defer { 842 -- 871 }
 						[6] PostfixExpression '(...)' { 856 -- 870 }
 							[7] Identifier 'printf' { 0 -- 0 }
-								[8] Constant '"2\n"' { 0 -- 0 }
+								[8] Constant '"3\n"' { 0 -- 0 }
 					[5] If { 871 -- 978 }
 						[6] Group { 871 -- 898 }
 							[7] BinaryOp '<' { 882 -- 898 }
 								[8] Identifier 'someParam' { 0 -- 0 }
 								[8] Constant '5' { 0 -- 0 }
 						[6] Scope { 898 -- 978 }
-							[7] Defer { 926 -- 941 }
+							[7] Defer { 908 -- 941 }
 								[8] PostfixExpression '(...)' { 926 -- 940 }
 									[9] Identifier 'printf' { 0 -- 0 }
 										[10] Constant '"2\n"' { 0 -- 0 }
@@ -102,7 +104,7 @@ AST:
 									[9] Constant '"1\n"' { 0 -- 0 }
 	[1] Function (void DEFER_CONDITION_MULTIPLE (int someParam,  )) { 986 -- 1245 }
 		[2] Scope { 1034 -- 1245 }
-			[3] Defer { 1044 -- 1060 }
+			[3] Defer { 1034 -- 1060 }
 				[4] PostfixExpression '(...)' { 1044 -- 1059 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"last"' { 0 -- 0 }
@@ -112,7 +114,7 @@ AST:
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '10' { 0 -- 0 }
 				[4] Scope { 1085 -- 1151 }
-					[5] Defer { 1105 -- 1122 }
+					[5] Defer { 1091 -- 1122 }
 						[6] PostfixExpression '(...)' { 1105 -- 1121 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"1.2\n"' { 0 -- 0 }
@@ -125,7 +127,7 @@ AST:
 						[6] Identifier 'someParam' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 1175 -- 1243 }
-					[5] Defer { 1195 -- 1212 }
+					[5] Defer { 1181 -- 1212 }
 						[6] PostfixExpression '(...)' { 1195 -- 1211 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2.2\n"' { 0 -- 0 }
@@ -134,7 +136,7 @@ AST:
 							[7] Constant '"2.1\n"' { 0 -- 0 }
 	[1] Function (void DEFER_LOOP ( )) { 1245 -- 1486 }
 		[2] Scope { 1270 -- 1486 }
-			[3] BinaryOp '=' { 1278 -- 1285 }
+			[3] BinaryOp '=' { 1270 -- 1285 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1285 -- 1377 }
@@ -148,7 +150,7 @@ AST:
 					[5] PostfixExpression '++' { 1308 -- 1312 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 1313 -- 1377 }
-					[5] Defer { 1333 -- 1348 }
+					[5] Defer { 1319 -- 1348 }
 						[6] PostfixExpression '(...)' { 1333 -- 1347 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2\n"' { 0 -- 0 }
@@ -164,7 +166,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 1407 -- 1484 }
-					[5] Defer { 1427 -- 1442 }
+					[5] Defer { 1413 -- 1442 }
 						[6] PostfixExpression '(...)' { 1427 -- 1441 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2\n"' { 0 -- 0 }
@@ -175,7 +177,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 	[1] Function (void DEFER_LOOP_BREAK (int param,  )) { 1486 -- 1868 }
 		[2] Scope { 1522 -- 1868 }
-			[3] BinaryOp '=' { 1530 -- 1537 }
+			[3] BinaryOp '=' { 1522 -- 1537 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1537 -- 1694 }
@@ -189,7 +191,7 @@ AST:
 					[5] PostfixExpression '++' { 1560 -- 1564 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 1565 -- 1694 }
-					[5] Defer { 1585 -- 1600 }
+					[5] Defer { 1571 -- 1600 }
 						[6] PostfixExpression '(...)' { 1585 -- 1599 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2\n"' { 0 -- 0 }
@@ -199,7 +201,7 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Identifier 'param' { 0 -- 0 }
 						[6] Scope { 1625 -- 1664 }
-							[7] JumpStatement 'break' { 1653 -- 1654 }
+							[7] JumpStatement 'break' { 1635 -- 1654 }
 					[5] PostfixExpression '(...)' { 1664 -- 1688 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"1\n"' { 0 -- 0 }
@@ -212,7 +214,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 1724 -- 1866 }
-					[5] Defer { 1744 -- 1759 }
+					[5] Defer { 1730 -- 1759 }
 						[6] PostfixExpression '(...)' { 1744 -- 1758 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2\n"' { 0 -- 0 }
@@ -222,7 +224,7 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Identifier 'param' { 0 -- 0 }
 						[6] Scope { 1784 -- 1823 }
-							[7] JumpStatement 'break' { 1812 -- 1813 }
+							[7] JumpStatement 'break' { 1794 -- 1813 }
 					[5] PostfixExpression '(...)' { 1823 -- 1847 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"1\n"' { 0 -- 0 }
@@ -230,7 +232,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 	[1] Function (void DEFER_LOOP_CONTINUE (int param,  )) { 1868 -- 2259 }
 		[2] Scope { 1907 -- 2259 }
-			[3] BinaryOp '=' { 1915 -- 1922 }
+			[3] BinaryOp '=' { 1907 -- 1922 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 1922 -- 2082 }
@@ -244,7 +246,7 @@ AST:
 					[5] PostfixExpression '++' { 1945 -- 1949 }
 						[6] Identifier 'i' { 0 -- 0 }
 				[4] Scope { 1950 -- 2082 }
-					[5] Defer { 1970 -- 1985 }
+					[5] Defer { 1956 -- 1985 }
 						[6] PostfixExpression '(...)' { 1970 -- 1984 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2\n"' { 0 -- 0 }
@@ -254,7 +256,7 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Identifier 'param' { 0 -- 0 }
 						[6] Scope { 2010 -- 2052 }
-							[7] JumpStatement 'continue' { 2041 -- 2042 }
+							[7] JumpStatement 'continue' { 2020 -- 2042 }
 					[5] PostfixExpression '(...)' { 2052 -- 2076 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"1\n"' { 0 -- 0 }
@@ -267,7 +269,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 						[6] Constant '5' { 0 -- 0 }
 				[4] Scope { 2112 -- 2257 }
-					[5] Defer { 2132 -- 2147 }
+					[5] Defer { 2118 -- 2147 }
 						[6] PostfixExpression '(...)' { 2132 -- 2146 }
 							[7] Identifier 'printf' { 0 -- 0 }
 								[8] Constant '"2\n"' { 0 -- 0 }
@@ -277,7 +279,7 @@ AST:
 								[8] Identifier 'i' { 0 -- 0 }
 								[8] Identifier 'param' { 0 -- 0 }
 						[6] Scope { 2172 -- 2214 }
-							[7] JumpStatement 'continue' { 2203 -- 2204 }
+							[7] JumpStatement 'continue' { 2182 -- 2204 }
 					[5] PostfixExpression '(...)' { 2214 -- 2238 }
 						[6] Identifier 'printf' { 0 -- 0 }
 							[7] Constant '"1\n"' { 0 -- 0 }
@@ -285,7 +287,7 @@ AST:
 						[6] Identifier 'i' { 0 -- 0 }
 	[1] Function (void DEFER_MULTIPLE ( )) { 2259 -- 2365 }
 		[2] Scope { 2288 -- 2365 }
-			[3] Defer { 2298 -- 2313 }
+			[3] Defer { 2288 -- 2313 }
 				[4] PostfixExpression '(...)' { 2298 -- 2312 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"3\n"' { 0 -- 0 }
@@ -299,14 +301,14 @@ AST:
 						[6] Constant '"1\n"' { 0 -- 0 }
 	[1] Function (void DEFER_SWITCH_CASE (int param,  )) { 2365 -- 2659 }
 		[2] Scope { 2402 -- 2659 }
-			[3] Defer { 2412 -- 2430 }
+			[3] Defer { 2402 -- 2430 }
 				[4] PostfixExpression '(...)' { 2412 -- 2429 }
 					[5] Identifier 'printf' { 0 -- 0 }
 						[6] Constant '"last\n"' { 0 -- 0 }
 			[3] SwitchCase on 'Identifier' { 2430 -- 2657 }
 				[4] Identifier 'param' { 0 -- 0 }
 				[4] Scope { 2450 -- 2657 }
-					[5] SwitchCaseLabel on 'Constant' { 2469 -- 2499 }
+					[5] SwitchCaseLabel on 'Constant' { 2456 -- 2499 }
 						[6] Constant '0' { 0 -- 0 }
 						[6] PostfixExpression '(...)' { 2472 -- 2499 }
 							[7] Identifier 'printf' { 0 -- 0 }
@@ -326,7 +328,7 @@ AST:
 					[5] JumpStatement 'break' { 2632 -- 2651 }
 	[1] Function (void DEFER_STRANGE ( )) { 2659 -- 2917 }
 		[2] Scope { 2687 -- 2917 }
-			[3] BinaryOp '=' { 2695 -- 2702 }
+			[3] BinaryOp '=' { 2687 -- 2702 }
 				[4] Declaration 'int i' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] Loop for { 2702 -- 2797 }
@@ -359,7 +361,7 @@ AST:
 						[6] Constant '"last statement in function\n"' { 0 -- 0 }
 	[1] Function (void DEFER_WITH_COMPL_STATEMENTS ( )) { 2917 -- 3300 }
 		[2] Scope { 2959 -- 3300 }
-			[3] BinaryOp '=' { 2967 -- 2980 }
+			[3] BinaryOp '=' { 2959 -- 2980 }
 				[4] Declaration 'int counter' { 0 -- 0 }
 				[4] Constant '0' { 0 -- 0 }
 			[3] BinaryOp '=' { 2980 -- 3007 }
@@ -369,7 +371,7 @@ AST:
 				[4] Identifier 'printf' { 0 -- 0 }
 					[5] Constant '"fun start\n"' { 0 -- 0 }
 			[3] Scope { 3035 -- 3118 }
-				[4] Defer { 3056 -- 3070 }
+				[4] Defer { 3042 -- 3070 }
 					[5] BinaryOp '+=' { 3056 -- 3070 }
 						[6] Identifier 'counter' { 0 -- 0 }
 						[6] Constant '1' { 0 -- 0 }
@@ -382,7 +384,7 @@ AST:
 					[5] Constant '"counter: %d\n"' { 0 -- 0 }
 					[5] Identifier 'counter' { 0 -- 0 }
 			[3] Scope { 3156 -- 3260 }
-				[4] Defer { 3177 -- 3212 }
+				[4] Defer { 3163 -- 3212 }
 					[5] BinaryOp '=' { 3177 -- 3212 }
 						[6] Identifier 'counter' { 0 -- 0 }
 						[6] BinaryOp '+' { 0 -- 0 }
