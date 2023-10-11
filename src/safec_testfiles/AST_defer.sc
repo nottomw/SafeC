@@ -49,10 +49,10 @@ void DEFER_CONDITION_MULTIPLE_NESTED(int someParam)
 
     if (someParam > 10)
     {
-        defer printf("2\n");
+        defer printf("3\n");
         if (someParam < 5)
         {
-            defer printf("3\n");
+            defer printf("2\n");
             printf("1\n");
         }
     }
