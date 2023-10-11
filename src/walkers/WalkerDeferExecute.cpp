@@ -122,9 +122,11 @@ void WalkerDeferExecute::commit()
 {
     scopeRemoveIfLeftScope(0);
 
-    // apply all deferred changes
-    for (auto &it : mDeferApplyInfo)
+    // apply all deferred changes (in reverse order)
+    // defer a; defer b; defer c; --should result in--> c; b; a;
+    for (auto itReverse = mDeferApplyInfo.rbegin(); itReverse != mDeferApplyInfo.rend(); itReverse++)
     {
+        auto &it = *itReverse;
         auto &deferNode = findNodeById(*mTranslationUnit, it.mDeferNodeId);
 
         auto &deferAttachedNodes = deferNode.getAttachedNodes();
@@ -133,10 +135,6 @@ void WalkerDeferExecute::commit()
         auto deferredOperation = deferAttachedNodes[0];
 
         auto &scopeToAttachDefer = findNodeById(*mTranslationUnit, it.mScopeToAttachDeferId);
-
-        // TODO: need to recalculate positions after this node to properly
-        // generate the output source file. For now just zero out the
-        // positions and mark the node as dirty.
 
         auto deferredOperationClone = deferredOperation->clone();
         deferredOperationClone->setDirty(SemNode::DirtyType::Added);
