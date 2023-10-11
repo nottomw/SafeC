@@ -84,7 +84,8 @@ void WalkerSourceGen::peek(SemNode &node, const uint32_t)
         sourceRange.mAdded = true;
     }
 
-    log("adding range: (%-%) % (added: %)", startPos, endPos, node.getTypeStr(), sourceRange.mAdded ? "true" : "false");
+    //    log("adding range: (%-%) % (added: %)", startPos, endPos, node.getTypeStr(), sourceRange.mAdded ? "true" :
+    //    "false");
 
     mSourceRanges.push_back(sourceRange);
 }
@@ -254,13 +255,13 @@ void WalkerSourceGen::squashRanges()
                 }
 
                 // this node must be split
-                log("trying to split node: (% -- %) % (following first node: (% -- %) %)",
-                    currentRange.mStartPos,
-                    currentRange.mEndPos,
-                    currentRange.mNodeType,
-                    followingRange.mStartPos,
-                    followingRange.mEndPos,
-                    followingRange.mNodeType);
+                //                log("trying to split node: (% -- %) % (following first node: (% -- %) %)",
+                //                    currentRange.mStartPos,
+                //                    currentRange.mEndPos,
+                //                    currentRange.mNodeType,
+                //                    followingRange.mStartPos,
+                //                    followingRange.mEndPos,
+                //                    followingRange.mNodeType);
             }
             else
             {
@@ -302,18 +303,31 @@ void WalkerSourceGen::squashRanges()
         i = 0; // reset loop to handle nested ranges
     }
 
-    for (auto &it : mSourceRanges)
-    {
-        log("squashed range: (% -- %) %", it.mStartPos, it.mEndPos, it.mNodeType);
-    }
+    //    for (auto &it : mSourceRanges)
+    //    {
+    //        log("squashed range: (% -- %) % (added: %)",
+    //            it.mStartPos,
+    //            it.mEndPos,
+    //            it.mNodeType,
+    //            it.mAdded ? "true" : "false");
+    //    }
 }
 
 void WalkerSourceGen::applyNodeRemoves()
 {
+    //    for (auto &it : mRemovedRanges)
+    //    {
+    //        log("REMOVED RANGES: (% -- %) % (added: %)",
+    //            Color::Blue,
+    //            it.mStartPos,
+    //            it.mEndPos,
+    //            it.mNodeType,
+    //            it.mAdded ? "true" : "false");
+    //    }
+
     for (uint32_t sourceRangeIdx = 0; sourceRangeIdx < mSourceRanges.size(); /* empty */)
     {
         auto &sourceRange = mSourceRanges[sourceRangeIdx];
-
         bool shouldAdvance = true;
 
         if (sourceRange.mAdded == false)
@@ -323,12 +337,14 @@ void WalkerSourceGen::applyNodeRemoves()
                 if ((removedRange.mStartPos >= sourceRange.mStartPos) && //
                     (removedRange.mEndPos <= sourceRange.mEndPos))
                 {
-                    log("APPLY REMOVES: % -- % ; % -- %",
-                        Color::Red,
-                        sourceRange.mStartPos,
-                        sourceRange.mEndPos,
-                        removedRange.mStartPos,
-                        removedRange.mEndPos);
+                    // whole removed range fits in the current range
+
+                    //                    log("APPLY REMOVES: % -- % ; % -- %",
+                    //                        Color::Red,
+                    //                        sourceRange.mStartPos,
+                    //                        sourceRange.mEndPos,
+                    //                        removedRange.mStartPos,
+                    //                        removedRange.mEndPos);
 
                     if ((removedRange.mStartPos == sourceRange.mStartPos) && //
                         (removedRange.mEndPos == sourceRange.mEndPos))
@@ -359,6 +375,22 @@ void WalkerSourceGen::applyNodeRemoves()
                         sourceRangeIdx = 0;
                     }
                 }
+                else if ((sourceRange.mStartPos >= removedRange.mStartPos) && //
+                         (sourceRange.mEndPos <= removedRange.mEndPos))
+                {
+                    //                    log("APPLY REMOVES (whole): % -- % ; % -- %",
+                    //                        Color::Red,
+                    //                        sourceRange.mStartPos,
+                    //                        sourceRange.mEndPos,
+                    //                        removedRange.mStartPos,
+                    //                        removedRange.mEndPos);
+
+                    // whole current range fits into removed range
+                    mSourceRanges.erase(mSourceRanges.begin() + sourceRangeIdx);
+                    shouldAdvance = false;
+                    sourceRangeIdx = 0;
+                    break;
+                }
             }
         }
 
@@ -367,4 +399,13 @@ void WalkerSourceGen::applyNodeRemoves()
             sourceRangeIdx++;
         }
     }
+
+    //    for (auto &it : mSourceRanges)
+    //    {
+    //        log("range with applied removed node: (% -- %) % (added: %)",
+    //            it.mStartPos,
+    //            it.mEndPos,
+    //            it.mNodeType,
+    //            it.mAdded ? "true" : "false");
+    //    }
 }
