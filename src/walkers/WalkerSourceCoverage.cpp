@@ -14,6 +14,8 @@ WalkerSourceCoverage::WalkerSourceCoverage()
 {
 }
 
+// TODO: use the "squash" pattern from WalkerSourceGen
+
 void WalkerSourceCoverage::peek( //
     SemNode &node,
     const uint32_t astLevel)
