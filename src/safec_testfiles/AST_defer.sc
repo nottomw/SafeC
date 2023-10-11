@@ -52,7 +52,7 @@ void DEFER_CONDITION_MULTIPLE_NESTED(int someParam)
         defer printf("2\n");
         if (someParam < 5)
         {
-            defer printf("2\n");
+            defer printf("3\n");
             printf("1\n");
         }
     }
