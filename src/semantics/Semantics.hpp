@@ -71,6 +71,8 @@ private:
 
     void printStagedNodes(const std::string &str = "");
 
+    void setPrevReducePos(const uint32_t pos);
+
     uint32_t mPrevReducePos;
 };
 

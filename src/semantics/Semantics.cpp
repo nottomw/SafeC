@@ -135,7 +135,7 @@ void Semantics::handle( //
                 auto ifGroup = nodeIf->getGroup();
                 ifGroup->setSemStart(mPrevReducePos);
 
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
                 mState.stageNode(nodeIf);
             }
             break;
@@ -151,7 +151,7 @@ void Semantics::handle( //
                 scopeNode->setEnd(stringIndex);
 
                 scopeNode->setSemEnd(stringIndex);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 mState.removeScope();
             }
@@ -163,7 +163,7 @@ void Semantics::handle( //
                 auto node = std::make_shared<SemNodeLoop>(stringIndex, "for");
 
                 node->setSemStart(mPrevReducePos);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 addNodeToAst(node);
                 mState.addScope(node);
@@ -184,7 +184,7 @@ void Semantics::handle( //
                 scopeNode->setEnd(stringIndex);
 
                 scopeNode->setSemEnd(stringIndex);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 mState.removeScope();
             }
@@ -230,7 +230,7 @@ void Semantics::handle( //
                 auto node = std::make_shared<SemNodeLoop>(stringIndex, "while");
 
                 node->setSemStart(mPrevReducePos);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 addNodeToAst(node);
                 mState.addScope(node);
@@ -248,7 +248,7 @@ void Semantics::handle( //
                 scopeNode->setEnd(stringIndex);
 
                 scopeNode->setSemEnd(stringIndex);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 mState.removeScope();
             }
@@ -273,8 +273,9 @@ void Semantics::handle( //
         case SyntaxChunkType::kDeferHeader:
             {
                 auto deferNode = std::make_shared<SemNodeDefer>(stringIndex);
+
                 deferNode->setSemStart(mPrevReducePos);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 mState.mDeferNodeWaitingForDeferredOp = deferNode;
                 mState.mState = SState::WaitingForDeferredOp;
@@ -290,7 +291,7 @@ void Semantics::handle( //
                 auto scopeNode = std::make_shared<SemNodeScope>(stringIndex);
 
                 scopeNode->setSemStart(mPrevReducePos);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 addNodeToAst(scopeNode);
                 mState.addScope(scopeNode);
@@ -304,7 +305,7 @@ void Semantics::handle( //
                 currentScopeTyped->setEnd(stringIndex);
 
                 currentScopeTyped->setSemEnd(stringIndex);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 mState.removeScope();
             }
@@ -315,7 +316,7 @@ void Semantics::handle( //
                 auto switchNode = std::make_shared<SemNodeSwitchCase>(stringIndex);
 
                 switchNode->setSemStart(mPrevReducePos);
-                mPrevReducePos = stringIndex;
+                setPrevReducePos(stringIndex);
 
                 addNodeToAst(switchNode);
                 mState.addScope(switchNode);
@@ -363,7 +364,7 @@ void Semantics::handleFunctionHeader( //
     node->setName(declNode->getLhsIdentifier());
 
     node->setSemStart(mPrevReducePos);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     // add function params
     for (uint32_t i = 1; i < stagedNodes.size(); i++)
@@ -395,7 +396,7 @@ void Semantics::handleFunctionEnd(const uint32_t stringIndex)
     funScopeNode->setEnd(stringIndex);
 
     funScopeNode->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     mState.removeScope();
 }
@@ -458,7 +459,7 @@ void Semantics::handleInitDeclaration( //
         addNodeToAst(decl);
     }
 
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 }
 
 void Semantics::handleAssignment(const uint32_t stringIndex)
@@ -488,7 +489,7 @@ void Semantics::handleAssignment(const uint32_t stringIndex)
 
     binaryOp->setSemStart(fixedStartPos);
     binaryOp->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     mState.stageNode(binaryOp);
 }
@@ -510,7 +511,7 @@ void Semantics::handleRelationalExpression( //
 
     node->setSemStart(mPrevReducePos);
     node->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     mState.stageNode(node);
 }
@@ -537,7 +538,7 @@ void Semantics::handlePostfixExpression( //
 
             node->setSemStart(mPrevReducePos);
             node->setSemEnd(stringIndex);
-            mPrevReducePos = stringIndex;
+            setPrevReducePos(stringIndex);
 
             for (uint32_t i = 2; i < stagedNodes.size(); i++)
             {
@@ -554,7 +555,7 @@ void Semantics::handlePostfixExpression( //
 
             node->setSemStart(mPrevReducePos);
             node->setSemEnd(stringIndex);
-            mPrevReducePos = stringIndex;
+            setPrevReducePos(stringIndex);
 
             for (uint32_t i = 1; i < stagedNodes.size(); i++)
             {
@@ -580,7 +581,7 @@ void Semantics::handlePostfixExpression( //
 
         node->setSemStart(mPrevReducePos);
         node->setSemEnd(stringIndex);
-        mPrevReducePos = stringIndex;
+        setPrevReducePos(stringIndex);
 
         node->addArg(indexExprNode);
         mState.stageNode(node);
@@ -594,7 +595,7 @@ void Semantics::handlePostfixExpression( //
 
         node->setSemStart(mPrevReducePos);
         node->setSemEnd(stringIndex);
-        mPrevReducePos = stringIndex;
+        setPrevReducePos(stringIndex);
 
         mState.stageNode(node);
     }
@@ -622,7 +623,7 @@ void Semantics::handleForLoopConditions(const uint32_t pos)
     group->setSemEnd(pos);
 
     // TODO: set pos to the group
-    mPrevReducePos = pos;
+    setPrevReducePos(pos);
 }
 
 void Semantics::handleConditionExpression(const uint32_t stringIndex)
@@ -642,7 +643,7 @@ void Semantics::handleConditionExpression(const uint32_t stringIndex)
     auto group = nodeIfTyped->getGroup();
     group->setSemEnd(stringIndex);
 
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     // all staged nodes should be now placed into AST, since
     // we now encountered condition expression the previously
@@ -671,7 +672,7 @@ void Semantics::handleWhileLoopConditions(const uint32_t stringIndex)
     auto loopNode = semNodeConvert<SemNodeLoop>(currentScope);
     loopNode->setIteratorCondition(itCond);
 
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 }
 
 void Semantics::handleDirectDecl(const uint32_t stringIndex, const std::string &additional)
@@ -784,7 +785,7 @@ void Semantics::handleDefer(const uint32_t stringIndex)
     deferNodeTyped->setDeferredNode(lastNode);
 
     deferNode->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     mState.stageNode(deferNode);
 }
@@ -804,7 +805,7 @@ void Semantics::handleSwitchStatement(const uint32_t stringIndex)
     auto switchCaseNode = semNodeConvert<SemNodeSwitchCase>(currentScope);
     switchCaseNode->setSwitchExpr(lastNode);
 
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 }
 
 void Semantics::handleSwitchEnd(const uint32_t stringIndex)
@@ -818,7 +819,7 @@ void Semantics::handleSwitchEnd(const uint32_t stringIndex)
     switchCaseNode->setEnd(stringIndex);
 
     switchCaseNode->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     mState.removeScope();
 }
@@ -920,7 +921,7 @@ void Semantics::handleSwitchCaseHeader(const uint32_t stringIndex, const std::st
     }
 
     caseLabelNode->setSemStart(mPrevReducePos);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     caseLabelNode->setCaseLabel(nodeToBeSetAsCaseLabel);
 
@@ -946,7 +947,7 @@ void Semantics::handleSwitchCaseEnd(const uint32_t stringIndex)
     switchCaseLabelNode->setEnd(stringIndex);
 
     switchCaseLabelNode->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     mState.removeScope();
 }
@@ -978,7 +979,7 @@ void Semantics::handleReturn(const uint32_t stringIndex, const std::string &addi
 
         node->setSemStart(mPrevReducePos);
         node->setSemEnd(stringIndex);
-        mPrevReducePos = stringIndex;
+        setPrevReducePos(stringIndex);
 
         addNodeToAst(node);
     }
@@ -1023,7 +1024,7 @@ void Semantics::handleReturn(const uint32_t stringIndex, const std::string &addi
 
         node->setSemStart(fixedStartPos);
         node->setSemEnd(stringIndex);
-        mPrevReducePos = stringIndex;
+        setPrevReducePos(stringIndex);
 
         addNodeToAst(node);
     }
@@ -1035,7 +1036,7 @@ void Semantics::handleUnaryOp(const uint32_t stringIndex, const std::string &add
 
     node->setSemStart(mPrevReducePos);
     node->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     if (additional == "++")
     {
@@ -1067,7 +1068,7 @@ void Semantics::handleSimpleExpr(const uint32_t stringIndex)
         if (stagedNodes.size() > 0)
         {
             stagedNodes.back()->setSemEnd(stringIndex);
-            mPrevReducePos = stringIndex;
+            setPrevReducePos(stringIndex);
         }
 
         stagedNodes.clear();
@@ -1082,7 +1083,7 @@ void Semantics::handleJumpStatement( //
 
     node->setSemStart(mPrevReducePos);
     node->setSemEnd(stringIndex);
-    mPrevReducePos = stringIndex;
+    setPrevReducePos(stringIndex);
 
     addNodeToAst(node);
 }
@@ -1141,6 +1142,11 @@ void Semantics::printStagedNodes(const std::string &str)
     {
         log("\tstaged node: [ % ] %", Color::Green, it->getTypeStr(), it->toStr());
     }
+}
+
+void Semantics::setPrevReducePos(const uint32_t pos)
+{
+    mPrevReducePos = pos;
 }
 
 } // namespace safec
