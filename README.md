@@ -15,8 +15,8 @@ Safer version of C89 language - transpiles to C89.
 ### Main features
 1. `defer`
     - partially done, see:
-        [input file](https://github.com/nottomw/SafeC/blob/main/src/safec_testfiles/AST_defer.sc)
-        [output file](https://github.com/nottomw/SafeC/blob/main/src/safec_testfiles/testfiles_generated_defer_ast/AST_defer.c)
+        - [input file](https://github.com/nottomw/SafeC/blob/main/src/safec_testfiles/AST_defer.sc)
+        - [output file](https://github.com/nottomw/SafeC/blob/main/src/safec_testfiles/testfiles_generated_defer_ast/AST_defer.c)
 2. References
 3. NULL - optional automatic checks before dereference whenever possible
 4. Ranged arrays - automatic checks
